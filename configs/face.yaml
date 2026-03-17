@@ -1,0 +1,59 @@
+# ── Data ──────────────────────────────────────────────────────────────────────
+data:
+  train_dir: data/splits/train
+  val_dir: data/splits/val
+  img_size: 224
+  num_workers: 4
+  pin_memory: true
+
+# ── Classes ───────────────────────────────────────────────────────────────────
+classes:
+  - neutral
+  - happy
+  - sad
+  - angry
+  - fearful
+  - disgusted
+  - surprised
+num_classes: 7
+
+# ── Model ─────────────────────────────────────────────────────────────────────
+model:
+  backbone: efficientnet_b2 # any timm model name
+  pretrained: true
+  drop_rate: 0.3
+  embed_dim: 512 # face feature vector size passed to fusion
+
+# ── Training ──────────────────────────────────────────────────────────────────
+train:
+  epochs: 40
+  batch_size: 64
+  optimizer: adamw # sgd | adam | adamw
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  scheduler: cosine # step | cosine | plateau
+  warmup_epochs: 3
+  amp: true # mixed-precision
+  grad_clip: 1.0
+  label_smoothing: 0.1
+
+# ── Loss ──────────────────────────────────────────────────────────────────────
+loss:
+  name: focal # cross_entropy | focal | label_smooth
+  focal_gamma: 2.0
+  focal_alpha: null # null = uniform, or list of per-class weights
+
+# ── Augmentation ──────────────────────────────────────────────────────────────
+augmentation:
+  random_crop: true
+  hflip: true
+  color_jitter: true
+  cutout: true
+  mixup_alpha: 0.2 # 0 = disabled
+
+# ── Checkpointing ─────────────────────────────────────────────────────────────
+output:
+  checkpoint_dir: checkpoints/face
+  log_dir: runs/face
+  save_top_k: 3
+  monitor: val_acc

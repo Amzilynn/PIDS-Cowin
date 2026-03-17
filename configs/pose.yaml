@@ -1,0 +1,58 @@
+# ── Data ──────────────────────────────────────────────────────────────────────
+data:
+  pose_npy_dir: data/pose_npy # output of scripts/extract_pose_sequences.py
+  label_csv: data/pose_labels.csv # columns: filename, label (int)
+  seq_len: 60 # frames per sequence window
+  stride: 30 # sliding-window overlap
+  num_workers: 4
+  pin_memory: true
+
+# ── Classes ───────────────────────────────────────────────────────────────────
+classes:
+  - neutral
+  - happy
+  - sad
+  - angry
+  - fearful
+  - disgusted
+  - surprised
+num_classes: 7
+
+# ── Pose Keypoints ────────────────────────────────────────────────────────────
+pose:
+  num_landmarks: 33 # MediaPipe Pose full body
+  landmark_features: 4 # x, y, z, visibility  (33*4 = 132 per frame)
+  input_size: 132
+
+# ── Model ─────────────────────────────────────────────────────────────────────
+model:
+  type: lstm_attn # lstm_attn | transformer
+  hidden_size: 256
+  num_layers: 2
+  dropout: 0.3
+  embed_dim: 256 # pose feature vector size passed to fusion
+  bidirectional: true
+
+# ── Training ──────────────────────────────────────────────────────────────────
+train:
+  epochs: 50
+  batch_size: 128
+  optimizer: adamw
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+  scheduler: cosine
+  warmup_epochs: 5
+  amp: true
+  grad_clip: 1.0
+
+# ── Loss ──────────────────────────────────────────────────────────────────────
+loss:
+  name: cross_entropy
+  label_smoothing: 0.1
+
+# ── Checkpointing ─────────────────────────────────────────────────────────────
+output:
+  checkpoint_dir: checkpoints/pose
+  log_dir: runs/pose
+  save_top_k: 3
+  monitor: val_acc

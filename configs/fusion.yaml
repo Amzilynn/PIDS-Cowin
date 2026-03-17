@@ -1,0 +1,59 @@
+# ── Pretrained Branches ───────────────────────────────────────────────────────
+face_ckpt: checkpoints/face/best.pth
+pose_ckpt: checkpoints/pose/best.pth
+freeze_branches: true # freeze face + pose encoders during fusion training
+
+# ── Data ──────────────────────────────────────────────────────────────────────
+data:
+  train_dir: data/splits/train # face images
+  val_dir: data/splits/val
+  pose_npy_dir: data/pose_npy
+  label_csv: data/pose_labels.csv
+  img_size: 224
+  seq_len: 60
+  stride: 30
+  num_workers: 4
+
+# ── Classes ───────────────────────────────────────────────────────────────────
+classes:
+  - neutral
+  - happy
+  - sad
+  - angry
+  - fearful
+  - disgusted
+  - surprised
+num_classes: 7
+
+# ── Fusion Architecture ───────────────────────────────────────────────────────
+model:
+  face_embed_dim: 512
+  pose_embed_dim: 256
+  fusion_type: concat_mlp # concat_mlp | attention | gated
+  hidden_dims: [384, 128]
+  dropout: 0.4
+
+# ── Training ──────────────────────────────────────────────────────────────────
+train:
+  epochs: 30
+  batch_size: 32
+  optimizer: adamw
+  lr: 5.0e-4
+  weight_decay: 1.0e-4
+  scheduler: cosine
+  warmup_epochs: 3
+  amp: true
+  grad_clip: 1.0
+  label_smoothing: 0.1
+
+# ── Loss ──────────────────────────────────────────────────────────────────────
+loss:
+  name: focal
+  focal_gamma: 2.0
+
+# ── Checkpointing ─────────────────────────────────────────────────────────────
+output:
+  checkpoint_dir: checkpoints/fusion
+  log_dir: runs/fusion
+  save_top_k: 3
+  monitor: val_f1

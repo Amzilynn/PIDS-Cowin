@@ -1,0 +1,180 @@
+"""
+src/train/train_pose.py
+────────────────────────
+Train the PoseModel (BiLSTM + Attention) on keypoint sequences.
+
+    python src/train/train_pose.py --config configs/pose.yaml [--seed 42]
+"""
+
+import argparse
+import sys
+from pathlib import Path
+
+import numpy as np
+import torch
+import torch.nn as nn
+from torch.cuda.amp import GradScaler, autocast
+from tqdm import tqdm
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from src.datasets.pose_dataset import get_pose_loaders
+from src.models.pose_model import PoseModel
+from src.utils.io import load_yaml, get_logger, get_writer, CheckpointManager
+from src.utils.losses import build_criterion
+from src.utils.metrics import compute_metrics, print_metrics
+from src.utils.seed import seed_everything
+
+
+# ── Helpers (identical pattern to train_face) ─────────────────────────────────
+
+def build_optimizer(cfg, model):
+    name = cfg["train"]["optimizer"].lower()
+    lr, wd = cfg["train"]["lr"], cfg["train"].get("weight_decay", 1e-4)
+    if name == "adamw":
+        return torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=wd)
+    if name == "adam":
+        return torch.optim.Adam(model.parameters(), lr=lr, weight_decay=wd)
+    return torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9,
+                           weight_decay=wd, nesterov=True)
+
+
+def build_scheduler(cfg, optimizer):
+    name    = cfg["train"].get("scheduler", "cosine").lower()
+    warmup  = cfg["train"].get("warmup_epochs", 0)
+
+    warmup_sched = torch.optim.lr_scheduler.LambdaLR(
+        optimizer, lr_lambda=lambda e: float(e) / max(warmup, 1) if e < warmup else 1.0)
+
+    if name == "cosine":
+        main_sched = torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, T_max=cfg["train"]["epochs"] - warmup, eta_min=1e-6)
+    elif name == "step":
+        main_sched = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.5)
+    else:
+        main_sched = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode="max", factor=0.5, patience=5)
+
+    return warmup_sched, main_sched
+
+
+def run_epoch(model, loader, criterion, optimizer, device,
+              scaler, use_amp, grad_clip, is_train):
+    model.train() if is_train else model.eval()
+    total_loss, all_preds, all_targets = 0.0, [], []
+
+    pbar = tqdm(loader, desc="train" if is_train else "val ", leave=False)
+    for seqs, labels in pbar:
+        seqs   = seqs.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
+
+        with torch.set_grad_enabled(is_train):
+            with autocast(enabled=use_amp):
+                logits = model(seqs)
+                loss   = criterion(logits, labels)
+
+        if is_train:
+            optimizer.zero_grad()
+            scaler.scale(loss).backward()
+            if grad_clip > 0:
+                scaler.unscale_(optimizer)
+                nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+            scaler.step(optimizer)
+            scaler.update()
+
+        total_loss += loss.item() * seqs.size(0)
+        all_preds.append(logits.argmax(-1).cpu().numpy())
+        all_targets.append(labels.cpu().numpy())
+        pbar.set_postfix(loss=f"{loss.item():.4f}")
+
+    return (total_loss / len(loader.dataset),
+            np.concatenate(all_preds),
+            np.concatenate(all_targets))
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+def train(cfg_path: str, seed: int = 42) -> None:
+    cfg    = load_yaml(cfg_path)
+    seed_everything(seed)
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    logger = get_logger("train_pose", cfg["output"]["log_dir"])
+    writer = get_writer(cfg["output"]["log_dir"])
+    ckpt_mgr = CheckpointManager(
+        cfg["output"]["checkpoint_dir"],
+        monitor=cfg["output"]["monitor"],
+        save_top_k=cfg["output"]["save_top_k"],
+        logger=logger,
+    )
+    logger.info(f"Device: {device}  |  Config: {cfg_path}")
+
+    train_loader, val_loader = get_pose_loaders(cfg)
+    model = PoseModel.from_config(cfg, mode="classifier").to(device)
+    logger.info(f"Params: {sum(p.numel() for p in model.parameters()):,}")
+
+    criterion    = build_criterion(cfg["loss"], cfg["num_classes"])
+    optimizer    = build_optimizer(cfg, model)
+    warmup_sched, main_sched = build_scheduler(cfg, optimizer)
+    scaler       = GradScaler(enabled=cfg["train"].get("amp", True))
+    use_amp      = cfg["train"].get("amp", True)
+    grad_clip    = cfg["train"].get("grad_clip", 1.0)
+    epochs       = cfg["train"]["epochs"]
+    warmup_ep    = cfg["train"].get("warmup_epochs", 0)
+    class_names  = cfg["classes"]
+
+    for epoch in range(1, epochs + 1):
+        if epoch <= warmup_ep:
+            warmup_sched.step()
+        elif not isinstance(main_sched,
+                            torch.optim.lr_scheduler.ReduceLROnPlateau):
+            main_sched.step()
+
+        tr_loss, tr_preds, tr_tgts = run_epoch(
+            model, train_loader, criterion, optimizer,
+            device, scaler, use_amp, grad_clip, True)
+        val_loss, val_preds, val_tgts = run_epoch(
+            model, val_loader, criterion, optimizer,
+            device, scaler, use_amp, grad_clip, False)
+
+        tr_metrics  = compute_metrics(tr_preds,  tr_tgts,  class_names, cfg["num_classes"])
+        val_metrics = compute_metrics(val_preds, val_tgts, class_names, cfg["num_classes"])
+
+        if isinstance(main_sched,
+                      torch.optim.lr_scheduler.ReduceLROnPlateau):
+            main_sched.step(val_metrics["acc"])
+
+        lr_now = optimizer.param_groups[0]["lr"]
+        for tag, val in [
+            ("Loss/train", tr_loss), ("Loss/val", val_loss),
+            ("Acc/train",  tr_metrics["acc"]), ("Acc/val", val_metrics["acc"]),
+            ("F1/val", val_metrics["f1_macro"]), ("LR", lr_now),
+        ]:
+            writer.add_scalar(tag, val, epoch)
+
+        logger.info(
+            f"Epoch {epoch:03d}/{epochs}  lr={lr_now:.2e}  "
+            f"train_loss={tr_loss:.4f}  val_loss={val_loss:.4f}  "
+            f"val_acc={val_metrics['acc']:.4f}  val_f1={val_metrics['f1_macro']:.4f}"
+        )
+        ckpt_mgr.step(model, optimizer, epoch, {
+            "val_acc": val_metrics["acc"],
+            "val_f1":  val_metrics["f1_macro"],
+        })
+
+    writer.close()
+    logger.info(f"Best {ckpt_mgr.monitor}: {ckpt_mgr.best_score:.4f}")
+
+    val_loss, val_preds, val_tgts = run_epoch(
+        model, val_loader, criterion, optimizer,
+        device, scaler, use_amp, grad_clip, False)
+    print_metrics(compute_metrics(val_preds, val_tgts, class_names,
+                                  cfg["num_classes"]), prefix="FINAL VAL")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", default="configs/pose.yaml")
+    parser.add_argument("--seed",   type=int, default=42)
+    args = parser.parse_args()
+    train(args.config, args.seed)

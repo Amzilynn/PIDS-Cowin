@@ -1,0 +1,28 @@
+# ── Core ──────────────────────────────────────────────────────────────────────
+torch>=2.2.0
+torchvision>=0.17.0
+torchaudio>=2.2.0
+timm>=0.9.12                  # EfficientNet / ViT backbones
+
+# ── Computer Vision ────────────────────────────────────────────────────────────
+opencv-python>=4.9.0
+mediapipe>=0.10.9             # pose + face mesh + hands
+albumentations>=1.4.0         # image augmentations
+
+# ── Data / Utilities ──────────────────────────────────────────────────────────
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.4.0
+Pillow>=10.2.0
+tqdm>=4.66.0
+PyYAML>=6.0.1
+
+# ── Logging / Experiment Tracking ─────────────────────────────────────────────
+tensorboard>=2.16.0
+
+# ── Optional: AffectNet/RAF-DB helpers ────────────────────────────────────────
+# kaggle                      # uncomment to download datasets via kaggle API
+
+# ── Dev ───────────────────────────────────────────────────────────────────────
+matplotlib>=3.8.0
+seaborn>=0.13.0

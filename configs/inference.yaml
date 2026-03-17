@@ -1,0 +1,47 @@
+# ── Model Paths ───────────────────────────────────────────────────────────────
+face_ckpt: checkpoints/face/best.pth
+pose_ckpt: checkpoints/pose/best.pth
+fusion_ckpt: checkpoints/fusion/best.pth
+
+# ── Classes ───────────────────────────────────────────────────────────────────
+classes:
+  - neutral
+  - happy
+  - sad
+  - angry
+  - fearful
+  - disgusted
+  - surprised
+
+# ── Face Detector ─────────────────────────────────────────────────────────────
+face:
+  img_size: 224
+  detection_confidence: 0.6
+  padding_ratio: 0.25 # extra padding around detected face bbox
+
+# ── Pose Estimator ────────────────────────────────────────────────────────────
+pose:
+  num_landmarks: 33
+  seq_len: 60 # rolling buffer length
+  min_detection_confidence: 0.5
+  min_tracking_confidence: 0.5
+
+# ── Webcam / Video ────────────────────────────────────────────────────────────
+source: 0 # 0 = default webcam; or path to video file
+display_width: 1280
+display_height: 720
+fps_limit: 30
+
+# ── Inference ─────────────────────────────────────────────────────────────────
+device: cuda # cuda | cpu
+amp: true
+emotion_threshold: 0.35 # minimum prob to show emotion label
+smoothing_window: 10 # temporal smoothing over N frames
+
+# ── Overlay ───────────────────────────────────────────────────────────────────
+overlay:
+  show_landmarks: true
+  show_pose: true
+  show_face_bbox: true
+  show_bar_chart: true # prob bar chart on the side
+  font_scale: 0.7
