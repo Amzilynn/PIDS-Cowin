@@ -3,3 +3,6 @@ knowledge/
 gradio_app.py
 .venv/
 index/
+__pycache__/
+app/__pycache__/
+*.pyc
