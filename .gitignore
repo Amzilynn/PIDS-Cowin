@@ -1,1 +1,5 @@
-data/
+knowledge/
+.env
+gradio_app.py
+.venv/
+index/

@@ -1,0 +1,8 @@
+gradio==5.22.0
+numpy==2.2.4
+scikit-learn==1.6.1
+pypdf==5.4.0
+faster-whisper==1.1.1
+gTTS==2.5.4
+python-dotenv==1.0.1
+openai==1.66.3
