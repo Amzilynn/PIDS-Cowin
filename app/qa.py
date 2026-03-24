@@ -151,15 +151,67 @@ def _answer_with_langchain(
     }
     target_language = language_labels.get(answer_language, "français")
 
+    sales_role_prompts = {
+        "fr": (
+            "Tu joues le rôle d'un délégué médical orienté vente en pharmacie. "
+            "Objectif: aider à convaincre le pharmacien avec un argumentaire utile et concret, "
+            "sans jamais dépasser les informations disponibles dans le contexte documentaire. "
+            "Interdictions: inventer des bénéfices, promettre un résultat clinique, ou comparer sans preuve."
+        ),
+        "en": (
+            "You act as a pharmacy-focused medical sales delegate. "
+            "Goal: help convince the pharmacist with practical value-oriented arguments, "
+            "while never going beyond information present in the provided context. "
+            "Forbidden: inventing benefits, making clinical guarantees, or unsupported comparisons."
+        ),
+        "es": (
+            "Actúas como delegado médico orientado a la venta en farmacia. "
+            "Objetivo: ayudar a convencer al farmacéutico con argumentos prácticos y de valor, "
+            "sin exceder la información del contexto documental. "
+            "Prohibido: inventar beneficios, prometer resultados clínicos o comparar sin evidencia."
+        ),
+    }
+
+    response_formats = {
+        "fr": (
+            "Format de sortie obligatoire:\n"
+            "1) Besoin officine\n"
+            "2) Arguments produit (2-4 points)\n"
+            "3) Preuves documentaires (citer la source)\n"
+            "4) Réponse à une objection probable\n"
+            "5) Prochaine action recommandée pour le délégué"
+        ),
+        "en": (
+            "Mandatory output format:\n"
+            "1) Pharmacy need\n"
+            "2) Product arguments (2-4 bullets)\n"
+            "3) Documentary evidence (cite source)\n"
+            "4) Response to one likely objection\n"
+            "5) Recommended next action for the delegate"
+        ),
+        "es": (
+            "Formato obligatorio:\n"
+            "1) Necesidad de la farmacia\n"
+            "2) Argumentos del producto (2-4 puntos)\n"
+            "3) Evidencias documentales (citar fuente)\n"
+            "4) Respuesta a una objeción probable\n"
+            "5) Próxima acción recomendada para el delegado"
+        ),
+    }
+
+    role_instruction = sales_role_prompts.get(answer_language, sales_role_prompts["fr"])
+    output_contract = response_formats.get(answer_language, response_formats["fr"])
+
     prompt = ChatPromptTemplate.from_messages(
         [
-            ("system", "{system_prompt}"),
+            ("system", "{system_prompt}\n\n{role_instruction}"),
             (
                 "human",
                 "Question:\n{question}\n\n"
                 "Document context:\n{context}\n\n"
                 "Answer language: {target_language}\n"
-                "Answer only from context. If missing, say information was not found in provided sources.",
+                "Answer only from context. If missing, say information was not found in provided sources.\n\n"
+                "{output_contract}",
             ),
         ]
     )
@@ -167,9 +219,11 @@ def _answer_with_langchain(
     return chain.invoke(
         {
             "system_prompt": selected_system_prompt,
+            "role_instruction": role_instruction,
             "question": question,
             "context": context,
             "target_language": target_language,
+            "output_contract": output_contract,
         }
     )
 
