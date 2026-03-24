@@ -1,0 +1,44 @@
+{
+  "default": {
+    "priority_columns": {
+      "nom": "PRODUIT",
+      "dci": "DCI",
+      "dosage": "DOSAGE",
+      "forme": "FORME",
+      "indications": "INDICATION",
+      "classe": "CLASSE",
+      "sous_classe": "SOUS_CLASSE",
+      "laboratoire": "LABORATOIRE",
+      "statut_amm": "STATUT",
+      "presentation": "PRESENTATION",
+      "conditionnement_primaire": "CONDITIONNEMENT_PRIMAIRE",
+      "spec_conditionnement": "SPEC_CONDITIONNEMENT",
+      "amm": "AMM",
+      "date_amm": "DATE_AMM",
+      "product": "PRODUIT",
+      "description": "DESCRIPTION",
+      "categories": "CATEGORIES"
+    },
+    "focus_columns": [],
+    "include_other_columns": true
+  },
+  "sources": {
+    "cleaned_dpm_medicaments.csv": {
+      "focus_columns": ["nom", "indications"],
+      "priority_columns": {
+        "nom": "PRODUIT",
+        "indications": "INDICATION"
+      },
+      "include_other_columns": false
+    },
+    "cleaned_xen_products.csv": {
+      "focus_columns": ["product", "description", "categories"],
+      "priority_columns": {
+        "product": "PRODUIT",
+        "description": "DESCRIPTION",
+        "categories": "CATEGORIES"
+      },
+      "include_other_columns": true
+    }
+  }
+}

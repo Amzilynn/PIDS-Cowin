@@ -5,4 +5,10 @@ pypdf==5.4.0
 faster-whisper==1.1.1
 gTTS==2.5.4
 python-dotenv==1.0.1
-openai==1.66.3
+openai==1.68.2
+langchain-core==0.3.51
+langchain-openai==0.3.12
+chromadb==0.5.23
+sentence-transformers==3.4.1
+chardet==5.2.0
+posthog==3.5.0

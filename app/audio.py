@@ -162,26 +162,41 @@ def _trim_audio_end_on_silence(audio_path: Optional[str], settings: Settings) ->
         return audio_path
 
 
-def transcribe_audio(audio_path: Optional[str], settings: Settings) -> str:
+def transcribe_audio(audio_path: Optional[str], settings: Settings) -> Tuple[str, Optional[str]]:
     if not audio_path:
-        return ""
+        return "", None
 
     if not Path(audio_path).exists():
-        return ""
+        return "", None
 
     model = _get_whisper_model(settings.whisper_model_size)
-    lang_code = _LANGUAGE_CODES.get(settings.language, "fr")
-    segments, _ = model.transcribe(
+    forced_language = _LANGUAGE_CODES.get(settings.language)
+    transcription_language = None if settings.whisper_auto_detect else forced_language
+    segments, info = model.transcribe(
         audio_path,
-        language=lang_code,
+        language=transcription_language,
         vad_filter=True,
         vad_parameters={
             "min_silence_duration_ms": max(200, settings.silence_min_ms),
             "speech_pad_ms": 200,
         },
     )
-    text = " ".join(segment.text.strip() for segment in segments).strip()
-    return text
+    segments_list = list(segments)
+    text = " ".join(segment.text.strip() for segment in segments_list).strip()
+
+    detected_language: Optional[str] = None
+    if settings.whisper_auto_detect:
+        info_language = getattr(info, "language", None)
+        info_confidence = float(getattr(info, "language_probability", 0.0) or 0.0)
+        if info_language in {"fr", "en", "es"} and info_confidence >= settings.whisper_lang_min_conf:
+            detected_language = info_language
+    elif forced_language:
+        detected_language = forced_language
+
+    if detected_language is not None and detected_language not in {"fr", "en", "es"}:
+        detected_language = None
+
+    return text, detected_language
 
 
 def synthesize_speech(text: str, lang: str = "fr", timeout_sec: int = 20, max_chars: int = 1200) -> Optional[str]:
@@ -237,7 +252,7 @@ def process_audio_question(audio_path: Optional[str], settings: Settings) -> Tup
         return "", message, None
 
     processed_audio_path = _trim_audio_end_on_silence(audio_path, settings)
-    transcript = transcribe_audio(processed_audio_path, settings)
+    transcript, detected_language = transcribe_audio(processed_audio_path, settings)
     if not transcript:
         message = _ERROR_MESSAGES.get(settings.language, _ERROR_MESSAGES["fr"])
         audio_answer = synthesize_speech(
@@ -248,7 +263,7 @@ def process_audio_question(audio_path: Optional[str], settings: Settings) -> Tup
         )
         return "", message, audio_answer
 
-    qa_result = answer_question(transcript, settings)
+    qa_result = answer_question(transcript, settings, preferred_language=detected_language)
     answer = qa_result["answer"]
     answer_language = str(qa_result.get("answer_language", settings.language))
     answer_audio_path = synthesize_speech(

@@ -6,6 +6,15 @@ import re
 
 from openai import OpenAI
 
+try:
+    from langchain_core.output_parsers import StrOutputParser
+    from langchain_core.prompts import ChatPromptTemplate
+    from langchain_openai import ChatOpenAI
+except Exception:
+    StrOutputParser = None
+    ChatPromptTemplate = None
+    ChatOpenAI = None
+
 from .config import Settings
 from .rag import retrieve
 
@@ -29,11 +38,14 @@ def _infer_question_language(question: str, default_language: str = "fr") -> str
 
     english_markers = {
         "what", "when", "where", "which", "how", "why", "can", "could", "should",
-        "does", "do", "is", "are", "the", "and", "for", "with", "about", "side", "effects"
+        "does", "do", "is", "are", "the", "and", "for", "with", "about", "side", "effects",
+        "indication", "indications", "dosage", "contraindications", "benefits", "use", "uses", "of"
     }
     french_markers = {
         "quoi", "quand", "où", "quel", "quelle", "comment", "pourquoi", "est", "sont",
-        "les", "des", "avec", "pour", "contre", "effets", "indication", "posologie"
+        "les", "des", "avec", "pour", "contre", "effets", "indication", "posologie",
+        "parle", "moi", "produit", "nomme", "nommé", "brievement", "brièvement",
+        "donne", "decris", "décris", "resume", "résume", "sur", "medicament", "médicament"
     }
     spanish_markers = {
         "qué", "cuando", "dónde", "cuál", "como", "por", "porque", "los", "las", "con",
@@ -48,12 +60,22 @@ def _infer_question_language(question: str, default_language: str = "fr") -> str
     fr_score = sum(1 for word in words if word in french_markers)
     es_score = sum(1 for word in words if word in spanish_markers)
 
+    # Strong phrase hints
+    if any(phrase in text for phrase in ["what is", "what are", "how to", "side effects", "indications of", "dosage of"]):
+        en_score += 3
+    if any(phrase in text for phrase in ["qu'est-ce", "quelle est", "quelles sont", "effets secondaires", "posologie de"]):
+        fr_score += 3
+    if any(phrase in text for phrase in ["qué es", "cuál es", "efectos adversos", "dosis de"]):
+        es_score += 3
+
     if en_score >= fr_score and en_score >= es_score and en_score > 0:
         return "en"
     if es_score >= fr_score and es_score > 0:
         return "es"
     if fr_score > 0:
         return "fr"
+
+    # If undecidable, keep app default language rather than forcing English.
     return default_language
 
 
@@ -92,9 +114,83 @@ def _fallback_answer(question: str, passages: List[Dict[str, str]], language: st
     )
 
 
-def answer_question(question: str, settings: Settings) -> Dict[str, object]:
-    answer_language = _infer_question_language(question, settings.language)
-    passages = retrieve(settings.index_dir, question, top_k=settings.top_k)
+def _answer_with_langchain(
+    *,
+    question: str,
+    context: str,
+    answer_language: str,
+    selected_system_prompt: str,
+    model: str,
+    provider: str,
+    settings: Settings,
+) -> str | None:
+    if ChatOpenAI is None or ChatPromptTemplate is None or StrOutputParser is None:
+        return None
+
+    if provider == "ollama":
+        llm = ChatOpenAI(
+            model=model,
+            base_url=settings.ollama_base_url,
+            api_key=os.getenv("OLLAMA_API_KEY", "ollama"),
+            temperature=0.2,
+        )
+    else:
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            return None
+        llm = ChatOpenAI(
+            model=model,
+            api_key=api_key,
+            temperature=0.2,
+        )
+
+    language_labels = {
+        "fr": "français",
+        "en": "English",
+        "es": "español",
+    }
+    target_language = language_labels.get(answer_language, "français")
+
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", "{system_prompt}"),
+            (
+                "human",
+                "Question:\n{question}\n\n"
+                "Document context:\n{context}\n\n"
+                "Answer language: {target_language}\n"
+                "Answer only from context. If missing, say information was not found in provided sources.",
+            ),
+        ]
+    )
+    chain = prompt | llm | StrOutputParser()
+    return chain.invoke(
+        {
+            "system_prompt": selected_system_prompt,
+            "question": question,
+            "context": context,
+            "target_language": target_language,
+        }
+    )
+
+
+def answer_question(question: str, settings: Settings, preferred_language: str | None = None) -> Dict[str, object]:
+    if preferred_language in {"fr", "en", "es"}:
+        answer_language = preferred_language
+    else:
+        answer_language = _infer_question_language(question, settings.language)
+    passages = retrieve(
+        settings.index_dir,
+        question,
+        top_k=settings.top_k,
+        collection_name=settings.chroma_collection,
+        embedding_model=settings.embedding_model,
+        fetch_k=settings.retrieval_fetch_k,
+        alpha_semantic=settings.retrieval_alpha_semantic,
+        alpha_lexical=settings.retrieval_alpha_lexical,
+        min_score=settings.retrieval_min_score,
+        max_per_source=settings.retrieval_max_per_source,
+    )
     context = _format_context(passages)
 
     provider = settings.llm_provider.lower().strip()
@@ -163,20 +259,38 @@ def answer_question(question: str, settings: Settings) -> Dict[str, object]:
     }
     selected_system_prompt = system_prompts.get(answer_language, settings.system_prompt)
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": selected_system_prompt},
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0.2,
-    )
+    answer_text: str | None = None
+    if settings.use_langchain:
+        answer_text = _answer_with_langchain(
+            question=question,
+            context=context,
+            answer_language=answer_language,
+            selected_system_prompt=selected_system_prompt,
+            model=model,
+            provider=provider,
+            settings=settings,
+        )
 
-    answer_text = response.choices[0].message.content or _fallback_answer(question, passages, answer_language)
+    if not answer_text:
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": selected_system_prompt},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.2,
+            )
+            answer_text = response.choices[0].message.content
+        except Exception:
+            answer_text = None
+
+    if not answer_text:
+        answer_text = _fallback_answer(question, passages, answer_language)
 
     return {
         "answer": answer_text,
         "passages": passages,
-        "mode": mode,
+        "mode": "langchain" if settings.use_langchain else mode,
         "answer_language": answer_language,
     }

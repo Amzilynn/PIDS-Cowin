@@ -7,9 +7,19 @@ import os
 class Settings:
     docs_dir: Path = Path("knowledge")
     index_dir: Path = Path("index")
+    chroma_collection: str = "medical_docs"
+    embedding_model: str = "default"
     whisper_model_size: str = "small"
+    whisper_auto_detect: bool = True
+    whisper_lang_min_conf: float = 0.60
     top_k: int = 8
+    retrieval_fetch_k: int = 24
+    retrieval_alpha_semantic: float = 0.72
+    retrieval_alpha_lexical: float = 0.28
+    retrieval_min_score: float = 0.16
+    retrieval_max_per_source: int = 3
     llm_provider: str = "ollama"
+    use_langchain: bool = False
     ollama_base_url: str = "http://127.0.0.1:11434/v1"
     ollama_model: str = "llama3.1:latest"
     openai_model: str = "gpt-4.1-mini"
@@ -63,9 +73,19 @@ class Settings:
     def from_env() -> "Settings":
         docs_dir = Path(os.getenv("DOCS_DIR", "knowledge"))
         index_dir = Path(os.getenv("INDEX_DIR", "index"))
+        chroma_collection = os.getenv("CHROMA_COLLECTION", "medical_docs")
+        embedding_model = os.getenv("EMBEDDING_MODEL", "default")
         whisper_model_size = os.getenv("WHISPER_MODEL_SIZE", "small")
+        whisper_auto_detect = os.getenv("WHISPER_AUTO_DETECT", "true").strip().lower() in {"1", "true", "yes", "on"}
+        whisper_lang_min_conf = float(os.getenv("WHISPER_LANG_MIN_CONF", "0.60"))
         top_k = int(os.getenv("TOP_K", "4"))
+        retrieval_fetch_k = int(os.getenv("RETRIEVAL_FETCH_K", "24"))
+        retrieval_alpha_semantic = float(os.getenv("RETRIEVAL_ALPHA_SEMANTIC", "0.72"))
+        retrieval_alpha_lexical = float(os.getenv("RETRIEVAL_ALPHA_LEXICAL", "0.28"))
+        retrieval_min_score = float(os.getenv("RETRIEVAL_MIN_SCORE", "0.16"))
+        retrieval_max_per_source = int(os.getenv("RETRIEVAL_MAX_PER_SOURCE", "3"))
         llm_provider = os.getenv("LLM_PROVIDER", "ollama")
+        use_langchain = os.getenv("USE_LANGCHAIN", "false").strip().lower() in {"1", "true", "yes", "on"}
         ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434/v1")
         ollama_model = os.getenv("OLLAMA_MODEL", "llama3.1:latest")
         openai_model = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
@@ -79,9 +99,19 @@ class Settings:
         return Settings(
             docs_dir=docs_dir,
             index_dir=index_dir,
+            chroma_collection=chroma_collection,
+            embedding_model=embedding_model,
             whisper_model_size=whisper_model_size,
+            whisper_auto_detect=whisper_auto_detect,
+            whisper_lang_min_conf=whisper_lang_min_conf,
             top_k=top_k,
+            retrieval_fetch_k=retrieval_fetch_k,
+            retrieval_alpha_semantic=retrieval_alpha_semantic,
+            retrieval_alpha_lexical=retrieval_alpha_lexical,
+            retrieval_min_score=retrieval_min_score,
+            retrieval_max_per_source=retrieval_max_per_source,
             llm_provider=llm_provider,
+            use_langchain=use_langchain,
             ollama_base_url=ollama_base_url,
             ollama_model=ollama_model,
             openai_model=openai_model,
