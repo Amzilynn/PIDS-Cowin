@@ -93,6 +93,7 @@ Puis ouvrez l'URL locale affichée (souvent http://127.0.0.1:7860).
 ## 6) Option OpenAI
 
 Par défaut: `LLM_PROVIDER=ollama`.
+La génération de réponse passe par **LangChain** par défaut (`USE_LANGCHAIN=true`).
 
 Si vous voulez OpenAI:
 
@@ -100,3 +101,24 @@ Si vous voulez OpenAI:
 - configurez `OPENAI_API_KEY`
 
 Si aucun provider valide n'est disponible, le projet fonctionne en mode fallback extractif.
+
+Vous pouvez désactiver LangChain (mode SDK direct) avec:
+
+```env
+USE_LANGCHAIN=false
+```
+
+---
+
+## 7) Mémoire de conversation
+
+L'application conserve les derniers tours de dialogue pour améliorer les questions de suivi.
+
+- Variable: `MEMORY_TURNS`
+- Valeur par défaut: `4` (soit 4 tours utilisateur + assistant)
+
+Exemple dans `.env`:
+
+```env
+MEMORY_TURNS=6
+```

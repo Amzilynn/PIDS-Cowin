@@ -19,7 +19,7 @@ class Settings:
     retrieval_min_score: float = 0.16
     retrieval_max_per_source: int = 3
     llm_provider: str = "ollama"
-    use_langchain: bool = False
+    use_langchain: bool = True
     ollama_base_url: str = "http://127.0.0.1:11434/v1"
     ollama_model: str = "llama3.1:latest"
     openai_model: str = "gpt-4.1-mini"
@@ -30,6 +30,7 @@ class Settings:
     analysis_window_ms: int = 30
     tts_timeout_sec: int = 20
     tts_max_chars: int = 1200
+    memory_turns: int = 4
     
     # System prompts in different languages
     _SYSTEM_PROMPTS = {
@@ -85,7 +86,7 @@ class Settings:
         retrieval_min_score = float(os.getenv("RETRIEVAL_MIN_SCORE", "0.16"))
         retrieval_max_per_source = int(os.getenv("RETRIEVAL_MAX_PER_SOURCE", "3"))
         llm_provider = os.getenv("LLM_PROVIDER", "ollama")
-        use_langchain = os.getenv("USE_LANGCHAIN", "false").strip().lower() in {"1", "true", "yes", "on"}
+        use_langchain = os.getenv("USE_LANGCHAIN", "true").strip().lower() in {"1", "true", "yes", "on"}
         ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434/v1")
         ollama_model = os.getenv("OLLAMA_MODEL", "llama3.1:latest")
         openai_model = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
@@ -96,6 +97,7 @@ class Settings:
         analysis_window_ms = int(os.getenv("ANALYSIS_WINDOW_MS", "30"))
         tts_timeout_sec = int(os.getenv("TTS_TIMEOUT_SEC", "20"))
         tts_max_chars = int(os.getenv("TTS_MAX_CHARS", "1200"))
+        memory_turns = int(os.getenv("MEMORY_TURNS", "4"))
         return Settings(
             docs_dir=docs_dir,
             index_dir=index_dir,
@@ -122,4 +124,5 @@ class Settings:
             analysis_window_ms=analysis_window_ms,
             tts_timeout_sec=tts_timeout_sec,
             tts_max_chars=tts_max_chars,
+            memory_turns=memory_turns,
         )

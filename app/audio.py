@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 import tempfile
 import wave
 import audioop
@@ -246,7 +246,11 @@ def synthesize_speech(text: str, lang: str = "fr", timeout_sec: int = 20, max_ch
         return None
 
 
-def process_audio_question(audio_path: Optional[str], settings: Settings) -> Tuple[str, str, Optional[str]]:
+def process_audio_question(
+    audio_path: Optional[str],
+    settings: Settings,
+    conversation_history: List[Dict[str, str]] | None = None,
+) -> Tuple[str, str, Optional[str]]:
     if not audio_path:
         message = _NO_AUDIO_MESSAGES.get(settings.language, _NO_AUDIO_MESSAGES["fr"])
         return "", message, None
@@ -263,7 +267,12 @@ def process_audio_question(audio_path: Optional[str], settings: Settings) -> Tup
         )
         return "", message, audio_answer
 
-    qa_result = answer_question(transcript, settings, preferred_language=detected_language)
+    qa_result = answer_question(
+        transcript,
+        settings,
+        preferred_language=detected_language,
+        conversation_history=conversation_history,
+    )
     answer = qa_result["answer"]
     answer_language = str(qa_result.get("answer_language", settings.language))
     answer_audio_path = synthesize_speech(
