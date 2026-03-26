@@ -159,8 +159,10 @@ def _smalltalk_reply(question: str, language: str) -> str | None:
     if not text:
         return None
 
+    normalized_text = re.sub(r"(.)\1+", r"\1", text)
+
     greetings = {
-        "bonjour", "salut", "bonsoir", "hello", "hi", "hey", "hola", "coucou"
+        "bonjour", "salut", "bonsoir", "hello", "hi", "hey", "hola", "coucou", "bjr", "salam", "slm"
     }
     thanks = {
         "merci", "thanks", "thank you", "gracias"
@@ -170,8 +172,8 @@ def _smalltalk_reply(question: str, language: str) -> str | None:
     if not words:
         return None
 
-    has_greeting = any(token in text for token in greetings)
-    has_thanks = any(token in text for token in thanks)
+    has_greeting = any(token in text or token in normalized_text for token in greetings)
+    has_thanks = any(token in text or token in normalized_text for token in thanks)
     is_short = len(words) <= 6
 
     if not is_short:

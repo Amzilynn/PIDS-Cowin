@@ -17,6 +17,8 @@ from .qa import answer_question
 
 _WHISPER_CACHE = {}
 
+_WHISPER_FALLBACK_SIZES = ["small", "base", "tiny"]
+
 # Language code mappings for whisper and gtts
 _LANGUAGE_CODES = {
     "fr": "fr",
@@ -38,12 +40,58 @@ _NO_AUDIO_MESSAGES = {
 }
 
 
-def _get_whisper_model(size: str) -> WhisperModel:
-    model = _WHISPER_CACHE.get(size)
-    if model is None:
-        model = WhisperModel(size, device="cpu", compute_type="int8")
-        _WHISPER_CACHE[size] = model
-    return model
+def _get_whisper_model(size: str, device: str, compute_type: str) -> WhisperModel:
+    requested = (size or "small").strip().lower()
+    requested_device = (device or "cpu").strip().lower()
+    requested_compute_type = (compute_type or "int8").strip().lower()
+
+    candidate_sizes: List[str] = []
+    if requested:
+        candidate_sizes.append(requested)
+    for candidate in _WHISPER_FALLBACK_SIZES:
+        if candidate not in candidate_sizes:
+            candidate_sizes.append(candidate)
+
+    last_error: Exception | None = None
+    for candidate in candidate_sizes:
+        runtime_options: List[Tuple[str, str]] = []
+        runtime_options.append((requested_device, requested_compute_type))
+        if requested_device == "cuda":
+            if requested_compute_type != "int8_float16":
+                runtime_options.append(("cuda", "int8_float16"))
+            runtime_options.append(("cpu", "int8"))
+
+        deduped_options: List[Tuple[str, str]] = []
+        for option in runtime_options:
+            if option not in deduped_options:
+                deduped_options.append(option)
+
+        for runtime_device, runtime_compute_type in deduped_options:
+            cache_key = f"{candidate}::{runtime_device}::{runtime_compute_type}"
+            cached_model = _WHISPER_CACHE.get(cache_key)
+            if cached_model is not None:
+                return cached_model
+            try:
+                model = WhisperModel(candidate, device=runtime_device, compute_type=runtime_compute_type)
+                _WHISPER_CACHE[cache_key] = model
+                return model
+            except Exception as error:
+                last_error = error
+                continue
+
+    raise RuntimeError(f"Failed to load Whisper model on CPU memory: {last_error}")
+
+
+def warmup_whisper(settings: Settings) -> bool:
+    try:
+        _get_whisper_model(
+            settings.whisper_model_size,
+            settings.whisper_device,
+            settings.whisper_compute_type,
+        )
+        return True
+    except Exception:
+        return False
 
 
 def _median(values: List[int]) -> int:
@@ -169,7 +217,14 @@ def transcribe_audio(audio_path: Optional[str], settings: Settings) -> Tuple[str
     if not Path(audio_path).exists():
         return "", None
 
-    model = _get_whisper_model(settings.whisper_model_size)
+    try:
+        model = _get_whisper_model(
+            settings.whisper_model_size,
+            settings.whisper_device,
+            settings.whisper_compute_type,
+        )
+    except Exception:
+        return "", None
     forced_language = _LANGUAGE_CODES.get(settings.language)
     transcription_language = None if settings.whisper_auto_detect else forced_language
     segments, info = model.transcribe(

@@ -8,8 +8,10 @@ class Settings:
     docs_dir: Path = Path("knowledge")
     index_dir: Path = Path("index")
     chroma_collection: str = "medical_docs"
-    embedding_model: str = "default"
+    embedding_model: str = "multi-qa-mpnet-base-dot-v1"
     whisper_model_size: str = "small"
+    whisper_device: str = "cpu"
+    whisper_compute_type: str = "int8"
     whisper_auto_detect: bool = True
     whisper_lang_min_conf: float = 0.60
     top_k: int = 8
@@ -77,6 +79,8 @@ class Settings:
         chroma_collection = os.getenv("CHROMA_COLLECTION", "medical_docs")
         embedding_model = os.getenv("EMBEDDING_MODEL", "default")
         whisper_model_size = os.getenv("WHISPER_MODEL_SIZE", "small")
+        whisper_device = os.getenv("WHISPER_DEVICE", "cpu")
+        whisper_compute_type = os.getenv("WHISPER_COMPUTE_TYPE", "int8")
         whisper_auto_detect = os.getenv("WHISPER_AUTO_DETECT", "true").strip().lower() in {"1", "true", "yes", "on"}
         whisper_lang_min_conf = float(os.getenv("WHISPER_LANG_MIN_CONF", "0.60"))
         top_k = int(os.getenv("TOP_K", "4"))
@@ -104,6 +108,8 @@ class Settings:
             chroma_collection=chroma_collection,
             embedding_model=embedding_model,
             whisper_model_size=whisper_model_size,
+            whisper_device=whisper_device,
+            whisper_compute_type=whisper_compute_type,
             whisper_auto_detect=whisper_auto_detect,
             whisper_lang_min_conf=whisper_lang_min_conf,
             top_k=top_k,

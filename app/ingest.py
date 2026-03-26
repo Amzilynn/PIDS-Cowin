@@ -295,18 +295,19 @@ def _collect_docs(docs_dir: Path) -> List[Dict[str, str]]:
             continue
 
         if ext == ".csv":
+            # Pour CSV: chaque ligne = un chunk complet (préserve l'intégrité des données produit)
             rows = _read_csv_rows(file_path)
             for row_idx, row_text in enumerate(rows):
-                for chunk_idx, chunk in enumerate(_chunk_text(row_text, chunk_size=700, overlap=120)):
-                    records.append(
-                        {
-                            "id": f"{file_path.name}::row_{row_idx}::chunk_{chunk_idx}",
-                            "source": str(file_path),
-                            "text": chunk,
-                        }
-                    )
+                records.append(
+                    {
+                        "id": f"{file_path.name}::row_{row_idx}",
+                        "source": str(file_path),
+                        "text": row_text,
+                    }
+                )
             continue
 
+        # Pour PDF/TXT: chunking classique avec overlap
         text = _read_pdf(file_path) if ext == ".pdf" else _read_txt(file_path)
         for idx, chunk in enumerate(_chunk_text(text)):
             records.append(
@@ -333,12 +334,10 @@ def build_index(
     with (index_dir / "chunks.json").open("w", encoding="utf-8") as file:
         json.dump(records, file, ensure_ascii=False, indent=2)
 
-    if embedding_model.strip().lower() == "default":
-        embedding_function = embedding_functions.ONNXMiniLM_L6_V2()
-    else:
-        embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name=embedding_model,
-        )
+    # Utilise SentenceTransformer pour tous les modèles (y compris MedCPT)
+    embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+        model_name=embedding_model,
+    )
 
     os.environ.setdefault("ANONYMIZED_TELEMETRY", "FALSE")
 
