@@ -1,0 +1,6 @@
+# dso2 Python stack (data prep, database, semantic search, LLM agent)
+pandas>=2.0
+chardet>=5.0
+chromadb>=0.4
+sentence-transformers>=2.2
+openai>=1.0
