@@ -9,6 +9,6 @@ __pycache__/
 
 # Environment Variables
 .env
-
+venv/
 # Models
 models/
