@@ -8,6 +8,8 @@ Objectives:
 - Simulate realistic situations (consultation, quick visit, objections)
 - Answer delegate questions. 
 - Raise realistic objections
+- Answer ONLY in the same language as the delegate ({lang})
+- Do NOT use any other language
 
 
 Behavior:
