@@ -1,0 +1,194 @@
+﻿Substance 1,Substance 2,Type interaction,Explication détaillée,Conduite à tenir
+Fer,Calcium,CONFLIT,Le calcium réduit l'absorption du fer de 40-60% via compétition au niveau du transporteur DMT1 et inhibition directe.,"Séparer les prises d'au moins 2 heures. Prendre le fer à jeun le matin, le calcium le soir."
+Fer,Zinc,CONFLIT,"Compétition d'absorption intestinale (transporteur DMT1 commun). À >25mg de zinc, l'absorption du fer chute significativement.",Espacer de 2h minimum. Ne pas dépasser 25mg zinc si fer pris le même jour.
+Fer,Magnésium,CONFLIT,Le magnésium peut réduire l'absorption du fer par compétition intestinale et augmentation du pH gastrique.,Espacer de 2h.
+Fer,Manganèse,CONFLIT,Compétition directe pour le transporteur DMT1. Le manganèse réduit l'absorption du fer et vice-versa.,Espacer les prises.
+Fer,Cuivre,SYNERGIE,Le cuivre est indispensable au métabolisme du fer: la céruloplasmine (cuivre-dépendante) oxyde le Fe²⁺ en Fe³⁺ pour le transport par la transferrine.,Association bénéfique.
+Fer,Chrome,CONFLIT PARTIEL,Le chrome trivalent peut compétitionner avec le fer pour l'absorption intestinale à forte dose.,Espacer si supplémentation à forte dose des deux.
+Fer,Phosphore (phosphates),CONFLIT,Les phosphates alimentaires chélatent le fer et réduisent son absorption.,Éviter les boissons au cola et aliments riches en phosphates avec le fer.
+Zinc,Cuivre,CONFLIT,Le zinc induit la métallothionéine intestinale qui piège le cuivre. >50mg zinc/j pendant >4 semaines → carence en cuivre certaine.,"Ratio optimal zinc/cuivre = 10:1. Si zinc prolongé, TOUJOURS ajouter du cuivre (1-2mg/j)."
+Zinc,Calcium,CONFLIT,"Le calcium peut réduire l'absorption du zinc, surtout à forte dose (>500mg calcium).",Espacer les prises de 2h si gros dosages.
+Zinc,Magnésium,COMPÉTITION,Compétition modérée pour l'absorption intestinale à haute dose.,"Aux doses normales, pas de problème clinique significatif."
+Zinc,Phosphore,CONFLIT,Les phytates (acide phytique) chélatent le zinc et réduisent son absorption de 40-60%.,"Éviter le zinc avec les céréales complètes, légumineuses crues."
+Calcium,Magnésium,COMPÉTITION,"À très forte dose simultanée, compétition pour les transporteurs intestinaux. Mais à dose physiologique, le magnésium régule le calcium.","Dose modérée ensemble: OK. Si Ca >500mg et Mg >400mg, séparer."
+Calcium,Phosphore,SYNERGIE,"Forment ensemble l'hydroxyapatite Ca₁₀(PO₄)₆(OH)₂, composant principal de l'os.",Ratio optimal Ca/P = 1.5:1 à 2:1.
+Calcium,Strontium,CONFLIT,Compétition d'absorption. Le calcium réduit l'absorption du strontium (ranélate de strontium).,Espacer de 2h si Protelos prescrit.
+Magnésium,Potassium,SYNERGIE,Le magnésium régule les canaux potassiques. Carence en Mg → perte rénale de potassium.,Corriger le magnésium AVANT le potassium en cas de double carence.
+Magnésium,Bore,SYNERGIE,Le bore améliore l'absorption et la rétention du magnésium.,Association bénéfique.
+Sélénium,Mercure,PROTECTION,Le sélénium chélate le mercure (séléno-mercure inerte). Protection contre la toxicité mercurielle.,"Les gros poissons (thon, espadon) apportent à la fois mercure et sélénium."
+Potassium,Sodium,ANTAGONISME,Le potassium contrebalance l'effet hypertenseur du sodium. Ratio K/Na important pour la TA.,"Augmenter les apports en potassium si alimentation salée (fruits, légumes)."
+Fer,Vitamine C,SYNERGIE,"La vitamine C réduit le fer ferrique Fe³⁺ en fer ferreux Fe²⁺, augmentant l'absorption de 2 à 6 fois. Effet dose-dépendant.",Prendre ensemble — un des meilleurs combos en nutrition. 100mg vit C suffit.
+Fer,Vitamine B9 (folate),SYNERGIE,Les deux sont essentiels à l'érythropoïèse. Carence combinée = anémie mégaloblastique + microcytaire.,"Association recommandée, surtout grossesse."
+Fer,Vitamine B12,SYNERGIE,"Complémentaires pour la formation des globules rouges. Sans B12, le fer seul ne corrige pas l'anémie pernicieuse.",Vérifier les deux en cas d'anémie.
+Fer,Vitamine A,SYNERGIE,La vitamine A améliore la mobilisation du fer stocké (ferritine) et l'incorporation dans l'hémoglobine.,Association utile dans les pays à double carence (fer + vit A).
+Fer,Vitamine E,CONFLIT PARTIEL,La vitamine E à très haute dose peut réduire l'absorption du fer non-héminique.,Espacer si supplémentation en vitamine E à haute dose.
+Fer,Vitamine B2 (riboflavine),SYNERGIE,La riboflavine est nécessaire à la mobilisation du fer et à la production d'hémoglobine.,Association bénéfique.
+Zinc,Vitamine A,SYNERGIE,Le zinc est indispensable à la synthèse de la RBP (retinol-binding protein) qui transporte la vitamine A dans le sang.,"Sans zinc suffisant, la vitamine A reste piégée dans le foie."
+Zinc,Vitamine C,SYNERGIE,"Double action immunostimulante. Ensemble, ils raccourcissent la durée du rhume de 33%.",Combinaison classique rhume/grippe.
+Zinc,Vitamine B6,SYNERGIE,Co-facteurs dans >300 réactions enzymatiques. La B6 améliore l'absorption cellulaire du zinc.,Association bénéfique.
+Zinc,Vitamine B9,SYNERGIE,Le zinc est nécessaire à l'activité des enzymes folate-dépendantes.,Association recommandée grossesse.
+Zinc,Vitamine B8 (biotine),SYNERGIE,"Travaillent ensemble pour la santé des cheveux, ongles et peau (kératine).",Association capillaire classique.
+Zinc,Sélénium,SYNERGIE,"Double action antioxydante complémentaire: Zn → SOD (superoxyde dismutase), Se → GPx (glutathion peroxydase).",Association recommandée anti-âge/immunité.
+Calcium,Vitamine D,SYNERGIE,"La vitamine D est INDISPENSABLE à l'absorption du calcium. Sans vit D, seulement 10-15% du Ca est absorbé (vs 30-40% avec).",TOUJOURS associer calcium + vitamine D. Association essentielle.
+Calcium,Vitamine K2,SYNERGIE,La vitamine K2 active l'ostéocalcine (fixe le Ca sur l'os) et la MGP (empêche le Ca de se déposer dans les artères).,Trio idéal: Ca + Vit D + Vit K2. Prévient l'ostéoporose SANS risque de calcification vasculaire.
+Calcium,Vitamine C,SYNERGIE,"La vitamine C favorise la synthèse du collagène, matrice sur laquelle le calcium se fixe dans l'os.",Complémentarité pour la santé osseuse.
+Magnésium,Vitamine B6,SYNERGIE,La B6 augmente la pénétration intracellulaire du magnésium de 20-40%. Duo anti-stress par excellence.,Association classique Mg + B6 (ex: Magne-B6).
+Magnésium,Vitamine D,SYNERGIE,"Le magnésium est nécessaire à la conversion hépatique et rénale de la vitamine D en forme active (1,25-diOH-D3).","Sans magnésium suffisant, la vitamine D reste inactive."
+Magnésium,Taurine,SYNERGIE,La taurine améliore la rétention cellulaire du magnésium et potentialise son effet sur le système nerveux.,Combinaison efficace stress/sommeil/crampes.
+Sélénium,Vitamine E,SYNERGIE,Le sélénium (GPx) et la vitamine E sont antioxydants complémentaires. Le sélénium recycle la vitamine E oxydée.,Association anti-âge et protection cellulaire de référence.
+Sélénium,Iode,SYNERGIE,Le sélénium (désiodases) convertit T4 en T3 active. Il protège aussi la thyroïde du H₂O₂ produit lors de la synthèse hormonale.,Co-facteurs thyroïdiens essentiels.
+Chrome,Vitamine B3 (niacine),SYNERGIE,"Le chrome et la niacine forment le facteur de tolérance au glucose (GTF), améliorant la sensibilité à l'insuline.",Association intéressante pour le syndrome métabolique.
+Chrome,Vitamine C,SYNERGIE,La vitamine C améliore l'absorption du chrome trivalent.,Prendre ensemble.
+Cuivre,Vitamine C,CONFLIT à haute dose,"La vitamine C à très haute dose (>1g) peut réduire le cuivre en Cu⁺ pro-oxydant. Mais à dose normale, synergie pour la synthèse du collagène.",Dose normale: synergie. Dose élevée: prudence.
+Iode,Fer,SYNERGIE,Carence en fer réduit l'activité de la thyroperoxydase (enzyme iode-dépendante). Double carence = hypothyroïdie sévère.,Corriger les deux carences simultanément.
+Vitamine C,Vitamine E,SYNERGIE,La vitamine C régénère la vitamine E oxydée (radical tocophéryle → tocophérol). Cycle antioxydant perpétuel.,Duo antioxydant majeur. Prendre ensemble.
+Vitamine C,Vitamine B9 (folate),SYNERGIE,La vitamine C protège le folate de l'oxydation dans le sang et améliore sa biodisponibilité.,"Association bénéfique, surtout grossesse."
+Vitamine C,Vitamine B12,CONFLIT PARTIEL,"À très forte dose (>1g), la vitamine C peut détruire une partie de la B12 in vitro (contesté in vivo, mais prudence).",Espacer de 2h si vitamine C > 1g.
+Vitamine A,Vitamine D,CONFLIT PARTIEL,"À très forte dose, la vitamine A antagonise les effets de la vitamine D sur le métabolisme calcique. Ratio important.",Respecter le ratio A/D. Ne pas surdoser la vitamine A.
+Vitamine A,Vitamine E,SYNERGIE,"La vitamine E protège la vitamine A de l'oxydation intestinale et hépatique, améliorant son stockage.",Association bénéfique.
+Vitamine A,Bêta-carotène,INTERACTION,Le bêta-carotène est converti en vitamine A selon les besoins (conversion régulée). Pas de risque d'hypervitaminose A avec le bêta-carotène seul.,Préférer le bêta-carotène chez la femme enceinte (pas de tératogénicité).
+Vitamine D,Vitamine K2,SYNERGIE,La vitamine D augmente l'absorption du calcium; la K2 le dirige vers les os via l'ostéocalcine activée.,"Duo essentiel. Sans K2, la vitamine D peut favoriser les calcifications vasculaires."
+Vitamine D,Vitamine A (haute dose),CONFLIT,L'excès de rétinol inhibe la signalisation de la vitamine D au niveau nucléaire (compétition RXR).,Ne pas supplémenter en vitamine A à haute dose si vitamine D.
+Vitamine B9 (folate),Vitamine B12,SYNERGIE,Indissociables: le folate est piégé sous forme 5-MTHF sans B12 (piège méthyl-folate). B12 libère le folate actif.,Toujours doser B12 AVANT de supplémenter en folate (risque de masquage d'une carence B12).
+Vitamine B1,Vitamines B (complexe),SYNERGIE,"Toutes les vitamines B sont co-facteurs dans les voies métaboliques communes (cycle de Krebs, β-oxydation).",Le complexe B complet est généralement préférable à une B isolée.
+Vitamine B6,Vitamine B9,SYNERGIE,Le trio B6+B9+B12 réduit l'homocystéine plasmatique (facteur de risque cardiovasculaire indépendant).,Trio cardiovasculaire protecteur.
+Vitamine B6,Vitamine B12,SYNERGIE,Co-facteurs dans le métabolisme de l'homocystéine et la synthèse des neurotransmetteurs.,Association neurologique bénéfique.
+Vitamine E,Vitamine K,CONFLIT,La vitamine E à haute dose (>400 UI/j) antagonise la vitamine K → risque de saignement.,Ne pas dépasser 400 UI/j de vitamine E sous anticoagulants AVK.
+Vitamine E,Oméga 3,SYNERGIE,La vitamine E protège les acides gras polyinsaturés EPA/DHA de la peroxydation lipidique.,Les bons suppléments d'oméga 3 contiennent toujours de la vitamine E ajoutée.
+Vitamine K,Vitamine A,SYNERGIE,La vitamine K soutient l'action de la vitamine A dans le métabolisme osseux.,Complémentarité osseuse.
+Oméga 3 (EPA/DHA),Oméga 6 (acide linoléique),ÉQUILIBRE,Ratio oméga 6/oméga 3 idéal = 3:1 à 5:1. L'alimentation moderne est souvent 15:1 à 20:1 → état pro-inflammatoire.,Réduire les oméga 6 (huiles végétales) ET augmenter les oméga 3 (poissons gras).
+Oméga 3,Vitamine D,SYNERGIE,Les oméga 3 améliorent l'absorption de la vitamine D liposoluble. Le poisson gras apporte naturellement les deux.,Association naturelle et bénéfique.
+Oméga 3,Coenzyme Q10,SYNERGIE,"Double protection cardiovasculaire: oméga 3 (anti-inflammatoire, triglycérides) + CoQ10 (énergie cardiaque, antioxydant).",Association cardiovasculaire de choix.
+Oméga 3,Curcuma,SYNERGIE,"Double action anti-inflammatoire par des voies différentes: oméga 3 → résolvines/protectines, curcuma → inhibition NF-κB.",Excellent combo articulaire et cardiovasculaire.
+Lécithine de soja,Oméga 3,SYNERGIE,La lécithine (phospholipides) améliore l'absorption des oméga 3. Les deux soutiennent la santé cérébrale.,Association cognitive bénéfique.
+Lécithine de soja,Vitamines B,SYNERGIE,La lécithine fournit de la choline (précurseur d'acétylcholine). Les vitamines B soutiennent la neurotransmission.,Combo mémoire/concentration.
+Huile d'onagre,Huile de bourrache,SYNERGIE,"Toutes deux riches en GLA (acide gamma-linolénique), anti-inflammatoire et régulateur hormonal.",Association classique pour le syndrome prémenstruel et l'eczéma.
+Huile d'onagre,Anticoagulants,CONFLIT,Le GLA a un léger effet anti-plaquettaire à forte dose.,Prudence sous anticoagulants.
+CLA (acide linoléique conjugué),L-Carnitine,SYNERGIE,"CLA réduit le stockage des graisses, la L-carnitine augmente leur oxydation dans les mitochondries.",Association minceur (mais effets modestes).
+L-Tryptophane,5-HTP,CONFLIT,Les deux sont des précurseurs de la sérotonine. L'association peut causer un excès de sérotonine.,NE PAS associer. Choisir l'un OU l'autre.
+L-Tryptophane,ISRS (antidépresseurs),CONFLIT MAJEUR,⚠️ Risque de syndrome sérotoninergique (potentiellement mortel). Triple augmentation de la sérotonine.,CONTRE-INDICATION. Ne jamais associer tryptophane + antidépresseur sans avis médical strict.
+5-HTP,ISRS (antidépresseurs),CONFLIT MAJEUR,⚠️ Risque de syndrome sérotoninergique. Le 5-HTP augmente directement la sérotonine.,CONTRE-INDICATION ABSOLUE avec tout antidépresseur sérotoninergique.
+5-HTP,Carbidopa,INTERACTION,La carbidopa empêche la conversion périphérique du 5-HTP → plus de 5-HTP atteint le cerveau → risque de surdosage sérotoninergique.,Association déconseillée sans supervision médicale.
+L-Carnitine,Thé vert,SYNERGIE,La L-carnitine transporte les acides gras dans les mitochondries; les catéchines du thé vert activent la thermogenèse.,Association minceur complémentaire.
+L-Carnitine,Oméga 3,SYNERGIE,La L-carnitine transporte les acides gras oméga 3 dans les mitochondries pour la β-oxydation.,Combinaison logique pour l'énergie et le métabolisme lipidique.
+L-Carnitine,Chrome,SYNERGIE,Double action sur le métabolisme: L-carnitine (acides gras) + chrome (glucose).,Association intéressante pour le syndrome métabolique.
+L-Cystéine / NAC,Vitamine C,SYNERGIE,Le NAC est le précurseur du glutathion (GSH). La vitamine C recycle le GSH oxydé.,Double système antioxydant.
+NAC (N-acétylcystéine),Paracétamol,PROTECTION,Le NAC est l'ANTIDOTE de l'intoxication au paracétamol (régénère le glutathion hépatique).,Le NAC protège le foie lors des traitements au paracétamol. Intérêt en préventif.
+NAC,Nitroglycérine,CONFLIT,"Le NAC potentialise l'effet hypotenseur de la nitroglycérine → hypotension sévère, céphalées.",Prudence. Surveillance tensionnelle.
+Glutamine,Probiotiques,SYNERGIE,"La glutamine nourrit les cellules intestinales (entérocytes), les probiotiques colonisent. Double réparation intestinale.",Association classique pour l'hyperperméabilité intestinale.
+Glutamine,Chimiothérapie (mucite),SYNERGIE,La glutamine peut réduire la sévérité de la mucite induite par la chimiothérapie.,Sous supervision oncologique uniquement.
+BCAA (leucine/isoleucine/valine),Lévodopa,CONFLIT,Les BCAA et la lévodopa entrent en compétition pour le même transporteur au niveau de la barrière hémato-encéphalique.,Réduire les BCAA chez les patients parkinsoniens sous lévodopa.
+Collagène,Vitamine C,SYNERGIE,La vitamine C est INDISPENSABLE à la synthèse du collagène (cofacteur de la prolyl-hydroxylase).,TOUJOURS associer collagène + vitamine C pour efficacité maximale.
+Collagène,Acide hyaluronique,SYNERGIE,"Complémentaires: le collagène assure la structure, l'acide hyaluronique l'hydratation des tissus connectifs.",Association articulaire et peau classique.
+Créatine,Caféine,CONFLIT PARTIEL,Certaines études montrent que la caféine peut atténuer les effets ergogéniques de la créatine sur la performance.,Séparer les prises de 1-2h. Résultats variables selon les individus.
+Créatine,Vitamine D,SYNERGIE,La créatine + vitamine D améliorent la force musculaire chez les seniors de façon synergique.,Association intéressante pour la sarcopénie.
+Valériane,Passiflore,SYNERGIE,"Complémentaires: la valériane facilite l'endormissement (GABA), la passiflore réduit l'anxiété nocturne (GABA + sérotoninergique).",Association classique sommeil. Très efficace ensemble.
+Valériane,Mélisse,SYNERGIE,"Double action: la valériane est sédative, la mélisse est anxiolytique et antispasmodique digestive.",Bonne association pour le stress avec composante digestive.
+Valériane,Houblon,SYNERGIE,Le houblon potentialise l'effet sédatif de la valériane. Études cliniques positives en association.,Association étudiée et validée pour l'insomnie légère.
+Passiflore,Mélisse,SYNERGIE,Deux anxiolytiques naturels aux mécanismes complémentaires.,Association apaisante sans somnolence marquée.
+Passiflore,Aubépine,SYNERGIE,"Passiflore (anxiété) + aubépine (palpitations d'origine nerveuse, éréthisme cardiaque).",Association classique: anxiété + palpitations.
+Échinacée,Propolis,SYNERGIE,"Double action immunitaire: l'échinacée stimule les macrophages et NK, la propolis est antiseptique directe.",Association de référence pour les infections ORL.
+Échinacée,Vitamine C,SYNERGIE,"L'échinacée module l'immunité innée, la vitamine C soutient les lymphocytes et la phagocytose.",Trio échinacée + propolis + vitamine C = défense immunitaire optimale.
+Échinacée,Zinc,SYNERGIE,Le zinc est nécessaire au développement et à l'activation des cellules T et NK que l'échinacée stimule.,Combinaison efficace rhume/grippe.
+Échinacée,Astragale,SYNERGIE,L'échinacée stimule l'immunité à court terme; l'astragale la renforce au long cours (adaptogène immunitaire).,"Alterner: échinacée en aigu (max 8 semaines), astragale en fond."
+Thym,Eucalyptus,SYNERGIE,"Thym (thymol = antiseptique) + eucalyptus (1,8-cinéole = décongestionnant). Actions respiratoires complémentaires.",Association classique dans les infections des voies respiratoires.
+Thym,Plantain,SYNERGIE,"Thym (antiseptique, expectorant) + plantain (émollient, antitussif). Le thym combat l'infection, le plantain calme l'irritation.","Association ORL/toux: thym traite, plantain apaise."
+Thym,Propolis,SYNERGIE,Double antiseptique respiratoire aux mécanismes complémentaires.,Association hivernale classique.
+Ginkgo biloba,Oméga 3,SYNERGIE avec PRUDENCE,"Synergie cognitive et circulatoire, mais les deux ont un léger effet anti-plaquettaire.",OK à dose normale. Prudence si anticoagulant en parallèle.
+Ginkgo biloba,Bacopa monnieri,SYNERGIE,"Ginkgo (circulation cérébrale) + bacopa (mémoire, neuroprotection). Deux nootropiques complémentaires.",Association cognitive de choix.
+Ginkgo biloba,Phosphatidylsérine,SYNERGIE,"Ginkgo (microcirculation) + PS (neurones, mémoire). Complémentaires pour le déclin cognitif.",Association étudiée chez le senior.
+Ginseng,Gelée royale,SYNERGIE,"Double adaptogène: le ginseng pour l'énergie mentale/physique, la gelée royale pour la vitalité globale.",Association tonifiante classique.
+Ginseng,Rhodiola rosea,SYNERGIE,"Deux adaptogènes complémentaires: ginseng (énergie, puissance), rhodiola (résistance au stress, endurance).",Association adaptogène de référence. Pas le soir.
+Ginseng,Éleuthérocoque,SYNERGIE,Le ginseng de Sibérie est complémentaire du ginseng asiatique pour l'adaptation au stress.,Les deux sont adaptogènes mais avec des profils légèrement différents.
+Rhodiola rosea,Ashwagandha,SYNERGIE,"Rhodiola (énergie, anti-fatigue, matin) + ashwagandha (calme, anti-stress, soir). Complémentaires en chrono-adaptogénèse.","Rhodiola le matin, ashwagandha le soir."
+Ashwagandha,Magnésium,SYNERGIE,"Ashwagandha (adaptogène, cortisol) + magnésium (relaxant musculaire et nerveux). Double anti-stress.",Association anxiété/stress.
+Ashwagandha,Hormones thyroïdiennes,CONFLIT,L'ashwagandha peut augmenter les taux de T3 et T4 → hyperthyroïdie chez les patients sous lévothyroxine.,⚠️ Contre-indiqué sous lévothyroxine ou en cas d'hyperthyroïdie.
+Ashwagandha,Sédatifs/Anxiolytiques,CONFLIT,Effet sédatif additif possible. L'ashwagandha est GABAergique.,Prudence sous benzodiazépines ou autres sédatifs.
+Ashwagandha,Immunosuppresseurs,CONFLIT,L'ashwagandha peut stimuler le système immunitaire → antagonisme avec les immunosuppresseurs.,Déconseillé sous immunosuppresseurs et en maladie auto-immune.
+Millepertuis,Passiflore,PRUDENCE,L'association peut augmenter le risque d'un excès sérotoninergique à forte dose.,Possible mais à dose modérée. Ne pas ajouter d'ISRS en plus.
+Harpagophytum,Glucosamine,SYNERGIE,Harpagophytum (anti-inflammatoire) + glucosamine (chondroprotection). Actions complémentaires sur l'arthrose.,"L'un soulage, l'autre reconstruit. Association articulaire de référence."
+Harpagophytum,Chondroïtine,SYNERGIE,Anti-inflammatoire + protection structurelle du cartilage.,Association classique pour l'arthrose.
+Harpagophytum,Curcuma,SYNERGIE,Double anti-inflammatoire naturel par des mécanismes différents.,Excellent combo articulaire.
+Harpagophytum,Boswellia,SYNERGIE,Harpagophytum (harpagosides) + boswellia (acides boswelliques). Deux anti-inflammatoires naturels synergiques.,"Association anti-inflammatoire de choix, notamment pour l'arthrose."
+Vigne rouge,Marron d'Inde,SYNERGIE,Vigne rouge (anthocyanes = protection vasculaire) + marron d'Inde (aescine = anti-œdémateux). Actions veino-toniques complémentaires.,Duo de référence pour l'insuffisance veineuse.
+Vigne rouge,Hamamélis,SYNERGIE,Double action vasculoprotectrice et astringente.,Association classique jambes lourdes.
+Vigne rouge,Fragon,SYNERGIE,Vigne rouge + fragon (petit houx): complémentaires pour la tonicité veineuse.,Association veineuse complète.
+Chardon-marie,Desmodium,SYNERGIE,Chardon-marie (silymarine = hépatoprotection et régénération) + desmodium (détoxification hépatique).,Association hépatoprotectrice de référence. Idéale après un traitement hépatotoxique.
+Chardon-marie,Artichaut,SYNERGIE,"Chardon-marie (protection hépatocellulaire) + artichaut (cholérétique, digestion des graisses).",Duo foie: protection + drainage.
+Artichaut,Radis noir,SYNERGIE,"Artichaut (cholérétique) + radis noir (cholérétique, drainant hépatique). Double stimulation biliaire.",Association détox classique.
+Artichaut,Pissenlit,SYNERGIE,Artichaut (foie) + pissenlit (rein). Drainage hépato-rénal complet.,Association dépurative de référence.
+Bardane,Pensée sauvage,SYNERGIE,"Bardane (dépurative, anti-séborrhéique) + pensée sauvage (anti-eczéma, anti-acné). Deux plantes de la peau.","Association dermatologique classique: acné, eczéma."
+Canneberge,D-Mannose,SYNERGIE,Canneberge (proanthocyanidines anti-adhésion) + D-mannose (compétition d'adhésion bactérienne). Double protection urinaire.,Association de référence pour la prévention des cystites récidivantes.
+Canneberge,Probiotiques (Lactobacillus),SYNERGIE,"La canneberge empêche l'adhésion d'E. coli, les lactobacilles colonisent et protègent la flore vaginale/urinaire.",Triple protection: canneberge + D-mannose + probiotiques.
+Canneberge,Warfarine,CONFLIT,La canneberge peut inhiber le CYP2C9 → augmentation de l'effet de la warfarine → risque hémorragique.,Surveillance INR si consommation régulière de canneberge.
+Berbérine,Metformine,CONFLIT,La berbérine active l'AMPK comme la metformine → risque d'hypoglycémie additive + acidose lactique.,⚠️ Ne pas associer sans surveillance médicale stricte. Risque d'hypoglycémie sévère.
+Berbérine,Ciclosporine,CONFLIT MAJEUR,La berbérine inhibe le CYP3A4 et la P-glycoprotéine → augmentation des taux de ciclosporine → toxicité.,CONTRE-INDICATION.
+Berbérine,Anticoagulants,CONFLIT,La berbérine peut inhiber l'agrégation plaquettaire et potentialiser les anticoagulants.,Surveillance INR.
+Kudzu,Metformine,CONFLIT,Le kudzu peut potentialiser l'effet hypoglycémiant de la metformine.,Surveillance glycémique.
+Kudzu,Anticoagulants,CONFLIT,Contient des isoflavones avec une activité anti-plaquettaire légère.,Prudence sous AVK.
+Garcinia cambogia,Statines,CONFLIT,Le Garcinia et les statines affectent tous deux le métabolisme lipidique (HMG-CoA). Interaction potentielle.,Prudence. Surveiller les enzymes hépatiques.
+Garcinia cambogia,Antidiabétiques,CONFLIT,Le HCA du Garcinia peut affecter la glycémie.,Surveiller la glycémie.
+Guarana,Thé vert,CUMUL CAFÉINE,Les deux contiennent de la caféine. Guarana (~40mg/g) + thé vert (~30mg/tasse). Risque de surdosage en caféine.,Calculer la caféine totale. Max 400mg/jour toutes sources.
+Guarana,Maté,CUMUL CAFÉINE,Le maté contient de la caféine (matéine). Cumul avec le guarana = caféine excessive.,Ne pas dépasser 400mg caféine/jour.
+Guarana,Café vert,CUMUL CAFÉINE,Le café vert contient de la caféine + acide chlorogénique. Cumul de caféine.,Éviter de combiner trop de sources de caféine.
+Café vert,Fer,CONFLIT,L'acide chlorogénique du café vert chélate le fer et réduit fortement son absorption.,Espacer de 2h.
+Maca,"Hormones (contraceptifs, THS)",PRUDENCE,La maca peut moduler les hormones sexuelles de façon indirecte (axe hypothalamo-hypophysaire).,Prudence si traitement hormonal. Pas de contre-indication formelle mais surveiller.
+Tribulus terrestris,Antihypertenseurs,CONFLIT,Possible effet hypotenseur léger → effet additif.,Surveillance tensionnelle.
+Tribulus terrestris,Antidiabétiques,CONFLIT,Possibles effets sur la glycémie.,Surveillance glycémique.
+Actée à grappes noires,Tamoxifène,CONFLIT,Activité œstrogénique possible → peut interférer avec le tamoxifène (cancers hormono-dépendants).,CONTRE-INDIQUÉ en cas de cancer du sein hormono-dépendant.
+Actée à grappes noires,Hépatotoxicité,PRUDENCE,Cas rapportés d'hépatotoxicité (rares mais graves). Surveiller les transaminases.,Surveiller la fonction hépatique. Arrêter si jaunisse ou douleur abdominale.
+Soja (isoflavones),Tamoxifène,CONFLIT,Les isoflavones ont une activité œstrogénique faible → peuvent interférer avec l'anti-œstrogène.,Débattu mais par précaution: déconseillé sous tamoxifène.
+Soja (isoflavones),Lévothyroxine,CONFLIT,Le soja réduit l'absorption de la lévothyroxine.,Espacer de 4h entre soja et lévothyroxine.
+Ail (allicine),Anticoagulants,CONFLIT,L'ail inhibe l'agrégation plaquettaire → risque hémorragique additif sous AVK/NACO.,Prudence à haute dose. Ail alimentaire normal = OK.
+Ail (allicine),Saquinavir (ARV),CONFLIT MAJEUR,L'ail réduit les taux de saquinavir de 50% → échec thérapeutique VIH.,Contre-indiqué sous saquinavir.
+Ortie racine,Antihypertenseurs,CONFLIT,L'ortie a un effet diurétique et peut potentialiser l'effet hypotenseur.,Surveillance TA.
+Ortie racine,Antidiabétiques,CONFLIT,L'ortie peut affecter la glycémie.,Surveillance glycémique.
+Prêle,Diurétiques,CONFLIT,La prêle est diurétique → effet additif → risque de déshydratation/hypokaliémie.,Augmenter l'hydratation. Surveiller le potassium si diurétique associé.
+Prêle,Lithium,CONFLIT,L'effet diurétique de la prêle peut concentrer le lithium → risque de toxicité.,Déconseillé sous lithium.
+Reishi / Champignons médicinaux,Anticoagulants,CONFLIT,Le reishi inhibe l'agrégation plaquettaire (adénosine) → risque hémorragique.,Prudence sous anticoagulants. Arrêter 2 semaines avant chirurgie.
+Reishi / Champignons médicinaux,Immunosuppresseurs,CONFLIT,Les polysaccharides du reishi stimulent l'immunité → antagonisme.,Déconseillé sous immunosuppresseurs.
+Cordyceps,Anticoagulants,CONFLIT,Le cordyceps peut inhiber l'agrégation plaquettaire.,Prudence sous AVK.
+Cordyceps,Immunosuppresseurs,CONFLIT,Activité immunostimulante.,Déconseillé sous immunosuppresseurs.
+Sauge,Antiépileptiques,CONFLIT,La thuyone de la sauge est convulsivante à forte dose → antagonise les antiépileptiques.,Contre-indiquée chez l'épileptique.
+Sauge,Antidiabétiques,CONFLIT,La sauge peut réduire la glycémie → effet additif.,Surveillance glycémique.
+Probiotiques,"Prébiotiques (FOS, inuline)",SYNERGIE,"Les prébiotiques nourrissent sélectivement les probiotiques, augmentant leur colonisation intestinale.",Association = synbiotique. Efficacité supérieure au probiotique seul.
+Probiotiques,Glutamine,SYNERGIE,"La glutamine répare la muqueuse intestinale, les probiotiques la colonisent.",Association pour le leaky gut et post-antibiotique.
+Spiruline,Chlorella,SYNERGIE,"Spiruline (nutrition, protéines, fer) + chlorella (détox métaux lourds, CGF). Complémentaires.",Association de référence en microalgues.
+Spiruline,Vitamine C,SYNERGIE,La vitamine C améliore l'absorption du fer non-héminique contenu dans la spiruline.,Bonne association.
+Gelée royale,Propolis,SYNERGIE,"Gelée royale (vitalité, nutrition) + propolis (antiseptique, immunité). Produits de la ruche complémentaires.",Association hivernale classique.
+Gelée royale,Pollen,SYNERGIE,"Gelée royale (tonifiant) + pollen (nutritif, appétit). Complémentaires de la ruche.",Association revitalisante.
+Charbon actif,Probiotiques,CONFLIT,Le charbon adsorbe les probiotiques → annule leur effet.,Prendre le charbon 3h avant ou après les probiotiques.
+Charbon actif,Médicaments (tous),CONFLIT MAJEUR,Le charbon adsorbe quasi tout de façon non-spécifique.,⚠️ 2h AVANT ou 3h APRÈS tout médicament/supplément.
+Argile (montmorillonite),Médicaments (tous),CONFLIT,L'argile adsorbe les médicaments comme le charbon.,Espacer de 2-3h.
+Psyllium / Fibres,Médicaments oraux,CONFLIT,Les fibres chélatent et retardent l'absorption des médicaments.,Prendre les médicaments 2h avant ou après les fibres.
+Konjac (glucomannane),Médicaments oraux,CONFLIT,Le konjac gonfle dans l'estomac et réduit l'absorption des médicaments.,Prendre les médicaments 1-2h avant le konjac.
+Chitosan,Médicaments oraux,CONFLIT,"Le chitosan adsorbe les graisses ET les médicaments liposolubles (vitamines A, D, E, K, contraceptifs).",⚠️ Prendre 4h avant/après les médicaments. RÉDUIT l'absorption des vitamines liposolubles.
+Chitosan,"Vitamines liposolubles (A, D, E, K)",CONFLIT,Le chitosan adsorbe les graisses et donc les vitamines liposolubles → carence possible à long terme.,"Supplémenter en vitamines A, D, E, K si chitosan au long cours."
+Millepertuis,Toute médication CYP3A4/CYP2C9,CONFLIT MAJEUR,⚠️ Le millepertuis est un PUISSANT inducteur enzymatique. Il accélère la destruction de >60% des médicaments via CYP3A4/CYP2C9/P-gp.,LA PLANTE LA PLUS DANGEREUSE en interactions. TOUJOURS vérifier TOUS les traitements du patient.
+Réglisse,Toute médication hypokaliémiante,CONFLIT MAJEUR,La glycyrrhizine inhibe la 11β-HSD2 → excès de cortisol → HTA + rétention Na⁺ + perte K⁺.,"⚠️ CONTRE-INDIQUÉE si HTA, insuffisance cardiaque, hypokaliémie, diurétiques, digitaliques."
+Pamplemousse,Toute médication CYP3A4,CONFLIT MAJEUR,Les furanocoumarines du pamplemousse inhibent IRRÉVERSIBLEMENT le CYP3A4 intestinal → surdosage médicamenteux pendant 72h.,⚠️ Interagit avec >85 médicaments. Effet dure 72h après un seul verre.
+Coenzyme Q10,Vitamine E,SYNERGIE,Le CoQ10 et la vitamine E sont des antioxydants liposolubles complémentaires dans les membranes cellulaires.,Association anti-âge.
+Coenzyme Q10,Sélénium,SYNERGIE,Le sélénium et le CoQ10 travaillent en synergie pour la protection cardiovasculaire (étude KiSel-10).,Association prouvée en réduction de la mortalité cardiovasculaire chez le senior.
+Coenzyme Q10,L-Carnitine,SYNERGIE,CoQ10 (chaîne respiratoire mitochondriale) + L-carnitine (transport des acides gras mitochondriaux). Double énergie cellulaire.,Association énergétique mitochondriale.
+Acide alpha-lipoïque,NAC,SYNERGIE,"Tous deux régénèrent le glutathion. L'ALA régénère la vitamine C, le NAC fournit la cystéine pour le GSH.",Puissant combo antioxydant hépatique.
+Acide alpha-lipoïque,Chrome,SYNERGIE,Tous deux améliorent la sensibilité à l'insuline par des mécanismes différents.,Association intéressante pour le diabète type 2.
+Astaxanthine,Vitamine C,SYNERGIE,L'astaxanthine est un caroténoïde 6000x plus puissant que la vitamine C comme antioxydant.,Association antioxydante de haute performance.
+Astaxanthine,Oméga 3,SYNERGIE,L'astaxanthine protège les oméga 3 de la peroxydation (l'huile de krill contient naturellement les deux).,Association naturelle dans l'huile de krill.
+Lutéine,Zéaxanthine,SYNERGIE,"Les deux caroténoïdes se concentrent dans la macula. Ensemble, ils filtrent la lumière bleue et protègent la rétine.",Duo oculaire de référence. Présents ensemble dans les formules vision (ex: AREDS2).
+Lutéine,Vitamine A,SYNERGIE,Lutéine (protection rétinienne) + vitamine A (fonctionnement des photorécepteurs). Complémentaires.,Association vision complète.
+Lutéine,Oméga 3 DHA,SYNERGIE,Le DHA est le composant lipidique majeur de la rétine. Lutéine + DHA = double protection oculaire.,Association oculaire optimale: lutéine + zéaxanthine + DHA + vitamine A.
+MSM,Glucosamine,SYNERGIE,"MSM (soufre organique, anti-inflammatoire) + glucosamine (chondroprotection). Combo articulaire éprouvé.",Association articulaire classique. Effet supérieur à chaque composant seul.
+MSM,Vitamine C,SYNERGIE,La vitamine C améliore l'absorption du MSM et soutient la synthèse du collagène.,Association bénéfique.
+Boswellia,Curcuma,SYNERGIE,"Deux anti-inflammatoires naturels: boswellia (5-LOX) + curcuma (NF-κB, COX-2). Voies différentes.",Association anti-inflammatoire puissante.
+Boswellia,Oméga 3,SYNERGIE,Triple action anti-inflammatoire: boswellia + oméga 3 couvrent LOX + COX + résolvines.,Combo anti-inflammatoire complet.
+Thé/Café (tanins/caféine),Fer,CONFLIT,"Les tanins du thé et du café chélatent le fer non-héminique, réduisant son absorption de 60-90%.",Ne pas boire de thé/café 1h avant et 2h après la prise de fer.
+Produits laitiers (calcium/caséine),Fer,CONFLIT,Le calcium et la caséine du lait réduisent l'absorption du fer.,Éviter de prendre fer avec du lait ou fromage.
+Produits laitiers,Tétracyclines/Quinolones,CONFLIT,Le calcium chélate ces antibiotiques → efficacité réduite de 50-90%.,Espacer de 2-3h. Pas de lait avec ces antibiotiques.
+"Aliments riches en tyramine (fromages affinés, charcuterie, vin rouge)",IMAO,CONFLIT MAJEUR,⚠️ Crise hypertensive potentiellement mortelle. Les IMAO empêchent la dégradation de la tyramine.,INTERDIT sous IMAO. Régime strict sans tyramine obligatoire.
+Alcool,Paracétamol,CONFLIT MAJEUR,L'alcool induit le CYP2E1 qui produit le métabolite hépatotoxique du paracétamol (NAPQI).,⚠️ Risque d'hépatite fulminante. Ne pas dépasser 2g paracétamol/j chez le consommateur régulier d'alcool.
+Alcool,Metformine,CONFLIT MAJEUR,L'alcool + la metformine augmentent le risque d'acidose lactique.,Limiter strictement l'alcool sous metformine.
+Alcool,Sédatifs/Benzodiazépines,CONFLIT MAJEUR,"Potentialisation de la dépression du SNC → coma, dépression respiratoire.",INTERDIT. Association potentiellement mortelle.
+"Aliments riches en vitamine K (brocoli, chou, épinards)",AVK (warfarine),INTERACTION,La vitamine K alimentaire antagonise la warfarine → INR instable.,Apport QUOTIDIEN STABLE en légumes verts. Ne pas en supprimer brusquement.
+Sel (sodium),Lithium,INTERACTION,Un régime pauvre en sel augmente la réabsorption rénale du lithium → surdosage. Un régime riche en sel le dilue.,Apport STABLE en sel sous lithium. Pas de régime hyposodé brusque.
+Fibres alimentaires / Phytates,Zinc,CONFLIT,"Les phytates (céréales, légumineuses) chélatent le zinc. Réduction d'absorption de 40-60%.",Prendre le zinc à distance des repas riches en céréales complètes.
+Jus d'orange / Vitamine C,Fer,SYNERGIE,Le jus d'orange (vitamine C + acide citrique) augmente l'absorption du fer de 2-6 fois.,Un verre de jus d'orange avec le comprimé de fer = combo optimal.

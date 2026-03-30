@@ -1,0 +1,801 @@
+guideline_id,disease_name,recommended_drug_class,line_of_treatment,decision_factors,contraindications_summary
+G001,Essential Hypertension,Thiazide Diuretics,1st Line,"Age <55, non-black, no comorbidities",Hypokalemia; Gout; Sulfa allergy
+G002,Essential Hypertension,ACE Inhibitors,1st Line,"Age <55, diabetes, CKD",Pregnancy; Angioedema; Bilateral renal artery stenosis
+G003,Essential Hypertension,Calcium Channel Blockers (Dihydropyridine),1st Line,"Age ≥55, black, isolated systolic HTN",Heart failure with reduced EF; edema
+G004,Essential Hypertension,ARBs,1st Line,"Alternative if ACEi intolerant (cough)",Pregnancy; Bilateral renal artery stenosis
+G005,Essential Hypertension,Beta-Blockers,1st Line,"Young women, hyperadrenergic, heart failure, post-MI",Asthma; Bradycardia; Heart block
+G006,Essential Hypertension,Aldosterone Antagonists,2nd Line,"Resistant hypertension, primary aldosteronism",Hyperkalemia; Renal failure
+G007,Essential Hypertension,Combination (ACEi + CCB),Add-on Therapy,"Inadequate response to monotherapy",As per components
+G008,Type 2 Diabetes,Metformin,1st Line,"All patients at diagnosis, unless contraindicated",Renal impairment (eGFR<30); Liver disease; Metformin allergy
+G009,Type 2 Diabetes,SGLT2 Inhibitors,2nd Line,"Established ASCVD, heart failure, CKD",Recurrent UTIs; DKA risk; elderly frailty
+G010,Type 2 Diabetes,GLP-1 Receptor Agonists,2nd Line,"Established ASCVD, need weight loss",Personal history of medullary thyroid carcinoma; MEN2
+G011,Type 2 Diabetes,DPP-4 Inhibitors,2nd Line,"Need low hypoglycemia risk, elderly",History of pancreatitis
+G012,Type 2 Diabetes,Sulfonylureas,2nd Line,"Cost considerations, not high hypoglycemia risk",Severe renal impairment; elderly at risk of hypoglycemia
+G013,Type 2 Diabetes,Insulin (Basal),3rd Line,"Severe hyperglycemia (A1c >10%), catabolic symptoms",Hypoglycemia unawareness
+G014,Type 2 Diabetes,Thiazolidinediones,3rd Line,"No heart failure, need insulin sensitizer",Heart failure (NYHA III/IV); osteoporosis
+G015,Type 1 Diabetes,Insulin (Rapid-acting),1st Line,"All patients, multiple daily injections or pump",Hypoglycemia unawareness
+G016,Type 1 Diabetes,Insulin (Long-acting),1st Line,"Basal coverage",Hypoglycemia
+G017,Type 1 Diabetes,Amylin Analogs,Add-on Therapy,"Inadequate postprandial control despite insulin",Gastroparesis; hypoglycemia
+G018,Hyperthyroidism (Graves'),Antithyroid Drugs (Methimazole),1st Line,"First-line in most patients, especially young",Agranulocytosis; pregnancy (prefer PTU in first trimester)
+G019,Hyperthyroidism (Graves'),Radioactive Iodine,2nd Line,"Relapse after drugs, elderly, toxic nodule",Pregnancy; lactation; severe ophthalmopathy
+G020,Hyperthyroidism (Graves'),Surgery (Thyroidectomy),3rd Line,"Large goiter, suspicious nodule, patient preference",Pregnancy; high surgical risk
+G021,Hypothyroidism (Hashimoto's),Levothyroxine,1st Line,"All patients with overt hypothyroidism",Untreated adrenal insufficiency; recent MI
+G022,Osteoporosis,Bisphosphonates,1st Line,"Postmenopausal women, men at high fracture risk",Hypocalcemia; esophageal disorders; unable to stand upright
+G023,Osteoporosis,Denosumab,2nd Line,"Renal impairment (eGFR<35), intolerance to oral",Hypocalcemia; risk of atypical fractures after stopping
+G024,Osteoporosis,Teriparatide,2nd Line,"Very high fracture risk, failure of antiresorptives",Paget's; bone metastases; hypercalcemia; prior radiation
+G025,Osteoporosis,Raloxifene (SERM),2nd Line,"Postmenopausal women, high spine fracture risk, low DVT risk",History of VTE; pregnancy
+G026,GERD,Proton Pump Inhibitors (PPIs),1st Line,"Frequent symptoms (>2/week), erosive esophagitis",Concurrent atazanavir; hypomagnesemia (long-term)
+G027,GERD,H2 Receptor Antagonists,1st Line,"Intermittent symptoms, mild disease",Acute intermittent porphyria
+G028,GERD,Antacids,As needed,"Mild, infrequent heartburn",Renal failure (avoid magnesium)
+G029,Peptic Ulcer Disease (H. pylori positive),PPI + Amoxicillin + Clarithromycin,1st Line,"H. pylori positive, no prior macrolide exposure",Penicillin allergy (use metronidazole)
+G030,Peptic Ulcer Disease (H. pylori positive),PPI + Metronidazole + Tetracycline + Bismuth,2nd Line,"Prior macrolide exposure, resistance",Tetracycline contraindicated in pregnancy; renal impairment
+G031,Crohn's Disease (Moderate),Corticosteroids (Systemic),Induction,"Severe symptoms, bridging to immunomodulator",Infection; poorly controlled diabetes; psychosis
+G032,Crohn's Disease (Mild),5-ASA Compounds (Mesalamine),1st Line,"Mild colonic disease, no perianal",Salicylate allergy; renal impairment
+G033,Crohn's Disease (Moderate-Severe),Anti-TNF Agents (Infliximab),1st Line (if high risk),"Young age, extensive disease, fistulizing",Heart failure (NYHA III/IV); demyelinating disease; active TB
+G034,Crohn's Disease (Maintenance),Immunomodulators (Azathioprine),Maintenance,"Steroid-dependent, after induction",TPMT deficiency; myelosuppression; pregnancy
+G035,Ulcerative Colitis (Mild-Moderate),5-ASA Compounds (Mesalamine),1st Line,"Proctitis or left-sided, extensive",Renal impairment; allergy
+G036,Ulcerative Colitis (Severe),Corticosteroids (IV),Induction,"Hospitalized, severe flares",Infection; GI perforation
+G037,Ulcerative Colitis (Refractory),Anti-TNF or Anti-integrin or JAK Inhibitor,2nd Line,"Failure of 5-ASA and steroids",Active infection; malignancy risk
+G038,Irritable Bowel Syndrome,Antispasmodics (Hyoscine),1st Line,"Pain predominant, intermittent",Glaucoma; myasthenia gravis; prostatic hyperplasia
+G039,Irritable Bowel Syndrome,Laxatives (Osmotic),1st Line,"Constipation-predominant",Intestinal obstruction; fecal impaction
+G040,Irritable Bowel Syndrome,Antidiarrheals (Loperamide),1st Line,"Diarrhea-predominant",Acute dysentery; pseudomembranous colitis
+G041,Irritable Bowel Syndrome,Low-dose Antidepressants (TCA),2nd Line,"Moderate-severe pain, global symptoms",Cardiac conduction defects; recent MI
+G042,Alcoholic Liver Disease,Corticosteroids,1st Line (severe alcoholic hepatitis),"Maddrey score >32, no infection",Active GI bleeding; renal failure; sepsis
+G043,Alcoholic Liver Disease,Pentoxifylline,2nd Line,"If corticosteroids contraindicated",Recent bleeding; intolerance
+G044,Non-alcoholic Fatty Liver Disease,Vitamin E,1st Line (nondiabetic NASH),"Biopsy-proven NASH, no diabetes",Bleeding risk; vitamin K antagonism
+G045,Non-alcoholic Fatty Liver Disease,Pioglitazone,1st Line (diabetic NASH),"Type 2 diabetes with NASH",Heart failure; bladder cancer risk; fractures
+G046,Stroke (Ischemic),Thrombolytics (tPA),Acute,"Within 4.5 hours, no contraindications",ICH history; recent surgery; severe hypertension
+G047,Stroke (Ischemic),Antiplatelet Agents (Aspirin),Secondary prevention,"After 24-48 hours, all patients",Allergy; active bleeding
+G048,Stroke (Ischemic),P2Y12 Inhibitors (Clopidogrel),Secondary prevention,"Aspirin allergy, recent TIA/stroke within 30 days (dual with aspirin short-term)",Active bleeding; severe liver disease
+G049,Atrial Fibrillation,Direct Oral Anticoagulants (DOACs),1st Line (stroke prevention),"Non-valvular AF, CHA2DS2-VASc ≥2 in men, ≥3 in women",Mechanical heart valve; mitral stenosis; pregnancy
+G050,Atrial Fibrillation,Warfarin,1st Line,"Valvular AF, mechanical valve, severe CKD, patient preference",Pregnancy; bleeding risk; inability to monitor INR
+G051,Atrial Fibrillation,Rate Control (Beta-Blockers),1st Line (rate control),"All patients with AF, unless contraindicated",Asthma; bradycardia; heart block
+G052,Atrial Fibrillation,Digoxin,2nd Line (rate control),"Heart failure, sedentary",Toxicity; hypokalemia; AV block
+G053,Heart Failure with Reduced EF,ACE Inhibitors,1st Line,"All patients with HFrEF (LVEF ≤40%)",Angioedema; bilateral renal artery stenosis; hyperkalemia
+G054,Heart Failure with Reduced EF,Beta-Blockers (Carvedilol, Metoprolol succinate),1st Line,"Stable patients, after optimization of diuretics",Decompensated heart failure; bradycardia; asthma
+G055,Heart Failure with Reduced EF,Aldosterone Antagonists,1st Line,"Persistent symptoms despite ACEi/BB, LVEF ≤35%, eGFR >30",Hyperkalemia; renal failure
+G056,Heart Failure with Reduced EF,SGLT2 Inhibitors,1st Line,"All HFrEF regardless of diabetes, on top of ACEi/BB/MRA",History of DKA; recurrent UTIs
+G057,Heart Failure with Reduced EF,Diuretics (Loop),Symptomatic,"Volume overload, congestion",Hypotension; electrolyte imbalance; severe hyponatremia
+G058,Parkinson's Disease,Levodopa/Carbidopa,1st Line,"Elderly, significant motor impairment",Narrow-angle glaucoma; melanoma history; MAOI use
+G059,Parkinson's Disease,Dopamine Agonists (Pramipexole),1st Line (young onset),"Younger patients, mild symptoms",Impulse control disorders; psychosis; hypotension
+G060,Parkinson's Disease,MAO-B Inhibitors (Selegiline),1st Line (adjunct),"Early, mild symptoms",Contraindicated with meperidine; SSRIs caution
+G061,Parkinson's Disease,COMT Inhibitors (Entacapone),Add-on,"Motor fluctuations on levodopa",Liver disease; pheochromocytoma
+G062,Alzheimer's Disease (Mild-Moderate),Acetylcholinesterase Inhibitors (Donepezil),1st Line,"Mild to moderate Alzheimer's",Bradycardia; COPD; peptic ulcer disease
+G063,Alzheimer's Disease (Moderate-Severe),NMDA Receptor Antagonists (Memantine),1st Line (mod-severe) or add-on,"Moderate to severe, combination or monotherapy",Severe renal impairment; seizures
+G064,Epilepsy (Generalized Tonic-Clonic),Valproate,1st Line (generalized),"Generalized epilepsy (genetic)",Pregnancy (teratogenic); liver disease; thrombocytopenia
+G065,Epilepsy (Focal),Carbamazepine,1st Line (focal),"Focal onset seizures",AV block; porphyria; HLA-B1502 allele
+G066,Epilepsy (Focal),Lamotrigine,1st Line (focal),"Women of childbearing potential",Stevens-Johnson risk; titration needed
+G067,Epilepsy (Focal),Levetiracetam,1st Line (focal),"All ages, rapid titration",Behavioral issues; psychosis
+G068,Migraine (Acute),Triptans (Sumatriptan),1st Line,"Moderate-severe migraine, no vascular risk factors",Ischemic heart disease; uncontrolled hypertension; basilar migraine
+G069,Migraine (Acute),NSAIDs,1st Line,"Mild-moderate, no contraindications",Peptic ulcer; bleeding risk; renal impairment
+G070,Migraine (Prophylaxis),Beta-Blockers (Propranolol),1st Line,"Frequent migraine, hypertension, no asthma",Asthma; bradycardia; depression
+G071,Migraine (Prophylaxis),Antiepileptics (Topiramate),1st Line,"Episodic migraine, need weight loss",Nephrolithiasis; glaucoma; cognitive dysfunction
+G072,Migraine (Prophylaxis),CGRP Monoclonal Antibodies,2nd Line,"Chronic migraine, failed 2-3 preventives",Hypersensitivity; cost
+G073,Rheumatoid Arthritis,DMARDs (Methotrexate),1st Line,"All patients with active RA",Severe renal impairment; liver disease; pregnancy; blood dyscrasias
+G074,Rheumatoid Arthritis,DMARDs (Leflunomide),2nd Line,"Alternative to MTX, combination",Liver disease; pregnancy (long half-life)
+G075,Rheumatoid Arthritis,Biologic DMARDs (Anti-TNF),2nd Line,"Inadequate response to MTX, moderate-high disease activity",Active infection; heart failure (NYHA III/IV); demyelinating disease
+G076,Rheumatoid Arthritis,JAK Inhibitors,2nd Line,"Inadequate response to MTX/biologics, oral preferred",Thrombosis risk; active infection; elderly caution
+G077,Osteoarthritis (Knee),NSAIDs (Topical),1st Line,"Mild-moderate pain, elderly",Skin sensitivity; allergy
+G078,Osteoarthritis (Knee),NSAIDs (Oral),1st Line,"Moderate-severe pain, no GI/CV risk",Peptic ulcer; renal impairment; heart failure
+G079,Osteoarthritis (Knee),Acetaminophen,1st Line,"Mild pain, contraindication to NSAIDs",Liver disease; alcoholism
+G080,Osteoarthritis (Knee),Corticosteroid Injections,2nd Line,"Flare, localized pain, effusion",Joint infection; fracture; bleeding disorder
+G081,Chronic Kidney Disease (Stage 3-4),ACE Inhibitors/ARBs,1st Line,"Hypertension, proteinuria",Hyperkalemia; bilateral renal artery stenosis
+G082,Chronic Kidney Disease (Stage 3-4),SGLT2 Inhibitors,1st Line,"Diabetic or non-diabetic CKD with proteinuria",History of DKA; recurrent UTIs
+G083,Chronic Kidney Disease (Anemia),Erythropoiesis-Stimulating Agents,2nd Line,"Hb <10, iron replete",Uncontrolled hypertension; pure red cell aplasia
+G084,Chronic Kidney Disease (Mineral Bone Disorder),Phosphate Binders,1st Line,"Hyperphosphatemia (serum P >4.5)",Hypophosphatemia; bowel obstruction
+G085,Chronic Kidney Disease (Secondary Hyperparathyroidism),Vitamin D Analogs,1st Line,"Low 1,25(OH)2D, elevated PTH",Hypercalcemia; hyperphosphatemia
+G086,Acute Myocardial Infarction,Antiplatelet Agents (Aspirin),Acute,"All patients at presentation",Allergy; active bleeding
+G087,Acute Myocardial Infarction,P2Y12 Inhibitors,Acute,"All patients (dual antiplatelet)",Bleeding risk; need for surgery
+G088,Acute Myocardial Infarction,Thrombolytics,Acute,"If PCI not available within 120 min",Bleeding risk; recent stroke; trauma
+G089,Acute Myocardial Infarction,Beta-Blockers,Acute (early),"Hemodynamically stable, no contraindications",Cardiogenic shock; bradycardia; heart block
+G090,Acute Myocardial Infarction,Statins,Secondary prevention,"All patients post-MI, high-intensity",Active liver disease; pregnancy
+G091,Community-acquired Pneumonia,Antibiotics (Macrolides),1st Line (outpatient, low risk),"Previously healthy, no comorbidities",QT prolongation; drug interactions
+G092,Community-acquired Pneumonia,Antibiotics (Doxycycline),1st Line (outpatient, low risk),"Alternative to macrolides",Pregnancy; children <8
+G093,Community-acquired Pneumonia,Antibiotics (Respiratory Fluoroquinolones),1st Line (outpatient, comorbidities),"COPD, diabetes, recent antibiotics",Tendonitis; QT prolongation; CNS effects
+G094,Community-acquired Pneumonia,Antibiotics (Beta-lactam + Macrolide),1st Line (inpatient, non-ICU),"Admitted, moderate severity",Beta-lactam allergy
+G095,Community-acquired Pneumonia,Antibiotics (Beta-lactam + Respiratory Fluoroquinolone),1st Line (ICU),"Severe CAP, ICU admission",As above
+G096,Tuberculosis (Pulmonary),Isoniazid + Rifampin + Pyrazinamide + Ethambutol,1st Line (intensive phase),"New TB case, drug-sensitive",Liver disease; optic neuritis (ethambutol); pregnancy caution
+G097,Tuberculosis (Pulmonary),Isoniazid + Rifampin,1st Line (continuation phase),"After 2 months intensive, if sensitive",Liver disease; peripheral neuropathy (give B6)
+G098,Tuberculosis (MDR),Bedaquiline + Linezolid + Others,2nd Line,"Resistance to first-line",QT prolongation; myelosuppression; drug interactions
+G099,HIV/AIDS,ARVs (Integrase Inhibitor + 2 NRTIs),1st Line,"All treatment-naive patients",Drug interactions; renal function (TDF caution)
+G100,HIV/AIDS,ARVs (NNRTI-based),2nd Line,"Failure on first-line, or switch for simplification",Resistance; drug interactions; CNS effects
+G101,HIV/AIDS,ARVs (Protease Inhibitor-based),3rd Line,"Failure of second-line",Metabolic syndrome; drug interactions; adherence issues
+G102,Asthma (Step 1),Inhaled Short-acting Beta Agonists (SABA),As needed,"Intermittent asthma, symptoms ≤2/week",Tachycardia; hypokalemia
+G103,Asthma (Step 2),Inhaled Corticosteroids (Low dose),Maintenance,"Mild persistent asthma",Local side effects (hoarseness, thrush); need spacer
+G104,Asthma (Step 3),Inhaled Corticosteroids (Low dose) + LABA,Maintenance,"Moderate persistent, not controlled on low ICS",LABA contraindicated without ICS (monotherapy not recommended)
+G105,Asthma (Step 4),Inhaled Corticosteroids (Medium dose) + LABA,Maintenance,"Not controlled on step 3",As above
+G106,Asthma (Step 5),Inhaled Corticosteroids (High dose) + LABA + consider add-ons (tiotropium, anti-IgE),Maintenance,"Severe persistent, frequent exacerbations",Need specialist evaluation; assess adherence
+G107,COPD (Group A),Inhaled Short-acting Bronchodilators (SABA or SAMA),As needed,"Mild symptoms, low risk",Cardiac arrhythmias (caution)
+G108,COPD (Group B),Inhaled Long-acting Bronchodilators (LABA or LAMA),Maintenance,"More symptoms, low risk",As above; consider LAMA if predominant dyspnea
+G109,COPD (Group E),Inhaled LABA + LAMA,Maintenance,"High exacerbation risk",Combination caution in cardiac disease
+G110,COPD (Group E with asthma features/eosinophilia),Inhaled ICS + LABA + LAMA,Maintenance,"High exacerbation despite LABA/LAMA, or eosinophilia >300",Pneumonia risk with ICS
+G111,Depression (Moderate),Antidepressants (SSRIs),1st Line,"All patients, first episode",Bipolar disorder; recent MAOI use; pregnancy caution
+G112,Depression (Moderate),Antidepressants (SNRIs),1st Line,"Need for efficacy, comorbid anxiety",Uncontrolled hypertension; narrow-angle glaucoma
+G113,Depression (Treatment-resistant),Antidepressants (TCAs),2nd Line,"Failure of SSRIs/SNRIs",Cardiac conduction defects; suicide risk; overdose risk
+G114,Depression (with psychosis),Antipsychotics (Atypical) + Antidepressants,1st Line,"Psychotic features",Metabolic syndrome; EPS; tardive dyskinesia
+G115,Bipolar I Disorder (Mania),Mood Stabilizers (Lithium) or Valproate or Atypical Antipsychotics,1st Line,"Acute mania",Lithium: renal/thyroid impairment; valproate: liver disease; pregnancy
+G116,Bipolar I Disorder (Maintenance),Lithium,1st Line,"Classic bipolar, reduces suicide risk",Renal impairment; hypothyroidism; dehydration
+G117,Bipolar I Disorder (Maintenance),Lamotrigine,1st Line,"Maintenance in bipolar I, especially for depression",Rash; slow titration
+G118,Schizophrenia (Acute),Antipsychotics (Atypical),1st Line,"First-episode or relapse",Weight gain; metabolic monitoring
+G119,Schizophrenia (Maintenance),Antipsychotics (Long-acting injectable),1st Line (if adherence issues),"Frequent relapses, poor adherence",Extrapyramidal symptoms; injection site reactions
+G120,Schizophrenia (Treatment-resistant),Clozapine,2nd Line,"Failure of two adequate antipsychotic trials",Agranulocytosis; myocarditis; seizures; weight gain
+G121,Insomnia (Chronic),Cognitive Behavioral Therapy,1st Line,"All patients",None
+G122,Insomnia (Chronic),Hypnotics (Z-drugs),2nd Line,"Short-term, when CBT ineffective or unavailable",Substance abuse; sleep apnea; respiratory depression
+G123,Insomnia (Chronic),Ramelteon,2nd Line,"Sleep-onset insomnia, no abuse potential",Concomitant fluvoxamine; severe liver impairment
+G124,Glaucoma (Open-angle),Prostaglandin Analogs (Latanoprost),1st Line,"First-line, once daily",Macular edema; uveitis; contact lens wearers
+G125,Glaucoma (Open-angle),Beta-blockers (Timolol),2nd Line,"Alternative or add-on",Asthma; bradycardia; heart block
+G126,Glaucoma (Open-angle),Alpha-2 Agonists (Brimonidine),2nd Line,"Add-on or when others contraindicated",Fatigue; hypotension; allergy
+G127,Wet Age-related Macular Degeneration,Anti-VEGF (Ranibizumab),1st Line,"Active CNV, intravitreal injection",Ocular/periocular infection; recent intraocular surgery
+G128,Wet Age-related Macular Degeneration,Anti-VEGF (Aflibercept),1st Line,"Active CNV, alternative dosing",As above
+G129,Diabetic Macular Edema,Anti-VEGF,1st Line,"Center-involving DME, vision loss",As above
+G130,Benign Prostatic Hyperplasia,Alpha-blockers (Tamsulosin),1st Line,"Moderate symptoms",Retrograde ejaculation; dizziness; hypotension
+G131,Benign Prostatic Hyperplasia,5-alpha Reductase Inhibitors (Finasteride),1st Line (if large prostate),"Large prostate (>40g), long-term",Sexual dysfunction; gynecomastia; depression
+G132,Benign Prostatic Hyperplasia,Combination (Alpha-blocker + 5-ARI),1st Line (if large prostate and symptoms),"Larger prostate, high risk of progression",As above
+G133,Erectile Dysfunction (Vasculogenic),PDE5 Inhibitors (Sildenafil),1st Line,"No contraindications",Nitrate use; severe hypotension; recent stroke/MI
+G134,Erectile Dysfunction (Psychogenic),PDE5 Inhibitors,1st Line,"As above",As above
+G135,Erectile Dysfunction (Post-prostatectomy),PDE5 Inhibitors (Tadalafil daily),1st Line,"Penile rehab after nerve-sparing surgery",As above
+G136,Overactive Bladder,Anticholinergics (Oxybutynin),1st Line,"Symptoms, no contraindications",Narrow-angle glaucoma; gastric retention; cognitive impairment
+G137,Overactive Bladder,Beta-3 Agonists (Mirabegron),2nd Line,"Intolerance to anticholinergics",Severe uncontrolled hypertension; bladder outlet obstruction
+G138,Prostate Cancer (Metastatic, Hormone-sensitive),ADT + Docetaxel or Abiraterone,1st Line,"High-volume disease",Bone marrow suppression; neuropathy; cardiac (abiraterone)
+G139,Prostate Cancer (Metastatic, Castration-resistant),Enzalutamide or Abiraterone,1st Line,"Asymptomatic/minimally symptomatic",Seizure risk (enzalutamide); hypertension; fatigue
+G140,Prostate Cancer (Metastatic, Castration-resistant),Chemotherapy (Cabazitaxel),2nd Line,"Post-docetaxel",Neutropenia; neuropathy
+G141,Breast Cancer (Early, HR+),Endocrine Therapy (Tamoxifen or AI),Adjuvant,"Post-surgery, hormone receptor-positive",Thrombosis (tamoxifen); osteoporosis (AI); endometrial cancer (tamoxifen)
+G142,Breast Cancer (HER2+),Trastuzumab + Chemotherapy,Adjuvant/Neoadjuvant,"HER2 overexpression",Cardiomyopathy; infusion reactions
+G143,Breast Cancer (Metastatic, HR+),CDK4/6 Inhibitors + Endocrine Therapy,1st Line,"Hormone receptor-positive, HER2-negative",Neutropenia; QT prolongation; fatigue
+G144,Breast Cancer (Metastatic, Triple-Negative),Chemotherapy (e.g., Taxanes),1st Line,"PD-L1 negative",Myelosuppression; neuropathy
+G145,Breast Cancer (Metastatic, Triple-Negative, PD-L1+),Immune Checkpoint Inhibitor + Chemotherapy,1st Line,"PD-L1 positive",Immune-related adverse events
+G146,Lung Cancer (NSCLC, Metastatic, EGFR mutant),EGFR Tyrosine Kinase Inhibitors (Osimertinib),1st Line,"EGFR mutation (exon 19 del, L858R)",Interstitial lung disease; QT prolongation; hepatotoxicity
+G147,Lung Cancer (NSCLC, Metastatic, ALK-positive),ALK Inhibitors (Alectinib),1st Line,"ALK rearrangement",Hepatotoxicity; bradycardia; myalgia
+G148,Lung Cancer (NSCLC, Metastatic, PD-L1 ≥50%),Immune Checkpoint Inhibitor (Pembrolizumab),1st Line,"PD-L1 high expression, no driver mutation",Immune-related adverse events
+G149,Lung Cancer (NSCLC, Metastatic, no driver),Chemotherapy (Platinum doublet),1st Line,"PD-L1 <50%, good PS",Nephrotoxicity; neuropathy; myelosuppression
+G150,Colorectal Cancer (Metastatic),Chemotherapy (FOLFOX or FOLFIRI) + Targeted therapy (if RAS wild-type),1st Line,"Unresectable metastatic",Neuropathy (oxaliplatin); diarrhea (irinotecan); neutropenia
+G151,Colorectal Cancer (Metastatic, RAS wild-type),Anti-EGFR (Cetuximab) + Chemotherapy,1st Line,"Left-sided tumors, RAS wild-type",Rash; infusion reactions; hypomagnesemia
+G152,Colorectal Cancer (Metastatic, BRAF mutant),BRAF Inhibitor + EGFR Inhibitor + Chemotherapy,2nd Line,"BRAF V600E mutation",Fatigue; nausea; hepatotoxicity
+G153,Gout (Acute),NSAIDs (Indomethacin),1st Line,"Acute attack, no contraindications",Peptic ulcer; renal impairment; bleeding
+G154,Gout (Acute),Colchicine,1st Line (if early),"Within 24 hours of onset",Renal/hepatic impairment; drug interactions (CYP3A4)
+G155,Gout (Acute),Corticosteroids (Oral/IA),2nd Line,"Contraindications to NSAIDs/colchicine",Infection; diabetes; osteoporosis
+G156,Gout (Chronic),Xanthine Oxidase Inhibitors (Allopurinol),1st Line (urate-lowering),"Recurrent attacks, tophi, CKD",Allopurinol hypersensitivity syndrome (HLA-B5801); renal impairment
+G157,Gout (Chronic),Xanthine Oxidase Inhibitors (Febuxostat),2nd Line,"Intolerance to allopurinol",Cardiovascular risk (boxed warning); liver enzyme elevation
+G158,Rheumatoid Arthritis (Early),Methotrexate,1st Line,"All patients with active RA",As above
+G159,Rheumatoid Arthritis (Refractory),Rituximab,2nd Line,"Failure of anti-TNF, seropositive",Infusion reactions; HBV reactivation; PML
+G160,Rheumatoid Arthritis (Refractory),Tocilizumab (Anti-IL6),2nd Line,"Failure of anti-TNF",Bowel perforation; hepatotoxicity; neutropenia
+G161,Psoriasis (Plaque, Mild-Moderate),Topical Corticosteroids,1st Line,"Limited disease",Skin atrophy; tachyphylaxis
+G162,Psoriasis (Plaque, Mild-Moderate),Vitamin D Analogs (Calcipotriene),1st Line,"Alternative or combination",Irritation; hypercalcemia (if excessive)
+G163,Psoriasis (Moderate-Severe),Biologics (Anti-TNF, Anti-IL17, Anti-IL23),1st Line (if candidate),"Extensive disease, failure of topical/systemic",Infection risk; need for TB screening
+G164,Psoriasis (Moderate-Severe),Methotrexate,1st Line (if biologics not available),"Moderate-severe, no liver disease",Hepatotoxicity; myelosuppression
+G165,Atopic Dermatitis (Mild),Topical Corticosteroids (mild),1st Line,"Localized flares",Skin atrophy; rebound
+G166,Atopic Dermatitis (Moderate),Topical Corticosteroids (moderate) + Moisturizers,1st Line,"Widespread",As above
+G167,Atopic Dermatitis (Severe),Systemic Immunosuppressants (Cyclosporine) or Biologics (Dupilumab),2nd Line,"Refractory severe disease",Renal impairment; hypertension; infection
+G168,Hepatitis C (Chronic),Direct-acting Antivirals (pangenotypic),1st Line,"All patients with chronic HCV, no cirrhosis or compensated cirrhosis",Drug interactions; pregnancy
+G169,Hepatitis B (Chronic),Entecavir or Tenofovir,1st Line,"Active disease (elevated ALT, HBV DNA >2000), cirrhosis",Renal toxicity (tenofovir); lactic acidosis
+G170,Hepatitis B (Chronic),Peginterferon,2nd Line,"Young, want finite duration, no contraindications",Cytopenias; depression; flu-like symptoms
+G171,Chronic Lymphocytic Leukemia (Treatment-naive),Ibrutinib (BTK inhibitor) or Venetoclax + Obinutuzumab,1st Line,"All patients, regardless of del17p",Bleeding; atrial fibrillation; tumor lysis (venetoclax)
+G172,Chronic Lymphocytic Leukemia (Relapsed),Venetoclax + Rituximab or Ibrutinib,2nd Line,"Prior chemoimmunotherapy",As above
+G173,Multiple Myeloma (Transplant-eligible),Induction (Bortezomib + Lenalidomide + Dexamethasone) then ASCT,1st Line,"Age ≤70, fit",Neuropathy (bortezomib); thrombosis (lenalidomide); cytopenias
+G174,Multiple Myeloma (Non-transplant),Lenalidomide + Dexamethasone (Rd),1st Line,"Age >70 or unfit",As above
+G175,Multiple Myeloma (Relapsed/Refractory),Carfilzomib + Lenalidomide + Dexamethasone or Daratumumab-based,2nd Line,"Prior exposure",Cardiac toxicity (carfilzomib); infusion reactions
+G176,Non-Hodgkin Lymphoma (DLBCL),R-CHOP (Rituximab + Cyclophosphamide + Doxorubicin + Vincristine + Prednisone),1st Line,"All patients, fit",Cardiomyopathy (doxorubicin); neuropathy; neutropenia
+G177,Non-Hodgkin Lymphoma (Follicular),Rituximab monotherapy or R-CHOP,1st Line,"Low burden: watchful wait; high burden: treat",Infusion reactions; infection risk
+G178,Hodgkin Lymphoma (Early stage),ABVD (Doxorubicin + Bleomycin + Vinblastine + Dacarbazine) +/- radiotherapy,1st Line,"Favorable early stage",Pulmonary toxicity (bleomycin); cardiomyopathy; infertility
+G179,Hodgkin Lymphoma (Advanced),ABVD or escalated BEACOPP,1st Line,"Advanced stage",As above; secondary cancers
+G180,Melanoma (Metastatic),Immune Checkpoint Inhibitors (Anti-PD1 +/- Anti-CTLA4),1st Line,"BRAF wild-type or mutant, good PS",Immune-related adverse events; severe if combination
+G181,Melanoma (Metastatic, BRAF mutant),BRAF + MEK Inhibitors,1st Line,"Alternative to IO, need rapid response",Cutaneous squamous; photosensitivity; pyrexia
+G182,Renal Cell Carcinoma (Clear cell, Metastatic),Immune Checkpoint Inhibitor combinations (Pembrolizumab + Axitinib) or Ipilimumab + Nivolumab,1st Line,"All risk groups",Hepatotoxicity; fatigue; immune events
+G183,Renal Cell Carcinoma (Metastatic),VEGF TKI (Sunitinib),1st Line (if IO not available),"Favorable risk",Hand-foot syndrome; hypertension; fatigue
+G184,Pancreatic Cancer (Metastatic),FOLFIRINOX or Gemcitabine + Nab-paclitaxel,1st Line,"Good performance status",Myelosuppression; neuropathy; fatigue
+G185,Pancreatic Cancer (Metastatic),Gemcitabine monotherapy,1st Line (if poor PS),"Poor performance status",Myelosuppression; flu-like symptoms
+G186,Ovarian Cancer (Advanced),Carboplatin + Paclitaxel +/- Bevacizumab,1st Line,"Stage III-IV",Neuropathy; myelosuppression; hypertension
+G187,Ovarian Cancer (Recurrent, Platinum-sensitive),Carboplatin-based doublet +/- Bevacizumab,2nd Line,"Relapse >6 months after platinum",As above
+G188,Ovarian Cancer (Recurrent, Platinum-resistant),Single-agent chemotherapy (Pegylated liposomal doxorubicin, Topotecan, etc.),2nd Line,"Relapse <6 months",Hand-foot syndrome; myelosuppression
+G189,Endometrial Cancer (Advanced),Carboplatin + Paclitaxel,1st Line,"Stage III-IV, serous/clear cell",Neuropathy; myelosuppression
+G190,Cervical Cancer (Recurrent/Metastatic),Platinum + Paclitaxel + Bevacizumab,1st Line,"PD-L1 positive or negative",Fistula risk; hypertension; bleeding
+G191,Testicular Cancer (Seminoma, Stage I),Carboplatin (adjuvant) or Surveillance,1st Line,"Low risk: surveillance; high risk: adjuvant carboplatin",Myelosuppression; second malignancy risk
+G192,Testicular Cancer (Non-seminoma, Stage I),BEP (Bleomycin + Etoposide + Cisplatin) or Surveillance,1st Line,"High risk: adjuvant BEP; low risk: surveillance",Pulmonary toxicity; ototoxicity; nephrotoxicity
+G193,Testicular Cancer (Advanced),BEP,1st Line,"Good prognosis",As above
+G194,Thyroid Cancer (Differentiated, Metastatic),Tyrosine Kinase Inhibitors (Lenvatinib, Sorafenib),1st Line (if RAI-refractory and progressive),"RAI-refractory, progressive disease",Hypertension; proteinuria; fatigue; diarrhea
+G195,Thyroid Cancer (Medullary),Vandetanib or Cabozantinib,1st Line (if metastatic and progressive),"RET mutation or advanced",QT prolongation; diarrhea; hypertension
+G196,Sarcoidosis (Pulmonary),Corticosteroids (Oral),1st Line (if symptomatic or progressive),"Stage II/III with dyspnea, declining lung function",Diabetes; osteoporosis; infection
+G197,Sarcoidosis (Cutaneous),Topical or Intralesional Corticosteroids,1st Line,"Localized skin lesions",Skin atrophy
+G198,Sarcoidosis (Refractory),Methotrexate or Azathioprine,2nd Line,"Failure of steroids, need steroid-sparing",Hepatotoxicity; myelosuppression
+G199,Idiopathic Pulmonary Fibrosis,Antifibrotics (Pirfenidone or Nintedanib),1st Line,"All patients with IPF, FVC 50-80%, DLCO >30%",GI intolerance; photosensitivity; hepatotoxicity
+G200,Idiopathic Pulmonary Fibrosis,Antifibrotics (Nintedanib),1st Line,"As above",Diarrhea; nausea; hepatotoxicity
+G201,Pulmonary Arterial Hypertension (Group 1),Endothelin Receptor Antagonists (Ambrisentan),1st Line (WHO FC II-III),"Treatment-naive, no liver impairment",Hepatotoxicity; edema; teratogenicity
+G202,Pulmonary Arterial Hypertension (Group 1),PDE5 Inhibitors (Sildenafil),1st Line (WHO FC II-III),"As above",Visual disturbances; hypotension; interaction with nitrates
+G203,Pulmonary Arterial Hypertension (Group 1),Prostacyclin Analogs (Epoprostenol),1st Line (WHO FC IV),"Severe, rapidly progressive",Infusion-related; thrombocytopenia; jaw pain
+G204,Pulmonary Arterial Hypertension (Group 1),Combination Therapy (Ambrisentan + Tadalafil),1st Line (initial combination),"WHO FC II-III, no contraindications",As above
+G205,Acne Vulgaris (Mild),Topical Retinoids (Tretinoin),1st Line,"Comedonal acne",Irritation; photosensitivity
+G206,Acne Vulgaris (Mild-Moderate),Topical Antibiotics (Clindamycin) + Benzoyl Peroxide,1st Line,"Inflammatory acne",Skin dryness; bleaching; bacterial resistance if monotherapy
+G207,Acne Vulgaris (Moderate-Severe),Oral Antibiotics (Doxycycline) + Topical Agents,1st Line,"Extensive inflammatory acne",Photosensitivity; GI upset; candidiasis
+G208,Acne Vulgaris (Severe, Nodulocystic),Oral Isotretinoin,1st Line (if resistant),"Severe, scarring, treatment-resistant",Teratogenicity; mood changes; dry skin; lipid elevation
+G209,Rosacea (Papulopustular),Topical Metronidazole or Azelaic Acid,1st Line,"Mild-moderate",Irritation; allergic reaction
+G210,Rosacea (Erythematotelangiectatic),Brimonidine Gel (topical),1st Line,"Persistent facial erythema",Worsening erythema; allergic contact
+G211,Rosacea (Severe),Oral Doxycycline (subantimicrobial),2nd Line,"Moderate-severe",As above
+G212,Urticaria (Chronic Spontaneous),Non-sedating Antihistamines (high dose),1st Line,"All patients",Sedation (if high dose)
+G213,Urticaria (Chronic Spontaneous),Omalizumab (Anti-IgE),2nd Line,"Refractory to antihistamines",Anaphylaxis risk; injection site reactions
+G214,Urticaria (Chronic Spontaneous),Cyclosporine,3rd Line,"Refractory to antihistamines and omalizumab",Renal impairment; hypertension; infection
+G215,Allergic Rhinitis (Moderate-Severe),Intranasal Corticosteroids,1st Line,"All patients with persistent symptoms",Epistaxis; septal perforation (rare)
+G216,Allergic Rhinitis (Moderate-Severe),Oral Antihistamines (non-sedating),1st Line (mild intermittent),"As needed for symptoms",Sedation (cetirizine); dry mouth
+G217,Allergic Rhinitis (Severe),Sublingual Immunotherapy (SLIT),2nd Line,"Persistent despite pharmacotherapy, allergen-specific",Local reactions; anaphylaxis risk (rare)
+G218,Anaphylaxis (Acute),Epinephrine (IM),1st Line,"First-line, immediate",Arrhythmias; hypertension; tissue necrosis if IM incorrectly
+G219,Anaphylaxis (Acute),Antihistamines + Corticosteroids,Adjunctive,"After epinephrine, for symptom relief",Delay in epinephrine use
+G220,Drug Allergy (Penicillin),Avoidance,1st Line,"History of immediate hypersensitivity",Alternative antibiotics; cross-reactivity with cephalosporins (low)
+G221,Drug Allergy (Penicillin),Penicillin Desensitization,Procedure,"If penicillin is essential (e.g., syphilis in pregnancy)",Performed in hospital
+G222,Hypothyroidism (Subclinical),Levothyroxine,1st Line (if TSH >10 or symptomatic),"TSH >10 or positive TPO antibodies with TSH >4-5",As above
+G223,Hyperthyroidism (Subclinical),Antithyroid Drugs or RAI,1st Line (if TSH <0.1),"TSH <0.1 especially if elderly, AF, osteoporosis",As per treatment chosen
+G224,Osteopenia,Bisphosphonates,1st Line (if high fracture risk),"FRAX score >20% major fracture or >3% hip fracture",As above
+G225,Osteopenia,Calcium + Vitamin D,1st Line (all patients),"Adequate intake",Hypercalcemia (if excess)
+G226,Gastroenteritis (Viral),Oral Rehydration,1st Line,"Mild-moderate dehydration",None
+G227,Gastroenteritis (Bacterial),Antibiotics (guided by culture),2nd Line,"Severe, invasive, immunocompromised",As per antibiotic
+G228,Cellulitis,Antibiotics (Cephalexin),1st Line,"Mild, no systemic signs",Penicillin allergy; caution if MRSA risk
+G229,Cellulitis (Severe),IV Antibiotics (Cefazolin or Clindamycin),1st Line (inpatient),"Systemic signs, rapid progression",Allergy
+G230,Pneumonia (Aspiration),Antibiotics (Ampicillin-sulbactam or Clindamycin),1st Line,"Community-acquired aspiration",Clindamycin C. diff risk
+G231,UTI (Uncomplicated),Antibiotics (Nitrofurantoin),1st Line,"Cystitis, non-pregnant women",Renal impairment (eGFR<30); pulmonary toxicity
+G232,UTI (Uncomplicated),Antibiotics (Trimethoprim-sulfamethoxazole),1st Line (alternative),"Local resistance <20%",Sulfa allergy; renal impairment; G6PD
+G233,UTI (Pyelonephritis),Antibiotics (Fluoroquinolones) or IV Ceftriaxone,1st Line,"Moderate-severe, outpatient if stable",Resistance; QT prolongation
+G234,Prostatitis (Acute Bacterial),Antibiotics (Fluoroquinolones),1st Line,"Coverage for Gram-negatives",As above
+G235,Prostatitis (Chronic Bacterial),Antibiotics (Fluoroquinolones for 4-6 weeks),1st Line,"Bacterial isolation",As above
+G236,BPH with Acute Urinary Retention,Alpha-blockers + Catheterization,1st Line,"Immediate relief",Hypotension; dizziness
+G237,Erectile Dysfunction (Post-radical prostatectomy),PDE5 Inhibitors (daily),1st Line,"Penile rehabilitation",Contraindicated with nitrates
+G238,Peyronie's Disease,Collagenase Clostridium histolyticum (Xiaflex),1st Line (if curvature >30°),"Plaque palpable, curvature stable",Peyronie's with ventral plaque; coagulation disorders
+G239,Interstitial Cystitis,Multimodal therapy (pentosan polysulfate, amitriptyline, hydroxyzine),1st Line,"Diagnosis of IC/BPS",Pentosan: bleeding risk; amitriptyline: anticholinergic
+G240,Nephrolithiasis (Calcium stones),Thiazide Diuretics,1st Line (prevention),"Hypercalciuria",Hypokalemia; hyperuricemia
+G241,Nephrolithiasis (Uric acid stones),Allopurinol,1st Line (prevention),"Hyperuricosuria, uric acid stones",Hypersensitivity
+G242,Acute Kidney Injury (Prerenal),IV Fluids,1st Line,"Volume depletion",Fluid overload; pulmonary edema
+G243,Acute Kidney Injury (Intrinsic),Supportive care + treat underlying cause,1st Line,"ATN, interstitial nephritis, etc.",Avoid nephrotoxins
+G244,Chronic Kidney Disease (Mineral Bone Disorder),Calcitriol,1st Line,"Low 1,25(OH)2D, elevated PTH",Hypercalcemia; hyperphosphatemia
+G245,Chronic Kidney Disease (Anemia),IV Iron,1st Line (if iron deficiency),"Ferritin <200, TSAT <20%",Hypersensitivity; anaphylaxis (rare)
+G246,Diabetic Nephropathy,ACE Inhibitors,1st Line,"All diabetics with albuminuria or HTN",As above
+G247,Hypertensive Nephrosclerosis,Control BP (ACEi/ARB, CCB),1st Line,"Aggressive BP control",As per drug
+G248,Glomerulonephritis (IgA Nephropathy),ACE Inhibitors/ARBs,1st Line,"Proteinuria >1g/day",As above
+G249,Glomerulonephritis (IgA Nephropathy with crescents),Corticosteroids + Cyclophosphamide,Induction,"Rapidly progressive",Infection risk; myelosuppression
+G250,Membranous Nephropathy,Immunosuppression (Rituximab or Cyclophosphamide + steroids),1st Line (high risk),"High risk of progression",As per drug
+G501,Long QT Syndrome Type 1,Beta-Blockers (Non-selective),1st Line,"All symptomatic patients; asymptomatic with QTc>470 ms (men) or >480 ms (women)",Asthma; Bradycardia; Decompensated heart failure
+G502,Long QT Syndrome Type 1,Implantable Cardioverter-Defibrillator (ICD),2nd Line,"Prior cardiac arrest, syncope on beta-blocker, very long QTc",Inability to implant; poor prognosis
+G503,Long QT Syndrome Type 2,Beta-Blockers (Non-selective),1st Line,"All symptomatic; consider in asymptomatic with significant QT prolongation",As above
+G504,Long QT Syndrome Type 2,ICD,2nd Line,"Prior arrest, recurrent syncope, QTc>500 ms on therapy",As above
+G505,Long QT Syndrome Type 3,Na Channel Blockers (Mexiletine) + Beta-Blockers,1st Line,"Consider in addition to beta-blockers for QT shortening",Conduction disease; renal/hepatic impairment
+G506,Long QT Syndrome Type 3,ICD,2nd Line,"High-risk features, prior arrest",As above
+G507,Catecholaminergic Polymorphic VT,Beta-Blockers (Non-selective),1st Line,"All patients with CPVT",Asthma; bradycardia
+G508,Catecholaminergic Polymorphic VT,Flecainide,2nd Line,"Inadequate control with beta-blockers",Structural heart disease; ventricular tachycardia
+G509,Catecholaminergic Polymorphic VT,ICD,3rd Line,"Cardiac arrest, recurrent syncope despite optimal therapy",As above
+G510,Brugada Syndrome,Quinidine,1st Line,"Patients with arrhythmia storms or high risk",QT prolongation; thrombocytopenia
+G511,Brugada Syndrome,ICD,1st Line,"Prior cardiac arrest, syncope with spontaneous type 1 ECG",As above
+G512,Arrhythmogenic Right Ventricular Cardiomyopathy,Beta-Blockers,1st Line,"All patients with ARVC",As above
+G513,Arrhythmogenic Right Ventricular Cardiomyopathy,ICD,2nd Line,"Prior cardiac arrest, sustained VT, severe RV dysfunction",As above
+G514,Arrhythmogenic Right Ventricular Cardiomyopathy,Antiarrhythmics (Amiodarone or Sotalol),2nd Line,"Recurrent VT despite beta-blockers, not ICD candidates",Pulmonary; thyroid; hepatic toxicity
+G515,Left Ventricular Noncompaction,ACE Inhibitors,1st Line,"Heart failure symptoms or LV dysfunction",Angioedema; pregnancy; bilateral renal artery stenosis
+G516,Left Ventricular Noncompaction,Anticoagulation,1st Line,"LV thrombus, atrial fibrillation, or LVEF<40%",Active bleeding; bleeding risk
+G517,Left Ventricular Noncompaction,ICD,2nd Line,"Sustained VT or aborted SCD",As above
+G518,Restrictive Cardiomyopathy (Idiopathic),Diuretics (Loop),1st Line,"Volume overload",Hypotension; electrolyte imbalance
+G519,Restrictive Cardiomyopathy (Idiopathic),ACE Inhibitors,1st Line,"If evidence of heart failure and tolerated",As above
+G520,Restrictive Cardiomyopathy (Idiopathic),Anticoagulation,2nd Line,"Atrial fibrillation or prior embolic event",Bleeding risk
+G521,Cardiac Amyloidosis (ATTR wild-type),Tafamidis,1st Line,"NYHA I-II symptoms, without severe heart failure",Pregnancy; hypersensitivity
+G522,Cardiac Amyloidosis (ATTR wild-type),Diuretics,Supportive,"Volume overload",As diuretics
+G523,Cardiac Amyloidosis (ATTR hereditary),Tafamidis or Patisiran,1st Line,"As above; genetic testing",Pregnancy; severe neuropathy
+G524,Cardiac Amyloidosis (AL),Chemotherapy (Daratumumab, CyBorD),1st Line,"Treat underlying plasma cell dyscrasia",Infection; cytopenias; cardiac toxicity
+G525,Fabry Disease (Cardiac variant),Enzyme Replacement Therapy (Agalsidase),1st Line,"Confirmed Fabry, any sign of organ involvement",Infusion reactions; pregnancy; severe renal impairment
+G526,Fabry Disease (Cardiac variant),Oral Chaperone (Migalastat),1st Line (if amenable mutation),"As above, with amenable GLA mutation",Pregnancy; renal impairment
+G527,Danon Disease,Supportive care,1st Line,"No specific therapy; manage heart failure, arrhythmias",None
+G528,Danon Disease,Heart Transplantation,2nd Line,"End-stage heart failure",Surgical risks; recurrence risk
+G529,Pompe Disease (Late-onset),Enzyme Replacement Therapy (Alglucosidase alfa),1st Line,"All patients with symptomatic Pompe",Infusion reactions; cardiac arrhythmias; pregnancy
+G530,Kawasaki Disease (Acute),IVIG,1st Line,"High-dose within 10 days of fever onset",Anaphylaxis (IgA deficiency); heart failure
+G531,Kawasaki Disease (Acute),Aspirin (High-dose),1st Line,"Anti-inflammatory dose during acute phase",Reye's; bleeding; aspirin allergy
+G532,Kawasaki Disease (Convalescent),Aspirin (Low-dose),Maintenance,"After fever resolves, until coronary aneurysms regress",As above
+G533,Acute Rheumatic Fever (Carditis),Penicillin,1st Line,"Eradicate group A strep",Penicillin allergy (use erythromycin)
+G534,Acute Rheumatic Fever (Carditis),Aspirin or NSAIDs,1st Line,"Symptomatic arthritis or mild carditis",GI bleeding; renal impairment
+G535,Acute Rheumatic Fever (Carditis),Corticosteroids,2nd Line,"Severe carditis with heart failure",Infection; diabetes
+G536,Acute Rheumatic Fever (Secondary prophylaxis),Penicillin (Benzathine),Maintenance,"Prevent recurrence; duration depends on severity",As above
+G537,Infective Endocarditis (Right-sided),Antibiotics (Anti-staphylococcal),1st Line,"Nafcillin or oxacillin for MSSA; vancomycin for MRSA",Allergy; renal toxicity
+G538,Infective Endocarditis (Right-sided),Surgery,2nd Line,"Failed antibiotics, large vegetations, recurrent emboli",Surgical risk
+G539,Nonbacterial Thrombotic Endocarditis,Anticoagulation (Heparin then warfarin),1st Line,"Treat underlying condition; anticoagulate for emboli",Bleeding; heparin-induced thrombocytopenia
+G540,Carcinoid Heart Disease,Somatostatin Analogs (Octreotide),1st Line,"Control carcinoid syndrome; may slow progression",Gallstones; bradycardia; glucose abnormalities
+G541,Carcinoid Heart Disease,Valve Surgery,2nd Line,"Severe symptomatic valve dysfunction",Surgical risk; carcinoid crisis
+G542,Cardiac Tumors (Myxoma),Surgical Resection,1st Line,"All symptomatic or >1 cm to prevent emboli",Surgical risk; recurrence
+G543,Cardiac Tumors (Sarcoma),Surgery + Chemotherapy,1st Line,"Complete resection if possible; adjuvant chemo",Cardiac toxicity; bleeding
+G544,Pericarditis (Constrictive),Diuretics,1st Line,"Symptom relief",Hypotension; electrolyte imbalance
+G545,Pericarditis (Constrictive),Pericardiectomy,2nd Line,"Refractory symptoms, severe constriction",Surgical risk
+G546,Pericardial Effusion (Malignant),Pericardiocentesis,1st Line,"Tamponade, symptomatic",Bleeding; recurrence
+G547,Pericardial Effusion (Malignant),Intrapericardial Sclerotherapy,2nd Line,"Recurrent effusion",Pain; infection
+G548,Myocarditis (Giant Cell),Immunosuppression (Cyclosporine + Steroids),1st Line,"Biopsy-proven, hemodynamically unstable",Infection; renal toxicity; hypertension
+G549,Myocarditis (Giant Cell),Mechanical Support (LVAD),2nd Line,"Bridge to recovery or transplant",Device complications; thrombosis
+G550,Myocarditis (Eosinophilic),Corticosteroids,1st Line,"High-dose for hypersensitivity",Infection; diabetes
+G551,Myocarditis (Eosinophilic),Treat underlying cause,1st Line,"Discontinue culprit drug; treat parasite",As indicated
+G552,Chagas Cardiomyopathy,Antiparasitic (Benznidazole),1st Line,"Acute or early chronic phase; not in advanced",Peripheral neuropathy; rash; GI
+G553,Chagas Cardiomyopathy,ACE Inhibitors + Beta-Blockers,1st Line,"Heart failure management",As above
+G554,Chagas Cardiomyopathy,Anticoagulation,2nd Line,"Atrial fibrillation, prior emboli, apical thrombus",Bleeding risk
+G555,HIV-associated Cardiomyopathy,Heart failure drugs (ACEi, BB, diuretics),1st Line,"Standard heart failure therapy",As per drugs
+G556,HIV-associated Cardiomyopathy,Antiretroviral Therapy,1st Line,"Treat HIV to reduce myocardial damage",Adherence; drug interactions
+G557,Peripartum Cardiomyopathy,Bromocriptine,1st Line (in addition to HF therapy),"Within 1 month postpartum, severe LV dysfunction",Thrombosis risk; pregnancy; lactation
+G558,Peripartum Cardiomyopathy,Standard HF therapy (ACEi, BB, diuretics),1st Line,"All patients",Avoid ACEi during pregnancy (use hydralazine/nitrates)
+G559,Peripartum Cardiomyopathy,Anticoagulation,2nd Line,"Severe LV dysfunction (LVEF<30%) for thrombosis prevention",Bleeding risk
+G560,Stress Cardiomyopathy (Takotsubo),Supportive care (ACEi, BB, diuretics),1st Line,"Treat heart failure; remove stressor",As above
+G561,Stress Cardiomyopathy (Takotsubo),Avoid inotropes,1st Line,"May cause obstruction",None
+G562,Coronary Vasospasm (Prinzmetal Angina),Calcium Channel Blockers (Non-dihydropyridine),1st Line,"Prevent vasospasm",Bradycardia; heart block; constipation
+G563,Coronary Vasospasm (Prinzmetal Angina),Nitrates (Long-acting),2nd Line,"Add-on if needed",Headache; tolerance; hypotension
+G564,Myocardial Bridging,Beta-Blockers,1st Line,"Reduce heart rate and contractility",Bradycardia; heart block; asthma
+G565,Myocardial Bridging,Calcium Channel Blockers,2nd Line,"Alternative if beta-blockers not tolerated",As above
+G566,Anomalous Coronary Artery,Surgical Unroofing,1st Line,"High-risk anatomy, ischemia, symptoms",Surgical risk
+G567,Anomalous Coronary Artery,Medical management (beta-blockers),2nd Line,"Low-risk, asymptomatic",As above
+G568,Spontaneous Coronary Artery Dissection,Conservative management,1st Line,"Stable patient, no ongoing ischemia",Observation
+G569,Spontaneous Coronary Artery Dissection,PCI or CABG,2nd Line,"Ongoing ischemia, hemodynamic instability",Procedure complications
+G570,Coronary Artery Fistula,Transcatheter Closure,1st Line,"Large fistula, symptoms, complications",Embolization; MI; arrhythmias
+G571,Coronary Artery Fistula,Observation,1st Line,"Small asymptomatic fistula",None
+G572,Kounis Syndrome,Epinephrine (with caution),1st Line,"Anaphylaxis with coronary spasm",May worsen ischemia; use judiciously
+G573,Kounis Syndrome,Nitrates + Antihistamines + Corticosteroids,1st Line,"Treat allergy and vasospasm",Hypotension
+G574,Hypertensive Emergency,IV Antihypertensives (Nicardipine, Labetalol),1st Line,"Rapid BP reduction (not too rapid) in ICU",Bradycardia; heart block; excessive hypotension
+G575,Hypertensive Emergency,Goal BP reduction,1st Line,"Reduce by 25% in first hour, then to 160/100 over next 2-6h",None
+G576,Hypertensive Urgency,Oral Antihypertensives,1st Line,"Gradual reduction over 24-48h, outpatient follow-up",As per drug
+G577,Pulmonary Hypertension (Group 1 - PAH),Endothelin Receptor Antagonists (Ambrisentan),1st Line (WHO FC II-III),"Treatment-naive, no liver impairment",Hepatotoxicity; edema; teratogenicity
+G578,Pulmonary Hypertension (Group 1 - PAH),PDE5 Inhibitors (Sildenafil),1st Line (WHO FC II-III),"As above",Visual disturbances; hypotension; interaction with nitrates
+G579,Pulmonary Hypertension (Group 1 - PAH),Prostacyclin Analogs (Epoprostenol),1st Line (WHO FC IV),"Severe, rapidly progressive",Infusion-related; thrombocytopenia; jaw pain
+G580,Pulmonary Hypertension (Group 1 - PAH),Combination Therapy (Ambrisentan + Tadalafil),1st Line (initial combination),"WHO FC II-III, no contraindications",As above
+G581,Pulmonary Hypertension (Group 2 - Left Heart),Treat underlying heart failure,1st Line,"Optimize HF therapy",None
+G582,Pulmonary Hypertension (Group 2 - Left Heart),Avoid PAH-specific therapies (except for trials),1st Line,"May cause pulmonary edema",None
+G583,Pulmonary Hypertension (Group 3 - Lung Disease),Treat underlying lung disease (O2, bronchodilators),1st Line,"Optimize COPD/ILD management",None
+G584,Pulmonary Hypertension (Group 3 - Lung Disease),Consider PDE5i in selected cases,2nd Line,"After expert referral, hypoxemia improvement uncertain",Hypotension
+G585,Pulmonary Hypertension (Group 4 - CTEPH),Pulmonary Endarterectomy,1st Line,"Surgically accessible disease",Surgical risk; residual PH
+G586,Pulmonary Hypertension (Group 4 - CTEPH),Riociguat,2nd Line,"Inoperable or persistent/recurrent PH after PEA",Hypotension; bleeding; hemoptysis
+G587,Pulmonary Hypertension (Group 5 - Miscellaneous),Treat underlying condition,1st Line,"Sarcoid, vasculitis, etc.",None
+G588,Acute Pulmonary Embolism (Massive),Thrombolytics (tPA),1st Line,"Shock or hypotension",Active bleeding; recent surgery; stroke
+G589,Acute Pulmonary Embolism (Massive),Surgical Embolectomy,2nd Line,"Contraindication to or failure of thrombolytics",Surgical risk
+G590,Acute Pulmonary Embolism (Submassive),Anticoagulation (Heparin then DOAC),1st Line,"All patients without contraindications",Bleeding risk
+G591,Acute Pulmonary Embolism (Submassive),Thrombolytics,2nd Line,"High-risk submassive (RV dysfunction, biomarkers), low bleeding risk",As above
+G592,Chronic Thromboembolic Disease,Anticoagulation,1st Line,"Indefinite anticoagulation",Bleeding
+G593,Superior Vena Cava Syndrome,Radiation or Chemotherapy,1st Line,"Treat underlying malignancy (lung cancer, lymphoma)",Toxicity
+G594,Superior Vena Cava Syndrome,Stenting,2nd Line,"Recurrent or refractory SVCS, especially if thrombus",Stent thrombosis; migration
+G595,Aortic Aneurysm (Thoracic),Beta-Blockers,1st Line,"Reduce aortic wall stress",Bradycardia; asthma
+G596,Aortic Aneurysm (Thoracic),Surgical Repair,2nd Line,"Diameter >5.5cm, rapid growth, symptoms",Surgical risk
+G597,Aortic Aneurysm (Abdominal),Smoking Cessation,1st Line,"All patients to slow growth",None
+G598,Aortic Aneurysm (Abdominal),Surgical/Endovascular Repair,2nd Line,"Diameter >5.5cm (men) or >5.0cm (women), rapid growth, symptoms",Procedure complications
+G599,Aortic Dissection (Type A),Emergency Surgery,1st Line,"Immediate surgical repair",Surgical mortality
+G600,Aortic Dissection (Type A),Intensive BP control (IV beta-blockers, nitroprusside),Pre-op,"Stabilize patient before surgery",Hypotension; bradycardia
+G601,Aortic Dissection (Type B),Medical Management (BP control),1st Line,"Uncomplicated, with anti-impulse therapy (beta-blockers)",As above
+G602,Aortic Dissection (Type B),TEVAR (Thoracic Endovascular Aortic Repair),2nd Line,"Complicated (rupture, malperfusion, refractory pain)",Endoleak; stroke; spinal cord ischemia
+G603,Intramural Hematoma,Medical Management (BP control),1st Line,"Uncomplicated",As above
+G604,Intramural Hematoma,TEVAR,2nd Line,"Progression, complications",As above
+G605,Penetrating Aortic Ulcer,Medical Management (BP control),1st Line,"Asymptomatic, small",As above
+G606,Penetrating Aortic Ulcer,TEVAR,2nd Line,"Large, symptomatic, rapid progression",As above
+G607,Marfan Syndrome (Aortic),Beta-Blockers,1st Line,"All patients to slow aortic root dilation",As above
+G608,Marfan Syndrome (Aortic),Losartan,2nd Line,"Add-on or alternative if beta-blocker not tolerated",Pregnancy; hyperkalemia
+G609,Marfan Syndrome (Aortic),Elective Aortic Root Replacement,2nd Line,"Root diameter >5.0cm or rapid growth",Surgical risk
+G610,Loeys-Dietz Syndrome,Losartan or Beta-Blockers,1st Line,"All patients",As above
+G611,Loeys-Dietz Syndrome,Early Surgical Repair,2nd Line,"Aortic root >4.0-4.2cm (depending on age and family history)",As above
+G612,Ehlers-Danlos Syndrome (Vascular type),BP Control (Beta-Blockers),1st Line,"All patients to reduce arterial events",As above
+G613,Ehlers-Danlos Syndrome (Vascular type),Avoid invasive procedures,1st Line,"Minimize arterial punctures and surgery",None
+G614,Takayasu Arteritis (Aortic involvement),Corticosteroids,1st Line,"Active inflammation",Infection; diabetes; osteoporosis
+G615,Takayasu Arteritis (Aortic involvement),Immunosuppressants (Methotrexate, Azathioprine),2nd Line,"Steroid-sparing, refractory",Hepatotoxicity; myelosuppression
+G616,Takayasu Arteritis (Aortic involvement),Surgical Bypass,3rd Line,"Critical stenosis, symptoms despite medical therapy",Restenosis; graft failure
+G617,Giant Cell Arteritis (Aortic involvement),High-dose Corticosteroids,1st Line,"Immediate treatment to prevent blindness",As above
+G618,Giant Cell Arteritis (Aortic involvement),Tocilizumab (Anti-IL6),2nd Line,"Refractory or steroid-sparing",Infection; neutropenia; hepatotoxicity
+G619,Behçet's Disease (Vascular),Immunosuppressants (Corticosteroids + Cyclophosphamide or Azathioprine),1st Line,"Pulmonary artery aneurysm, major thrombosis",Infection; infertility; bladder toxicity
+G620,Behçet's Disease (Vascular),Anticoagulation,Controversial,"Not generally recommended unless concomitant thrombophilia",Bleeding; aneurysm rupture
+G621,Cogan's Syndrome,Corticosteroids,1st Line,"Active inflammation",As above
+G622,Cogan's Syndrome,Immunosuppressants (Methotrexate, Mycophenolate),2nd Line,"Steroid-refractory",As above
+G623,Relapsing Polychondritis (Cardiovascular),Corticosteroids,1st Line,"Acute flares",Infection; osteoporosis
+G624,Relapsing Polychondritis (Cardiovascular),Immunosuppressants (Cyclophosphamide, Methotrexate),2nd Line,"Severe or refractory",As above
+G625,Antiphospholipid Syndrome (Catastrophic),Anticoagulation (Heparin) + Corticosteroids + Plasma Exchange + IVIG,1st Line,"Multimodal therapy in ICU",Bleeding; infection
+G626,Thrombotic Storm,Anticoagulation (Heparin then warfarin/DOAC),1st Line,"Intensive anticoagulation",Bleeding; recurrence
+G627,Heparin-Induced Thrombocytopenia (HIT),Discontinue Heparin,1st Line,"Immediate cessation",Thrombosis progression
+G628,Heparin-Induced Thrombocytopenia (HIT),Alternative Anticoagulation (Argatroban, Fondaparinux),1st Line,"Therapeutic dose",Bleeding
+G629,Heparin-Induced Thrombocytopenia (HIT),Avoid Warfarin until platelets recovered,1st Line,"Prevent warfarin-induced skin necrosis",None
+G630,Paroxysmal Nocturnal Hemoglobinuria (Thrombosis),Eculizumab (Anti-C5),1st Line,"Reduce hemolysis and thrombosis risk",Meningococcal infection risk; vaccination required
+G631,Paroxysmal Nocturnal Hemoglobinuria (Thrombosis),Anticoagulation,2nd Line,"If thrombosis occurs despite eculizumab or if eculizumab not available",Bleeding
+G632,Essential Thrombocythemia (Thrombosis),Low-dose Aspirin,1st Line,"All patients with thrombosis risk, regardless of age",GI bleeding; aspirin allergy
+G633,Essential Thrombocythemia (Thrombosis),Cytoreduction (Hydroxyurea, Anagrelide),1st Line,"High-risk (age >60, prior thrombosis, JAK2 mutation)",Myelosuppression; teratogenicity
+G634,Polycythemia Vera (Thrombosis),Low-dose Aspirin,1st Line,"All patients",As above
+G635,Polycythemia Vera (Thrombosis),Phlebotomy,1st Line,"Maintain Hct <45%",Iron deficiency
+G636,Polycythemia Vera (Thrombosis),Cytoreduction (Hydroxyurea),2nd Line,"High-risk, intolerance to phlebotomy",As above
+G637,Sickle Cell Disease (Thrombosis),Hydroxyurea,1st Line,"Reduce VOC, ACS, transfusion needs",Myelosuppression; teratogenicity
+G638,Sickle Cell Disease (Thrombosis),Chronic Transfusions,2nd Line,"Stroke prevention, severe complications",Iron overload; alloimmunization
+G639,Thalassemia Intermedia (Thrombosis),Anticoagulation,2nd Line,"Documented thrombosis",Bleeding risk; transfusion
+G640,Immune Thrombocytopenia (ITP) - Adult,Corticosteroids,1st Line,"First-line for newly diagnosed ITP with bleeding or platelets <30",Infection; osteoporosis; hyperglycemia
+G641,Immune Thrombocytopenia (ITP) - Adult,IVIG,1st Line,"Emergency treatment, rapid platelet rise",Headache; aseptic meningitis; thrombosis
+G642,Immune Thrombocytopenia (ITP) - Adult,Thrombopoietin Receptor Agonists (Eltrombopag),2nd Line,"Chronic ITP, failure of steroids",Hepatotoxicity; thrombosis; cataracts
+G643,Immune Thrombocytopenia (ITP) - Adult,Rituximab,2nd Line,"Steroid-refractory or dependent",Infusion reactions; PML; hepatitis B reactivation
+G644,Immune Thrombocytopenia (ITP) - Adult,Splenectomy,3rd Line,"Refractory to medical therapy",Infection risk; thrombosis
+G645,Thrombotic Thrombocytopenic Purpura (TTP) - Acquired,Plasma Exchange,1st Line,"All patients with acute TTP",Catheter complications; allergic reactions
+G646,Thrombotic Thrombocytopenic Purpura (TTP) - Acquired,Corticosteroids,1st Line,"Adjunct to PLEX",As above
+G647,Thrombotic Thrombocytopenic Purpura (TTP) - Acquired,Rituximab,2nd Line,"Refractory or relapsing",As above
+G648,Thrombotic Thrombocytopenic Purpura (TTP) - Acquired,Caplacizumab (Anti-vWF),2nd Line,"Adjunct to PLEX to prevent microthrombi",Bleeding
+G649,Thrombotic Thrombocytopenic Purpura (TTP) - Congenital,Plasma Infusion,1st Line,"Prophylaxis or acute episodes",Volume overload; allergic reactions
+G650,Atypical Hemolytic Uremic Syndrome (aHUS),Eculizumab,1st Line,"All patients with aHUS",Meningococcal infection
+G651,Shiga Toxin-associated HUS (STEC-HUS),Supportive Care,1st Line,"Fluid, electrolyte management, dialysis",None
+G652,Shiga Toxin-associated HUS (STEC-HUS),Avoid Antibiotics,1st Line,"May increase HUS risk",None
+G653,IgA Vasculitis (Henoch-Schönlein Purpura) Nephritis,ACE Inhibitors/ARBs,1st Line,"Mild proteinuria",As above
+G654,IgA Vasculitis (Henoch-Schönlein Purpura) Nephritis,Corticosteroids,2nd Line,"Severe proteinuria, crescentic GN",Infection; growth suppression
+G655,IgA Vasculitis (Henoch-Schönlein Purpura) Nephritis,Cyclophosphamide,3rd Line,"Rapidly progressive GN",As above
+G656,ANCA-associated Vasculitis (Granulomatosis with Polyangiitis) - Renal,Cyclophosphamide + Corticosteroids,Induction,"Organ-threatening disease (RPGN)",As above
+G657,ANCA-associated Vasculitis (Granulomatosis with Polyangiitis) - Renal,Rituximab + Corticosteroids,Induction,"Alternative to cyclophosphamide",As above
+G658,ANCA-associated Vasculitis (Granulomatosis with Polyangiitis) - Renal,Azathioprine or Methotrexate,Maintenance,"After remission induction",As above
+G659,ANCA-associated Vasculitis (Microscopic Polyangiitis) - Renal,As above,As above,As above,As above
+G660,ANCA-associated Vasculitis (Eosinophilic Granulomatosis with Polyangiitis) - Renal,Corticosteroids,Induction,"All patients",As above
+G661,ANCA-associated Vasculitis (Eosinophilic Granulomatosis with Polyangiitis) - Renal,Cyclophosphamide or Rituximab,Induction,"Life-threatening, organ-threatening",As above
+G662,Anti-GBM Disease (Goodpasture Syndrome) - Renal,Cyclophosphamide + Corticosteroids + Plasma Exchange,Induction,"All patients with diffuse alveolar hemorrhage or RPGN",As above
+G663,Lupus Nephritis (Class III/IV),Mycophenolate Mofetil or Cyclophosphamide + Corticosteroids,Induction,"Active proliferative LN",Infection; GI; bone marrow suppression
+G664,Lupus Nephritis (Class III/IV),Mycophenolate Mofetil or Azathioprine,Maintenance,"After induction",As above
+G665,Lupus Nephritis (Class V),Mycophenolate Mofetil + Corticosteroids,Induction,"Nephrotic syndrome",As above
+G666,Lupus Nephritis (Class V),Calcineurin Inhibitors (Tacrolimus),2nd Line,"Refractory",Renal toxicity; hypertension; diabetes
+G667,IgA Nephropathy (Berger's Disease),ACE Inhibitors/ARBs,1st Line,"Proteinuria >0.5g/day",As above
+G668,IgA Nephropathy (Berger's Disease),Corticosteroids,2nd Line,"Persistent proteinuria >1g/day despite maximal ACEi, eGFR>50",Infection; osteoporosis
+G669,IgA Nephropathy (Berger's Disease),Fish Oil,2nd Line,"May slow progression; controversial",Fishy taste; bleeding risk
+G670,IgA Nephropathy (with crescentic),Cyclophosphamide + Corticosteroids,Induction,"Rapidly progressive",As above
+G671,Membranous Nephropathy (Primary),Conservative (ACEi, BP control),1st Line,"Low risk (proteinuria <4g/day, normal Cr)",None
+G672,Membranous Nephropathy (Primary),Rituximab,1st Line (moderate risk),"Proteinuria 4-8g/day, normal Cr",As above
+G673,Membranous Nephropathy (Primary),Cyclophosphamide + Corticosteroids,2nd Line,"High risk (proteinuria >8g/day, declining Cr)",As above
+G674,Focal Segmental Glomerulosclerosis (Primary),Corticosteroids,1st Line,"Nephrotic syndrome, idiopathic",Infection; diabetes; osteoporosis
+G675,Focal Segmental Glomerulosclerosis (Primary),Calcineurin Inhibitors (Tacrolimus),2nd Line,"Steroid-resistant or dependent",Nephrotoxicity; hypertension; diabetes
+G676,Focal Segmental Glomerulosclerosis (Secondary),Treat underlying cause,1st Line,"Obesity, HIV, etc.",None
+G677,Minimal Change Disease (Adult),Corticosteroids,1st Line,"Nephrotic syndrome",As above
+G678,Minimal Change Disease (Adult),Rituximab,2nd Line,"Frequently relapsing, steroid-dependent",As above
+G679,Minimal Change Disease (Child),Corticosteroids,1st Line,"Nephrotic syndrome",Growth suppression; osteoporosis
+G680,Minimal Change Disease (Child),Levamisole or Cyclophosphamide,2nd Line,"Frequent relapses",Neutropenia; GI
+G681,Amyloidosis (AL) - Renal,Chemotherapy (Daratumumab, CyBorD),1st Line,"Treat underlying plasma cell dyscrasia",As above
+G682,Amyloidosis (AA) - Renal,Treat underlying inflammation,1st Line,"Control chronic inflammatory disease",As indicated
+G683,Fibrillary Glomerulonephritis,Supportive (ACEi, BP control),1st Line,"Limited evidence; treat as per proteinuria",None
+G684,Immunotactoid Glomerulopathy,Treat underlying CLL/lymphoma,1st Line,"If associated",As above
+G685,C3 Glomerulopathy,Eculizumab,2nd Line,"Rapidly progressive or post-transplant",Meningococcal infection
+G686,Dense Deposit Disease (MPGN type II),Supportive (ACEi, BP control),1st Line,"Proteinuria",None
+G687,Post-infectious Glomerulonephritis (Atypical),Supportive,1st Line,"Self-limited in most",None
+G688,Shunt Nephritis,Remove infected shunt + Antibiotics,1st Line,"Treat infection",Surgical risk
+G689,Diabetic Nephropathy (Advanced),ACE Inhibitors/ARBs,1st Line,"All diabetics with albuminuria",As above
+G690,Diabetic Nephropathy (Advanced),SGLT2 Inhibitors,1st Line,"All with CKD, regardless of diabetes",As above
+G691,Hypertensive Nephrosclerosis (Malignant),Intensive BP control (IV antihypertensives),1st Line,"Admit to ICU",As above
+G692,Renal Artery Stenosis (Atherosclerotic),Medical Therapy (ACEi/ARB, antiplatelet, statin),1st Line,"All patients",As above
+G693,Renal Artery Stenosis (Atherosclerotic),Stenting,2nd Line,"Refractory hypertension, flash pulmonary edema, rapid CKD decline",Stent complications; restenosis
+G694,Renal Artery Stenosis (Fibromuscular Dysplasia),Angioplasty (without stent),1st Line,"Hypertension uncontrolled, young patients",Vessel rupture; restenosis
+G695,Renal Artery Stenosis (Fibromuscular Dysplasia),Medical Therapy,2nd Line,"Controlled BP, stable",As above
+G696,Atheroembolic Renal Disease,Supportive Care,1st Line,"No specific therapy; avoid anticoagulation, further angiography",None
+G697,Acute Tubular Necrosis (Ischemic),Supportive (fluids, avoid nephrotoxins),1st Line,"Treat underlying cause; may need dialysis",None
+G698,Acute Tubular Necrosis (Nephrotoxic),Stop offending drug,1st Line,"Discontinue aminoglycosides, contrast, etc.",None
+G699,Acute Interstitial Nephritis (Drug-induced),Stop culprit drug,1st Line,"NSAIDs, antibiotics",None
+G700,Acute Interstitial Nephritis (Drug-induced),Corticosteroids,2nd Line,"If no improvement after 1 week, severe",Infection; hyperglycemia
+G701,Acute Interstitial Nephritis (Infection-related),Treat infection,1st Line,"Antibiotics",As per antibiotic
+G702,Acute Interstitial Nephritis (Autoimmune),Corticosteroids,1st Line,"Sarcoid, TINU",As above
+G703,Light Chain Cast Nephropathy (Myeloma Kidney),Treat myeloma (chemotherapy) + Supportive,1st Line,"High-dose dexamethasone, bortezomib-based",As chemo
+G704,Light Chain Cast Nephropathy (Myeloma Kidney),Extracorporeal Removal (Plasma exchange),2nd Line,"Controversial; may help reduce light chains",Catheter complications
+G705,Tumor Lysis Syndrome (Renal),Rasburicase (Urate oxidase),1st Line,"High uric acid (>8 mg/dL) or TLS",Methemoglobinemia; G6PD deficiency
+G706,Tumor Lysis Syndrome (Renal),IV Fluids + Allopurinol,1st Line,"Prevention and treatment",As above
+G707,Hantavirus Nephropathy,Supportive (dialysis if needed),1st Line,"No specific antiviral",None
+G708,Leptospirosis (Weil's Disease) - Renal,Antibiotics (Penicillin, Doxycycline),1st Line,"Treat infection",Herxheimer reaction
+G709,Leptospirosis (Weil's Disease) - Renal,Dialysis,2nd Line,"AKI requiring RRT",Catheter complications
+G710,Malaria (Acute Kidney Injury),Antimalarials (Artemisinins),1st Line,"Treat malaria",As per antimalarial
+G711,Malaria (Acute Kidney Injury),Dialysis,2nd Line,"AKI requiring RRT",As above
+G712,Schistosomiasis (Urogenital),Praziquantel,1st Line,"Treat infection",Abdominal pain; dizziness; urticaria
+G713,Schistosomiasis (Urogenital),Surveillance for bladder cancer,2nd Line,"Chronic infection",None
+G714,Schistosomiasis (Hepatosplenic),Praziquantel,1st Line,"Treat infection to prevent progression",As above
+G715,Schistosomiasis (Hepatosplenic),Manage portal hypertension,2nd Line,"Beta-blockers for varices, banding",As per drugs
+G716,Opisthorchiasis (Liver fluke),Praziquantel,1st Line,"Treat infection",As above
+G717,Clonorchiasis (Chinese liver fluke),Praziquantel,1st Line,"Treat infection",As above
+G718,Fascioliasis (Liver fluke),Triclabendazole,1st Line,"Drug of choice",Abdominal pain; fever; biliary colic
+G719,Fascioliasis (Liver fluke),Nitazoxanide,2nd Line,"Alternative",GI upset
+G720,Echinococcosis (Hepatic hydatid cyst),Albendazole,1st Line,"Pre-op or inoperable",Hepatotoxicity; bone marrow suppression
+G721,Echinococcosis (Hepatic hydatid cyst),Surgical Resection + Albendazole,1st Line,"Large cysts, complications",Surgical risk; spillage
+G722,Echinococcosis (Hepatic hydatid cyst),PAIR (Puncture, Aspiration, Injection, Re-aspiration),2nd Line,"Selected cysts",Anaphylaxis; recurrence
+G723,Echinococcosis (Alveolar),Surgical Resection (if possible),1st Line,"Early disease",As above
+G724,Echinococcosis (Alveolar),Albendazole (long-term),1st Line,"Inoperable, adjuvant",Hepatotoxicity
+G725,Amoebic Liver Abscess,Metronidazole or Tinidazole,1st Line,"Treat infection",Disulfiram-like reaction; metallic taste
+G726,Amoebic Liver Abscess,Paromomycin (luminal agent),2nd Line,"Eradicate cysts after metronidazole",GI upset
+G727,Amoebic Liver Abscess,Aspiration,2nd Line,"Large abscess (>10cm), risk of rupture, no response",Bleeding; perforation
+G728,Pyogenic Liver Abscess,Antibiotics (broad-spectrum, then targeted),1st Line,"IV antibiotics, often including metronidazole + 3rd-gen cephalosporin",Allergy; C. diff
+G729,Pyogenic Liver Abscess,Percutaneous Drainage,1st Line,"If >5cm or not responding to antibiotics alone",Bleeding; sepsis; catheter occlusion
+G730,Fungal Liver Abscess (Candida),Antifungals (Echinocandin or Amphotericin B),1st Line,"Systemic antifungal",Hepatotoxicity; renal toxicity
+G731,Portal Vein Thrombosis,Anticoagulation,1st Line,"Acute thrombosis, unless high bleeding risk",Bleeding; variceal hemorrhage
+G732,Portal Vein Thrombosis,Manage complications (varices, ascites),2nd Line,"Portal hypertension management",As per drugs
+G733,Budd-Chiari Syndrome,Anticoagulation,1st Line,"Acute or chronic thrombosis",Bleeding
+G734,Budd-Chiari Syndrome,TIPS (Transjugular Intrahepatic Portosystemic Shunt),2nd Line,"Refractory ascites, liver failure",Shunt dysfunction; encephalopathy
+G735,Budd-Chiari Syndrome,Liver Transplantation,3rd Line,"Fulminant, end-stage",Surgical risk; recurrence
+G736,Sinusoidal Obstruction Syndrome (Veno-occlusive disease),Supportive (fluid, sodium restriction, diuretics),1st Line,"Mild to moderate",None
+G737,Sinusoidal Obstruction Syndrome (Veno-occlusive disease),Defibrotide,1st Line (severe),"Severe SOS with multi-organ failure",Bleeding
+G738,Acute Fatty Liver of Pregnancy,Immediate Delivery,1st Line,"Terminate pregnancy",Prematurity; neonatal complications
+G739,Acute Fatty Liver of Pregnancy,Supportive (ICU, glucose, dialysis),2nd Line,"Postpartum care",None
+G740,HELLP Syndrome,Immediate Delivery,1st Line,"If >34 weeks or maternal/fetal distress",Prematurity
+G741,HELLP Syndrome,Corticosteroids for fetal lung maturity,1st Line,"If <34 weeks, delay delivery 48h if stable",Infection; hyperglycemia
+G742,HELLP Syndrome,Magnesium Sulfate for seizure prophylaxis,1st Line,"All with severe preeclampsia/HELLP",Respiratory depression; hyporeflexia
+G743,Intrahepatic Cholestasis of Pregnancy,Ursodeoxycholic Acid,1st Line,"Relieve pruritus, improve bile acids",Diarrhea; rash
+G744,Intrahepatic Cholestasis of Pregnancy,Early Delivery,2nd Line,"Severe, at 36-37 weeks",Prematurity
+G745,Hyperemesis Gravidarum,IV Fluids + Thiamine,1st Line,"Rehydration, prevent Wernicke's",Fluid overload
+G746,Hyperemesis Gravidarum,Antiemetics (Ondansetron, Promethazine),1st Line,"Control nausea",QT prolongation; sedation
+G747,Hyperemesis Gravidarum,Corticosteroids,3rd Line,"Refractory cases",Hyperglycemia; cleft palate risk
+G748,Placenta Accreta Spectrum,Planned Cesarean Hysterectomy,1st Line,"Multidisciplinary team, scheduled",Massive hemorrhage; surgical injury
+G749,Placenta Accreta Spectrum,Balloon Occlusion,2nd Line,"Adjunctive to reduce bleeding",Thrombosis; ischemia
+G750,Placental Abruption,Immediate Delivery (if fetal distress),1st Line,"Regardless of gestational age",Prematurity
+G751,Placental Abruption,Supportive (blood transfusion, correction of coagulopathy),1st Line,"Maternal stabilization",None
+G752,Placenta Previa,Cesarean Section,1st Line,"At 36-37 weeks if uncomplicated; earlier if bleeding",Prematurity
+G753,Postpartum Hemorrhage (Atony),Uterotonic Agents (Oxytocin, Misoprostol),1st Line,"First-line",Nausea; vomiting; hypertension (ergometrine)
+G754,Postpartum Hemorrhage (Atony),Uterine Massage,1st Line,"Immediate",None
+G755,Postpartum Hemorrhage (Atony),Tranexamic Acid,1st Line,"Within 3 hours of birth",Thrombosis; seizures
+G756,Postpartum Hemorrhage (Atony),Uterine Balloon Tamponade,2nd Line,"If medical therapy fails",Infection; uterine perforation
+G757,Postpartum Hemorrhage (Atony),Surgical (B-Lynch, hysterectomy),3rd Line,"Persistent hemorrhage",Surgical risk
+G758,Postpartum Hemorrhage (Traumatic),Repair lacerations,1st Line,"Surgical repair",Infection; bleeding
+G759,Amniotic Fluid Embolism,Cardiopulmonary Support (ICU),1st Line,"Immediate aggressive resuscitation",None
+G760,Amniotic Fluid Embolism,Blood Products (Massive transfusion protocol),1st Line,"DIC management",Transfusion reactions
+G761,Puerperal Sepsis,Antibiotics (broad-spectrum),1st Line,"IV antibiotics covering endometritis",Allergy; C. diff
+G762,Puerperal Sepsis,Surgical Source Control (D&C, hysterectomy),2nd Line,"Retained products, abscess",Surgical risk
+G763,Mastitis (Lactational),Antibiotics (Dicloxacillin or Cephalexin),1st Line,"If symptoms >24h, no improvement with milk removal",Allergy; GI upset
+G764,Mastitis (Lactational),Continue Breastfeeding/Pumping,1st Line,"Essential to empty breast",None
+G765,Galactorrhea,Dopamine Agonists (Cabergoline),1st Line,"If bothersome, prolactinoma",Valvular fibrosis (cabergoline high dose); nausea; dizziness
+G766,Prolactinoma (Microadenoma),Dopamine Agonists (Cabergoline),1st Line,"Shrink tumor, normalize prolactin",As above
+G767,Prolactinoma (Macroadenoma),Dopamine Agonists (Cabergoline),1st Line,"First-line, monitor visual fields",As above
+G768,Prolactinoma (Macroadenoma),Transsphenoidal Surgery,2nd Line,"Failure of DA, visual compromise, apoplexy",Surgical risk; hypopituitarism
+G769,Acromegaly (Pituitary),Transsphenoidal Surgery,1st Line,"First-line for microadenomas and non-invasive macroadenomas",Surgical risk; hypopituitarism
+G770,Acromegaly (Pituitary),Somatostatin Analogs (Octreotide, Lanreotide),2nd Line,"Post-op residual, inoperable",Gallstones; glucose intolerance; bradycardia
+G771,Acromegaly (Pituitary),Pegvisomant (GH receptor antagonist),3rd Line,"Resistant to somatostatin analogs",Hepatotoxicity; lipohypertrophy
+G772,Cushing's Disease (Pituitary),Transsphenoidal Surgery,1st Line,"Selective adenomectomy",Surgical risk; hypopituitarism; remission
+G773,Cushing's Disease (Pituitary),Steroidogenesis Inhibitors (Ketoconazole, Metyrapone),2nd Line,"Pre-op to control cortisol, or if surgery fails",Hepatotoxicity; GI; adrenal insufficiency
+G774,Cushing's Disease (Pituitary),Pituitary Radiotherapy,3rd Line,"Persistent disease",Hypopituitarism; optic neuropathy
+G775,Cushing's Syndrome (Adrenal),Adrenalectomy,1st Line,"Unilateral adenoma/carcinoma",Surgical risk; adrenal insufficiency contralateral
+G776,Cushing's Syndrome (Adrenal),Steroidogenesis Inhibitors,2nd Line,"Inoperable carcinoma, metastatic",As above
+G777,Adrenal Insufficiency (Primary - Addison's),Glucocorticoid Replacement (Hydrocortisone),1st Line,"All patients",Infection; hyperglycemia; osteoporosis
+G778,Adrenal Insufficiency (Primary - Addison's),Mineralocorticoid Replacement (Fludrocortisone),1st Line,"All with primary AI",Hypertension; hypokalemia; edema
+G779,Adrenal Insufficiency (Secondary),Glucocorticoid Replacement only,1st Line,"No mineralocorticoid needed",As above
+G780,Pheochromocytoma (Adrenal),Alpha-blockers (Phenoxybenzamine) pre-op,1st Line,"Preoperative preparation",Orthostatic hypotension; nasal congestion; reflex tachycardia
+G781,Pheochromocytoma (Adrenal),Beta-blockers (after alpha-blockade),2nd Line,"Control tachycardia, only after alpha-block",Unopposed alpha if given first
+G782,Pheochromocytoma (Adrenal),Surgical Resection,1st Line,"Curative",Hypertensive crisis during manipulation
+G783,Pheochromocytoma (Extra-adrenal - Paraganglioma),Surgical Resection,1st Line,"If feasible",As above
+G784,Neuroblastoma,Chemotherapy (Multiagent),1st Line,"High-risk",Myelosuppression; infection; organ toxicity
+G785,Neuroblastoma,Surgery,2nd Line,"Resection after chemo",Surgical risk
+G786,Neuroblastoma,Radiotherapy,3rd Line,"Local control",Growth delay; secondary cancers
+G787,Ganglioneuroma,Observation,1st Line,"Benign, asymptomatic",None
+G788,Ganglioneuroma,Surgical Resection,2nd Line,"If symptomatic or large",Surgical risk
+G789,Medullary Thyroid Carcinoma (Sporadic),Total Thyroidectomy + Central Neck Dissection,1st Line,"Curative if localized",Hypoparathyroidism; recurrent laryngeal nerve injury
+G790,Medullary Thyroid Carcinoma (Sporadic),Tyrosine Kinase Inhibitors (Vandetanib, Cabozantinib),2nd Line,"Metastatic, progressive",QT prolongation; diarrhea; hypertension; rash
+G791,Medullary Thyroid Carcinoma (Hereditary - MEN2),Prophylactic Thyroidectomy,1st Line,"Based on RET mutation, age",As above
+G792,Parathyroid Adenoma,Parathyroidectomy,1st Line,"Symptomatic, young, calcium >1mg/dL above upper limit",Hypocalcemia; recurrent laryngeal nerve injury
+G793,Parathyroid Adenoma,Medical Management (Cinacalcet),2nd Line,"Inoperable, failed surgery",Nausea; hypocalcemia
+G794,Parathyroid Carcinoma,En Bloc Resection,1st Line,"Curative",As above
+G795,Parathyroid Carcinoma,Cinacalcet,2nd Line,"Control hypercalcemia in metastatic",As above
+G796,Hypercalcemia of Malignancy (Humoral),IV Fluids + Bisphosphonates (Zoledronic acid),1st Line,"All patients",Renal toxicity; hypocalcemia; jaw osteonecrosis
+G797,Hypercalcemia of Malignancy (Humoral),Denosumab,2nd Line,"Refractory to bisphosphonates",Hypocalcemia; rebound
+G798,Hypercalcemia of Malignancy (Local osteolytic),As above,1st Line,"As above",As above
+G799,Hyponatremia (SIADH),Fluid Restriction,1st Line,"Mild-moderate",Poor compliance
+G800,Hyponatremia (SIADH),Tolvaptan (Vaptans),2nd Line,"Severe, refractory",Liver toxicity; overcorrection
+G801,Hyponatremia (SIADH),Urea,2nd Line,"Alternative",Azotemia; GI
+G802,Hyponatremia (Cerebral salt wasting),IV Fluids (normal saline or hypertonic),1st Line,"Replace sodium and volume",Fluid overload
+G803,Hyponatremia (Cerebral salt wasting),Fludrocortisone,2nd Line,"Mineralocorticoid to reduce natriuresis",Edema; hypertension
+G804,Diabetes Insipidus (Central),Desmopressin,1st Line,"All patients",Hyponatremia; water intoxication
+G805,Diabetes Insipidus (Central),Thiazide Diuretics (paradoxical),2nd Line,"Partial DI or desmopressin not tolerated",Hypokalemia
+G806,Diabetes Insipidus (Nephrogenic),Thiazide Diuretics,1st Line,"Reduce polyuria",As above
+G807,Diabetes Insipidus (Nephrogenic),Amiloride,1st Line,"If lithium-induced",Hyperkalemia
+G808,Primary Polydipsia,Behavioral Modification,1st Line,"Fluid restriction, therapy",None
+G809,Syndrome of Inappropriate Antidiuresis (SIAD) - chronic,As SIADH,1st Line,"As per hyponatremia guidelines",As above
+G810,Cerebral Edema (High altitude),Immediate Descent,1st Line,"Lifesaving",None
+G811,Cerebral Edema (High altitude),Oxygen + Dexamethasone,1st Line,"Adjunct to descent",Hyperglycemia; infection
+G812,High Altitude Pulmonary Edema (HAPE),Immediate Descent,1st Line,"Lifesaving",None
+G813,High Altitude Pulmonary Edema (HAPE),Oxygen + Nifedipine,1st Line,"Adjunct to descent",Hypotension; headache
+G814,Decompression Sickness (Neurologic),Hyperbaric Oxygen,1st Line,"Recompression therapy",Barotrauma; oxygen toxicity
+G815,Decompression Sickness (Neurologic),IV Fluids + Oxygen,1st Line,"Adjunct",None
+G816,Arterial Gas Embolism,Hyperbaric Oxygen,1st Line,"Urgent",As above
+G817,Heat Stroke (Classic),Rapid Cooling (evaporative, ice packs),1st Line,"Reduce core temp quickly",Shivering; overcooling
+G818,Heat Stroke (Classic),IV Fluids,1st Line,"Support circulation",Fluid overload
+G819,Heat Stroke (Exertional),As above,1st Line,As above,As above
+G820,Hypothermia (Severe),Active Rewarming (warm fluids, warming devices),1st Line,"Gradual rewarming",Afterdrop; arrhythmias
+G821,Hypothermia (Severe),Cardiopulmonary Support (ECMO),2nd Line,"Cardiac arrest, severe hypothermia",Bleeding; vascular complications
+G822,Frostbite (Deep),Rapid Rewarming in Water (37-39°C),1st Line,"Thaw tissue",Pain; compartment syndrome
+G823,Frostbite (Deep),Thrombolytics (tPA),2nd Line,"Within 24h, severe, to reduce amputation",Bleeding
+G824,Frostbite (Deep),Ibuprofen,1st Line,"Anti-inflammatory, analgesic",GI bleeding; renal
+G825,Electrical Injury (High voltage),Cardiac Monitoring,1st Line,"Observe for arrhythmias",None
+G826,Electrical Injury (High voltage),IV Fluids + Alkalinization,1st Line,"Rhabdomyolysis prevention",Metabolic alkalosis
+G827,Lightning Injury,CPR,1st Line,"Prolonged resuscitation may be successful",None
+G828,Drowning (Non-fatal),Oxygen + Ventilatory Support,1st Line,"Treat hypoxemia",Ventilator complications
+G829,Drowning (Non-fatal),Antibiotics,2nd Line,"If evidence of infection",As per antibiotic
+G830,Smoke Inhalation,100% Oxygen,1st Line,"All patients",None
+G831,Smoke Inhalation,Consider Hyperbaric Oxygen for CO poisoning,2nd Line,"If severe CO poisoning",Barotrauma
+G832,Carbon Monoxide Poisoning,100% Oxygen,1st Line,"All patients",None
+G833,Carbon Monoxide Poisoning,Hyperbaric Oxygen,2nd Line,"Severe poisoning (loss of consciousness, neuro symptoms, COHb >25%)",As above
+G834,Cyanide Poisoning,Amyl Nitrite + Sodium Thiosulfate + Hydroxocobalamin,1st Line,"Antidote kit",Methemoglobinemia; hypotension
+G835,Organophosphate Poisoning,Atropine,1st Line,"Reverse muscarinic effects",Tachycardia; ileus; hyperthermia
+G836,Organophosphate Poisoning,Pralidoxime (2-PAM),1st Line,"Reactivate AChE (if given early)",Hypertension; dizziness
+G837,Lead Poisoning (Chronic),Chelation (Succimer, EDTA),1st Line,"Symptomatic, high blood lead levels",Nephrotoxicity; trace element deficiency
+G838,Lead Poisoning (Chronic),Remove source,1st Line,"Environmental remediation",None
+G839,Mercury Poisoning (Elemental),Chelation (DMPS, DMSA),1st Line,"Symptomatic, high levels",As above
+G840,Mercury Poisoning (Organic - Methylmercury),Supportive,1st Line,"No effective chelation",None
+G841,Arsenic Poisoning (Chronic),Chelation (DMPS, DMSA),1st Line,"Symptomatic",As above
+G842,Arsenic Poisoning (Acute),Supportive + Chelation (BAL, DMSA),1st Line,"Life-threatening",BAL can cause hypertension, fever
+G843,Cadmium Poisoning (Chronic),Supportive,1st Line,"No effective chelation",None
+G844,Chromium Poisoning (Hexavalent),Supportive + Ascorbic Acid,1st Line,"May reduce Cr(VI) to Cr(III)",None
+G845,Nickel Poisoning (Acute),Supportive + Chelation (EDTA),1st Line,"Controversial",Renal toxicity
+G846,Berylliosis (Chronic),Corticosteroids,1st Line,"Symptomatic pulmonary disease",Infection; osteoporosis
+G847,Berylliosis (Chronic),Avoid further exposure,1st Line,"All patients",None
+G848,Silicosis (Chronic),Supportive (O2, bronchodilators),1st Line,"Symptom management",None
+G849,Silicosis (Chronic),Lung Transplantation,2nd Line,"End-stage",Surgical risk; immunosuppression
+G850,Coal Worker's Pneumoconiosis (Black Lung),Supportive,1st Line,"As above",None
+G851,Asbestosis,Supportive,1st Line,"As above",None
+G852,Asbestosis,Smoking Cessation,1st Line,"Reduce lung cancer risk",None
+G853,Byssinosis (Brown Lung),Avoid exposure,1st Line,"Remove from cotton dust",None
+G854,Byssinosis (Brown Lung),Bronchodilators,1st Line,"Symptomatic",As per bronchodilators
+G855,Farmer's Lung (Hypersensitivity Pneumonitis),Avoid antigen,1st Line,"Remove from moldy hay",None
+G856,Farmer's Lung (Hypersensitivity Pneumonitis),Corticosteroids,2nd Line,"Acute severe or chronic progressive",Infection; osteoporosis
+G857,Bird Fancier's Lung,As above,1st Line,As above,As above
+G858,Hot Tub Lung,Avoid exposure,1st Line,"Remove from hot tub",None
+G859,Hot Tub Lung,May need corticosteroids,2nd Line,"Persistent symptoms",As above
+G860,Chemical Pneumonitis (Chlorine gas),Supportive (O2, bronchodilators),1st Line,"Treat airway injury",None
+G861,Phosgene Gas Poisoning,Supportive (ICU),1st Line,"Observe for delayed pulmonary edema",None
+G862,Mustard Gas Injury (Chemical warfare),Decontamination,1st Line,"Immediate",None
+G863,Mustard Gas Injury (Chemical warfare),Supportive (burn care, eye care),1st Line,"Symptom management",Infection; scarring
+G864,Radiation Pneumonitis,Corticosteroids,1st Line,"Symptomatic",Infection; hyperglycemia
+G865,Radiation Enteritis,Supportive (antidiarrheals, nutritional support),1st Line,"Symptom management",None
+G866,Radiation Cystitis,Hyperbaric Oxygen,2nd Line,"Refractory bleeding",Barotrauma
+G867,Radiation Dermatitis (Chronic),Emollients, Topical Steroids,1st Line,"Symptom management",Skin atrophy
+G868,Graft-versus-Host Disease (Acute),Corticosteroids,1st Line,"First-line for GVHD",Infection; hyperglycemia
+G869,Graft-versus-Host Disease (Acute),Ruxolitinib (JAK Inhibitor),2nd Line,"Steroid-refractory",Cytopenias; infection; bleeding
+G870,Graft-versus-Host Disease (Chronic),Corticosteroids,1st Line,"First-line",As above
+G871,Graft-versus-Host Disease (Chronic),Ruxolitinib,2nd Line,"Steroid-refractory",As above
+G872,Transplant Rejection (Acute Cellular),Corticosteroids (Methylprednisolone),1st Line,"First-line for acute rejection",Infection; hyperglycemia; psychosis
+G873,Transplant Rejection (Acute Cellular),Antithymocyte Globulin (ATG),2nd Line,"Steroid-resistant",Cytokine release; serum sickness; infection
+G874,Transplant Rejection (Antibody-mediated),Plasma Exchange + IVIG + Rituximab,1st Line,"Treat AMR",Bleeding; infection; infusion reactions
+G875,Chronic Lung Allograft Dysfunction (Bronchiolitis Obliterans),Azithromycin,1st Line,"May slow decline",QT prolongation; GI; hearing loss
+G876,Chronic Lung Allograft Dysfunction (Bronchiolitis Obliterans),Montelukast,2nd Line,"Add-on",Neuropsychiatric
+G877,Chronic Lung Allograft Dysfunction (Bronchiolitis Obliterans),Retransplantation,3rd Line,"End-stage",Surgical risk; recurrence
+G878,Cardiac Allograft Vasculopathy,Statins,1st Line,"All heart transplant patients",As statins
+G879,Cardiac Allograft Vasculopathy,Antiproliferative Immunosuppressants (Everolimus),2nd Line,"May slow progression",Stomatitis; rash; pneumonitis
+G880,Post-transplant Lymphoproliferative Disorder (PTLD),Reduce Immunosuppression,1st Line,"First step",Rejection risk
+G881,Post-transplant Lymphoproliferative Disorder (PTLD),Rituximab,2nd Line,"CD20+ PTLD",Infusion reactions; hepatitis B reactivation
+G882,Post-transplant Lymphoproliferative Disorder (PTLD),Chemotherapy (R-CHOP),3rd Line,"Aggressive PTLD",As chemo
+G883,Postherpetic Neuralgia (after shingles),Gabapentinoids (Gabapentin, Pregabalin),1st Line,"First-line neuropathic pain",Dizziness; somnolence; peripheral edema
+G884,Postherpetic Neuralgia (after shingles),Tricyclic Antidepressants (Amitriptyline),1st Line,"Alternative first-line",Anticholinergic; sedation; cardiotoxicity
+G885,Postherpetic Neuralgia (after shingles),Lidocaine Patch,2nd Line,"Localized pain",Local irritation
+G886,Trigeminal Neuralgia (Classical),Carbamazepine,1st Line,"First-line",Hyponatremia; rash; aplastic anemia; dizziness
+G887,Trigeminal Neuralgia (Classical),Oxcarbazepine,1st Line,"Better tolerated than carbamazepine",Hyponatremia; dizziness
+G888,Trigeminal Neuralgia (Classical),Microvascular Decompression,2nd Line,"If medical therapy fails, suitable candidate",Surgical risk; hearing loss; facial numbness
+G889,Trigeminal Neuralgia (Secondary),Treat underlying cause,1st Line,"MS, tumor",As per cause
+G890,Glossopharyngeal Neuralgia,Carbamazepine or Oxcarbazepine,1st Line,"As trigeminal neuralgia",As above
+G891,Glossopharyngeal Neuralgia,Microvascular Decompression,2nd Line,"Refractory",As above
+G892,Occipital Neuralgia,NSAIDs,1st Line,"Acute pain",GI; renal; bleeding
+G893,Occipital Neuralgia,Nerve Blocks (Local Anesthetic + Steroid),2nd Line,"Diagnostic and therapeutic",Pain; infection; bleeding
+G894,Complex Regional Pain Syndrome (CRPS) Type I,Physical Therapy,1st Line,"Rehabilitation",None
+G895,Complex Regional Pain Syndrome (CRPS) Type I,Gabapentinoids,1st Line,"Neuropathic pain",As above
+G896,Complex Regional Pain Syndrome (CRPS) Type I,Bisphosphonates,2nd Line,"Reduce bone pain, inflammation",Osteonecrosis; hypocalcemia
+G897,Complex Regional Pain Syndrome (CRPS) Type I,IV Ketamine,3rd Line,"Severe refractory",Psychomimetic; bladder toxicity
+G898,Phantom Limb Pain,Gabapentinoids,1st Line,"First-line",As above
+G899,Phantom Limb Pain,TCAs,1st Line,"Alternative",As above
+G900,Phantom Limb Pain,Mirror Therapy,2nd Line,"Adjunct",None
+G901,Central Post-Stroke Pain,Amitriptyline,1st Line,"First-line",As above
+G902,Central Post-Stroke Pain,Gabapentin,1st Line,"Alternative",As above
+G903,Central Post-Stroke Pain,Lamotrigine,2nd Line,"May be effective",Stevens-Johnson; rash
+G904,Spinal Cord Injury Pain,Gabapentinoids,1st Line,"As above",As above
+G905,Spinal Cord Injury Pain,Baclofen (Oral or Intrathecal),2nd Line,"Spasticity-related pain",Sedation; weakness; withdrawal
+G906,Multiple Sclerosis (Pain),Gabapentinoids,1st Line,"As above",As above
+G907,Multiple Sclerosis (Pain),TCAs,1st Line,"As above",As above
+G908,Parkinson's Disease (Pain),Optimize Dopaminergic Therapy,1st Line,"Often related to off-periods",Dyskinesia; hallucinations
+G909,Parkinson's Disease (Pain),Analgesics (NSAIDs, acetaminophen),2nd Line,"Musculoskeletal pain",As per drug
+G910,Diabetic Peripheral Neuropathy (Painful),Pregabalin or Gabapentin,1st Line,"FDA approved",As above
+G911,Diabetic Peripheral Neuropathy (Painful),Duloxetine (SNRI),1st Line,"FDA approved",Nausea; hypertension; hepatotoxicity
+G912,Diabetic Peripheral Neuropathy (Painful),Amitriptyline,1st Line,"Effective, but more side effects",As above
+G913,Diabetic Peripheral Neuropathy (Painful),Topical Capsaicin,2nd Line,"Localized pain",Burning; irritation
+G914,Alcoholic Neuropathy (Painful),Thiamine (Vitamin B1),1st Line,"Treat deficiency",None
+G915,Alcoholic Neuropathy (Painful),Gabapentinoids,2nd Line,"Symptom relief",As above
+G916,HIV-associated Neuropathy (Painful),Duloxetine,1st Line,"First-line",As above
+G917,HIV-associated Neuropathy (Painful),Gabapentin,1st Line,"First-line",As above
+G918,HIV-associated Neuropathy (Painful),Topical Capsaicin,2nd Line,"Localized",As above
+G919,Chemotherapy-induced Peripheral Neuropathy (CIPN),Duloxetine,1st Line,"Moderate evidence",As above
+G920,Chemotherapy-induced Peripheral Neuropathy (CIPN),Exercise,1st Line,"Adjunct",None
+G921,Chemotherapy-induced Peripheral Neuropathy (CIPN),Gabapentinoids,2nd Line,"Limited evidence",As above
+G922,Guillain-Barré Syndrome (Acute Inflammatory Demyelinating Polyneuropathy),IVIG,1st Line,"All patients with severe disease",Headache; thrombosis; anaphylaxis
+G923,Guillain-Barré Syndrome (Acute Inflammatory Demyelinating Polyneuropathy),Plasma Exchange,1st Line,"Alternative to IVIG",Catheter complications; hypotension
+G924,Chronic Inflammatory Demyelinating Polyneuropathy (CIDP),Corticosteroids,1st Line,"First-line",Infection; osteoporosis; hyperglycemia
+G925,Chronic Inflammatory Demyelinating Polyneuropathy (CIDP),IVIG,1st Line,"First-line",As above
+G926,Chronic Inflammatory Demyelinating Polyneuropathy (CIDP),Plasma Exchange,1st Line,"Alternative",As above
+G927,Multifocal Motor Neuropathy (MMN),IVIG,1st Line,"Highly effective",As above
+G928,Multifocal Motor Neuropathy (MMN),Cyclophosphamide,2nd Line,"Refractory",Infection; bladder toxicity; infertility
+G929,Myasthenia Gravis (Generalized),Pyridostigmine (Acetylcholinesterase inhibitor),1st Line,"Symptomatic treatment",GI cramps; diarrhea; bradycardia
+G930,Myasthenia Gravis (Generalized),Corticosteroids,1st Line,"Immunosuppression",As above
+G931,Myasthenia Gravis (Generalized),Azathioprine or Mycophenolate,2nd Line,"Steroid-sparing",As per drug
+G932,Myasthenia Gravis (Generalized),IVIG or Plasma Exchange,3rd Line,"Crisis, pre-op",As above
+G933,Myasthenia Gravis (Ocular),Pyridostigmine,1st Line,"First-line",As above
+G934,Myasthenia Gravis (Ocular),Corticosteroids,2nd Line,"If inadequate response",As above
+G935,Lambert-Eaton Myasthenic Syndrome,Amifampridine (3,4-DAP),1st Line,"Potassium channel blocker",Paresthesia; seizures; arrhythmias
+G936,Lambert-Eaton Myasthenic Syndrome,Immunosuppression (Prednisone, Azathioprine),2nd Line,"If associated with SCLC or autoimmune",As above
+G937,Lambert-Eaton Myasthenic Syndrome,Treat underlying cancer,1st Line,"If paraneoplastic",As per cancer
+G938,Botulism (Foodborne),Antitoxin (Equine),1st Line,"Early administration",Anaphylaxis; serum sickness
+G939,Botulism (Foodborne),Supportive (ICU, mechanical ventilation),1st Line,"Airway management",None
+G940,Botulism (Infant),Human Botulism Immune Globulin (BabyBIG),1st Line,"Neutralize toxin",Hypersensitivity; volume overload
+G941,Botulism (Wound),Antitoxin + Wound Debridement,1st Line,"As above",As above
+G942,Tetanus (Generalized),Tetanus Immune Globulin (TIG),1st Line,"Neutralize unbound toxin",Anaphylaxis; serum sickness
+G943,Tetanus (Generalized),Metronidazole,1st Line,"Eradicate C. tetani",Disulfiram-like; metallic taste
+G944,Tetanus (Generalized),Wound Debridement,1st Line,"Remove source",None
+G945,Tetanus (Generalized),Muscle Relaxants (Benzodiazepines, Baclofen),1st Line,"Control spasms",Sedation; respiratory depression
+G946,Tetanus (Generalized),Autonomic Instability Management (Magnesium, Labetalol),2nd Line,"Hemodynamic support",Hypotension; bradycardia
+G947,Tetanus (Neonatal),As above,1st Line,As above,As above
+G948,Tetanus (Cephalic),As above,1st Line,As above,As above
+G949,Diphtheria (Respiratory),Antitoxin (Equine),1st Line,"Neutralize toxin",Anaphylaxis; serum sickness
+G950,Diphtheria (Respiratory),Antibiotics (Erythromycin or Penicillin),1st Line,"Eradicate bacteria",QT prolongation; allergy
+G951,Diphtheria (Cutaneous),Wound care + Antibiotics,1st Line,"Treat infection",As above
+G952,Pertussis (Whooping Cough),Macrolide Antibiotics (Azithromycin),1st Line,"Eradicate bacteria, reduce transmission",QT prolongation; GI
+G953,Pertussis (Whooping Cough),Supportive (O2, suction),1st Line,"Symptom management",None
+G954,Haemophilus influenzae type b (Meningitis),Antibiotics (Ceftriaxone),1st Line,"Empiric therapy",Allergy; biliary sludging
+G955,Haemophilus influenzae type b (Meningitis),Corticosteroids (Dexamethasone),1st Line,"Adjunct to reduce hearing loss",Infection; hyperglycemia
+G956,Streptococcus pneumoniae (Pneumococcal Meningitis),Antibiotics (Ceftriaxone + Vancomycin),1st Line,"Empiric until susceptibilities",As above
+G957,Streptococcus pneumoniae (Pneumococcal Meningitis),Dexamethasone,1st Line,"Adjunct",As above
+G958,Neisseria meningitidis (Meningococcal Meningitis),Antibiotics (Ceftriaxone),1st Line,"Empiric",As above
+G959,Neisseria meningitidis (Meningococcal Meningitis),Chemoprophylaxis for contacts (Rifampin, Ciprofloxacin),1st Line,"Close contacts",Drug interactions; pregnancy caution
+G960,Neisseria meningitidis (Meningococcemia),IV Antibiotics + ICU Support,1st Line,"Treat sepsis",As above
+G961,Listeria monocytogenes (Meningitis, Neonatal),Ampicillin + Gentamicin,1st Line,"Synergistic",Renal toxicity; ototoxicity
+G962,Listeria monocytogenes (Meningitis, Adult),Ampicillin + Gentamicin,1st Line,"First-line",As above
+G963,Group B Streptococcus (Neonatal Sepsis),Ampicillin + Gentamicin,1st Line,"Empiric",As above
+G964,Escherichia coli (Neonatal Meningitis),Cefotaxime + Ampicillin,1st Line,"Empiric",As above
+G965,Staphylococcus aureus (Methicillin-sensitive - MSSA),Nafcillin or Cefazolin,1st Line,"First-line",Allergy; neutropenia; nephritis (nafcillin)
+G966,Staphylococcus aureus (Methicillin-resistant - MRSA),Vancomycin,1st Line,"First-line",Red man syndrome; nephrotoxicity; ototoxicity
+G967,Staphylococcus aureus (Methicillin-resistant - MRSA),Daptomycin,2nd Line,"If vancomycin failure, intolerance, or bacteremia",CPK elevation; myopathy; not for pneumonia
+G968,Staphylococcus epidermidis (Coagulase-negative),Vancomycin,1st Line,"Empiric for device-related infections",As above
+G969,Enterococcus faecalis (Vancomycin-susceptible),Ampicillin +/- Gentamicin,1st Line,"For endocarditis, synergy",As above
+G970,Enterococcus faecalis (Vancomycin-susceptible),Vancomycin,2nd Line,"If penicillin-allergic",As above
+G971,Enterococcus faecium (Vancomycin-resistant - VRE),Linezolid or Daptomycin,1st Line,"Treatment options",Myelosuppression (linezolid); CPK (daptomycin)
+G972,Pseudomonas aeruginosa (Healthcare-associated),Anti-pseudomonal Beta-lactam (Cefepime, Piperacillin-tazobactam),1st Line,"Empiric, then tailored",Allergy; C. diff
+G973,Pseudomonas aeruginosa (Healthcare-associated),Aminoglycoside (Tobramycin),2nd Line,"Add-on for synergy",Nephrotoxicity; ototoxicity
+G974,Acinetobacter baumannii (Multidrug-resistant),Colistin (Polymyxin E),1st Line,"Last-line for XDR",Nephrotoxicity; neurotoxicity
+G975,Acinetobacter baumannii (Multidrug-resistant),Tigecycline,2nd Line,"For pneumonia, but low serum levels",GI; pancreatitis
+G976,Stenotrophomonas maltophilia,Trimethoprim-sulfamethoxazole,1st Line,"Drug of choice",Sulfa allergy; myelosuppression; hyperkalemia
+G977,Burkholderia cepacia,Trimethoprim-sulfamethoxazole or Meropenem,1st Line,"CF patients",As above
+G978,Mycobacterium abscessus (Non-tuberculous mycobacteria),Macrolide-based regimen (Clarithromycin + Amikacin + others),1st Line,"Multidrug therapy",Ototoxicity; nephrotoxicity; GI
+G979,Mycobacterium avium complex (MAC) - Pulmonary,Clarithromycin + Ethambutol + Rifampin,1st Line,"Treat until culture negative 1 year",Hepatotoxicity; optic neuritis; drug interactions
+G980,Mycobacterium avium complex (MAC) - Disseminated,Clarithromycin + Ethambutol +/- Rifabutin,1st Line,"Treat until immune recovery in HIV",As above
+G981,Mycobacterium kansasii,Rifampin + Ethambutol + Isoniazid,1st Line,"Treat for 12 months",As above
+G982,Mycobacterium marinum (Fish tank granuloma),Minocycline or Clarithromycin or Rifampin + Ethambutol,1st Line,"Usually 3-6 months",As per drug
+G983,Mycobacterium ulcerans (Buruli ulcer),Rifampin + Clarithromycin or Rifampin + Streptomycin,1st Line,"8 weeks",As above
+G984,Leprosy (Hansen's disease) - Tuberculoid,Dapsone + Rifampin,1st Line,"Paucibacillary (6 months)",Hemolysis; methemoglobinemia; rash
+G985,Leprosy (Hansen's disease) - Lepromatous,Dapsone + Rifampin + Clofazimine,1st Line,"Multibacillary (12 months)",Clofazimine skin discoloration; GI
+G986,Leprosy (Hansen's disease) - Borderline,As per classification,1st Line,As above,As above
+G987,Treponema pallidum (Primary Syphilis),Penicillin G Benzathine (IM),1st Line,"Single dose",Jarisch-Herxheimer; allergy
+G988,Treponema pallidum (Secondary Syphilis),Penicillin G Benzathine (IM),1st Line,"Single dose",As above
+G989,Treponema pallidum (Tertiary Syphilis - Gummatous),Penicillin G Benzathine (IM) weekly x 3,1st Line,"3 doses",As above
+G990,Treponema pallidum (Tertiary Syphilis - Cardiovascular),Aqueous Penicillin G IV for 10-14 days,1st Line,"Neurosyphilis regimen",As above
+G991,Treponema pallidum (Neurosyphilis - General paresis),Aqueous Penicillin G IV for 10-14 days,1st Line,"Follow CDC guidelines",As above
+G992,Treponema pallidum (Neurosyphilis - Tabes dorsalis),As above,1st Line,As above,As above
+G993,Borrelia burgdorferi (Lyme disease - Early localized),Doxycycline,1st Line,"Oral for 10-21 days",Photosensitivity; GI; esophagitis
+G994,Borrelia burgdorferi (Lyme disease - Early localized),Amoxicillin or Cefuroxime,1st Line,"Alternatives for pregnant, children",Allergy; GI
+G995,Borrelia burgdorferi (Lyme disease - Early disseminated),Doxycycline oral,1st Line,"For mild neurologic (e.g., cranial nerve palsy)",As above
+G996,Borrelia burgdorferi (Lyme disease - Early disseminated),IV Ceftriaxone,1st Line,"For meningitis, severe carditis",As above
+G997,Borrelia burgdorferi (Lyme disease - Late),Doxycycline oral for 28 days,1st Line,"Arthritis, acrodermatitis",As above
+G998,Borrelia recurrentis (Relapsing fever - Louse-borne),Doxycycline or Tetracycline,1st Line,"Single dose",Jarisch-Herxheimer
+G999,Borrelia hermsii (Relapsing fever - Tick-borne),Doxycycline or Tetracycline,1st Line,"5-10 days",As above
+G1000,Leptospira interrogans (Leptospirosis - Anicteric),Doxycycline,1st Line,"Treat mild cases",As above
+G1001,Leptospira interrogans (Leptospirosis - Icteric - Weil's disease),IV Penicillin or Ceftriaxone,1st Line,"Severe disease",Jarisch-Herxheimer
+G1002,Yaws,Penicillin G Benzathine,1st Line,"Single dose",Allergy
+G1003,Pinta,Penicillin G Benzathine,1st Line,"Single dose",Allergy
+G1004,Chlamydia trachomatis (Trachoma),Azithromycin (single dose) or Topical Tetracycline,1st Line,"Mass drug administration",QT prolongation; GI
+G1005,Chlamydia trachomatis (Lymphogranuloma venereum - LGV),Doxycycline for 21 days,1st Line,"Treat",Photosensitivity; GI
+G1006,Chlamydia psittaci (Psittacosis),Doxycycline,1st Line,"First-line",As above
+G1007,Coxiella burnetii (Q fever - Acute),Doxycycline,1st Line,"Treat acute",As above
+G1008,Coxiella burnetii (Q fever - Chronic),Doxycycline + Hydroxychloroquine,1st Line,"For endocarditis (18-36 months)",Retinopathy; drug interactions
+G1009,Bartonella henselae (Cat scratch disease),Azithromycin,1st Line,"If moderate-severe lymphadenopathy",As above
+G1010,Bartonella henselae (Bacillary angiomatosis),Doxycycline + Erythromycin,1st Line,"Treat 3-4 months",As above
+G1011,Bartonella quintana (Trench fever),Doxycycline + Gentamicin,1st Line,"Treat",As above
+G1012,Brucella melitensis (Brucellosis - Acute),Doxycycline + Streptomycin or Rifampin,1st Line,"Combination for 6 weeks",Ototoxicity (streptomycin); hepatotoxicity (rifampin)
+G1013,Francisella tularensis (Tularemia - Ulceroglandular),Streptomycin or Gentamicin,1st Line,"First-line",Nephrotoxicity; ototoxicity
+G1014,Francisella tularensis (Tularemia - Ulceroglandular),Doxycycline or Ciprofloxacin,2nd Line,"Oral alternatives for mild cases",As above
+G1015,Yersinia pestis (Plague - Bubonic),Streptomycin or Gentamicin,1st Line,"First-line",As above
+G1016,Yersinia pestis (Plague - Bubonic),Doxycycline or Ciprofloxacin,2nd Line,"Oral alternatives",As above
+G1017,Yersinia pestis (Plague - Pneumonic),Streptomycin or Gentamicin + Doxycycline,1st Line,"Combination",As above
+G1018,Pasteurella multocida (Cellulitis after animal bite),Amoxicillin-clavulanate,1st Line,"Oral or IV",GI; allergy
+G1019,Capnocytophaga canimorsus (Sepsis after dog bite),Penicillin or Ceftriaxone,1st Line,"IV",Allergy
+G1020,Erysipelothrix rhusiopathiae (Erysipeloid),Penicillin,1st Line,"First-line",Allergy
+G1021,Spirillum minus (Rat-bite fever - Sodoku),Penicillin,1st Line,"First-line",Allergy
+G1022,Streptobacillus moniliformis (Rat-bite fever - Haverhill fever),Penicillin,1st Line,"First-line",Allergy
+G1023,Vibrio cholerae (Cholera),Fluid Resuscitation (ORS, IV),1st Line,"Life-saving",None
+G1024,Vibrio cholerae (Cholera),Doxycycline (single dose),1st Line,"Reduce duration, volume",As above
+G1025,Vibrio parahaemolyticus (Gastroenteritis),Supportive (fluids),1st Line,"Self-limited",None
+G1026,Vibrio vulnificus (Wound infection / Sepsis),Doxycycline + Ceftazidime (or Cefotaxime),1st Line,"IV antibiotics",As above
+G1027,Aeromonas hydrophila (Wound infection / Gastroenteritis),Doxycycline + Ceftriaxone,1st Line,"For severe",As above
+G1028,Plesiomonas shigelloides (Gastroenteritis),Supportive or TMP-SMX,1st Line,"If severe, prolonged",Sulfa allergy
+G1029,Campylobacter jejuni (Gastroenteritis),Supportive (fluids),1st Line,"Self-limited",None
+G1030,Campylobacter jejuni (Gastroenteritis),Azithromycin or Ciprofloxacin,2nd Line,"If severe, immunocompromised, prolonged",QT; GI
+G1031,Helicobacter pylori (Gastritis),PPI + Amoxicillin + Clarithromycin,1st Line,"Triple therapy 14 days",Penicillin allergy: use metronidazole
+G1032,Helicobacter pylori (Gastritis),PPI + Bismuth + Metronidazole + Tetracycline,2nd Line,"Quadruple therapy for failure",Tetracycline in pregnancy; renal
+G1033,Yersinia enterocolitica (Enterocolitis),Supportive,1st Line,"Self-limited",None
+G1034,Yersinia enterocolitica (Enterocolitis),Antibiotics (TMP-SMX, Ciprofloxacin),2nd Line,"Severe, immunocompromised",As above
+G1035,Yersinia pseudotuberculosis (Mesenteric lymphadenitis),Supportive,1st Line,"Self-limited",None
+G1036,Clostridium perfringens (Food poisoning),Supportive,1st Line,"Self-limited",None
+G1037,Clostridium perfringens (Gas gangrene),Surgical Debridement,1st Line,"Emergent",Loss of limb; disfigurement
+G1038,Clostridium perfringens (Gas gangrene),Penicillin + Clindamycin,1st Line,"Antibiotics",Allergy; C. diff
+G1039,Clostridium difficile (Antibiotic-associated colitis),Oral Vancomycin or Fidaxomicin,1st Line,"First-line",Cost; nephrotoxicity (vancomycin rare oral)
+G1040,Clostridium difficile (Antibiotic-associated colitis),Metronidazole,2nd Line,"Only if above not available",Disulfiram-like; neuropathy
+G1041,Clostridium difficile (Antibiotic-associated colitis),Fecal Microbiota Transplant,3rd Line,"Recurrent, refractory",Infection risk; procedural
+G1042,Clostridium sordellii (Toxic shock syndrome),Surgical Debridement + Antibiotics (Penicillin + Clindamycin),1st Line,"Emergent",As above
+G1043,Bacillus anthracis (Cutaneous anthrax),Ciprofloxacin or Doxycycline,1st Line,"Oral for 60 days",As above
+G1044,Bacillus anthracis (Inhalational anthrax),IV Ciprofloxacin + Other agents,1st Line,"Combination therapy",As above
+G1045,Bacillus cereus (Food poisoning - Emetic),Supportive,1st Line,"Self-limited",None
+G1046,Bacillus cereus (Food poisoning - Diarrheal),Supportive,1st Line,"Self-limited",None
+G1047,Bacillus cereus (Ocular infections),Intravitreal + IV Antibiotics,1st Line,"Emergent",Vision loss; endophthalmitis
+G1048,Listeria monocytogenes (Foodborne febrile gastroenteritis),Supportive,1st Line,"Self-limited",None
+G1049,Listeria monocytogenes (Meningitis) (already)
+G1050,Listeria monocytogenes (Rhombencephalitis),As above,1st Line,As above,As above

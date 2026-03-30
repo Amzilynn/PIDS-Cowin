@@ -1,0 +1,1051 @@
+disease_id,disease_name,therapeutic_area,chronic_or_acute,severity_level,brief_clinical_description,typical_patient_profile,common_comorbidities
+DIS001,Essential Hypertension,Cardiology,Chronic,Moderate,Persistently elevated arterial blood pressure,Adults >40 years, obesity; family history,Diabetes; Dyslipidemia; Obesity
+DIS002,Coronary Artery Disease,Cardiology,Chronic,Severe,Atherosclerosis of coronary arteries leading to ischemia,Smokers; hypertensive; hyperlipidemic,Diabetes; Hypertension; Heart failure
+DIS003,Heart Failure with Reduced Ejection Fraction,Cardiology,Chronic,Severe,Inability of heart to pump sufficiently,Prior MI; hypertensive; elderly,COPD; Chronic kidney disease; Anemia
+DIS004,Atrial Fibrillation,Cardiology,Chronic,Moderate,Irregular and rapid heart rate,Age >65; hypertensive; valvular disease,Heart failure; Stroke; Hypertension
+DIS005,Acute Myocardial Infarction,Cardiology,Acute,Severe,Necrosis of heart muscle due to ischemia,Middle-aged/older with risk factors,Diabetes; Hypertension; Hyperlipidemia
+DIS006,Stable Angina Pectoris,Cardiology,Chronic,Moderate,Chest pain due to reversible myocardial ischemia,Men >50; postmenopausal women,Coronary artery disease; Diabetes
+DIS007,Hypertrophic Cardiomyopathy,Cardiology,Chronic,Severe,Thickened heart muscle without obvious cause,Young athletes; family history,Arrhythmias; Heart failure
+DIS008,Long QT Syndrome,Cardiology,Chronic,Severe,Disorder of cardiac repolarization predisposing to arrhythmias,Children/young adults; family history,Syncope; Sudden cardiac death risk
+DIS009,Rheumatic Heart Disease,Cardiology,Chronic,Moderate,Valvular damage from rheumatic fever,Children/young adults in developing countries,Atrial fibrillation; Heart failure
+DIS010,Pulmonary Arterial Hypertension,Cardiology,Chronic,Severe,High blood pressure in pulmonary arteries,Women 30-60; connective tissue disease,Right heart failure; Raynaud's
+DIS011,Peripheral Artery Disease,Cardiology,Chronic,Moderate,Atherosclerosis of peripheral arteries,Smokers; diabetics >50,Coronary artery disease; Cerebrovascular disease
+DIS012,Deep Vein Thrombosis,Cardiology,Acute,Severe,Blood clot in deep veins,Post-surgery; immobility; cancer,Pulmonary embolism; Post-thrombotic syndrome
+DIS013,Type 1 Diabetes Mellitus,Endocrinology,Chronic,Severe,Autoimmune destruction of pancreatic beta cells,Children; adolescents; young adults,Autoimmune thyroiditis; Celiac disease
+DIS014,Type 2 Diabetes Mellinois,Endocrinology,Chronic,Moderate,Insulin resistance and relative insulin deficiency,Obese adults; sedentary lifestyle,Hypertension; Dyslipidemia; Obesity
+DIS015,Gestational Diabetes,Endocrinology,Acute,Moderate,Glucose intolerance during pregnancy,Pregnant women (2nd/3rd trimester),Pre-eclampsia; Future type 2 diabetes
+DIS016,Hyperthyroidism (Graves' Disease),Endocrinology,Chronic,Moderate,Excess thyroid hormone production due to autoimmunity,Women 20-50; family history,Atrial fibrillation; Osteoporosis
+DIS017,Hypothyroidism (Hashimoto's),Endocrinology,Chronic,Moderate,Underactive thyroid due to autoimmune destruction,Women >40; family history,Hyperlipidemia; Depression
+DIS018,Cushing's Syndrome,Endocrinology,Chronic,Severe,Excess cortisol production,Adults 20-50; glucocorticoid use,Hypertension; Diabetes; Osteoporosis
+DIS019,Addison's Disease,Endocrinology,Chronic,Moderate,Primary adrenal insufficiency,Adults 30-50; autoimmune history,Other autoimmune disorders; Vitiligo
+DIS020,Polycystic Ovary Syndrome,Endocrinology,Chronic,Moderate,Hormonal disorder causing enlarged ovaries with cysts,Reproductive-age women; obese,Infertility; Type 2 diabetes; Metabolic syndrome
+DIS021,Osteoporosis,Endocrinology,Chronic,Moderate,Reduced bone mass and microarchitectural deterioration,Postmenopausal women; elderly,Fractures; Sarcopenia
+DIS022,Pituitary Adenoma,Endocrinology,Chronic,Moderate,Benign tumor of pituitary gland,Adults 30-60; both sexes,Visual field defects; Hypopituitarism
+DIS023,Acromegaly,Endocrinology,Chronic,Severe,Excess growth hormone in adulthood,Adults 40-60; rare,Cardiomyopathy; Diabetes; Arthritis
+DIS024,Diabetes Insipidus,Endocrinology,Chronic,Moderate,Deficiency of ADH or renal resistance to ADH,Any age; post-head trauma or genetic,Dehydration; Electrolyte imbalance
+DIS025,Metabolic Syndrome,Endocrinology,Chronic,Moderate,Cluster of conditions increasing cardiovascular risk,Obese adults; sedentary,Type 2 diabetes; Cardiovascular disease
+DIS026,Gastroesophageal Reflux Disease,Gastroenterology,Chronic,Moderate,Backflow of stomach contents into esophagus,Adults; obese; pregnancy,Barrett's esophagus; Esophagitis
+DIS027,Peptic Ulcer Disease,Gastroenterology,Chronic,Moderate,Ulcers in stomach or duodenum,H. pylori infected; NSAID users,GI bleeding; Perforation
+DIS028,Crohn's Disease,Gastroenterology,Chronic,Severe,Chronic inflammatory bowel disease affecting any GI tract,Young adults 15-35; smokers,Arthritis; Uveitis; Anemia
+DIS029,Ulcerative Colitis,Gastroenterology,Chronic,Severe,Chronic inflammation of colon and rectum,Adults 20-40; nonsmokers,Primary sclerosing cholangitis; Colon cancer risk
+DIS030,Irritable Bowel Syndrome,Gastroenterology,Chronic,Mild,Functional bowel disorder with abdominal pain and altered bowel habits,Women <50; stress,Anxiety; Fibromyalgia
+DIS031,Celiac Disease,Gastroenterology,Chronic,Moderate,Immune reaction to gluten causing small intestinal damage,Children; adults with genetic predisposition,Osteoporosis; Anemia; Dermatitis herpetiformis
+DIS032,Acute Pancreatitis,Gastroenterology,Acute,Severe,Inflammation of pancreas with rapid onset,Gallstones; alcohol abuse; hypertriglyceridemia,Diabetes; Pseudocyst
+DIS033,Chronic Pancreatitis,Gastroenterology,Chronic,Severe,Progressive inflammatory destruction of pancreas,Chronic alcohol use; hereditary,Pain; Malabsorption; Diabetes
+DIS034,Cholelithiasis (Gallstones),Gastroenterology,Chronic,Moderate,Presence of stones in gallbladder,Obese; female; >40,Cholecystitis; Pancreatitis
+DIS035,Viral Hepatitis (B),Gastroenterology,Chronic,Severe,Chronic infection with hepatitis B virus,Endemic areas; IV drug users; unsafe sex,Cirrhosis; Hepatocellular carcinoma
+DIS036,Viral Hepatitis (C),Gastroenterology,Chronic,Severe,Chronic infection with hepatitis C virus,IV drug users; blood transfusion before 1992,Cirrhosis; Liver cancer
+DIS037,Alcoholic Liver Disease,Gastroenterology,Chronic,Severe,Liver damage due to chronic alcohol abuse,Chronic alcoholics; males >40,Portal hypertension; Ascites; Encephalopathy
+DIS038,Non-alcoholic Fatty Liver Disease,Gastroenterology,Chronic,Moderate,Fat accumulation in liver not due to alcohol,Obese; diabetic; metabolic syndrome,NASH; Cirrhosis
+DIS039,Diverticulitis,Gastroenterology,Acute,Moderate,Inflammation of diverticula in colon,Elderly; low-fiber diet,Perforation; Abscess
+DIS040,Barrett's Esophagus,Gastroenterology,Chronic,Moderate,Metaplasia of esophageal epithelium due to chronic GERD,Chronic GERD patients; white males,Esophageal adenocarcinoma
+DIS041,Stroke (Ischemic),Neurology,Acute,Severe,Sudden loss of brain function due to blocked artery,Elderly; hypertensive; atrial fibrillation,Hypertension; Diabetes; Dyslipidemia
+DIS042,Transient Ischemic Attack,Neurology,Acute,Moderate,Temporary neurologic dysfunction due to brief ischemia,Adults with vascular risk factors,Subsequent stroke; Carotid stenosis
+DIS043,Intracerebral Hemorrhage,Neurology,Acute,Severe,Bleeding within brain tissue due to vessel rupture,Hypertensive; anticoagulant use; elderly,Hypertension; Amyloid angiopathy
+DIS044,Subarachnoid Hemorrhage,Neurology,Acute,Severe,Bleeding in subarachnoid space from aneurysm rupture,Women 40-60; smokers; family history,Vasospasm; Hydrocephalus
+DIS045,Epilepsy (Generalized),Neurology,Chronic,Moderate,Recurrent unprovoked seizures due to brain disorder,Children; elderly; post-stroke,Depression; Anxiety; SUDEP risk
+DIS046,Parkinson's Disease,Neurology,Chronic,Severe,Progressive neurodegenerative disorder with motor symptoms,Men >60; possible genetic,Depression; Dementia; Falls
+DIS047,Multiple Sclerosis,Neurology,Chronic,Severe,Autoimmune demyelination of CNS,Young adults 20-40; female,Depression; Fatigue; Bladder dysfunction
+DIS048,Alzheimer's Disease,Neurology,Chronic,Severe,Progressive neurodegenerative dementia,Elderly >65; APOE4 carriers,Behavioral disorders; Malnutrition
+DIS049,Migraine with Aura,Neurology,Chronic,Moderate,Recurrent headache preceded by focal neurological symptoms,Women 20-50; family history,Depression; Anxiety
+DIS050,Cluster Headache,Neurology,Chronic,Severe,Severe unilateral headache occurring in clusters,Men 20-40; smokers,Suicidal ideation; Sleep disturbances
+DIS051,Amyotrophic Lateral Sclerosis,Neurology,Chronic,Severe,Progressive motor neuron degeneration,Adults 40-70; sporadic or familial,Respiratory failure; Dysphagia
+DIS052,Huntington's Disease,Neurology,Chronic,Severe,Autosomal dominant neurodegenerative disorder,Adults 30-50; family history,Chorea; Dementia; Psychiatric issues
+DIS053,Myasthenia Gravis,Neurology,Chronic,Moderate,Autoimmune disorder affecting neuromuscular junction,Women <40; men >60,Thymoma; Other autoimmune diseases
+DIS054,Guillain-Barré Syndrome,Neurology,Acute,Severe,Acute inflammatory demyelinating polyneuropathy,Any age; post-infection,Respiratory failure; Autonomic instability
+DIS055,Trigeminal Neuralgia,Neurology,Chronic,Severe,Severe facial pain due to trigeminal nerve dysfunction,Adults >50; female,Migraine; Depression
+DIS056,Breast Cancer (Invasive Ductal),Oncology,Chronic,Severe,Malignant tumor originating in breast ducts,Women >40; BRCA mutation,Lymph node metastasis; Bone metastasis
+DIS057,Lung Cancer (Non-Small Cell),Oncology,Chronic,Severe,Malignant lung tumor (adenocarcinoma, squamous, etc.),Smokers; elderly,Metastasis to brain; bone; liver
+DIS058,Colorectal Adenocarcinoma,Oncology,Chronic,Severe,Malignancy of colon or rectum,Adults >50; family history; IBD,Liver metastasis; Bowel obstruction
+DIS059,Prostate Adenocarcinoma,Oncology,Chronic,Severe,Malignancy of prostate gland,Men >65; African ancestry,Bone metastasis; Urinary obstruction
+DIS060,Acute Myeloid Leukemia,Oncology,Acute,Severe,Rapidly progressing cancer of myeloid line,Adults >60; prior chemotherapy,Infection; Bleeding; Anemia
+DIS061,Chronic Lymphocytic Leukemia,Oncology,Chronic,Moderate,Indolent cancer of B lymphocytes,Elderly; male,Infection; Autoimmune cytopenias
+DIS062,Hodgkin Lymphoma,Oncology,Chronic,Moderate,Malignancy of B cells with Reed-Sternberg cells,Young adults 20-30; elderly,Second malignancies; Infections
+DIS063,Non-Hodgkin Lymphoma (Diffuse Large B-cell),Oncology,Chronic,Severe,Aggressive lymphoma of B cells,Adults >60; immunocompromised,Extranodal involvement; Bone marrow failure
+DIS064,Melanoma (Malignant),Oncology,Chronic,Severe,Skin cancer arising from melanocytes,Light-skinned; sun exposure; familial atypical moles,Metastasis to lymph nodes; visceral
+DIS065,Ovarian Serous Carcinoma,Oncology,Chronic,Severe,Epithelial ovarian cancer,Women >50; BRCA mutation,Peritoneal carcinomatosis; Ascites
+DIS066,Glioblastoma Multiforme,Oncology,Chronic,Severe,Highly aggressive primary brain tumor,Adults 45-70; male,Neurologic deficits; Seizures
+DIS067,Pancreatic Adenocarcinoma,Oncology,Chronic,Severe,Ductal adenocarcinoma of pancreas,Adults >60; smokers; chronic pancreatitis,Liver metastasis; Cachexia
+DIS068,Multiple Myeloma,Oncology,Chronic,Severe,Malignant plasma cell disorder,Adults >65; male; African descent,Renal failure; Bone lesions; Anemia
+DIS069,Renal Cell Carcinoma,Oncology,Chronic,Moderate,Kidney cancer from proximal tubules,Men 50-70; smokers; von Hippel-Lindau,Metastasis to lung; bone
+DIS070,Thyroid Papillary Carcinoma,Oncology,Chronic,Moderate,Most common thyroid cancer,Women 30-50; radiation exposure,Local lymph node metastasis; good prognosis
+DIS071,HIV/AIDS,Infectious Diseases,Chronic,Severe,Chronic infection with HIV leading to immune deficiency,Adults; IV drug users; MSM; endemic regions,Opportunistic infections; Malignancies
+DIS072,Tuberculosis (Pulmonary),Infectious Diseases,Chronic,Severe,Infection with Mycobacterium tuberculosis,Immunocompromised; crowded living; endemic areas,HIV; Malnutrition
+DIS073,Community-acquired Pneumonia,Infectious Diseases,Acute,Severe,Acute lung infection in community setting,Elderly; young children; smokers,Sepsis; Respiratory failure
+DIS074,Healthcare-associated Pneumonia,Infectious Diseases,Acute,Severe,Pneumonia in hospitalized or long-term care patients,Hospitalized; ventilated; immunocompromised,Multidrug-resistant organisms
+DIS075,Meningococcal Meningitis,Infectious Diseases,Acute,Severe,Bacterial meningitis due to Neisseria meningitidis,Children; adolescents; military recruits,Septic shock; DIC; Death
+DIS076,Sepsis (Bacterial),Infectious Diseases,Acute,Severe,Life-threatening organ dysfunction due to infection,Hospitalized; elderly; immunocompromised,Septic shock; Multi-organ failure
+DIS077,Infective Endocarditis,Infectious Diseases,Acute,Severe,Infection of heart valves,IV drug users; prosthetic valves; structural heart disease,Embolic phenomena; Heart failure
+DIS078,Osteomyelitis,Infectious Diseases,Chronic,Moderate,Bone infection,Diabetics; trauma; post-surgery,Chronic pain; Septic arthritis
+DIS079,Cellulitis,Infectious Diseases,Acute,Moderate,Bacterial skin infection,Adults; diabetics; venous insufficiency,Lymphangitis; Abscess
+DIS080,Influenza,Infectious Diseases,Acute,Moderate,Viral respiratory infection,All ages; seasonal,Pneumonia; Myocarditis
+DIS081,Urinary Tract Infection (complicated),Infectious Diseases,Acute,Moderate,Infection of urinary tract with risk factors,Pregnant; elderly; catheterized; diabetics,Pyelonephritis; Sepsis
+DIS082,Clostridioides difficile Infection,Infectious Diseases,Acute,Severe,Antibiotic-associated colitis,Hospitalized; recent antibiotics; elderly,Dehydration; Toxic megacolon
+DIS083,Malaria (Plasmodium falciparum),Infectious Diseases,Acute,Severe,Life-threatening parasitic infection transmitted by mosquitoes,Travelers to endemic areas; children in Africa,Cerebral malaria; Anemia
+DIS084,Dengue Hemorrhagic Fever,Infectious Diseases,Acute,Severe,Viral infection causing plasma leakage,Tropical regions; secondary infection,Shock; Bleeding; Organ failure
+DIS085,Herpes Zoster (Shingles),Infectious Diseases,Acute,Moderate,Reactivation of varicella-zoster virus,Adults >50; immunocompromised,Postherpetic neuralgia
+DIS086,Asthma (Allergic),Pulmonology,Chronic,Moderate,Chronic airway inflammation with reversible obstruction,Children; adults with atopy,Rhinitis; Eczema; Sinusitis
+DIS087,COPD (Chronic Bronchitis),Pulmonology,Chronic,Severe,Chronic bronchitis with airflow limitation,Smokers >40; occupational exposure,Respiratory infections; Cor pulmonale
+DIS088,COPD (Emphysema),Pulmonology,Chronic,Severe,Destruction of alveolar walls,Smokers; alpha-1 antitrypsin deficiency,Weight loss; Respiratory failure
+DIS089,Idiopathic Pulmonary Fibrosis,Pulmonology,Chronic,Severe,Progressive fibrotic interstitial lung disease,Adults >60; male; smokers,Pulmonary hypertension; Lung cancer
+DIS090,Acute Respiratory Distress Syndrome,Pulmonology,Acute,Severe,Acute lung injury causing hypoxemia,Sepsis; pneumonia; trauma; aspiration,Multi-organ failure; Barotrauma
+DIS091,Pulmonary Embolism,Pulmonology,Acute,Severe,Blockage of pulmonary artery by clot,Post-surgery; immobility; cancer; pregnancy,Right heart failure; Infarction
+DIS092,Sleep Apnea (Obstructive),Pulmonology,Chronic,Moderate,Repeated upper airway collapse during sleep,Obese; male; large neck,Hypertension; Cardiovascular disease; Daytime sleepiness
+DIS093,Lung Cancer (Small Cell),Pulmonology,Chronic,Severe,Neuroendocrine lung carcinoma strongly linked to smoking,Heavy smokers; elderly,Paraneoplastic syndromes; Brain metastases
+DIS094,Pleural Effusion (Malignant),Pulmonology,Chronic,Moderate,Accumulation of fluid in pleural space due to cancer,Lung cancer; breast cancer; lymphoma,Dyspnea; Chest pain
+DIS095,Pneumothorax (Spontaneous),Pulmonology,Acute,Severe,Air in pleural space without trauma,Tall thin young males; smokers; COPD,Respiratory distress; Tension pneumothorax
+DIS096,Allergic Bronchopulmonary Aspergillosis,Pulmonology,Chronic,Moderate,Hypersensitivity reaction to Aspergillus in asthmatics/CF,Patients with asthma or cystic fibrosis,Bronchiectasis; Fibrosis
+DIS097,Acne Vulgaris,Dermatology,Chronic,Mild,Inflammatory disorder of pilosebaceous units,Adolescents; young adults,Scarring; Hyperpigmentation; Depression
+DIS098,Psoriasis (Plaque),Dermatology,Chronic,Moderate,Chronic immune-mediated inflammatory skin disease,Adults; genetic predisposition,Psoriatic arthritis; Cardiovascular disease
+DIS099,Atopic Dermatitis (Eczema),Dermatology,Chronic,Moderate,Chronic pruritic inflammatory skin condition,Infants; children; personal/family atopy,Allergic rhinitis; Asthma
+DIS100,Basal Cell Carcinoma,Dermatology,Chronic,Moderate,Most common skin cancer,Light-skinned; sun-damaged skin,Local invasion; Rare metastasis
+DIS101,Squamous Cell Carcinoma (Skin),Dermatology,Chronic,Moderate,Malignancy of epidermal keratinocytes,Sun-exposed skin; immunosuppression,Metastasis to lymph nodes
+DIS102,Malignant Melanoma (Superficial Spreading),Dermatology,Chronic,Severe,Most common type of melanoma,Intermittent sun exposure; fair skin,Metastasis; Breslow thickness
+DIS103,Contact Dermatitis (Allergic),Dermatology,Acute,Mild,Delayed hypersensitivity reaction to allergen,Exposure to specific allergen (nickel, poison ivy),Acute eczema; Blistering
+DIS104,Urticaria (Chronic),Dermatology,Chronic,Mild,Wheal-and-flare reaction lasting >6 weeks,Adults; often idiopathic,Angioedema; Anaphylaxis risk
+DIS105,Herpes Simplex (Labialis),Dermatology,Acute,Mild,Recurrent viral infection caused by HSV-1,Most adults; triggered by stress/fever,Pain; Secondary bacterial infection
+DIS106,Tinea Pedis (Athlete's Foot),Dermatology,Acute,Mild,Fungal infection of feet,Adults; occlusive footwear,Secondary bacterial infection; Onychomycosis
+DIS107,Vitiligo,Dermatology,Chronic,Mild,Autoimmune destruction of melanocytes,Any age; family history,Other autoimmune diseases; Sunburn risk
+DIS108,Alopecia Areata,Dermatology,Acute,Mild,Autoimmune non-scarring hair loss,Children; young adults; family history,Atopy; Thyroid disease
+DIS109,Hidradenitis Suppurativa,Dermatology,Chronic,Moderate,Chronic inflammatory follicular disease in apocrine glands,Young women; smokers; obese,Scarring; Depression
+DIS110,Rosacea,Dermatology,Chronic,Mild,Chronic inflammatory facial dermatosis,Adults 30-50; fair skin,Ocular involvement; Rhinophyma
+DIS111,Major Depressive Disorder,Psychiatry,Chronic,Severe,Pervasive low mood and loss of interest,Adults; female predominance,Anxiety; Substance abuse; Suicide risk
+DIS112,Generalized Anxiety Disorder,Psychiatry,Chronic,Moderate,Excessive worry about multiple events,Adults; more common in women,Panic disorder; Depression
+DIS113,Panic Disorder,Psychiatry,Chronic,Moderate,Recurrent unexpected panic attacks,Young adults; female,Agoraphobia; Depression
+DIS114,Schizophrenia,Psychiatry,Chronic,Severe,Chronic psychotic disorder with positive and negative symptoms,Young adults 16-30; male earlier onset,Substance abuse; Metabolic syndrome
+DIS115,Bipolar I Disorder,Psychiatry,Chronic,Severe,Mania alternating with depression,Young adults; genetic,Suicide; Substance abuse
+DIS116,Obsessive-Compulsive Disorder,Psychiatry,Chronic,Moderate,Recurrent intrusive thoughts and repetitive behaviors,Children; young adults; male earlier,Depression; Tic disorders
+DIS117,Post-Traumatic Stress Disorder,Psychiatry,Chronic,Moderate,Trauma-induced disorder with re-experiencing and hyperarousal,Adults after trauma; female,Depression; Substance abuse
+DIS118,Attention-Deficit/Hyperactivity Disorder,Psychiatry,Chronic,Moderate,Persistent inattention and/or hyperactivity,Children; persists into adulthood,Learning disorders; Anxiety
+DIS119,Anorexia Nervosa,Psychiatry,Chronic,Severe,Restrictive eating leading to low body weight,Adolescent females; perfectionism,Depression; Osteoporosis; Cardiac complications
+DIS120,Bulimia Nervosa,Psychiatry,Chronic,Moderate,Binge eating followed by compensatory behaviors,Adolescents; young adults,Electrolyte imbalance; Dental erosion
+DIS121,Borderline Personality Disorder,Psychiatry,Chronic,Severe,Pervasive instability in relationships, self-image, and affect,Young adults; female,Depression; Self-harm; Substance abuse
+DIS122,Insomnia Disorder,Sleep Medicine,Chronic,Mild,Difficulty initiating or maintaining sleep,Adults; elderly; stress,Depression; Anxiety; Hypertension
+DIS123,Narcolepsy,Sleep Medicine,Chronic,Moderate,Excessive daytime sleepiness with cataplexy,Adolescents; young adults,Depression; Obesity; Sleep paralysis
+DIS124,Restless Legs Syndrome,Sleep Medicine,Chronic,Mild,Uncomfortable leg sensations relieved by movement,Adults; elderly; iron deficiency,Insomnia; Depression; Cardiovascular disease
+DIS125,Rheumatoid Arthritis,Rheumatology,Chronic,Severe,Chronic systemic autoimmune inflammatory arthritis,Women 40-60; smokers,Cardiovascular disease; Osteoporosis; Sjogren's
+DIS126,Osteoarthritis (Knee),Rheumatology,Chronic,Moderate,Degenerative joint disease,Elderly; obese; previous injury,Obesity; Metabolic syndrome
+DIS127,Systemic Lupus Erythematosus,Rheumatology,Chronic,Severe,Autoimmune disease affecting multiple organs,Women 15-45; African/Caribbean descent,Lupus nephritis; Antiphospholipid syndrome
+DIS128,Gout,Rheumatology,Acute,Moderate,Acute arthritis due to urate crystal deposition,Men >40; hyperuricemia; diet,Chronic tophaceous gout; Nephrolithiasis
+DIS129,Ankylosing Spondylitis,Rheumatology,Chronic,Severe,Chronic inflammatory spine disease,Young men; HLA-B27 positive,Spinal fusion; Uveitis; Aortitis
+DIS130,Psoriatic Arthritis,Rheumatology,Chronic,Moderate,Inflammatory arthritis associated with psoriasis,Adults with psoriasis; 30-50,Dactylitis; Enthesitis; Cardiovascular risk
+DIS131,Sjögren's Syndrome,Rheumatology,Chronic,Moderate,Autoimmune exocrinopathy causing dry eyes/mouth,Women 40-60; associated with other autoimmune,Lymphoma; Pulmonary fibrosis
+DIS132,Polymyalgia Rheumatica,Rheumatology,Chronic,Moderate,Inflammatory condition causing pain and stiffness in shoulders/hips,Adults >50; female,Giant cell arteritis; Fatigue
+DIS133,Vasculitis (ANCA-associated),Rheumatology,Chronic,Severe,Necrotizing inflammation of blood vessels,Adults; male,Glomerulonephritis; Pulmonary hemorrhage
+DIS134,Scleroderma (Systemic Sclerosis),Rheumatology,Chronic,Severe,Fibrosis of skin and internal organs,Women 30-50; African descent,Pulmonary hypertension; Renal crisis
+DIS135,Familial Mediterranean Fever,Rheumatology,Chronic,Moderate,Inherited autoinflammatory disease,Mediterranean descent; children,Amyloidosis; Arthritis
+DIS136,Glaucoma (Open-angle),Ophthalmology,Chronic,Moderate,Progressive optic neuropathy with visual field loss,Elderly; African descent; family history,Blindness; Hypertension
+DIS137,Cataract (Age-related),Ophthalmology,Chronic,Mild,Opacity of lens causing visual impairment,Elderly; UV exposure; diabetes,Blindness if untreated; Falls
+DIS138,Diabetic Retinopathy (Proliferative),Ophthalmology,Chronic,Severe,Retinal neovascularization due to diabetes,Long-standing diabetes; poor glycemic control,Blindness; Vitreous hemorrhage
+DIS139,Age-related Macular Degeneration (Wet),Ophthalmology,Chronic,Severe,Choroidal neovascularization causing central vision loss,Adults >60; smokers; family history,Legal blindness; Depression
+DIS140,Conjunctivitis (Bacterial),Ophthalmology,Acute,Mild,Inflammation of conjunctiva due to bacteria,Children; contact lens wearers,Corneal involvement
+DIS141,Uveitis (Anterior),Ophthalmology,Acute,Moderate,Inflammation of uveal tract,Young to middle-aged adults; HLA-B27,Cataract; Glaucoma; Vision loss
+DIS142,Retinal Detachment (Rhegmatogenous),Ophthalmology,Acute,Severe,Separation of neurosensory retina from RPE,High myopia; trauma; aphakia,Permanent vision loss if not repaired
+DIS143,Optic Neuritis,Ophthalmology,Acute,Moderate,Inflammation of optic nerve,Young adults; female; associated with MS,Visual loss; Multiple sclerosis
+DIS144,Keratitis (Infectious),Ophthalmology,Acute,Severe,Corneal infection,Contact lens wear; trauma; immunocompromised,Corneal scarring; Perforation
+DIS145,Strabismus,Ophthalmology,Chronic,Mild,Misalignment of eyes,Children; adults post-trauma or stroke,Amblyopia; Diplopia
+DIS146,Chronic Kidney Disease (Stage 4),Nephrology,Chronic,Severe,Advanced kidney damage with eGFR 15-29,Diabetes; hypertension; elderly,Anemia; Metabolic bone disease; Cardiovascular
+DIS147,Acute Kidney Injury (Prerenal),Nephrology,Acute,Severe,Sudden decrease in kidney function due to hypoperfusion,Hospitalized; dehydrated; sepsis,Volume overload; Electrolyte disturbances
+DIS148,Diabetic Nephropathy,Nephrology,Chronic,Severe,Progressive kidney damage due to diabetes,Long-term diabetics; poor control,ESRD; Cardiovascular disease
+DIS149,Hypertensive Nephrosclerosis,Nephrology,Chronic,Moderate,Kidney damage due to chronic hypertension,Longstanding hypertension; elderly,ESRD; Cardiovascular events
+DIS150,Glomerulonephritis (IgA Nephropathy),Nephrology,Chronic,Moderate,IgA deposits in glomeruli,Young adults; post-infection,Hypertension; Progressive renal failure
+DIS151,Focal Segmental Glomerulosclerosis,Nephrology,Chronic,Severe,Scarring of glomeruli,Black ethnicity; HIV; obesity,Nephrotic syndrome; ESRD
+DIS152,Membranous Nephropathy,Nephrology,Chronic,Moderate,Autoimmune thickening of glomerular basement membrane,Adults; idiopathic; secondary to malignancies,Nephrotic syndrome; Thrombosis
+DIS153,Polycystic Kidney Disease (ADPKD),Nephrology,Chronic,Severe,Cystic enlargement of kidneys,Adults 30-50; family history,Hypertension; ESRD; Cerebral aneurysms
+DIS154,Renal Artery Stenosis,Nephrology,Chronic,Moderate,Narrowing of renal artery,Smokers; atherosclerotic; elderly,Hypertension; Ischemic nephropathy
+DIS155,Nephrolithiasis (Calcium Oxalate),Nephrology,Acute,Moderate,Kidney stones,Adults; dehydration; hypercalciuria,Obstruction; Infection; Pain
+DIS156,Interstitial Cystitis,Urology,Chronic,Moderate,Chronic bladder pain syndrome,Women; middle-aged,Pain; Frequency; Depression
+DIS157,Benign Prostatic Hyperplasia,Urology,Chronic,Moderate,Non-malignant enlargement of prostate,Men >50; age,Urinary retention; UTI; Renal impairment
+DIS158,Erectile Dysfunction (Vasculogenic),Urology,Chronic,Moderate,Inability to maintain erection due to vascular cause,Men >40; diabetes; hypertension,Depression; Cardiovascular disease
+DIS159,Prostate Cancer (Localized),Urology,Chronic,Severe,Adenocarcinoma confined to prostate,Men >65; family history; African ancestry,Metastasis; Incontinence; Erectile dysfunction
+DIS160,Bladder Cancer (Urothelial),Urology,Chronic,Severe,Malignancy of bladder epithelium,Men >60; smokers; occupational chemical exposure,Hematuria; Metastasis
+DIS161,Urinary Incontinence (Stress),Urology,Chronic,Mild,Involuntary leakage with exertion,Women; post-childbirth; elderly,Social isolation; Dermatitis
+DIS162,Pyelonephritis (Acute),Urology,Acute,Severe,Acute bacterial kidney infection,Young women; pregnant; elderly; stones,Sepsis; Renal abscess
+DIS163,Testicular Cancer (Seminoma),Urology,Acute,Severe,Malignant germ cell tumor of testis,Young men 20-40; cryptorchidism,Metastasis to retroperitoneum; good prognosis
+DIS164,Peyronie's Disease,Urology,Chronic,Mild,Fibrous plaque in penis causing curvature,Men 40-60; genetic,Penile pain; Erectile dysfunction
+DIS165,Ottis Media (Acute),Otorhinolaryngology,Acute,Moderate,Acute infection of middle ear,Infants; young children; winter,Perforation; Hearing loss
+DIS166,Chronic Sinusitis,Otorhinolaryngology,Chronic,Moderate,Prolonged inflammation of sinuses,Adults; allergic rhinitis; anatomic variants,Nasal polyps; Asthma
+DIS167,Tonsillitis (Recurrent),Otorhinolaryngology,Acute,Moderate,Repeated infection of tonsils,Children; adolescents,Peritonsillar abscess; Airway obstruction
+DIS168,Sensorineural Hearing Loss,Otorhinolaryngology,Chronic,Moderate,Inner ear or neural hearing loss,Elderly; noise exposure; ototoxic drugs,Tinnitus; Social isolation
+DIS169,Vertigo (Benign Paroxysmal Positional),Otorhinolaryngology,Acute,Mild,Episodic positional vertigo due to canalithiasis,Adults >50; female,Posterior canal involvement; Nausea
+DIS170,Meniere's Disease,Otorhinolaryngology,Chronic,Moderate,Endolymphatic hydrops causing vertigo, tinnitus, hearing loss,Adults 40-60; female,Falls; Hearing fluctuation
+DIS171,Laryngitis (Chronic),Otorhinolaryngology,Chronic,Mild,Prolonged hoarseness due to vocal cord inflammation,Adults; voice overuse; reflux,Reinke's edema; Vocal nodules
+DIS172,Obstructive Sleep Apnea (Moderate),Otorhinolaryngology,Chronic,Moderate,Collapsible upper airway during sleep,Obese; male; large neck,Hypertension; Daytime sleepiness
+DIS173,Nasal Polyps,Otorhinolaryngology,Chronic,Moderate,Benign growths in nasal mucosa,Adults; asthma; aspirin sensitivity,Sinusitis; Anosmia
+DIS174,Epistaxis (Recurrent),Otorhinolaryngology,Acute,Mild,Recurrent nosebleeds,Children; elderly; dry climate; anticoagulants,Anemia; Anxiety
+DIS175,Thyroid Nodule (Benign),Endocrinology,Chronic,Low,Non-cancerous growth in thyroid,Women; middle-aged,Compression symptoms; Malignancy risk
+DIS176,Hashimoto's Thyroiditis,Endocrinology,Chronic,Moderate,Autoimmune hypothyroidism,Women; middle-aged; family history,Hyperlipidemia; Depression; Goiter
+DIS177,Graves' Ophthalmopathy,Endocrinology,Chronic,Moderate,Orbital involvement in Graves' disease,Women; smokers,Proptosis; Diplopia; Vision loss
+DIS178,Primary Hyperparathyroidism,Endocrinology,Chronic,Moderate,Excess PTH from parathyroid adenoma,Women >50; postmenopausal,Osteoporosis; Nephrolithiasis
+DIS179,Hypopituitarism (Panhypopituitarism),Endocrinology,Chronic,Severe,Deficiency of multiple pituitary hormones,Any age; post-surgery; tumor,Adrenal crisis; Infertility
+DIS180,Adrenal Incidentaloma,Endocrinology,Chronic,Low,Asymptomatic adrenal mass discovered incidentally,Adults >50; imaging for other reasons,Hormonal excess; Malignancy
+DIS181,Osteogenesis Imperfecta,Clinical Genetics,Chronic,Moderate,Hereditary disorder causing brittle bones,Children; family history,Fractures; Blue sclera; Hearing loss
+DIS182,Cystic Fibrosis,Clinical Genetics,Chronic,Severe,Autosomal recessive disorder affecting exocrine glands,Children; Caucasian,Respiratory infections; Pancreatic insufficiency; Infertility
+DIS183,Duchenne Muscular Dystrophy,Clinical Genetics,Chronic,Severe,X-linked recessive muscular dystrophy,Boys; early childhood,Cardiomyopathy; Respiratory failure; Scoliosis
+DIS184,Fragile X Syndrome,Clinical Genetics,Chronic,Moderate,X-linked disorder leading to intellectual disability,Boys; carrier females,Autism; Anxiety; Macroorchidism
+DIS185,Hemophilia A,Clinical Genetics,Chronic,Severe,X-linked factor VIII deficiency,Boys; family history,Bleeding; Arthropathy; Intracranial hemorrhage
+DIS186,Sickle Cell Disease,Clinical Genetics,Chronic,Severe,Hemoglobinopathy causing sickle-shaped RBCs,African descent; children,Pain crises; Stroke; Infections
+DIS187,Trisomy 21 (Down Syndrome),Clinical Genetics,Chronic,Moderate,Chromosomal disorder with intellectual disability,All ethnicities; maternal age,Congenital heart disease; Alzheimer's risk; Leukemia
+DIS188,Marfan Syndrome,Clinical Genetics,Chronic,Moderate,Connective tissue disorder due to FBN1 mutation,Tall individuals; family history,Aortic aneurysm; Lens dislocation; Scoliosis
+DIS189,Huntington's Disease (already in Neuro, but okay), repeat? We'll skip.
+DIS190,Neurofibromatosis Type 1,Clinical Genetics,Chronic,Moderate,Tumor predisposition syndrome,Children; family history,Neurofibromas; Learning difficulties; Optic glioma
+DIS191,Turner Syndrome,Clinical Genetics,Chronic,Moderate,Monosomy X in females,Girls; short stature,Coarctation of aorta; Infertility; Hypothyroidism
+DIS192,Klinefelter Syndrome,Clinical Genetics,Chronic,Moderate,XXY syndrome in males,Boys; tall stature,Hypogonadism; Infertility; Gynecomastia
+DIS193,Phenylketonuria,Clinical Genetics,Chronic,Moderate,Inborn error of phenylalanine metabolism,Newborns; screened,Intellectual disability if untreated; Eczema
+DIS194,Gaucher Disease,Clinical Genetics,Chronic,Moderate,Lysosomal storage disorder,Ashkenazi Jews; children/adults,Hepatosplenomegaly; Bone pain; Cytopenias
+DIS195,Acute Lymphoblastic Leukemia,Oncology,Acute,Severe,Rapidly progressing cancer of lymphoid line,Children; adults >50,Infection; Bleeding; CNS involvement
+DIS196,Chronic Myeloid Leukemia,Oncology,Chronic,Moderate,Myeloproliferative neoplasm with Philadelphia chromosome,Adults; middle-aged,Blast crisis; Splenomegaly
+DIS197,Hairy Cell Leukemia,Oncology,Chronic,Moderate,Rare indolent B-cell malignancy,Men >50; rare,Pancytopenia; Splenomegaly; Infections
+DIS198,Waldenström Macroglobulinemia,Oncology,Chronic,Moderate,Lymphoplasmacytic lymphoma with IgM monoclonal gammopathy,Elderly; male,Hyperviscosity; Neuropathy; Anemia
+DIS199,Mantle Cell Lymphoma,Oncology,Chronic,Severe,Aggressive B-cell lymphoma,Men >60; advanced stage,Extranodal involvement; Poor prognosis
+DIS200,Burkitt Lymphoma,Oncology,Acute,Severe,Highly aggressive B-cell lymphoma,Children in Africa; immunocompromised,Jaw mass; Abdominal mass; CNS involvement
+DIS201,Mesothelioma (Pleural),Oncology,Chronic,Severe,Rare cancer of mesothelium due to asbestos,Adults >60; asbestos exposure,Chest pain; Dyspnea; Poor prognosis
+DIS202,Cholangiocarcinoma,Oncology,Chronic,Severe,Bile duct cancer,Adults >50; PSC; liver flukes,Jaundice; Liver failure; Metastasis
+DIS203,Gastric Adenocarcinoma,Oncology,Chronic,Severe,Stomach cancer,Adults >60; H. pylori; diet,Weight loss; Bleeding; Metastasis
+DIS204,Esophageal Squamous Cell Carcinoma,Oncology,Chronic,Severe,SCC of esophagus,Smoking; alcohol; developing countries,Dysphagia; Cachexia; Metastasis
+DIS205,Esophageal Adenocarcinoma,Oncology,Chronic,Severe,Adenocarcinoma of esophagus,Barrett's esophagus; white males,GERD; Dysphagia; Metastasis
+DIS206,Anal Canal Carcinoma,Oncology,Chronic,Moderate,SCC of anus,HPV infection; HIV; smoking,Bleeding; Pain; Metastasis to inguinal nodes
+DIS207,Vulvar Carcinoma,Oncology,Chronic,Moderate,SCC of vulva,Postmenopausal women; HPV,Itching; Bleeding; Inguinal node metastasis
+DIS208,Cervical Carcinoma (SCC),Oncology,Chronic,Severe,SCC of cervix,Women 30-50; HPV infection,Metastasis to pelvic nodes; Parametrial invasion
+DIS209,Endometrial Adenocarcinoma,Oncology,Chronic,Moderate,Cancer of uterine lining,Postmenopausal women; obesity; estrogen exposure,Vaginal bleeding; Myometrial invasion
+DIS210,Uterine Sarcoma,Oncology,Chronic,Severe,Rare uterine cancer,Women; all ages,Metastasis; Poor prognosis
+DIS211,Adrenocortical Carcinoma,Oncology,Chronic,Severe,Rare cancer of adrenal cortex,Children; adults,Hormone excess; Local invasion
+DIS212,Pheochromocytoma,Oncology,Chronic,Severe,Catecholamine-secreting tumor,Adults; familial syndromes,Hypertension; Palpitations; Stroke
+DIS213,Carcinoid Syndrome,Oncology,Chronic,Moderate,Neuroendocrine tumor secreting serotonin,Midgut carcinoid; metastatic,Flushing; Diarrhea; Valvular heart disease
+DIS214,Parathyroid Carcinoma,Oncology,Chronic,Severe,Rare cancer of parathyroid,Adults; severe hypercalcemia,Renal failure; Bone disease
+DIS215,Myelodysplastic Syndromes,Hematology,Chronic,Severe,Clonal stem cell disorder with cytopenias,Elderly; prior chemo,Acute myeloid leukemia; Infections
+DIS216,Aplastic Anemia,Hematology,Chronic,Severe,Bone marrow failure,Children; young adults; idiopathic; toxins,Pancytopenia; Infections; Bleeding
+DIS217,Hereditary Spherocytosis,Hematology,Chronic,Moderate,RBC membrane disorder,Children; family history,Gallstones; Hemolytic crises
+DIS218,Immune Thrombocytopenic Purpura,Hematology,Chronic,Moderate,Autoimmune destruction of platelets,Children (acute); adults (chronic),Bleeding; Fatigue
+DIS219,Von Willebrand Disease,Hematology,Chronic,Moderate,Most common inherited bleeding disorder,Both sexes; family history,Menorrhagia; Bleeding after surgery
+DIS220,Thrombotic Thrombocytopenic Purpura,Hematology,Acute,Severe,Microangiopathic hemolytic anemia with thrombocytopenia,Adults; female; ADAMTS13 deficiency,Neurologic symptoms; Renal failure
+DIS221,Disseminated Intravascular Coagulation,Hematology,Acute,Severe,Systemic activation of coagulation,Sepsis; trauma; obstetric complications,Bleeding; Thrombosis; Organ failure
+DIS222,Polycythemia Vera,Hematology,Chronic,Moderate,Myeloproliferative neoplasm with increased RBC mass,Adults >60; JAK2 mutation,Thrombosis; Pruritus; Transformation to AML
+DIS223,Essential Thrombocythemia,Hematology,Chronic,Moderate,Myeloproliferative neoplasm with high platelets,Adults >50; JAK2 mutation,Thrombosis; Bleeding; Transformation
+DIS224,Primary Myelofibrosis,Hematology,Chronic,Severe,Myeloproliferative neoplasm with bone marrow fibrosis,Adults >60; JAK2 mutation,Constitutional symptoms; Splenomegaly; Cytopenias
+DIS225,Amyloidosis (Primary),Hematology,Chronic,Severe,Extracellular deposition of amyloid fibrils,Adults >50; plasma cell dyscrasia,Cardiomyopathy; Nephrotic syndrome; Neuropathy
+DIS226,Mixed Connective Tissue Disease,Rheumatology,Chronic,Moderate,Overlap syndrome with features of SLE, scleroderma, polymyositis,Women 20-40; anti-RNP,Pulmonary hypertension; Arthritis; Raynaud's
+DIS227,Behçet's Disease,Rheumatology,Chronic,Moderate,Multi-system vasculitis with oral/genital ulcers,Young adults; Silk Road,Thrombosis; Uveitis; CNS involvement
+DIS228,Takayasu Arteritis,Rheumatology,Chronic,Severe,Granulomatous large vessel vasculitis,Young women; Asian,Vascular stenosis; Aneurysm; Stroke
+DIS229,Giant Cell Arteritis,Rheumatology,Chronic,Severe,Vasculitis of medium/large arteries in elderly,Adults >50; female,Blindness; Aortic aneurysm; Polymyalgia rheumatica
+DIS230,Polyarteritis Nodosa,Rheumatology,Chronic,Severe,Necrotizing vasculitis of medium arteries,Adults; HBV association,Mononeuritis multiplex; Renal involvement
+DIS231,IgG4-related Disease,Immunology,Chronic,Moderate,Fibroinflammatory condition with IgG4+ plasma cells,Men >50; Asian,Multi-organ (pancreas, salivary, retroperitoneum)
+DIS232,Common Variable Immunodeficiency,Immunology,Chronic,Severe,Primary immunodeficiency with low immunoglobulins,Children; adults,Recurrent infections; Autoimmunity; Granulomas
+DIS233,Severe Combined Immunodeficiency,Immunology,Acute,Severe,Genetic defect causing near-absence of T cells,Infants; SCID,Life-threatening infections; Failure to thrive
+DIS234,Wiskott-Aldrich Syndrome,Immunology,Chronic,Severe,X-linked primary immunodeficiency,Eczema; Thrombocytopenia; Infections,Boys; family history
+DIS235,Chronic Granulomatous Disease,Immunology,Chronic,Severe,Phagocyte defect leading to recurrent bacterial/fungal infections,Children; X-linked or AR,Granulomas; Abscesses; Infections
+DIS236,Hyper-IgE Syndrome,Immunology,Chronic,Moderate,Primary immunodeficiency with high IgE,Recurrent skin/lung abscesses; eczema; coarse facies,Children; autosomal dominant
+DIS237,Hereditary Angioedema,Immunology,Chronic,Moderate,C1 inhibitor deficiency causing recurrent angioedema,Adolescents; family history,Laryngeal edema; Abdominal pain
+DIS238,Mastocytosis (Systemic),Immunology,Chronic,Moderate,Clonal mast cell proliferation,Adults; KIT mutation,Anaphylaxis; Osteoporosis; GI symptoms
+DIS239,Allergic Rhinitis (Perennial),Allergy and Immunology,Chronic,Mild,IgE-mediated inflammation of nasal mucosa,Children; adults; atopic,Conjunctivitis; Asthma; Sinusitis
+DIS240,Food Allergy (Peanut),Allergy and Immunology,Chronic,Moderate,IgE-mediated hypersensitivity to peanut,Children; may persist,Anaphylaxis; Atopic dermatitis
+DIS241,Drug Allergy (Penicillin),Allergy and Immunology,Acute,Moderate,Immediate or delayed hypersensitivity to penicillin,Any age; prior exposure,Anaphylaxis; Stevens-Johnson syndrome
+DIS242,Anaphylaxis (Idiopathic),Allergy and Immunology,Acute,Severe,Severe life-threatening allergic reaction without identifiable trigger,Adults; female,Recurrent episodes; Hypotension
+DIS243,Urticaria (Acute),Allergy and Immunology,Acute,Mild,Wheals lasting <6 weeks due to allergen or infection,All ages; triggers,Angioedema; Anaphylaxis risk
+DIS244,Atopic March,Allergy and Immunology,Chronic,Mild,Progression from eczema to allergic rhinitis to asthma in childhood,Infants with atopic dermatitis,Asthma; Allergic rhinitis; Food allergy
+DIS245,Allergic Bronchopulmonary Mycosis,Pulmonology,Chronic,Moderate,Hypersensitivity to fungi in asthmatics,Adults with asthma; CF,Bronchiectasis; Fibrosis
+DIS246,Acute Chest Syndrome,Hematology,Acute,Severe,Life-threatening complication of sickle cell disease,Children with SCD; infection,Respiratory failure; Acute pain
+DIS247,Thalassemia Major,Hematology,Chronic,Severe,Severe beta-thalassemia requiring transfusions,Children; Mediterranean/Asian descent,Transfusion hemosiderosis; Growth retardation
+DIS248,Paroxysmal Nocturnal Hemoglobinuria,Hematology,Chronic,Severe,Acquired clonal stem cell disorder with complement-mediated hemolysis,Adults; thrombosis,Thrombosis; Bone marrow failure; Smooth muscle dystonia
+DIS249,Pure Red Cell Aplasia,Hematology,Chronic,Severe,Selective failure of erythropoiesis,Adults; associated with thymoma; drugs,Severe anemia; Transfusion dependence
+DIS250,Granulomatosis with Polyangiitis,Rheumatology,Chronic,Severe,ANCA-associated vasculitis with respiratory and renal involvement,Adults; Caucasian,Glomerulonephritis; Pulmonary nodules; ENT involvement
+DIS251,Eosinophilic Granulomatosis with Polyangiitis,Rheumatology,Chronic,Severe,ANCA-associated vasculitis with asthma and eosinophilia,Adults; asthma history,Mononeuritis multiplex; Cardiac involvement
+DIS252,Microscopic Polyangiitis,Rheumatology,Chronic,Severe,ANCA-associated vasculitis with pauci-immune glomerulonephritis,Adults; elderly,Rapidly progressive GN; Pulmonary hemorrhage
+DIS253,Anti-GBM Disease,Rheumatology,Acute,Severe,Goodpasture syndrome: antibodies against type IV collagen,Young men; elderly,Alveolar hemorrhage; Rapidly progressive GN
+DIS254,IgA Vasculitis (Henoch-Schönlein),Rheumatology,Acute,Moderate,Small-vessel vasculitis with IgA deposits,Children; post-infection,Purpura; Arthritis; Abdominal pain; Nephritis
+DIS255,Hereditary Hemorrhagic Telangiectasia,Clinical Genetics,Chronic,Moderate,Autosomal dominant disorder with telangiectasias and AVMs,Adults; family history,Epistaxis; GI bleeding; Stroke from AVM
+DIS256,Ehlers-Danlos Syndrome (Hypermobility),Clinical Genetics,Chronic,Moderate,Connective tissue disorder with joint hypermobility,Children; adults; female,Joint pain; Dislocations; Skin hyperextensibility
+DIS257,Osteopetrosis,Clinical Genetics,Chronic,Severe,Increased bone density due to osteoclast dysfunction,Children; autosomal recessive,Pathologic fractures; Bone marrow failure; Vision loss
+DIS258,Glycogen Storage Disease Type I,Clinical Genetics,Chronic,Severe,Deficiency of glucose-6-phosphatase,Infants; hepatomegaly,Hypoglycemia; Lactic acidosis; Gout
+DIS259,Maple Syrup Urine Disease,Clinical Genetics,Acute,Severe,Disorder of branched-chain amino acid metabolism,Newborns; autosomal recessive,Neurologic deterioration; Coma; Death
+DIS260,Homocystinuria,Clinical Genetics,Chronic,Moderate,Deficiency of cystathionine beta-synthase,Children; Marfanoid appearance,Ectopia lentis; Thrombosis; Intellectual disability
+DIS261,Acute Coronary Syndrome,Cardiology,Acute,Severe,Umbrella term for MI and unstable angina,Elderly; multiple risk factors,Arrhythmias; Heart failure; Cardiogenic shock
+DIS262,Prinzmetal Angina,Cardiology,Chronic,Moderate,Vasospastic angina,Younger; smokers; migraine,Arrhythmias; MI
+DIS263,Brugada Syndrome,Cardiology,Chronic,Severe,Genetic channelopathy causing risk of sudden death,Adults 30-40; male; Asian,Syncope; Sudden cardiac death
+DIS264,Catecholaminergic Polymorphic VT,Cardiology,Chronic,Severe,Genetic disorder causing exercise-induced arrhythmias,Children; young adults; family history,Syncope; Sudden death
+DIS265,Takotsubo Cardiomyopathy,Cardiology,Acute,Severe,Stress-induced transient LV dysfunction,Postmenopausal women; emotional stress,Heart failure; Arrhythmias; Recovery
+DIS266,Pericarditis (Acute),Cardiology,Acute,Moderate,Inflammation of pericardium,Young adults; post-MI; viral,Pericardial effusion; Constriction
+DIS267,Constrictive Pericarditis,Cardiology,Chronic,Moderate,Fibrotic thickening of pericardium limiting filling,Prior pericarditis; TB; radiation,Heart failure; Diastolic dysfunction
+DIS268,Infective Endocarditis (Subacute),Infectious Diseases,Subacute,Severe,Indolent heart valve infection,Prosthetic valves; prior damage; IVDU,Emboli; Heart failure; Glomerulonephritis
+DIS269,Rheumatic Fever,Infectious Diseases,Acute,Moderate,Post-streptococcal autoimmune complication,Children 5-15; developing countries,Carditis; Arthritis; Chorea; Erythema marginatum
+DIS270,Lyme Disease (Early Disseminated),Infectious Diseases,Acute,Moderate,Borreliosis with multiple erythema migrans and neurologic symptoms,Tick-exposed individuals; endemic areas,Cranial nerve palsy; Meningitis; Carditis
+DIS271,Babesiosis,Infectious Diseases,Acute,Severe,Malaria-like illness from Babesia parasite,Tick-exposed; asplenic; elderly,Hemolytic anemia; Multi-organ failure
+DIS272,Ehrlichiosis,Infectious Diseases,Acute,Severe,Tick-borne illness causing fever, cytopenias, hepatitis,Tick-exposed; immunocompromised,Severe sepsis; ARDS
+DIS273,Leptospirosis,Infectious Diseases,Acute,Severe,Zoonosis with hepatic and renal involvement,Flood exposure; farmers; sewage workers,Weil's disease: jaundice, renal failure
+DIS274,Brucellosis,Infectious Diseases,Chronic,Moderate,Zoonosis with undulant fever,Sheep/goat farmers; unpasteurized dairy,Arthritis; Endocarditis; Neurobrucellosis
+DIS275,Tetanus,Infectious Diseases,Acute,Severe,Neurotoxin from Clostridium tetani,Unvaccinated; contaminated wounds,Trismus; Autonomic instability; Respiratory failure
+DIS276,Botulism (Foodborne),Infectious Diseases,Acute,Severe,Neurotoxin from Clostridium botulinum,Home-canned foods; infant (honey),Descending paralysis; Respiratory failure
+DIS277,Anthrax (Cutaneous),Infectious Diseases,Acute,Moderate,Bacillus anthracis infection via skin,Animal handlers; bioterrorism,Eschar; Systemic dissemination
+DIS278,Plague (Bubonic),Infectious Diseases,Acute,Severe,Yersinia pestis infection,Endemic areas; flea bites,Buboes; Septicemic; Pneumonic
+DIS279,Tularemia,Infectious Diseases,Acute,Severe,Francisella tularensis infection,Tick bites; rabbits; rodents,Ulceroglandular; Pneumonia; Sepsis
+DIS280,Q Fever,Infectious Diseases,Acute,Moderate,Coxiella burnetii infection,Sheep/goat exposure; farmers,Hepatitis; Endocarditis; Chronic fatigue
+DIS281,Legionnaires' Disease,Infectious Diseases,Acute,Severe,Legionella pneumophila pneumonia,Exposure to water aerosols; elderly; smokers,Multi-organ failure; Hyponatremia
+DIS282,Psittacosis,Infectious Diseases,Acute,Severe,Chlamydia psittaci from birds,Bird owners; pet shop workers,Pneumonia; Splenomegaly; Neurologic
+DIS283,Histoplasmosis (Disseminated),Infectious Diseases,Acute,Severe,Fungal infection in endemic areas,Immunocompromised; Ohio River valley,Pneumonia; Hepatosplenomegaly; Adrenal insufficiency
+DIS284,Coccidioidomycosis (Valley Fever),Infectious Diseases,Acute,Moderate,Fungal infection in SW US,Immunocompetent; desert exposure,Pneumonia; Dissemination in immunocompromised
+DIS285,Blastomycosis,Infectious Diseases,Acute,Severe,Fungal infection in SE US,Outdoor activities; immunocompetent,Pneumonia; Skin lesions; Bone lesions
+DIS286,Aspergillosis (Invasive),Infectious Diseases,Acute,Severe,Angioinvasive aspergillus in neutropenic patients,Neutropenic; stem cell transplant,Lung infiltrates; Hemoptysis; CNS
+DIS287,Candidemia,Infectious Diseases,Acute,Severe,Bloodstream infection with Candida spp.,ICU patients; central line; broad antibiotics,Septic shock; Endophthalmitis; Deep abscess
+DIS288,Cryptococcosis (Meningitis),Infectious Diseases,Acute,Severe,Fungal meningitis in immunocompromised,HIV; transplant; cryptococcal antigen,Meningismus; Increased ICP
+DIS289,Mucormycosis (Rhinocerebral),Infectious Diseases,Acute,Severe,Angioinvasive fungal infection,Uncontrolled diabetes; neutropenia,Black eschar; Sinusitis; Cerebral involvement
+DIS290,Strongyloidiasis (Hyperinfection),Infectious Diseases,Acute,Severe,Nematode infection in immunocompromised,Immunosuppression; HTLV-1,Bacterial peritonitis; Sepsis; Pulmonary
+DIS291,Toxocariasis (Visceral Larva Migrans),Infectious Diseases,Acute,Moderate,Nematode infection from dogs/cats,Children; pica,Visceral inflammation; Eosinophilia
+DIS292,Trichinellosis,Infectious Diseases,Acute,Moderate,Nematode infection from undercooked pork,Eating raw/undercooked meat,Myositis; Periorbital edema; Eosinophilia
+DIS293,Cysticercosis (Neurocysticercosis),Infectious Diseases,Chronic,Severe,Taenia solium larval infection in CNS,Endemic areas; poor sanitation,Seizures; Hydrocephalus; Focal deficits
+DIS294,Echinococcosis (Hydatid Cyst),Infectious Diseases,Chronic,Moderate,Echinococcus larval cysts in liver/lung,Sheep farming areas; dog contact,Cyst rupture; Anaphylaxis
+DIS295,Schistosomiasis (Hepatosplenic),Infectious Diseases,Chronic,Severe,Parasitic infection with S. mansoni,Endemic freshwater exposure,Portal hypertension; Hematemesis; Bladder cancer (S. haematobium)
+DIS296,Leishmaniasis (Visceral),Infectious Diseases,Chronic,Severe,Parasitic infection of reticuloendothelial system,Endemic areas; poverty,Hepatosplenomegaly; Pancytopenia; Fever
+DIS297,African Trypanosomiasis,Infectious Diseases,Acute,Severe,Sleeping sickness from tsetse fly,Sub-Saharan Africa,Neurologic deterioration; Coma
+DIS298,Chagas Disease (Chronic),Infectious Diseases,Chronic,Severe,Trypanosoma cruzi infection,Central/South America; vector,Cardiomyopathy; Megaesophagus; Megacolon
+DIS299,Relapsing Fever,Infectious Diseases,Acute,Moderate,Borrelia infection from ticks/lice,Endemic areas; homeless,Febrile relapses; Jaundice; Bleeding
+DIS300,Rickettsialpox,Infectious Diseases,Acute,Mild,Rickettsia akari from mouse mites,Urban areas; housing,Eschar; Fever; Rash
+DIS301,Scrub Typhus,Infectious Diseases,Acute,Severe,Orientia tsutsugamushi from chiggers,Rural Asia; farmers,Eschar; Pneumonitis; Meningoencephalitis
+DIS302,Endemic Typhus (Murine),Infectious Diseases,Acute,Moderate,Rickettsia typhi from fleas,Rat-infested areas; urban,Fever; Rash; Hepatitis
+DIS303,Epidemic Typhus,Infectious Diseases,Acute,Severe,Rickettsia prowazekii from lice,War; refugee camps; cold,Severe headache; Rash; Multi-organ failure
+DIS304,Human Granulocytic Anaplasmosis,Infectious Diseases,Acute,Severe,Anaplasma phagocytophilum from ticks,Tick exposure; endemic,Fever; Cytopenias; Hepatitis
+DIS305,Human Monocytic Ehrlichiosis,Infectious Diseases,Acute,Severe,Ehrlichia chaffeensis from ticks,Tick exposure; South Central US,Fever; Cytopenias; Meningitis
+DIS306,Colorado Tick Fever,Infectious Diseases,Acute,Moderate,Reovirus from ticks,Rocky Mountains; tick exposure,Biphasic fever; Headache; Myalgia
+DIS307,Rift Valley Fever,Infectious Diseases,Acute,Severe,Phlebovirus from mosquitoes,Africa; livestock contact,Hemorrhagic fever; Encephalitis; Retinitis
+DIS308,Yellow Fever,Infectious Diseases,Acute,Severe,Flavivirus from mosquitoes in Africa/South America,Unvaccinated travelers; endemic,Hepatic necrosis; Hemorrhage; Renal failure
+DIS309,Dengue Fever (Classic),Infectious Diseases,Acute,Moderate,Flavivirus from Aedes mosquitoes,Tropics; rainy season,Fever; Rash; Myalgia; Retro-orbital pain
+DIS310,Chikungunya,Infectious Diseases,Acute,Moderate,Alphavirus from Aedes mosquitoes,Tropics; outbreaks,Symmetric polyarthritis; Fever; Rash
+DIS311,Zika Virus,Infectious Diseases,Acute,Mild,Flavivirus from Aedes mosquitoes,Tropics; pregnant women,Microcephaly in fetus; Guillain-Barré
+DIS312,West Nile Virus (Neuroinvasive),Infectious Diseases,Acute,Severe,Flavivirus from mosquitoes,Endemic areas; elderly,Meningitis; Encephalitis; Flaccid paralysis
+DIS313,St. Louis Encephalitis,Infectious Diseases,Acute,Severe,Flavivirus from mosquitoes,Central US; elderly,Encephalitis; Tremors; Seizures
+DIS314,Eastern Equine Encephalitis,Infectious Diseases,Acute,Severe,Alphavirus from mosquitoes,Atlantic/Gulf coasts; rare,Severe encephalitis; High mortality
+DIS315,Western Equine Encephalitis,Infectious Diseases,Acute,Severe,Alphavirus from mosquitoes,Western US; infants,Meningoencephalitis; Seizures
+DIS316,Venezuelan Equine Encephalitis,Infectious Diseases,Acute,Severe,Alphavirus from mosquitoes,Central/South America; epizootic,Encephalitis; Abortion in pregnancy
+DIS317,Japanese Encephalitis,Infectious Diseases,Acute,Severe,Flavivirus from mosquitoes in Asia,Endemic; children,Parkinsonism; Seizures; High mortality
+DIS318,Measles,Infectious Diseases,Acute,Severe,Paramyxovirus with rash and fever,Unvaccinated children; global,Pneumonia; Encephalitis; Subacute sclerosing panencephalitis
+DIS319,Mumps,Infectious Diseases,Acute,Moderate,Paramyxovirus causing parotitis,Unvaccinated children; young adults,Meningitis; Orchitis; Deafness
+DIS320,Rubella,Infectious Diseases,Acute,Mild,Togavirus with rash and fever,Unvaccinated; pregnant women,Congenital rubella syndrome; Arthritis
+DIS321,Varicella (Chickenpox),Infectious Diseases,Acute,Moderate,Primary VZV infection,Children; unvaccinated,Pneumonia; Cerebellar ataxia; Reye's with aspirin
+DIS322,Erythema Infectiosum (Fifth Disease),Infectious Diseases,Acute,Mild,Parvovirus B19,Children; adults,Aplastic crisis in sickle cell; Hydrops fetalis
+DIS323,Roseola Infantum,Infectious Diseases,Acute,Mild,HHV-6,Infants 6-24 months,Fever; Rash; Febrile seizures
+DIS324,Hand-Foot-and-Mouth Disease,Infectious Diseases,Acute,Mild,Coxsackievirus,Children <5; daycare,Vesicular rash; Dehydration; Rare meningitis
+DIS325,Herpangina,Infectious Diseases,Acute,Mild,Coxsackievirus,Children; summer,Fever; Oral ulcers; Sore throat
+DIS326,Infectious Mononucleosis,Infectious Diseases,Acute,Moderate,EBV,Adolescents; young adults,Fatigue; Splenomegaly; Airway obstruction
+DIS327,Cytomegalovirus (Mononucleosis-like),Infectious Diseases,Acute,Moderate,CMV,Immunocompetent; immunocompromised,Fever; Hepatitis; Pneumonitis in immunocompromised
+DIS328,Pertussis (Whooping Cough),Infectious Diseases,Acute,Moderate,Bordetella pertussis,Infants; unvaccinated,Paroxysmal cough; Apnea; Pneumonia
+DIS329,Diphtheria,Infectious Diseases,Acute,Severe,Corynebacterium diphtheriae,Unvaccinated; developing,Pseudomembrane; Myocarditis; Neuropathy
+DIS330,Tetanus (already listed), - skip
+DIS331,Haemophilus influenzae type b (Meningitis),Infectious Diseases,Acute,Severe,Hib meningitis,Unvaccinated children <5,Deafness; Brain damage; Death
+DIS332,Streptococcus pneumoniae (Invasive),Infectious Diseases,Acute,Severe,Pneumococcal bacteremia,Children; elderly; asplenia,Sepsis; Meningitis; Pneumonia
+DIS333,Neisseria meningitidis (Meningococcemia),Infectious Diseases,Acute,Severe,Meningococcal septicemia,Adolescents; college; military,Purpura fulminans; Shock; DIC
+DIS334,Listeriosis,Infectious Diseases,Acute,Severe,Listeria monocytogenes,Pregnant; elderly; immunocompromised,Neonatal sepsis; Meningitis; Abortion
+DIS335,Bacterial Vaginosis,Obstetrics and Gynecology,Acute,Mild,Alteration of vaginal flora,Reproductive-age women,Preterm birth; Pelvic inflammatory disease
+DIS336,Vulvovaginal Candidiasis,Obstetrics and Gynecology,Acute,Mild,Candida infection of vagina,Women; antibiotic use; diabetes,Recurrent infection; Discomfort
+DIS337,Trichomoniasis,Obstetrics and Gynecology,Acute,Moderate,STI caused by Trichomonas vaginalis,Sexually active women,Preterm birth; HIV risk
+DIS338,Chlamydia trachomatis (Cervicitis),Obstetrics and Gynecology,Acute,Moderate,STI causing cervicitis,Young sexually active women,PID; Infertility; Ectopic pregnancy
+DIS339,Gonorrhea,Obstetrics and Gynecology,Acute,Moderate,STI causing cervicitis/urethritis,Young adults,PID; Disseminated infection
+DIS340,HPV Infection (Low-risk),Obstetrics and Gynecology,Chronic,Low,Genital warts due to HPV 6/11,Sexually active,Recurrent warts; Psychosocial
+DIS341,HPV Infection (High-risk),Obstetrics and Gynecology,Chronic,High,Cervical dysplasia/cancer risk,Sexually active women,Progress to cervical cancer
+DIS342,Endometriosis,Obstetrics and Gynecology,Chronic,Moderate,Ectopic endometrial tissue,Women 25-40; nulliparity,Chronic pain; Infertility; Dyspareunia
+DIS343,Uterine Fibroids (Leiomyomas),Obstetrics and Gynecology,Chronic,Moderate,Benign smooth muscle tumors of uterus,Women 30-50; African descent,Menorrhagia; Pain; Infertility
+DIS344,Polycystic Ovary Syndrome (already in Endo), but okay
+DIS345,Menorrhagia (Dysfunctional Uterine Bleeding),Obstetrics and Gynecology,Chronic,Moderate,Heavy menstrual bleeding without organic cause,Adolescents; perimenopausal,Anemia; Fatigue; QoL impairment
+DIS346,Dysmenorrhea (Primary),Obstetrics and Gynecology,Chronic,Mild,Painful menstruation without pathology,Adolescents; young women,Missed school/work; Nausea
+DIS347,Premenstrual Dysphoric Disorder,Psychiatry,Chronic,Moderate,Severe mood symptoms before menses,Reproductive-age women,Depression; Anxiety; Impaired function
+DIS348,Menopause (Symptomatic),Obstetrics and Gynecology,Chronic,Mild,Physiologic cessation of menses with vasomotor symptoms,Women 45-55,Hot flashes; Vaginal dryness; Mood changes
+DIS349,Osteopenia,Endocrinology,Chronic,Low,Low bone mass preceding osteoporosis,Postmenopausal women; elderly,Progress to osteoporosis; Fracture risk
+DIS350,Sarcopenia,Geriatrics,Chronic,Moderate,Age-related loss of muscle mass and strength,Elderly; sedentary,Falls; Frailty; Disability
+DIS351,Frailty Syndrome,Geriatrics,Chronic,Severe,State of vulnerability to stressors,Elderly >75; comorbid,Disability; Hospitalization; Death
+DIS352,Dementia with Lewy Bodies,Neurology,Chronic,Severe,Progressive dementia with parkinsonism and hallucinations,Elderly; >65,Falls; Autonomic dysfunction; Psychosis
+DIS353,Frontotemporal Dementia,Neurology,Chronic,Severe,Early-onset dementia with behavioral changes,Adults 45-65; family history,Behavioral variant; Primary progressive aphasia
+DIS354,Vascular Dementia,Neurology,Chronic,Severe,Cognitive impairment due to cerebrovascular disease,Elderly with vascular risk factors,Stepwise decline; Focal signs; Depression
+DIS355,Normal Pressure Hydrocephalus,Neurology,Chronic,Moderate,Communicating hydrocephalus with gait disturbance, urinary incontinence, dementia,Elderly,Improvement with shunt
+DIS356,Chronic Subdural Hematoma,Neurology,Chronic,Severe,Accumulation of blood in subdural space,Elderly; fall; anticoagulants,Altered mental status; Focal deficits
+DIS357,Spinal Stenosis (Lumbar),Orthopedics,Chronic,Moderate,Narrowing of spinal canal causing neurogenic claudication,Elderly; degenerative,Pain; Weakness; Disability
+DIS358,Herniated Nucleus Pulposus (Lumbar),Orthopedics,Acute,Moderate,Disc herniation compressing nerve root,Young to middle-aged; lifting,Sciatica; Motor/sensory deficits
+DIS359,Cervical Spondylosis,Orthopedics,Chronic,Moderate,Age-related disc degeneration in neck,Elderly,Neck pain; Radiculopathy; Myelopathy
+DIS360,Rotator Cuff Tear,Orthopedics,Acute,Moderate,Tear of shoulder tendons,Overhead athletes; elderly,Pain; Weakness; Loss of motion
+DIS361,Osteoarthritis (Hip),Orthopedics,Chronic,Moderate,Degenerative joint disease of hip,Elderly; prior injury,Pain; Stiffness; Limp
+DIS362,Rheumatoid Arthritis (already in Rheum), skip
+DIS363,Gout (already in Rheum), skip
+DIS364,Fracture (Hip),Orthopedics,Acute,Severe,Break in proximal femur,Elderly with osteoporosis; fall,Immobility; Nonunion; Death
+DIS365,Fracture (Vertebral Compression),Orthopedics,Acute,Severe,Collapse of vertebral body,Osteoporotic elderly; trauma,Back pain; Kyphosis; Neurologic compromise
+DIS366,Osteomyelitis (Vertebral),Infectious Diseases,Acute,Severe,Spinal infection,IVDU; elderly; post-surgery,Spinal instability; Epidural abscess
+DIS367,Septic Arthritis (Knee),Infectious Diseases,Acute,Severe,Joint infection,Children; elderly; prosthetic joint,Destruction; Sepsis
+DIS368,Avascular Necrosis (Femoral Head),Orthopedics,Chronic,Severe,Death of bone tissue due to blood supply loss,Steroid use; alcohol; trauma,Collapse; Osteoarthritis
+DIS369,Paget's Disease of Bone,Endocrinology,Chronic,Moderate,Disordered bone remodeling leading to enlarged bones,Elderly; >50; Northern European,Bone pain; Deformity; High-output heart failure
+DIS370,Osteomalacia,Endocrinology,Chronic,Moderate,Softening of bones due to vitamin D deficiency,Elderly; malabsorption; lack of sun,Pain; Proximal weakness; Fractures
+DIS371,Fibromyalgia,Pain Medicine,Chronic,Moderate,Widespread pain with tender points and fatigue,Women 20-50; often with other syndromes,Depression; IBS; Sleep disturbance
+DIS372,Chronic Low Back Pain (Non-specific),Pain Medicine,Chronic,Moderate,Pain in lower back >3 months without specific cause,Adults; sedentary; obesity,Disability; Depression; Deconditioning
+DIS373,Complex Regional Pain Syndrome (Type I),Pain Medicine,Chronic,Severe,Regional pain with autonomic features after trauma,Adults; limb injury,Allodynia; Edema; Trophic changes
+DIS374,Postherpetic Neuralgia,Pain Medicine,Chronic,Moderate,Neuropathic pain after shingles,Elderly; after zoster,Persistent burning pain; Allodynia
+DIS375,Diabetic Neuropathy (Painful),Endocrinology,Chronic,Moderate,Peripheral nerve damage due to diabetes,Long-standing diabetes,Foot ulcers; Autonomic symptoms
+DIS376,Trigeminal Neuralgia (already in Neuro), skip
+DIS377,Phantom Limb Pain,Pain Medicine,Chronic,Moderate,Pain perceived in amputated limb,Amputees,Stump pain; Depression
+DIS378,Cancer Pain (Bone Metastasis),Pain Medicine,Chronic,Severe,Pain due to metastatic bone lesions,Advanced cancer patients,Impaired QoL; Anxiety
+DIS379,Chronic Migraine,Neurology,Chronic,Severe,Migraine occurring ≥15 days/month,Adults; female; overuse of meds,Medication overuse headache; Disability
+DIS380,Tension-Type Headache (Chronic),Neurology,Chronic,Moderate,Frequent episodes of tension headache,Adults; stress,Anxiety; Sleep disturbance
+DIS381,Medication Overuse Headache,Neurology,Chronic,Moderate,Headache caused by frequent analgesic use,Chronic pain patients; migraineurs,Withdrawal; Rebound
+DIS382,Cluster Headache (Chronic),Neurology,Chronic,Severe,Unremitting cluster attacks for >1 year without remission,Men; smokers,Suicide risk; Disability
+DIS383,Paroxysmal Hemicrania,Neurology,Chronic,Moderate,Severe unilateral headache with autonomic features,Adults; female,Indomethacin responsiveness; Misdiagnosis
+DIS384,SUNCT Syndrome,Neurology,Chronic,Severe,Short-lasting unilateral neuralgiform headache with autonomic symptoms,Rare; male,Suicidal ideation; Severe disability
+DIS385,Hemicrania Continua,Neurology,Chronic,Moderate,Continuous unilateral headache with fluctuations,Adults; female,Indomethacin responsiveness
+DIS386,Idiopathic Intracranial Hypertension,Neurology,Chronic,Moderate,Increased intracranial pressure without mass lesion,Obese women 20-40,Papilledema; Vision loss; Tinnitus
+DIS387,Pseudotumor Cerebri (already above)
+DIS388,Central Retinal Artery Occlusion,Ophthalmology,Acute,Severe,Sudden monocular vision loss from embolus,Elderly; vascular risk factors,Blindness; Neovascularization
+DIS389,Central Retinal Vein Occlusion,Ophthalmology,Acute,Severe,Retinal vein occlusion causing hemorrhagic retinopathy,Elderly; hypertension; glaucoma,Macular edema; Neovascular glaucoma
+DIS390,Anterior Ischemic Optic Neuropathy,Ophthalmology,Acute,Severe,Optic disc infarction due to vasculopathy,Elderly; giant cell arteritis (arteritic) or small vessel (non-arteritic),Vision loss; Disc edema
+DIS391,Optic Neuritis (already in Ophthal), skip
+DIS392,Thyroid Eye Disease,Endocrinology,Chronic,Moderate,Orbital inflammation in Graves',Women; smokers,Exophthalmos; Diplopia; Optic neuropathy
+DIS393,Uveitis (Intermediate),Ophthalmology,Chronic,Moderate,Inflammation of pars plana,Young adults; MS,Macular edema; Cataract
+DIS394,Uveitis (Posterior),Ophthalmology,Chronic,Severe,Choroiditis/retinitis,Toxoplasmosis; CMV; autoimmune,Scarring; Vision loss
+DIS395,Scleritis,Rheumatology,Chronic,Severe,Deep inflammation of sclera,Associated with rheumatoid arthritis; vasculitis,Pain; Perforation; Vision loss
+DIS396,Episcleritis,Ophthalmology,Acute,Mild,Benign inflammation of episclera,Young adults; often idiopathic,Discomfort; Recurrence
+DIS397,Keratoconus,Ophthalmology,Chronic,Moderate,Progressive corneal thinning,Adolescents; young adults; atopy,Irregular astigmatism; Corneal scarring
+DIS398,Fuchs' Dystrophy,Ophthalmology,Chronic,Moderate,Corneal endothelial dysfunction,Elderly; female,Corneal edema; Reduced vision
+DIS399,Pterygium,Ophthalmology,Chronic,Low,Fleshy growth on conjunctiva,Outdoor workers; UV exposure,Irritation; Visual axis obstruction
+DIS400,Chalazion,Ophthalmology,Chronic,Low,Lipogranuloma of meibomian gland,Adults; blepharitis,Lump; Rare infection
+DIS401,Blepharitis,Ophthalmology,Chronic,Low,Chronic eyelid inflammation,Adults; rosacea; seborrhea,Dry eye; Conjunctivitis; Styes
+DIS402,Dry Eye Syndrome,Ophthalmology,Chronic,Moderate,Qualitative or quantitative tear deficiency,Adults; elderly; autoimmune,Corneal damage; Visual disturbance
+DIS403,Allergic Conjunctivitis (Seasonal),Allergy and Immunology,Acute,Mild,IgE-mediated conjunctival inflammation,Atopic individuals; pollen season,Itching; Redness; Watering
+DIS404,Vernal Keratoconjunctivitis,Ophthalmology,Chronic,Moderate,Severe allergic eye disease in children,Boys in warm climates,Corneal shield ulcers; Vision loss
+DIS405,Atopic Keratoconjunctivitis,Ophthalmology,Chronic,Severe,Chronic allergic disease in adults with atopic dermatitis,Adults; atopic,Cataract; Keratoconus; Vision loss
+DIS406,Giant Papillary Conjunctivitis,Ophthalmology,Chronic,Moderate,Contact lens-related allergic response,Contact lens wearers; prostheses,Discomfort; Lens intolerance
+DIS407,Contact Lens-related Keratitis,Ophthalmology,Acute,Severe,Microbial keratitis in contact lens users,Contact lens wearers; poor hygiene,Corneal ulcer; Scarring; Vision loss
+DIS408,Corneal Ulcer (Bacterial),Ophthalmology,Acute,Severe,Infection of cornea,Contact lens; trauma; dry eye,Perforation; Endophthalmitis; Blindness
+DIS409,Endophthalmitis (Post-operative),Ophthalmology,Acute,Severe,Intraocular infection after surgery,Post-cataract; intravitreal injection,Panophthalmitis; Vision loss
+DIS410,Retinitis Pigmentosa,Ophthalmology,Chronic,Severe,Hereditary retinal degeneration,Children; young adults; family history,Tunnel vision; Night blindness; Legal blindness
+DIS411,Stargardt Disease,Ophthalmology,Chronic,Severe,Macular dystrophy in children,Children; adolescents; autosomal recessive,Central vision loss; Fundus flecks
+DIS412,Best Disease,Ophthalmology,Chronic,Moderate,Macular dystrophy with egg-yolk lesion,Children; young adults; autosomal dominant,Slow vision loss
+DIS413,Choroideremia,Ophthalmology,Chronic,Severe,X-linked retinal degeneration,Men; progressive night blindness,Legal blindness
+DIS414,Leber Congenital Amaurosis,Ophthalmology,Chronic,Severe,Severe retinal dystrophy in infancy,Infants; genetic,Blindness; Nystagmus
+DIS415,Usher Syndrome,Ophthalmology,Chronic,Severe,Combined retinitis pigmentosa and deafness,Children; autosomal recessive,Blindness; Deafness
+DIS416,Bardet-Biedl Syndrome,Clinical Genetics,Chronic,Severe,Ciliopathy with retinal dystrophy, polydactyly, obesity,Children; autosomal recessive,Progressive vision loss; Renal anomalies
+DIS417,Alström Syndrome,Clinical Genetics,Chronic,Severe,Ciliopathy with cone-rod dystrophy, obesity, deafness, cardiomyopathy,Infants; autosomal recessive,Multi-organ failure
+DIS418,Conductive Hearing Loss (Otosclerosis),Otorhinolaryngology,Chronic,Moderate,Stapes fixation causing conductive loss,Adults 20-40; female,Fixation; Tinnitus; Family history
+DIS419,Sudden Sensorineural Hearing Loss,Otorhinolaryngology,Acute,Severe,Idiopathic sudden hearing loss,Adults; often viral,Permanent hearing loss; Vertigo
+DIS420,Acoustic Neuroma (Vestibular Schwannoma),Otorhinolaryngology,Chronic,Moderate,Benign tumor of CN VIII,Adults 40-60; unilateral,Hearing loss; Tinnitus; Balance issues; Facial numbness
+DIS421,Cholesteatoma,Otorhinolaryngology,Chronic,Moderate,Keratinizing squamous epithelium in middle ear,Chronic otitis media; congenital,Bone erosion; Hearing loss; Intracranial complications
+DIS422,Mastoiditis (Acute),Otorhinolaryngology,Acute,Severe,Acute infection of mastoid air cells,Children; untreated otitis media,Subperiosteal abscess; Sigmoid sinus thrombosis; Meningitis
+DIS423,Peritonsillar Abscess (Quinsy),Otorhinolaryngology,Acute,Severe,Complication of tonsillitis with abscess,Adolescents; young adults,Trismus; Airway obstruction; Sepsis
+DIS424,Retropharyngeal Abscess,Otorhinolaryngology,Acute,Severe,Deep neck space infection,Children <5; adults with trauma,Airway compromise; Mediastinitis
+DIS425,Epiglottitis (Acute),Otorhinolaryngology,Acute,Severe,Life-threatening inflammation of epiglottis,Unvaccinated children; adults,Airway obstruction; Death
+DIS426,Laryngeal Papillomatosis (Recurrent),Otorhinolaryngology,Chronic,Moderate,HPV-related benign laryngeal tumors,Children; young adults,Hoarseness; Airway obstruction; Malignant transformation rare
+DIS427,Vocal Cord Paralysis (Unilateral),Otorhinolaryngology,Chronic,Moderate,Immobile vocal cord due to recurrent laryngeal nerve injury,Post-thyroidectomy; mediastinal tumor; idiopathic,Hoarseness; Aspiration; Dysphagia
+DIS428,Spasmodic Dysphonia,Otorhinolaryngology,Chronic,Moderate,Focal dystonia of larynx,Adults 30-50; female,Breathy or strangled voice; Social disability
+DIS429,Zenker's Diverticulum,Gastroenterology,Chronic,Moderate,Pharyngoesophageal diverticulum,Elderly; male,Dysphagia; Regurgitation; Aspiration pneumonia
+DIS430,Achalasia,Gastroenterology,Chronic,Moderate,Esophageal motility disorder with incomplete LES relaxation,Adults 30-60; idiopathic,Dysphagia; Regurgitation; Chest pain
+DIS431,Esophageal Spasm (Diffuse),Gastroenterology,Chronic,Moderate,Abnormal esophageal contractions,Adults; stress,Chest pain; Dysphagia
+DIS432,Gastroparesis (Diabetic),Gastroenterology,Chronic,Moderate,Delayed gastric emptying without obstruction,Long-standing diabetes; post-viral,Nausea; Vomiting; Early satiety
+DIS433,Functional Dyspepsia,Gastroenterology,Chronic,Mild,Upper abdominal discomfort without organic cause,Adults; stress,Epigastric pain; Bloating; Nausea
+DIS434,Cyclic Vomiting Syndrome,Gastroenterology,Chronic,Moderate,Episodic vomiting with symptom-free intervals,Children; adults; migraine history,Dehydration; Electrolyte imbalance
+DIS435,Small Intestinal Bacterial Overgrowth,Gastroenterology,Chronic,Moderate,Excess bacteria in small bowel,Post-surgery; IBS; elderly,Diarrhea; Malabsorption; Bloating
+DIS436,Exocrine Pancreatic Insufficiency,Gastroenterology,Chronic,Moderate,Insufficient pancreatic enzymes,Chronic pancreatitis; cystic fibrosis,Steatorrhea; Weight loss; Malnutrition
+DIS437,Acute Cholangitis,Gastroenterology,Acute,Severe,Infection of bile duct due to obstruction,Gallstones; stricture; stent,Charcot's triad; Sepsis; Liver abscess
+DIS438,Primary Biliary Cholangitis,Hepatology,Chronic,Severe,Chronic cholestatic liver disease,Women 40-60; AMA positive,Pruritus; Fatigue; Cirrhosis; Portal hypertension
+DIS439,Primary Sclerosing Cholangitis,Hepatology,Chronic,Severe,Chronic cholestatic disease with bile duct strictures,Men 30-50; IBD,Cholangiocarcinoma; Cirrhosis; Recurrent cholangitis
+DIS440,Autoimmune Hepatitis,Hepatology,Chronic,Severe,Immune-mediated liver inflammation,Women; any age,Arthralgia; Cirrhosis; Acute liver failure
+DIS441,Alcoholic Hepatitis,Hepatology,Acute,Severe,Acute liver inflammation due to alcohol,Chronic alcoholics; binge,Jaundice; Ascites; Variceal hemorrhage; Death
+DIS442,Hepatocellular Carcinoma,Hepatology,Chronic,Severe,Primary liver cancer,Cirrhosis; HBV/HCV; alcohol,Abdominal pain; Weight loss; Liver failure
+DIS443,Liver Metastases (Colorectal),Oncology,Chronic,Severe,Metastatic colorectal cancer to liver,Colorectal cancer patients,Jaundice; Ascites; Liver failure
+DIS444,Gilbert's Syndrome,Hepatology,Chronic,Low,Benign unconjugated hyperbilirubinemia,Young adults; stress,Intermittent jaundice; No treatment
+DIS445,Dubin-Johnson Syndrome,Hepatology,Chronic,Low,Conjugated hyperbilirubinemia due to defective excretion,Young adults; autosomal recessive,Chronic jaundice; Liver pigment
+DIS446,Rotor Syndrome,Hepatology,Chronic,Low,Conjugated hyperbilirubinemia similar to Dubin-Johnson,Rare; benign,Jaundice
+DIS447,Hereditary Hemochromatosis,Hepatology,Chronic,Severe,Iron overload disorder,Adults; Northern European,Diabetes; Cirrhosis; Cardiomyopathy; Arthropathy
+DIS448,Wilson's Disease,Hepatology,Chronic,Severe,Copper accumulation in liver and brain,Children; young adults; Kayser-Fleischer rings,Liver disease; Neurologic symptoms; Psychiatric
+DIS449,Alpha-1 Antitrypsin Deficiency,Pulmonology,Chronic,Severe,Deficiency leading to COPD and liver disease,Adults; Northern European,COPD; Cirrhosis; Panniculitis
+DIS450,Cystic Fibrosis Liver Disease,Pulmonology,Chronic,Severe,Hepatic manifestation of CF,Children; young adults with CF,Portal hypertension; Cirrhosis; Variceal bleed
+DIS451,Hereditary Spherocytosis (already in Hem), skip
+DIS452,Glucose-6-Phosphate Dehydrogenase Deficiency,Hematology,Acute,Moderate,RBC enzyme deficiency causing hemolytic anemia with oxidative stress,Mediterranean; African; Asian,Hemolytic crises; Neonatal jaundice
+DIS453,Pyruvate Kinase Deficiency,Hematology,Chronic,Moderate,RBC enzyme deficiency causing chronic hemolytic anemia,Any ethnicity; autosomal recessive,Gallstones; Transfusion dependence
+DIS454,Paroxysmal Cold Hemoglobinuria,Hematology,Acute,Moderate,Donath-Landsteiner antibody-mediated hemolysis,Children; post-viral,Hemoglobinuria; Anemia
+DIS455,Warm Autoimmune Hemolytic Anemia,Hematology,Chronic,Moderate,Autoimmune hemolysis with IgG antibodies,Adults; associated with SLE/CLL,Jaw-and-face
+DIS456,Cold Agglutinin Disease,Hematology,Chronic,Moderate,Autoimmune hemolysis with IgM antibodies,Elderly; post-Mycoplasma; lymphoma,Acrocyanosis; Hemoglobinuria
+DIS457,Drug-induced Hemolytic Anemia,Hematology,Acute,Moderate,Hemolysis due to drug antibodies,Any age; drug exposure (penicillin, cephalosporins),Anemia; Hemoglobinuria
+DIS458,Thrombotic Microangiopathy (Atypical HUS),Nephrology,Acute,Severe,Complement-mediated thrombotic microangiopathy,Children; adults; genetic,Acute kidney injury; Hypertension; Neurologic
+DIS459,Thrombotic Thrombocytopenic Purpura (already in Hem), skip
+DIS460,Hemolytic Uremic Syndrome (Typical),Nephrology,Acute,Severe,Shiga toxin-induced,Children; post-diarrheal,Acute kidney injury; Anemia; Thrombocytopenia
+DIS461,IgA Nephropathy (already in Nephro), skip
+DIS462,Alport Syndrome,Nephrology,Chronic,Severe,Hereditary nephritis with deafness and eye defects,Boys; X-linked,Progressive renal failure; Hearing loss; Lenticonus
+DIS463,Fabry Disease,Nephrology,Chronic,Severe,X-linked lysosomal storage disorder with renal, cardiac, neurologic involvement,Men; children,Neuropathic pain; Angiokeratomas; Renal failure
+DIS464,Nail-Patella Syndrome,Clinical Genetics,Chronic,Moderate,Autosomal dominant with nail and bone anomalies,Children; adults,Renal involvement; Glaucoma
+DIS465,Medullary Sponge Kidney,Nephrology,Chronic,Low,Congenital cystic dilation of renal collecting ducts,Adults; incidental,Nephrolithiasis; Urinary infection
+DIS466,Autosomal Dominant Tubulointerstitial Kidney Disease,Nephrology,Chronic,Severe,Hereditary interstitial nephritis,Adults; family history,Gout; Progressive CKD
+DIS467,Renal Tubular Acidosis (Distal),Nephrology,Chronic,Moderate,Impaired acid excretion by distal tubule,Children; adults; autoimmune,Nephrolithiasis; Rickets; Hypokalemia
+DIS468,Fanconi Syndrome (Proximal RTA),Nephrology,Chronic,Moderate,Generalized proximal tubule dysfunction,Children; adults; multiple causes,Hypophosphatemia; Osteomalacia; Glycosuria
+DIS469,Nephrogenic Diabetes Insipidus,Nephrology,Chronic,Moderate,Renal resistance to ADH,Boys (X-linked); lithium therapy,Polyuria; Hypernatremia; Dehydration
+DIS470,Acute Interstitial Nephritis,Nephrology,Acute,Severe,Inflammation of renal interstitium due to drugs/infection,Drug-induced (NSAIDs, antibiotics); infection,Acute kidney injury; Fever; Rash
+DIS471,Chronic Interstitial Nephritis,Nephrology,Chronic,Moderate,Chronic tubulointerstitial damage,Analgesic abuse; lead; Chinese herbs,Slowly progressive renal failure
+DIS472,Light Chain Deposition Disease,Nephrology,Chronic,Severe,Monoclonal immunoglobulin deposition in kidney,Multiple myeloma; MGUS,Nephrotic syndrome; Renal failure
+DIS473,Amyloidosis (Renal),Nephrology,Chronic,Severe,Amyloid deposits in kidney,AL amyloidosis; chronic inflammation,Nephrotic syndrome; Progressive CKD
+DIS474,Diabetic Nephropathy (already), skip
+DIS475,Hypertensive Nephrosclerosis (already), skip
+DIS476,FSGS (already), skip
+DIS477,Membranous Nephropathy (already), skip
+DIS478,Minimal Change Disease,Nephrology,Acute,Moderate,Nephrotic syndrome with foot process effacement,Children; young adults,Edema; Hypoalbuminemia; Infection risk
+DIS479,Post-streptococcal Glomerulonephritis,Nephrology,Acute,Moderate,Acute nephritis after strep infection,Children 2-10; developing world,Hypertension; Edema; Hematuria; Renal recovery
+DIS480,Rapidly Progressive Glomerulonephritis (Crescentic),Nephrology,Acute,Severe,Rapid loss of renal function with crescents,Any age; associated with vasculitis or anti-GBM,Oliguria; ESRD
+DIS481,Goodpasture Syndrome (already Anti-GBM)
+DIS482,Henoch-Schönlein Purpura Nephritis,Rheumatology,Acute,Moderate,IgA vasculitis with renal involvement,Children; adults,IgA nephropathy-like; Hypertension; Renal impairment
+DIS483,Lupus Nephritis,Rheumatology,Chronic,Severe,Renal involvement in SLE,Young women; SLE,Nephritic/nephrotic syndrome; ESRD
+DIS484,IgA Vasculitis (already)
+DIS485,Behçet's Disease (already)
+DIS486,Relapsing Polychondritis,Rheumatology,Chronic,Moderate,Episodic inflammation of cartilage,Adults; autoimmune,Auricular chondritis; Nasal deformity; Airway collapse
+DIS487,Sarcoidosis,Pulmonology,Chronic,Moderate,Multi-system non-caseating granulomas,Adults 20-40; African American,Lymphadenopathy; Pulmonary infiltrates; Skin lesions; Uveitis
+DIS488,Idiopathic Pulmonary Hemosiderosis,Pulmonology,Chronic,Severe,Rare cause of diffuse alveolar hemorrhage,Children; adults,Hemoptysis; Anemia; Pulmonary fibrosis
+DIS489,Pulmonary Alveolar Proteinosis,Pulmonology,Chronic,Moderate,Accumulation of surfactant in alveoli,Adults 30-50; smokers; autoantibodies to GM-CSF,Progressive dyspnea; Ground-glass opacities
+DIS490,Lymphangioleiomyomatosis (LAM),Pulmonology,Chronic,Severe,Rare cystic lung disease in women,Women childbearing age; TSC,Pneumothorax; Chylothorax; Progressive dyspnea
+DIS491,Postural Orthostatic Tachycardia Syndrome (POTS),Cardiology,Chronic,Moderate,Autonomic disorder with tachycardia on standing,Young women; post-viral,Fatigue; Syncope; Palpitations
+DIS492,Neurocardiogenic Syncope,Cardiology,Chronic,Moderate,Reflex syncope due to autonomic reflex,Young; triggers (standing, emotion),Recurrent syncope; Injury
+DIS493,Carotid Sinus Hypersensitivity,Cardiology,Chronic,Moderate,Exaggerated response to carotid massage,Elderly; male,Syncope; Falls; Pacemaker indicated
+DIS494,Sick Sinus Syndrome,Cardiology,Chronic,Severe,Sinus node dysfunction causing bradycardia/tachycardia,Elderly; fibrosis,Pacemaker needed; Tachy-brady syndrome
+DIS495,Atrial Flutter (Typical),Cardiology,Acute,Moderate,Macro-reentrant atrial tachycardia,Adults; structural heart disease,Palpitations; Thromboembolism; Heart failure
+DIS496,Wolff-Parkinson-White Syndrome,Cardiology,Chronic,Moderate,Accessory pathway causing pre-excitation and tachyarrhythmias,Young; healthy; may be incidental,Palpitations; Syncope; SCD risk
+DIS497,Long QT Syndrome (already)
+DIS498,Brugada Syndrome (already)
+DIS499,Catecholaminergic Polymorphic VT (already)
+DIS500,Arrhythmogenic Right Ventricular Cardiomyopathy,Cardiology,Chronic,Severe,Fibrofatty replacement of RV myocardium,Young adults; athletes; genetic,Ventricular arrhythmias; Sudden death
+DIS501,Left Ventricular Noncompaction,Cardiology,Chronic,Moderate,Rare cardiomyopathy with prominent trabeculations,Adults; genetic,Heart failure; Arrhythmias; Emboli
+DIS502,Endocardial Fibroelastosis,Cardiology,Chronic,Severe,Rare cause of restrictive cardiomyopathy in children,Infants; possibly viral,Heart failure; Death
+DIS503,Kawasaki Disease,Cardiology,Acute,Severe,Acute systemic vasculitis in children,Infants <5; Asian,Coronary artery aneurysms; Myocarditis
+DIS504,Acute Rheumatic Fever (already)
+DIS505,Chagas Cardiomyopathy (already)
+DIS506,Peripartum Cardiomyopathy,Cardiology,Acute,Severe,Heart failure in last month of pregnancy or postpartum,Women; peripartum,Thromboembolism; Recovery or progression
+DIS507,Stress Cardiomyopathy (Takotsubo) (already)
+DIS508,Myocarditis (Viral),Cardiology,Acute,Severe,Inflammation of heart muscle due to infection,Young adults; post-viral,Heart failure; Arrhythmias; Dilated cardiomyopathy
+DIS509,Cardiac Amyloidosis (AL),Cardiology,Chronic,Severe,Amyloid deposition in heart,Adults >60; AL amyloidosis,Restrictive cardiomyopathy; Heart failure; Arrhythmias
+DIS510,Cardiac Amyloidosis (ATTR),Cardiology,Chronic,Severe,Transthyretin amyloid deposition,Elderly; hereditary,Heart failure; Carpal tunnel syndrome; Neuropathy
+DIS511,Hemochromatosis Cardiomyopathy,Cardiology,Chronic,Severe,Iron overload cardiomyopathy,Hemochromatosis; multiple transfusions,Restrictive/dilated cardiomyopathy; Arrhythmias
+DIS512,Carcinoid Heart Disease,Cardiology,Chronic,Severe,Valvular lesions due to serotonin from carcinoid,Metastatic carcinoid,Right-sided valve disease; Heart failure
+DIS513,Endocarditis (Non-infective, Libman-Sacks),Rheumatology,Chronic,Moderate,Valvular vegetations in SLE or antiphospholipid syndrome,SLE; antiphospholipid,Embolic events; Valve dysfunction
+DIS514,Antiphospholipid Syndrome,Rheumatology,Chronic,Severe,Thrombophilia with arterial/venous thrombosis, pregnancy loss,Young adults; female; primary or secondary,Thrombosis; Miscarriage; Livedo reticularis
+DIS515,Thrombophilia (Hereditary),Hematology,Chronic,Moderate,Genetic predisposition to thrombosis (Factor V Leiden, Prothrombin mutation),Any age; family history,DVT; PE; Recurrent miscarriage
+DIS516,Protein C Deficiency,Hematology,Chronic,Severe,Deficiency of natural anticoagulant,Neonatal purpura fulminans; adults,Venous thrombosis; Warfarin-induced skin necrosis
+DIS517,Protein S Deficiency,Hematology,Chronic,Moderate,Deficiency of natural anticoagulant,Adults; family history,Venous thrombosis; Arterial thrombosis rare
+DIS518,Antithrombin Deficiency,Hematology,Chronic,Severe,Deficiency of natural anticoagulant,Adults; family history,Venous thrombosis; Heparin resistance
+DIS519,Paroxysmal Nocturnal Hemoglobinuria (already)
+DIS520,Myeloproliferative Neoplasm (already)
+DIS521,Chronic Neutrophilic Leukemia,Hematology,Chronic,Moderate,Rare myeloproliferative neoplasm,Adults >60; splenomegaly,Neutrophilia; Transformation to AML
+DIS522,Chronic Eosinophilic Leukemia,Hematology,Chronic,Severe,Clonal eosinophilia with organ damage,Adults; male,Cytogenetic abnormalities; Endomyocardial fibrosis
+DIS523,Hypereosinophilic Syndrome,Immunology,Chronic,Severe,Persistent eosinophilia with organ damage,Adults; male,Cardiac; Neurologic; Cutaneous; Pulmonary
+DIS524,Mast Cell Leukemia,Oncology,Acute,Severe,Aggressive form of systemic mastocytosis,Rare; poor prognosis,Anaphylaxis; Organ failure
+DIS525,Langerhans Cell Histiocytosis,Oncology,Chronic,Moderate,Clonal proliferation of Langerhans cells,Children; adults,Multisystem: bone, skin, lung, pituitary
+DIS526,Erdheim-Chester Disease,Oncology,Chronic,Severe,Rare non-Langerhans histiocytosis,Adults; >40,Bone pain; CNS; Cardiovascular; Retroperitoneal fibrosis
+DIS527,Rosaï-Dorfman Disease,Oncology,Chronic,Moderate,Sinus histiocytosis with massive lymphadenopathy,Children; young adults; cervical,Lymphadenopathy; Extranodal
+DIS528,Castleman Disease (Unicentric),Hematology,Chronic,Moderate,Benign lymphoproliferative disorder,Adults; hyaline vascular type,Asymptomatic mass; Resection cures
+DIS529,Castleman Disease (Multicentric),Hematology,Chronic,Severe,Systemic inflammatory syndrome due to HHV-8 or idiopathic,Adults; HIV; HHV-8,Constitutional symptoms; Cytopenias; Organ failure; POEMS
+DIS530,POEMS Syndrome,Hematology,Chronic,Severe,Paraneoplastic syndrome with polyneuropathy, organomegaly, endocrinopathy, monoclonal protein, skin changes,Adults; >50,Neuropathy; Sclerotic bone lesions; Thrombocytosis
+DIS531,TTR Amyloidosis (already)
+DIS532,Light Chain Amyloidosis (already)
+DIS533,Heavy Chain Disease,Hematology,Chronic,Severe,Rare lymphoproliferative disorder with heavy chain production,Adults; variable,Lymphadenopathy; Hepatosplenomegaly; Anemia
+DIS534,Waldenström Macroglobulinemia (already)
+DIS535,Monoclonal Gammopathy of Undetermined Significance (MGUS),Hematology,Chronic,Low,Asymptomatic paraproteinemia,Adults >50; elderly,Progression to myeloma or lymphoma
+DIS536,Smoldering Multiple Myeloma,Oncology,Chronic,Moderate,Asymptomatic with high paraprotein or bone marrow plasma cells,Adults >60,Progression to active myeloma
+DIS537,Multiple Myeloma (already)
+DIS538,Plasma Cell Leukemia,Oncology,Acute,Severe,Rare aggressive plasma cell dyscrasia,Adults; primary or secondary,Pancytopenia; Renal failure; Poor prognosis
+DIS539,Solitary Plasmacytoma (Bone),Oncology,Chronic,Moderate,Single bone lesion with plasma cells,Adults; >50,Local pain; Risk of progression
+DIS540,Extramedullary Plasmacytoma,Oncology,Chronic,Moderate,Single soft tissue plasma cell tumor,Adults; upper respiratory tract,Local symptoms; Progression risk
+DIS541,MALT Lymphoma (Gastric),Oncology,Chronic,Moderate,Extranodal marginal zone lymphoma associated with H. pylori,Adults; H. pylori infection,Abdominal pain; Bleeding; Responds to H. pylori eradication
+DIS542,Follicular Lymphoma,Oncology,Chronic,Moderate,Indolent B-cell lymphoma with follicular pattern,Adults >60; advanced stage,Asymptomatic lymphadenopathy; Spontaneous regression
+DIS543,Marginal Zone Lymphoma (Nodal),Oncology,Chronic,Moderate,Indolent B-cell lymphoma,Adults; autoimmune disease,Lymphadenopathy; Extranodal may occur
+DIS544,Splenic Marginal Zone Lymphoma,Oncology,Chronic,Moderate,Indolent lymphoma with splenomegaly,Adults; HCV association,Splenomegaly; Cytopenias; Fatigue
+DIS545,Lymphoplasmacytic Lymphoma (already Waldenström)
+DIS546,Mantle Cell Lymphoma (already)
+DIS547,Diffuse Large B-cell Lymphoma (already)
+DIS548,Burkitt Lymphoma (already)
+DIS549,Primary CNS Lymphoma,Oncology,Chronic,Severe,Diffuse large B-cell lymphoma confined to CNS,Immunocompromised; elderly,Neurologic deficits; Seizures; Mass lesion
+DIS550,Primary Effusion Lymphoma,Oncology,Acute,Severe,HHV-8-associated lymphoma in body cavities,HIV; effusions without mass,Pleural/peritoneal effusion; Poor prognosis
+DIS551,Anaplastic Large Cell Lymphoma,Oncology,Chronic,Severe,CD30+ T-cell lymphoma,Children; young adults; ALK+,Peripheral lymphadenopathy; Extranodal
+DIS552,Peripheral T-cell Lymphoma (NOS),Oncology,Chronic,Severe,Heterogeneous group of T-cell lymphomas,Adults; aggressive,Lymphadenopathy; Skin; Bone marrow; Poor prognosis
+DIS553,Angioimmunoblastic T-cell Lymphoma,Oncology,Chronic,Severe,EBV-associated T-cell lymphoma,Elderly; systemic symptoms,Lymphadenopathy; Rash; Polyclonal gammopathy; Autoimmune phenomena
+DIS554,Enteropathy-associated T-cell Lymphoma,Oncology,Acute,Severe,Complication of celiac disease,Adults with refractory celiac,Intestinal perforation; Obstruction; Malnutrition
+DIS555,Extranodal NK/T-cell Lymphoma (Nasal type),Oncology,Chronic,Severe,EBV-associated lymphoma with necrosis,Middle-aged; Asian; Central/South America,Nasal obstruction; Midline destruction; Hemophagocytosis
+DIS556,Mycosis Fungoides (Cutaneous T-cell),Oncology,Chronic,Moderate,Indolent cutaneous lymphoma,Adults >50; male,Patches; Plaques; Tumors; Sézary syndrome progression
+DIS557,Sézary Syndrome,Oncology,Chronic,Severe,Leukemic variant of cutaneous T-cell lymphoma,Adults; erythroderma,Generalized erythroderma; Lymphadenopathy; Pruritus
+DIS558,Primary Cutaneous Anaplastic Large Cell Lymphoma,Oncology,Chronic,Moderate,CD30+ cutaneous lymphoma,Adults; solitary or localized nodules,Spontaneous regression; Good prognosis
+DIS559,Subcutaneous Panniculitis-like T-cell Lymphoma,Oncology,Chronic,Severe,Rare cytotoxic T-cell lymphoma infiltrating subcutaneous tissue,Adults; autoimmune,Subcutaneous nodules; Hemophagocytic syndrome
+DIS560,Blastic Plasmacytoid Dendritic Cell Neoplasm,Oncology,Acute,Severe,Aggressive hematologic malignancy,Adults; elderly; skin lesions,Cutaneous; Leukemic dissemination; Poor prognosis
+DIS561,Acute Myeloid Leukemia (with maturation),Oncology,Acute,Severe,AML subtype with maturation,Adults; cytogenetics,Leukostasis; DIC; Infection
+DIS562,Acute Promyelocytic Leukemia,Oncology,Acute,Severe,AML M3 with t(15;17),Adults; young,Bleeding diathesis; DIC; APL differentiation syndrome
+DIS563,Acute Monoblastic Leukemia,Oncology,Acute,Severe,AML M5 with monocytic differentiation,Children; adults,Extramedullary infiltration; Gingival hyperplasia; CNS
+DIS564,Erythroleukemia,Oncology,Acute,Severe,Rare AML with erythroid predominance,Adults; elderly,Cytopenias; Bone marrow failure
+DIS565,Megakaryoblastic Leukemia,Oncology,Acute,Severe,AML with megakaryoblasts,Children (Down syndrome); adults,Myelofibrosis; Organomegaly
+DIS566,Acute Undifferentiated Leukemia,Oncology,Acute,Severe,Acute leukemia with no lineage differentiation,Adults; poor prognosis,Leukocytosis; Cytopenias; Early death
+DIS567,Mixed Phenotype Acute Leukemia,Oncology,Acute,Severe,Acute leukemia with both lymphoid and myeloid markers,Adults; children,High risk; Poor outcome
+DIS568,Blastic Plasmacytoid Dendritic Cell Neoplasm (already)
+DIS569,Chronic Myelomonocytic Leukemia,Oncology,Chronic,Severe,Myelodysplastic/myeloproliferative overlap,Elderly; splenomegaly,Monocytosis; Cytopenias; Transformation to AML
+DIS570,Juvenile Myelomonocytic Leukemia,Oncology,Chronic,Severe,Rare myeloproliferative neoplasm in children,Infants; young children; RAS pathway mutation,Organomegaly; Monocytosis; Poor prognosis
+DIS571,Chronic Eosinophilic Leukemia (already)
+DIS572,Chronic Neutrophilic Leukemia (already)
+DIS573,Systemic Mastocytosis (Indolent),Immunology,Chronic,Moderate,Clonal mast cell proliferation without organ damage,Adults; KIT mutation,Urticaria pigmentosa; Anaphylaxis; Osteoporosis
+DIS574,Systemic Mastocytosis (Aggressive),Immunology,Chronic,Severe,Mast cell infiltration causing organ dysfunction,Adults; KIT mutation,Cytopenias; Hepatosplenomegaly; Malabsorption
+DIS575,Mast Cell Sarcoma,Oncology,Acute,Severe,Rare solid mast cell tumor,Extremely rare,Local destruction; Metastasis
+DIS576,Myeloid Sarcoma,Oncology,Acute,Severe,Extramedullary tumor of myeloblasts,AML; prior or concurrent,Local mass; Cytopenias
+DIS577,Histiocytic Sarcoma,Oncology,Acute,Severe,Rare malignant proliferation of histiocytes,Adults; variable,Extranodal; Poor prognosis
+DIS578,Follicular Dendritic Cell Sarcoma,Oncology,Chronic,Moderate,Rare neoplasm of follicular dendritic cells,Adults; lymph node or extranodal,Slow-growing mass; Recurrence
+DIS579,Interdigitating Dendritic Cell Sarcoma,Oncology,Chronic,Moderate,Rare sarcoma,Adults; lymph node,Asymptomatic mass; Variable behavior
+DIS580,Langerhans Cell Sarcoma,Oncology,Acute,Severe,High-grade Langerhans cell neoplasm,Adults; aggressive,Multisystem; Poor prognosis
+DIS581,Rosai-Dorfman Disease (already)
+DIS582,Erdheim-Chester Disease (already)
+DIS583,IgG4-related Disease (already)
+DIS584,Castleman Disease (already)
+DIS585,POEMS Syndrome (already)
+DIS586,Tumor-induced Osteomalacia,Endocrinology,Chronic,Moderate,Rare paraneoplastic syndrome with renal phosphate wasting,Adults; mesenchymal tumors,Proximal weakness; Bone pain; Fractures
+DIS587,McCune-Albright Syndrome,Endocrinology,Chronic,Moderate,Polyostotic fibrous dysplasia, café-au-lait spots, precocious puberty,Children; girls; GNAS mutation,Fibrous dysplasia; Precocious puberty; Other endocrinopathies
+DIS588,Pseudohypoparathyroidism,Endocrinology,Chronic,Moderate,Resistance to PTH with characteristic features,Children; adults; Albright hereditary osteodystrophy,Hypocalcemia; Short stature; Subcutaneous ossifications
+DIS589,Pseudopseudohypoparathyroidism,Endocrinology,Chronic,Low,Phenotype of Albright hereditary osteodystrophy without hormone resistance,Adults; family history,Brachydactyly; Short stature; Obesity
+DIS590,Multiple Endocrine Neoplasia Type 1,Endocrinology,Chronic,Severe,Aut dominant syndrome with pituitary, parathyroid, pancreas tumors,Adults; family history,Hyperparathyroidism; Pancreatic NET; Pituitary adenoma
+DIS591,Multiple Endocrine Neoplasia Type 2A,Endocrinology,Chronic,Severe,Aut dominant with medullary thyroid CA, pheochromocytoma, hyperparathyroidism,Adults; family history,Risk of MTC; Pheochromocytoma
+DIS592,Multiple Endocrine Neoplasia Type 2B,Endocrinology,Chronic,Severe,More aggressive MEN2 with mucosal neuromas, marfanoid habitus,Children; young adults; RET mutation,Medullary thyroid CA; Pheochromocytoma; Mucosal neuromas
+DIS593,Von Hippel-Lindau Disease,Clinical Genetics,Chronic,Severe,Aut dominant with hemangioblastomas, renal cell CA, pheochromocytoma,Adults; family history,Retinal/CNS hemangioblastomas; RCC; Pheochromocytoma
+DIS594,Neurofibromatosis Type 2,Clinical Genetics,Chronic,Severe,Aut dominant with bilateral acoustic neuromas,Adults; family history,Vestibular schwannomas; Meningiomas; Cataracts
+DIS595,Tuberous Sclerosis Complex,Clinical Genetics,Chronic,Severe,Aut dominant with hamartomas in multiple organs,Children; TSC1/TSC2 mutations,Seizures; Angiofibromas; Renal angiomyolipomas; LAM
+DIS596,Sturge-Weber Syndrome,Clinical Genetics,Chronic,Moderate,Sporadic with facial port-wine stain and leptomeningeal angioma,Infants; GNAQ mutation,Glaucoma; Seizures; Stroke-like episodes
+DIS597,Hereditary Hemorrhagic Telangiectasia (already)
+DIS598,Blue Rubber Bleb Nevus Syndrome,Clinical Genetics,Chronic,Moderate,Rare with multiple venous malformations,Infants; adults,GI bleeding; Anemia; Pain
+DIS599,Klippel-Trenaunay Syndrome,Clinical Genetics,Chronic,Moderate,Congenital vascular malformation with limb overgrowth,Infants; sporadic,Port-wine stain; Varicosities; Limb hypertrophy
+DIS600,Proteus Syndrome,Clinical Genetics,Chronic,Severe,Rare overgrowth syndrome,Infants; AKT1 mutation,Progressive asymmetric overgrowth; Tumor risk
+DIS601,Long QT Syndrome Type 1,Cardiology,Chronic,Severe,Channelopathy affecting KCNQ1 gene leading to prolonged QT interval and arrhythmias,Children/young adults; triggered by exercise,Syncope; Sudden cardiac death
+DIS602,Long QT Syndrome Type 2,Cardiology,Chronic,Severe,Channelopathy affecting KCNH2 gene; arrhythmias triggered by emotions or startle,Adolescents; adults,Syncope; Sudden death; auditory triggers
+DIS603,Long QT Syndrome Type 3,Cardiology,Chronic,Severe,SCN5A mutation causing late sodium current; arrhythmias during sleep,Adults; bradycardia,Life-threatening arrhythmias
+DIS604,Catecholaminergic Polymorphic Ventricular Tachycardia,Cardiology,Chronic,Severe,Ryanodine receptor mutation causing bidirectional VT with exercise,Children; young adults,Syncope; Sudden death
+DIS605,Brugada Syndrome,Cardiology,Chronic,Severe,SCN5A mutation causing ST elevation in V1-V3 and risk of ventricular fibrillation,Men 30-40; Asian descent,Syncope; Sudden nocturnal death
+DIS606,Arrhythmogenic Right Ventricular Cardiomyopathy,Cardiology,Chronic,Severe,Fibrofatty replacement of RV myocardium; desmosomal mutations,Young adults; athletes,Ventricular arrhythmias; Heart failure
+DIS607,Left Ventricular Noncompaction,Cardiology,Chronic,Moderate,Prominent trabeculations due to arrested myocardial development,Infants; adults,Heart failure; Thromboembolism; Arrhythmias
+DIS608,Restrictive Cardiomyopathy (Idiopathic),Cardiology,Chronic,Severe,Impaired ventricular filling with normal wall thickness,Adults; elderly,Heart failure; Atrial fibrillation; Thromboembolism
+DIS609,Cardiac Amyloidosis (ATTR wild-type),Cardiology,Chronic,Severe,Transthyretin amyloid deposition in elderly,Men >70; carpal tunnel syndrome,Heart failure; Neuropathy; Atrial fibrillation
+DIS610,Cardiac Amyloidosis (ATTR hereditary),Cardiology,Chronic,Severe,Mutant TTR amyloidosis,Portuguese; Swedish; Japanese descent,Neuropathy; Cardiomyopathy; Autonomic dysfunction
+DIS611,Fabry Disease (Cardiac variant),Cardiology,Chronic,Moderate,Alpha-galactosidase A deficiency leading to LVH and conduction abnormalities,Men 40-50; women carriers,LVH; Kidney disease; Stroke
+DIS612,Danon Disease,Cardiology,Chronic,Severe,LAMP-2 mutation causing hypertrophic cardiomyopathy and skeletal myopathy,Boys; young men,Cardiomyopathy; Intellectual disability; Myopathy
+DIS613,Pompe Disease (Late-onset),Cardiology,Chronic,Moderate,Acid alpha-glucosidase deficiency causing glycogen accumulation in heart and muscle,Children; adults,Proximal weakness; Respiratory failure; Cardiomyopathy
+DIS614,Erdheim-Chester Disease (Cardiac),Cardiology,Chronic,Severe,Non-Langerhans histiocytosis with cardiac involvement,Adults 40-70; male,Pericardial infiltration; Heart failure; Atrial mass
+DIS615,Kawasaki Disease (Acute),Cardiology,Acute,Severe,Acute systemic vasculitis in children causing coronary aneurysms,Infants <5; Asian,Coronary artery aneurysms; Myocarditis; Arthritis
+DIS616,Acute Rheumatic Fever (Carditis),Cardiology,Acute,Severe,Post-streptococcal autoimmune complication with pancarditis,Children 5-15; developing countries,Valvular regurgitation; Heart failure; Chorea
+DIS617,Infective Endocarditis (Right-sided),Cardiology,Acute,Severe,Infection of tricuspid valve in IV drug users,IV drug users; young adults,Septic pulmonary emboli; Sepsis; Heart failure
+DIS618,Nonbacterial Thrombotic Endocarditis,Cardiology,Acute,Moderate,Sterile vegetations in hypercoagulable states (cancer, SLE),Adults with malignancy; SLE,Embolic events; Stroke
+DIS619,Carcinoid Heart Disease,Cardiology,Chronic,Severe,Valvular lesions due to serotonin from metastatic carcinoid,Metastatic carcinoid tumor,Right-sided valve regurgitation; Heart failure
+DIS620,Cardiac Tumors (Myxoma),Cardiology,Chronic,Moderate,Benign primary cardiac tumor (left atrium),Adults 30-60; female,Embolism; Obstruction; Constitutional symptoms
+DIS621,Cardiac Tumors (Sarcoma),Cardiology,Acute,Severe,Malignant primary cardiac tumor,Adults; poor prognosis,Heart failure; Arrhythmias; Metastasis
+DIS622,Pericarditis (Constrictive),Cardiology,Chronic,Moderate,Fibrotic thickening of pericardium limiting filling,Prior cardiac surgery; TB; radiation,Diastolic heart failure; Edema; Ascites
+DIS623,Pericardial Effusion (Malignant),Cardiology,Acute,Severe,Pericardial fluid due to metastatic cancer,Lung cancer; breast cancer; lymphoma,Tamponade; Dyspnea; Chest pain
+DIS624,Myocarditis (Giant Cell),Cardiology,Acute,Severe,Autoimmune myocarditis with multinucleated giant cells,Adults; rapidly progressive,Heart failure; Ventricular arrhythmias; Death
+DIS625,Myocarditis (Eosinophilic),Cardiology,Acute,Severe,Hypersensitivity or parasitic myocarditis,Adults; drug reaction; hypereosinophilic syndrome,Heart failure; Restrictive physiology
+DIS626,Chagas Cardiomyopathy,Cardiology,Chronic,Severe,Chronic Trypanosoma cruzi infection causing cardiomyopathy,Latin American immigrants,Heart failure; Thromboembolism; Megaesophagus
+DIS627,HIV-associated Cardiomyopathy,Cardiology,Chronic,Moderate,Dilated cardiomyopathy in HIV patients,HIV patients; low CD4,Heart failure; Opportunistic infections
+DIS628,Peripartum Cardiomyopathy,Cardiology,Acute,Severe,Heart failure in last month of pregnancy or postpartum,Women; peripartum; African descent,Thromboembolism; Recovery or progression
+DIS629,Stress Cardiomyopathy (Takotsubo),Cardiology,Acute,Moderate,Transient LV dysfunction triggered by stress,Postmenopausal women; emotional stress,Heart failure; Arrhythmias; Recovery
+DIS630,Coronary Vasospasm (Prinzmetal Angina),Cardiology,Chronic,Moderate,Episodic vasospasm of coronary arteries,Younger; smokers; migraine,Angina at rest; Arrhythmias; MI
+DIS631,Myocardial Bridging,Cardiology,Chronic,Low,Congenital band of muscle overlying coronary artery,Young adults; hypertrophic cardiomyopathy,Angina; Ischemia; Arrhythmias
+DIS632,Anomalous Coronary Artery,Cardiology,Chronic,Moderate,Aberrant origin of coronary artery,Children; young adults; athletes,Myocardial ischemia; Sudden death
+DIS633,Spontaneous Coronary Artery Dissection,Cardiology,Acute,Severe,Non-iatrogenic dissection of coronary artery,Women; peripartum; fibromuscular dysplasia,Acute MI; Sudden death
+DIS634,Coronary Artery Fistula,Cardiology,Chronic,Low,Abnormal connection between coronary artery and chamber/vessel,Incidental; children,Steal phenomenon; Heart failure; Endocarditis
+DIS635,Kounis Syndrome,Cardiology,Acute,Moderate,Allergic acute coronary syndrome,Adults with allergy; mastocytosis,Chest pain; Hypotension; Urticaria
+DIS636,Hypertensive Emergency,Cardiology,Acute,Severe,Severe hypertension with acute target organ damage,Adults with uncontrolled HTN; medication nonadherence,Stroke; AKI; Aortic dissection; Encephalopathy
+DIS637,Hypertensive Urgency,Cardiology,Acute,Moderate,Severe hypertension without acute target organ damage,Adults; nonadherence,Asymptomatic; need for BP control
+DIS638,Pulmonary Hypertension (Group 1 - PAH),Cardiology,Chronic,Severe,Idiopathic or heritable PAH,Women 30-60; BMPR2 mutation,Right heart failure; Syncope; Raynaud's
+DIS639,Pulmonary Hypertension (Group 2 - Left Heart),Cardiology,Chronic,Moderate,PH due to left heart disease,Elderly with HFpEF or HFrEF,Dyspnea; Fatigue; Volume overload
+DIS640,Pulmonary Hypertension (Group 3 - Lung Disease),Pulmonology,Chronic,Moderate,PH due to COPD or ILD,Smokers; ILD patients,Dyspnea; Hypoxemia; Cor pulmonale
+DIS641,Pulmonary Hypertension (Group 4 - CTEPH),Cardiology,Chronic,Severe,Chronic thromboembolic PH,Prior PE; DVT,Dyspnea; Right heart failure; Hemoptysis
+DIS642,Pulmonary Hypertension (Group 5 - Miscellaneous),Cardiology,Chronic,Moderate,PH due to sarcoid, vasculitis, etc.,Underlying condition,Variable
+DIS643,Acute Pulmonary Embolism (Massive),Cardiology,Acute,Severe,PE with hypotension or shock,Post-surgery; immobility; cancer,Cardiogenic shock; RV failure; Death
+DIS644,Acute Pulmonary Embolism (Submassive),Cardiology,Acute,Severe,PE with RV dysfunction but stable BP,As above,RV dysfunction; Risk of decompensation
+DIS645,Chronic Thromboembolic Disease,Cardiology,Chronic,Moderate,Persistent perfusion defects without PH,After PE,Dyspnea; Exercise intolerance
+DIS646,Superior Vena Cava Syndrome,Cardiology,Acute,Severe,Obstruction of SVC by tumor or thrombosis,Lung cancer; lymphoma; thrombotic,Facial edema; Dyspnea; Cerebral edema
+DIS647,Aortic Aneurysm (Thoracic),Cardiology,Chronic,Severe,Dilation of thoracic aorta,Smokers; hypertensive; Marfan,Rupture; Dissection; Aortic regurgitation
+DIS648,Aortic Aneurysm (Abdominal),Cardiology,Chronic,Severe,Dilation of infrarenal aorta,Men >65; smokers,Rupture; Embolization; Compression
+DIS649,Aortic Dissection (Type A),Cardiology,Acute,Severe,Acute dissection involving ascending aorta,Hypertensive; connective tissue disorder; bicuspid valve,Cardiac tamponade; MI; Stroke; Death
+DIS650,Aortic Dissection (Type B),Cardiology,Acute,Severe,Acute dissection limited to descending aorta,Hypertensive; elderly,Malperfusion; Rupture; Chronic dissection
+DIS651,Intramural Hematoma,Cardiology,Acute,Severe,Hematoma within aortic wall without intimal tear,Hypertensive; elderly,Progression to dissection; Rupture
+DIS652,Penetrating Aortic Ulcer,Cardiology,Acute,Severe,Ulceration through intima into media,Atherosclerotic; elderly,Rupture; Dissection; Pseudoaneurysm
+DIS653,Marfan Syndrome (Aortic),Cardiology,Chronic,Severe,FBN1 mutation leading to aortic root dilation,Tall individuals; family history,Aortic dissection; Mitral prolapse; Lens dislocation
+DIS654,Loeys-Dietz Syndrome,Cardiology,Chronic,Severe,TGFBR mutation causing aggressive aortic disease,Children; young adults; hypertelorism,Aortic dissection; Arterial tortuosity; Cleft palate
+DIS655,Ehlers-Danlos Syndrome (Vascular type),Cardiology,Chronic,Severe,COL3A1 mutation with arterial fragility,Thin skin; easy bruising; characteristic facies,Arterial rupture; Organ rupture; Pneumothorax
+DIS656,Takayasu Arteritis (Aortic involvement),Cardiology,Chronic,Severe,Granulomatous large vessel vasculitis,Young women; Asian,Aortic stenosis; Aneurysm; Stroke
+DIS657,Giant Cell Arteritis (Aortic involvement),Cardiology,Chronic,Severe,Vasculitis of aorta in elderly,Adults >50; female,Aortic aneurysm; Dissection; Blindness
+DIS658,Behçet's Disease (Vascular),Rheumatology,Chronic,Severe,Vasculitis with venous thrombosis and arterial aneurysms,Young adults; Mediterranean,Venous thrombosis; Pulmonary artery aneurysm
+DIS659,Cogan's Syndrome,Rheumatology,Chronic,Moderate,Autoimmune disease with interstitial keratitis and audiovestibular symptoms,Young adults; autoimmune,Aortitis; Hearing loss; Vision loss
+DIS660,Relapsing Polychondritis (Cardiovascular),Rheumatology,Chronic,Moderate,Episodic cartilage inflammation with aortic involvement,Adults; autoimmune,Aortic regurgitation; Aneurysm; Valvulitis
+DIS661,Antiphospholipid Syndrome (Catastrophic),Hematology,Acute,Severe,Rapid multi-organ thrombosis due to antiphospholipid antibodies,Adults; SLE; post-surgery,Microthrombosis; ARDS; Renal failure; Death
+DIS662,Thrombotic Storm,Hematology,Acute,Severe,Rare syndrome of recurrent thrombosis despite anticoagulation,Adults; underlying thrombophilia,Recurrent DVT/PE; Gangrene; Organ failure
+DIS663,Heparin-Induced Thrombocytopenia (HIT),Hematology,Acute,Severe,Immune-mediated thrombocytopenia with thrombosis post-heparin exposure,Hospitalized; post-surgery; heparin use,Venous/arterial thrombosis; Skin necrosis; Amputation
+DIS664,Paroxysmal Nocturnal Hemoglobinuria (Thrombosis),Hematology,Chronic,Severe,Complement-mediated hemolysis with high thrombosis risk,Adults; abdominal pain; hemoglobinuria,Hepatic vein thrombosis; Stroke; Pulmonary embolism
+DIS665,Essential Thrombocythemia (Thrombosis),Hematology,Chronic,Moderate,Myeloproliferative neoplasm with high platelets and thrombosis risk,Adults >50; JAK2 mutation,Arterial/venous thrombosis; Hemorrhage; Transformation
+DIS666,Polycythemia Vera (Thrombosis),Hematology,Chronic,Severe,Increased RBC mass with high thrombosis risk,Adults >60; JAK2 mutation,Thrombosis; Hemorrhage; Pruritus; Gout
+DIS667,Sickle Cell Disease (Thrombosis),Hematology,Chronic,Severe,Vaso-occlusive crises and thrombosis risk,African descent; children,Pain crises; Stroke; Pulmonary hypertension
+DIS668,Thalassemia Intermedia (Thrombosis),Hematology,Chronic,Moderate,Chronic hemolytic anemia with increased thrombosis risk,Mediterranean descent; splenectomy,Pulmonary embolism; Leg ulcers; Osteoporosis
+DIS669,Immune Thrombocytopenia (ITP) - Adult,Hematology,Chronic,Moderate,Autoimmune destruction of platelets,Adults; female,Bleeding; Fatigue; Intracranial hemorrhage (rare)
+DIS670,Thrombotic Thrombocytopenic Purpura (TTP) - Acquired,Hematology,Acute,Severe,ADAMTS13 deficiency causing microthrombi,Adults; female; obesity,Neurologic symptoms; Renal failure; Fever
+DIS671,Thrombotic Thrombocytopenic Purpura (TTP) - Congenital,Hematology,Chronic,Severe,Upshaw-Schulman syndrome; ADAMTS13 mutation,Neonates; children; triggered by stress,Episodic thrombocytopenia; Hemolysis; Stroke
+DIS672,Atypical Hemolytic Uremic Syndrome (aHUS),Nephrology,Acute,Severe,Complement-mediated TMA,Children; adults; complement mutations,AKI; Hypertension; Thrombotic microangiopathy
+DIS673,Shiga Toxin-associated HUS (STEC-HUS),Nephrology,Acute,Severe,Post-diarrheal HUS from E. coli O157:H7,Children; outbreaks,AKI; Anemia; Thrombocytopenia
+DIS674,IgA Vasculitis (Henoch-Schönlein Purpura) Nephritis,Rheumatology,Acute,Moderate,IgA vasculitis with renal involvement,Children; post-infection,IgA nephropathy-like; Hypertension; Renal impairment
+DIS675,ANCA-associated Vasculitis (Granulomatosis with Polyangiitis) - Renal,Rheumatology,Chronic,Severe,Necrotizing glomerulonephritis with respiratory involvement,Adults; Caucasian,RPGN; Pulmonary hemorrhage; Sinusitis
+DIS676,ANCA-associated Vasculitis (Microscopic Polyangiitis) - Renal,Rheumatology,Chronic,Severe,Pauci-immune glomerulonephritis,Adults; elderly,RPGN; Pulmonary hemorrhage; Mononeuritis multiplex
+DIS677,ANCA-associated Vasculitis (Eosinophilic Granulomatosis with Polyangiitis) - Renal,Rheumatology,Chronic,Moderate,Necrotizing vasculitis with asthma and eosinophilia,Adults; asthma,RPGN; Neuropathy; Cardiac involvement
+DIS678,Anti-GBM Disease (Goodpasture Syndrome) - Renal,Rheumatology,Acute,Severe,Anti-GBM antibodies causing crescentic GN and alveolar hemorrhage,Young men; elderly,RPGN; Pulmonary hemorrhage; Rapid progression
+DIS679,Lupus Nephritis (Class III),Rheumatology,Chronic,Severe,Focal proliferative GN in SLE,Young women; SLE,Hypertension; Proteinuria; ESRD
+DIS680,Lupus Nephritis (Class IV),Rheumatology,Chronic,Severe,Diffuse proliferative GN,As above,Nephritic syndrome; Rapid progression
+DIS681,Lupus Nephritis (Class V),Rheumatology,Chronic,Moderate,Membranous GN,Nephrotic syndrome; Thrombosis
+DIS682,IgA Nephropathy (Berger's Disease),Nephrology,Chronic,Moderate,IgA deposits in mesangium,Young adults; post-infection,Hematuria; Hypertension; CKD
+DIS683,IgA Nephropathy (with crescentic),Nephrology,Acute,Severe,Rapidly progressive IgA nephropathy,As above,RPGN; Renal failure
+DIS684,Membranous Nephropathy (Primary),Nephrology,Chronic,Moderate,PLA2R antibody-mediated,Adults; >40,Nephrotic syndrome; Thrombosis; ESRD
+DIS685,Membranous Nephropathy (Secondary),Nephrology,Chronic,Moderate,Associated with SLE, malignancy, drugs,Underlying condition,Nephrotic syndrome; Manage underlying cause
+DIS686,Focal Segmental Glomerulosclerosis (Primary),Nephrology,Chronic,Severe,Podocytopathy causing scarring,Black ethnicity; young adults,Nephrotic syndrome; CKD
+DIS687,Focal Segmental Glomerulosclerosis (Secondary),Nephrology,Chronic,Moderate,Adaptive form due to obesity, reflux, HIV,Obese; HIV; reflux,Nephrotic range proteinuria; Hypertension
+DIS688,Minimal Change Disease (Adult),Nephrology,Acute,Moderate,Foot process effacement causing nephrotic syndrome,Adults; NSAIDs; Hodgkin's,Edema; Hypoalbuminemia; Infection risk
+DIS689,Minimal Change Disease (Child),Nephrology,Acute,Moderate,Idiopathic nephrotic syndrome in children,Children 2-6; male,Edema; Peritonitis; Relapses
+DIS690,Amyloidosis (AL) - Renal,Nephrology,Chronic,Severe,Light chain amyloid deposits in kidney,Multiple myeloma; MGUS,Nephrotic syndrome; CKD
+DIS691,Amyloidosis (AA) - Renal,Nephrology,Chronic,Severe,Serum amyloid A deposits in chronic inflammation,Chronic infection; RA; IBD,Nephrotic syndrome; CKD
+DIS692,Fibrillary Glomerulonephritis,Nephrology,Chronic,Severe,Rare GN with fibrillary deposits,Adults; associated with malignancy,Nephrotic syndrome; Hematuria; CKD
+DIS693,Immunotactoid Glomerulopathy,Nephrology,Chronic,Severe,Rare GN with microtubular deposits,Adults; CLL; lymphoma,Nephrotic syndrome; Hypertension
+DIS694,C3 Glomerulopathy,Nephrology,Chronic,Severe,Complement alternative pathway dysregulation,Children; adults; C3 nephritic factor,Proteinuria; Hematuria; CKD
+DIS695,Dense Deposit Disease (MPGN type II),Nephrology,Chronic,Severe,Electron-dense deposits in GBM,Children; young adults,Proteinuria; Hematuria; ESRD
+DIS696,Post-infectious Glomerulonephritis (Atypical),Nephrology,Acute,Moderate,GN after non-streptococcal infection,Adults; staph infection,Hypertension; Edema; Renal impairment
+DIS697,Shunt Nephritis,Nephrology,Chronic,Moderate,Immune complex GN due to infected ventriculoatrial shunt,Children with hydrocephalus; infected shunt,Proteinuria; Hematuria; Renal failure
+DIS698,Diabetic Nephropathy (Advanced),Nephrology,Chronic,Severe,Kimmelstiel-Wilson nodules,Long-standing diabetes,ESRD; Cardiovascular disease
+DIS699,Hypertensive Nephrosclerosis (Malignant),Nephrology,Acute,Severe,Accelerated hypertension with renal injury,Uncontrolled hypertension; young black men,AKI; Hematuria; Hypertensive retinopathy
+DIS700,Renal Artery Stenosis (Atherosclerotic),Nephrology,Chronic,Moderate,Atherosclerotic narrowing of renal artery,Elderly; smokers; PAD,Hypertension; Ischemic nephropathy; Flash pulmonary edema
+DIS701,Renal Artery Stenosis (Fibromuscular Dysplasia),Nephrology,Chronic,Moderate,Non-atherosclerotic narrowing,Young women; middle-aged,Hypertension; Renal artery dissection
+DIS702,Atheroembolic Renal Disease,Nephrology,Acute,Severe,Cholesterol emboli after vascular procedure,Elderly; post-angiography; aortic manipulation,AKI; Livedo reticularis; Eosinophilia
+DIS703,Acute Tubular Necrosis (Ischemic),Nephrology,Acute,Severe,Renal tubular injury from hypoperfusion,Hospitalized; shock; sepsis,AKI; Hyperkalemia; Volume overload
+DIS704,Acute Tubular Necrosis (Nephrotoxic),Nephrology,Acute,Severe,Drug-induced tubular injury (aminoglycosides, contrast),Hospitalized; ICU; drug exposure,AKI; Non-oliguric; Recovery
+DIS705,Acute Interstitial Nephritis (Drug-induced),Nephrology,Acute,Severe,Allergic interstitial inflammation (NSAIDs, antibiotics),Adults; drug exposure,AKI; Fever; Rash; Eosinophiluria
+DIS706,Acute Interstitial Nephritis (Infection-related),Nephrology,Acute,Severe,Bacterial or viral interstitial nephritis,Children; adults; pyelonephritis,AKI; Flank pain; Fever
+DIS707,Acute Interstitial Nephritis (Autoimmune),Nephrology,Acute,Severe,Associated with sarcoid, TINU syndrome,Young adults; uveitis,AKI; Eye inflammation
+DIS708,Light Chain Cast Nephropathy (Myeloma Kidney),Nephrology,Acute,Severe,Obstructive casts of light chains in multiple myeloma,Multiple myeloma; high light chains,AKI; Proteinuria; Renal failure
+DIS709,Tumor Lysis Syndrome (Renal),Nephrology,Acute,Severe,AKI due to urate and phosphate precipitation after chemotherapy,Hematologic malignancies; post-chemo,Hyperuricemia; Hyperphosphatemia; AKI
+DIS710,Hantavirus Nephropathy,Nephrology,Acute,Severe,Infection with hantavirus causing hemorrhagic fever with renal syndrome,Endemic areas (Asia, Europe); rodent exposure,AKI; Thrombocytopenia; Capillary leak
+DIS711,Leptospirosis (Weil's Disease) - Renal,Nephrology,Acute,Severe,Severe leptospirosis with renal failure,Tropical; flood exposure; farmers,AKI; Jaundice; Hemorrhage
+DIS712,Malaria (Acute Kidney Injury),Nephrology,Acute,Severe,AKI in falciparum malaria,Endemic areas; children,AKI; Blackwater fever; Anemia
+DIS713,Schistosomiasis (Urogenital),Urology,Chronic,Moderate,Schistosoma haematobium infection of bladder,Endemic Africa; freshwater exposure,Hematuria; Bladder cancer; Hydronephrosis
+DIS714,Schistosomiasis (Hepatosplenic),Hepatology,Chronic,Severe,Portal hypertension due to S. mansoni,Endemic; chronic infection,Variceal bleeding; Hepatosplenomegaly; Ascites
+DIS715,Opisthorchiasis (Liver fluke),Hepatology,Chronic,Moderate,Infection with Opisthorchis viverrini,SE Asia; raw fish consumption,Cholangiocarcinoma; Cholangitis; Gallstones
+DIS716,Clonorchiasis (Chinese liver fluke),Hepatology,Chronic,Moderate,Clonorchis sinensis infection,East Asia; raw fish,Cholangiocarcinoma; Bile duct obstruction
+DIS717,Fascioliasis (Liver fluke),Hepatology,Acute,Severe,Fasciola hepatica infection,Sheep-raising areas; watercress,Liver abscess; Biliary obstruction; Eosinophilia
+DIS718,Echinococcosis (Hepatic hydatid cyst),Hepatology,Chronic,Moderate,Echinococcus granulosus cyst in liver,Sheep farming; dog contact,Cyst rupture; Anaphylaxis; Secondary infection
+DIS719,Echinococcosis (Alveolar),Hepatology,Chronic,Severe,Echinococcus multilocularis, mimicking liver cancer,Northern hemisphere; foxes,Infiltrative liver lesion; Metastasis; Poor prognosis
+DIS720,Amoebic Liver Abscess,Infectious Diseases,Acute,Severe,Entamoeba histolytica abscess,Endemic; poor sanitation,Fever; RUQ pain; Rupture; Peritonitis
+DIS721,Pyogenic Liver Abscess,Infectious Diseases,Acute,Severe,Bacterial liver abscess (Klebsiella, E. coli),Diabetics; biliary disease; elderly,Fever; Sepsis; Metastatic infection
+DIS722,Fungal Liver Abscess (Candida),Infectious Diseases,Acute,Severe,Hepatosplenic candidiasis in neutropenic patients,Neutropenic; leukemia,Fever; Abdominal pain; Hepatomegaly
+DIS723,Portal Vein Thrombosis,Hepatology,Acute,Severe,Thrombosis of portal vein,Cirrhosis; hypercoagulable; abdominal infection,Variceal bleeding; Ascites; Mesenteric ischemia
+DIS724,Budd-Chiari Syndrome,Hepatology,Acute,Severe,Hepatic vein thrombosis,Myeloproliferative neoplasms; thrombophilia,Hepatomegaly; Ascites; Liver failure
+DIS725,Sinusoidal Obstruction Syndrome (Veno-occlusive disease),Hepatology,Acute,Severe,Post-hematopoietic stem cell transplant liver injury,HSCT; chemotherapy,Weight gain; Jaundice; Ascites; Hepatomegaly
+DIS726,Acute Fatty Liver of Pregnancy,Obstetrics and Gynecology,Acute,Severe,Microvesicular fatty infiltration in third trimester,Pregnant women; first pregnancy; multiple gestation,Liver failure; Encephalopathy; DIC
+DIS727,HELLP Syndrome,Obstetrics and Gynecology,Acute,Severe,Hemolysis, elevated liver enzymes, low platelets in preeclampsia,Preeclamptic women; third trimester,Liver rupture; DIC; Renal failure
+DIS728,Intrahepatic Cholestasis of Pregnancy,Obstetrics and Gynecology,Acute,Moderate,Pruritus and elevated bile acids in pregnancy,Pregnant women; third trimester; recurrence,Fetal distress; Stillbirth; Maternal vitamin K deficiency
+DIS729,Hyperemesis Gravidarum,Obstetrics and Gynecology,Acute,Moderate,Severe nausea and vomiting in early pregnancy,Pregnant women; first trimester,Dehydration; Electrolyte imbalance; Weight loss
+DIS730,Placenta Accreta Spectrum,Obstetrics and Gynecology,Acute,Severe,Abnormal placental invasion,Prior C-section; placenta previa,Postpartum hemorrhage; Hysterectomy; Maternal death
+DIS731,Placental Abruption,Obstetrics and Gynecology,Acute,Severe,Premature separation of placenta,Preeclampsia; trauma; smoking,Maternal hemorrhage; Fetal distress; Stillbirth
+DIS732,Placenta Previa,Obstetrics and Gynecology,Acute,Severe,Placenta covering cervical os,Prior C-section; multiparity,Antepartum hemorrhage; Preterm delivery; Maternal death
+DIS733,Postpartum Hemorrhage (Atony),Obstetrics and Gynecology,Acute,Severe,Uterine atony after delivery,Prolonged labor; overdistended uterus,Shock; DIC; Hysterectomy
+DIS734,Postpartum Hemorrhage (Traumatic),Obstetrics and Gynecology,Acute,Severe,Lacerations or uterine rupture,Instrumental delivery; previous scar,Hypovolemia; Shock
+DIS735,Amniotic Fluid Embolism,Obstetrics and Gynecology,Acute,Severe,Anaphylactoid reaction to amniotic fluid,Parturient; rapid labor,Cardiovascular collapse; DIC; Death
+DIS736,Puerperal Sepsis,Obstetrics and Gynecology,Acute,Severe,Postpartum uterine infection,C-section; prolonged rupture of membranes; manual placenta removal,Endometritis; Sepsis; Septic shock
+DIS737,Mastitis (Lactational),Obstetrics and Gynecology,Acute,Mild,Breast infection during lactation,Postpartum; breastfeeding,Breast abscess; Fever; Pain
+DIS738,Galactorrhea,Endocrinology,Chronic,Low,Non-puerperal lactation,Prolactinoma; medications; hypothyroidism,Ammenorrhea; Infertility; Osteoporosis
+DIS739,Prolactinoma (Microadenoma),Endocrinology,Chronic,Moderate,Benign prolactin-secreting pituitary tumor,Women 20-50; men,Galactorrhea; Hypogonadism; Infertility; Visual field defects
+DIS740,Prolactinoma (Macroadenoma),Endocrinology,Chronic,Severe,Large pituitary tumor with mass effect,Adults; male; headache,Visual loss; Hypopituitarism; Headache
+DIS741,Acromegaly (Pituitary),Endocrinology,Chronic,Severe,GH-secreting pituitary adenoma,Adults 40-60; coarse features,Arthralgia; Cardiomyopathy; Diabetes; Sleep apnea
+DIS742,Cushing's Disease (Pituitary),Endocrinology,Chronic,Severe,ACTH-secreting pituitary adenoma,Women 20-40; central obesity; striae,Diabetes; Hypertension; Osteoporosis; Depression
+DIS743,Cushing's Syndrome (Adrenal),Endocrinology,Chronic,Severe,Adrenal adenoma or carcinoma causing hypercortisolism,Adults; women; sudden onset,As above; Hypokalemia; Androgen excess
+DIS744,Adrenal Insufficiency (Primary - Addison's),Endocrinology,Chronic,Moderate,Adrenal destruction (autoimmune, TB),Adults; autoimmune; TB,Hyperpigmentation; Hyponatremia; Hyperkalemia; Shock
+DIS745,Adrenal Insufficiency (Secondary),Endocrinology,Chronic,Moderate,ACTH deficiency (pituitary tumor, steroids),Any age; steroid withdrawal; pituitary disease,No hyperpigmentation; Hypotension; Fatigue
+DIS746,Pheochromocytoma (Adrenal),Endocrinology,Chronic,Severe,Catecholamine-secreting tumor,Adults 30-50; paroxysmal hypertension,Palpitations; Headache; Sweating; Stroke; MI
+DIS747,Pheochromocytoma (Extra-adrenal - Paraganglioma),Endocrinology,Chronic,Severe,Extra-adrenal paraganglioma,Genetic syndromes (SDHx),As above; Head and neck paragangliomas
+DIS748,Neuroblastoma,Oncology,Acute,Severe,Embryonal tumor of sympathetic nervous system,Children <5; abdominal mass,Metastasis; Opsoclonus-myoclonus; Hypertension
+DIS749,Ganglioneuroma,Oncology,Chronic,Low,Benign tumor of sympathetic ganglia,Older children; adults,Asymptomatic; Incidental
+DIS750,Medullary Thyroid Carcinoma (Sporadic),Oncology,Chronic,Severe,Thyroid C-cell malignancy,Adults 40-60; neck mass,Diarrhea; Lymph node metastasis; RET mutation
+DIS751,Medullary Thyroid Carcinoma (Hereditary - MEN2),Oncology,Chronic,Severe,Familial MTC,Children; young adults; MEN2A/2B,Early metastasis; Pheochromocytoma; Hyperparathyroidism
+DIS752,Parathyroid Adenoma,Endocrinology,Chronic,Moderate,Benign parathyroid tumor causing hyperparathyroidism,Women >50; osteoporosis,Nephrolithiasis; Bone pain; Fatigue
+DIS753,Parathyroid Carcinoma,Endocrinology,Chronic,Severe,Rare parathyroid malignancy,Adults; severe hypercalcemia,Renal failure; Bone disease; Metastasis
+DIS754,Hypercalcemia of Malignancy (Humoral),Oncology,Acute,Severe,PTHrP-mediated hypercalcemia,Squamous cell lung; renal; breast,Nausea; Confusion; AKI; Coma
+DIS755,Hypercalcemia of Malignancy (Local osteolytic),Oncology,Acute,Severe,Bone metastases causing hypercalcemia,Multiple myeloma; breast; lung,As above
+DIS756,Hyponatremia (SIADH),Endocrinology,Acute,Moderate,Inappropriate ADH secretion,Lung cancer; CNS disorders; drugs,Nausea; Seizures; Coma; Cerebral edema
+DIS757,Hyponatremia (Cerebral salt wasting),Neurology,Acute,Moderate,Renal sodium loss after brain injury,Subarachnoid hemorrhage; head trauma,Polyuria; Hypovolemia; Seizures
+DIS758,Diabetes Insipidus (Central),Endocrinology,Chronic,Moderate,ADH deficiency due to pituitary/hypothalamic lesion,Pituitary surgery; trauma; tumor,Polyuria; Polydipsia; Hypernatremia
+DIS759,Diabetes Insipidus (Nephrogenic),Nephrology,Chronic,Moderate,Renal resistance to ADH (genetic, lithium),Lithium therapy; boys (X-linked),Polyuria; Hypernatremia; Dehydration
+DIS760,Primary Polydipsia,Psychiatry,Chronic,Low,Excessive water intake,Psychiatric patients; habit,Hyponatremia; Dilutional
+DIS761,Syndrome of Inappropriate Antidiuresis (SIAD) - chronic,Endocrinology,Chronic,Moderate,Persistent hyponatremia from ADH excess,As SIADH but chronic,Asymptomatic; mild hyponatremia
+DIS762,Cerebral Edema (High altitude),Neurology,Acute,Severe,Life-threatening brain swelling at altitude,Climbers; rapid ascent,Ataxia; Altered consciousness; Coma
+DIS763,High Altitude Pulmonary Edema (HAPE),Pulmonology,Acute,Severe,Non-cardiogenic pulmonary edema at altitude,Climbers; rapid ascent; cold,Dyspnea; Cough; Cyanosis; Death
+DIS764,Decompression Sickness (Neurologic),Neurology,Acute,Severe,Nitrogen bubbles in tissues after rapid ascent,Divers; aviators; caisson workers,Spinal cord deficits; Joint pain; Confusion
+DIS765,Arterial Gas Embolism,Neurology,Acute,Severe,Air embolism in cerebral arteries,Scuba diving; iatrogenic,Stroke; Seizures; Cardiac arrest
+DIS766,Heat Stroke (Classic),Emergency Medicine,Acute,Severe,Hyperthermia with CNS dysfunction,Elderly; infants; heat wave,Hypotension; Multi-organ failure; DIC
+DIS767,Heat Stroke (Exertional),Emergency Medicine,Acute,Severe,Hyperthermia during exercise,Young athletes; military recruits,Rhabdomyolysis; AKI; Liver failure; DIC
+DIS768,Hypothermia (Severe),Emergency Medicine,Acute,Severe,Core temperature <28°C,Exposure; elderly; alcohol,Cardiac arrhythmias; Coagulopathy; Coma; Death
+DIS769,Frostbite (Deep),Emergency Medicine,Acute,Severe,Tissue freezing with necrosis,Cold exposure; homeless; mountaineers,Tissue loss; Infection; Amputation
+DIS770,Electrical Injury (High voltage),Emergency Medicine,Acute,Severe,High-voltage electrical shock,Workplace accidents; lightning,Cardiac arrest; Burns; Rhabdomyolysis; Neurologic sequelae
+DIS771,Lightning Injury,Cardiology,Acute,Severe,Lightning strike causing cardiorespiratory arrest,Outdoor activities; storms,Asystole; Burns; Neurologic damage
+DIS772,Drowning (Non-fatal),Pulmonology,Acute,Severe,Immersion causing respiratory compromise,Children; swimming; boating,ARDS; Hypoxic brain injury; Infection
+DIS773,Smoke Inhalation,Infectious Diseases/Pulmonology,Acute,Severe,Inhalation of combustion products,Fire victims,Airway edema; CO poisoning; ARDS
+DIS774,Carbon Monoxide Poisoning,Toxicology,Acute,Severe,CO binding to hemoglobin causing tissue hypoxia,Enclosed fires; faulty heaters; car exhaust,Headache; Confusion; Coma; Delayed neurologic sequelae
+DIS775,Cyanide Poisoning,Toxicology,Acute,Severe,Inhibition of cytochrome oxidase,Smoke inhalation; industrial; terrorism,Coma; Seizures; Lactic acidosis; Death
+DIS776,Organophosphate Poisoning,Toxicology,Acute,Severe,Irreversible AChE inhibition causing cholinergic crisis,Agricultural workers; suicide,SLUDGE syndrome; Respiratory failure; Seizures
+DIS777,Lead Poisoning (Chronic),Toxicology,Chronic,Moderate,Cumulative lead toxicity,Industrial exposure; old paint; folk remedies,Abdominal pain; Neuropathy; Anemia; Encephalopathy
+DIS778,Mercury Poisoning (Elemental),Toxicology,Chronic,Severe,Inhalation of mercury vapor,Dental amalgam; broken thermometers; gold mining,Tremor; Gingivitis; Neuropsychiatric; Nephrotic syndrome
+DIS779,Mercury Poisoning (Organic - Methylmercury),Toxicology,Chronic,Severe,Consumption of contaminated fish,Seafood consumption; Minamata disease,Paresthesia; Ataxia; Visual field constriction; Developmental delay
+DIS780,Arsenic Poisoning (Chronic),Toxicology,Chronic,Severe,Contaminated water; industrial,Hyperkeratosis; Skin cancer; Peripheral neuropathy; Anemia
+DIS781,Arsenic Poisoning (Acute),Toxicology,Acute,Severe,Ingestion of high dose,Suicide; homicide,GI symptoms; Shock; Multi-organ failure
+DIS782,Cadmium Poisoning (Chronic),Toxicology,Chronic,Severe,Industrial exposure; smoking,Renal tubular dysfunction; Osteomalacia; Lung cancer
+DIS783,Chromium Poisoning (Hexavalent),Toxicology,Acute,Severe,Industrial exposure; skin contact,Skin ulcers; Nasal septum perforation; Lung cancer
+DIS784,Nickel Poisoning (Acute),Toxicology,Acute,Severe,Inhalation of nickel carbonyl,Industrial; refining,Pneumonitis; CNS depression; Death
+DIS785,Berylliosis (Chronic),Pulmonology,Chronic,Severe,Granulomatous lung disease due to beryllium exposure,Aerospace workers; machinists,Interstitial lung disease; Granulomas; Cor pulmonale
+DIS786,Silicosis (Chronic),Pulmonology,Chronic,Severe,Nodular pulmonary fibrosis from silica dust,Miners; sandblasters; stone cutters,Progressive massive fibrosis; TB; Lung cancer
+DIS787,Coal Worker's Pneumoconiosis (Black Lung),Pulmonology,Chronic,Moderate,Coal dust accumulation in lungs,Coal miners,Simple or complicated; Progressive fibrosis; Caplan syndrome
+DIS788,Asbestosis,Pulmonology,Chronic,Severe,Interstitial fibrosis from asbestos exposure,Insulators; shipyard workers; construction,Pleural plaques; Lung cancer; Mesothelioma
+DIS789,Byssinosis (Brown Lung),Pulmonology,Chronic,Moderate,Occupational lung disease from cotton dust,Textile workers,Chest tightness; Cough; FEV1 decline
+DIS790,Farmer's Lung (Hypersensitivity Pneumonitis),Pulmonology,Chronic,Moderate,Allergic alveolitis from moldy hay,Farmers; exposure,Fever; Cough; Dyspnea; Interstitial fibrosis
+DIS791,Bird Fancier's Lung,Pulmonology,Chronic,Moderate,HP from bird droppings/feathers,Pigeon breeders; bird owners,Flu-like episodes; Progressive dyspnea; Fibrosis
+DIS792,Hot Tub Lung,Pulmonology,Acute,Moderate,HP from Mycobacterium avium in hot tubs,Hot tub users; immunocompetent,Subacute cough; Dyspnea; Ground-glass opacities
+DIS793,Chemical Pneumonitis (Chlorine gas),Pulmonology,Acute,Severe,Inhalation injury from chlorine,Industrial accidents; pool chemicals,ARDS; Airway burns; Pulmonary edema
+DIS794,Phosgene Gas Poisoning,Pulmonology,Acute,Severe,Delayed pulmonary edema after exposure,Industrial; warfare,ARDS; Hypoxia; Death
+DIS795,Mustard Gas Injury (Chemical warfare),Dermatology/Pulmonology,Acute,Severe,Blistering agent causing skin and lung injury,Warfare; industrial,Severe burns; Airway necrosis; Chronic lung disease
+DIS796,Radiation Pneumonitis,Oncology/Pulmonology,Acute,Severe,Inflammatory lung injury after thoracic radiation,Lung cancer; breast cancer; lymphoma,Fever; Cough; Dyspnea; Pulmonary fibrosis
+DIS797,Radiation Enteritis,Gastroenterology,Chronic,Moderate,Gastrointestinal injury after abdominal radiation,Abdominal/pelvic cancer patients,Diarrhea; Malabsorption; Stricture; Bleeding
+DIS798,Radiation Cystitis,Urology,Chronic,Moderate,Bladder injury after pelvic radiation,Pelvic cancer patients,Hematuria; Frequency; Contracture; Fistula
+DIS799,Radiation Dermatitis (Chronic),Dermatology,Chronic,Moderate,Skin changes after radiation,Breast cancer; head and neck,Fibrosis; Telangiectasia; Ulceration
+DIS800,Graft-versus-Host Disease (Acute),Immunology,Acute,Severe,Donor T cells attacking host after transplant,Post-allogeneic stem cell transplant,Skin rash; Diarrhea; Cholestatic hepatitis
+DIS801,Graft-versus-Host Disease (Chronic),Immunology,Chronic,Severe,Late-phase GVHD with autoimmune-like features,As above,Sicca; Scleroderma; Bronchiolitis obliterans; Liver dysfunction
+DIS802,Transplant Rejection (Acute Cellular),Immunology,Acute,Severe,T-cell mediated rejection of solid organ,Post-kidney, heart, liver transplant,Dysfunction of graft; Fever; Tenderness
+DIS803,Transplant Rejection (Antibody-mediated),Immunology,Acute,Severe,Donor-specific antibodies causing graft injury,As above,Acute graft dysfunction; C4d deposition
+DIS804,Chronic Lung Allograft Dysfunction (Bronchiolitis Obliterans),Pulmonology,Chronic,Severe,Progressive airway obstruction post-lung transplant,Lung transplant recipients,FEV1 decline; Dyspnea; Death
+DIS805,Cardiac Allograft Vasculopathy,Cardiology,Chronic,Severe,Accelerated atherosclerosis in transplanted heart,Heart transplant recipients,Silent ischemia; Heart failure; Sudden death
+DIS806,Post-transplant Lymphoproliferative Disorder (PTLD),Oncology,Acute,Severe,EBV-driven lymphoproliferation post-transplant,Post-solid organ or stem cell transplant,Lymphadenopathy; Mass lesions; Fever; Organ dysfunction
+DIS807,Postherpetic Neuralgia (after shingles),Pain Medicine,Chronic,Moderate,Persistent neuropathic pain after VZV reactivation,Elderly; immunocompromised,Burning pain; Allodynia; Sleep disturbance
+DIS808,Trigeminal Neuralgia (Classical),Neurology,Chronic,Severe,Neuropathic pain in trigeminal distribution due to vascular compression,Adults >50; female,Severe electric shock-like pain; Trigger zones
+DIS809,Trigeminal Neuralgia (Secondary),Neurology,Chronic,Severe,Due to MS or tumor,Younger adults; associated symptoms,Sensory loss; Bilateral involvement
+DIS810,Glossopharyngeal Neuralgia,Neurology,Chronic,Severe,Pain in throat, ear, base of tongue,Adults; idiopathic,Swallowing triggers; Syncope; Weight loss
+DIS811,Occipital Neuralgia,Neurology,Chronic,Moderate,Pain in occipital region due to occipital nerve irritation,Adults; trauma; cervical spine,Pain; Tenderness over occiput
+DIS812,Complex Regional Pain Syndrome (CRPS) Type I,Pain Medicine,Chronic,Severe,Regional pain with autonomic features after minor trauma,Adults; limb injury,Allodynia; Edema; Trophic changes; Osteoporosis
+DIS813,Complex Regional Pain Syndrome (CRPS) Type II,Pain Medicine,Chronic,Severe,With nerve injury,As above,As above
+DIS814,Phantom Limb Pain (already)
+DIS815,Central Post-Stroke Pain,Neurology,Chronic,Moderate,Neuropathic pain after thalamic or brainstem stroke,Stroke survivors; thalamic lesion,Contralateral burning pain; Allodynia
+DIS816,Spinal Cord Injury Pain,Neurology,Chronic,Moderate,Neuropathic pain below level of injury,Spinal cord injury patients,Burning; Shooting; Spasticity
+DIS817,Multiple Sclerosis (Pain),Neurology,Chronic,Moderate,Neuropathic pain in MS (optic neuritis, Lhermitte's),MS patients,As above
+DIS818,Parkinson's Disease (Pain),Neurology,Chronic,Moderate,Musculoskeletal or central pain in PD,PD patients,Off-period pain; Dystonia
+DIS819,Diabetic Peripheral Neuropathy (Painful) (already)
+DIS820,Alcoholic Neuropathy (Painful),Neurology,Chronic,Moderate,Peripheral neuropathy due to alcohol toxicity,Chronic alcoholics,Distal burning; Ataxia; Weakness
+DIS821,HIV-associated Neuropathy (Painful),Neurology,Chronic,Moderate,Distal sensory polyneuropathy in HIV,HIV patients; on ARVs,Burning feet; Allodynia
+DIS822,Chemotherapy-induced Peripheral Neuropathy (CIPN),Neurology,Chronic,Moderate,Neuropathy from taxanes, platinums, vinca alkaloids,Cancer survivors; post-chemo,Numbness; Tingling; Pain; Motor deficits
+DIS823,Guillain-Barré Syndrome (Acute Inflammatory Demyelinating Polyneuropathy) (already)
+DIS824,Chronic Inflammatory Demyelinating Polyneuropathy (CIDP),Neurology,Chronic,Severe,Immune-mediated demyelinating neuropathy,Adults; progressive or relapsing,Proximal and distal weakness; Sensory loss; Areflexia
+DIS825,Multifocal Motor Neuropathy (MMN),Neurology,Chronic,Moderate,Immune-mediated motor neuropathy with conduction block,Men > women; asymmetric weakness,Progressive weakness without sensory loss; Response to IVIG
+DIS826,POEMS Syndrome (already)
+DIS827,Myasthenia Gravis (Generalized) (already)
+DIS828,Myasthenia Gravis (Ocular),Neurology,Chronic,Moderate,Limited to extraocular muscles,Adults; may generalize,Ptosis; Diplopia; Fluctuation
+DIS829,Lambert-Eaton Myasthenic Syndrome,Neurology,Chronic,Moderate,Presynaptic neuromuscular junction disorder (VGCC antibodies),Small cell lung cancer; autoimmune,Proximal weakness; Autonomic; Improved with repetitive stimulation
+DIS830,Botulism (Foodborne) (already)
+DIS831,Botulism (Infant),Infectious Diseases,Acute,Severe,Ingestion of Clostridium botulinum spores in infants,Infants <6 months; honey exposure,Flaccid paralysis; Constipation; Respiratory failure
+DIS832,Botulism (Wound),Infectious Diseases,Acute,Severe,Wound infection with C. botulinum,IV drug users; trauma,As foodborne
+DIS833,Tetanus (Generalized) (already)
+DIS834,Tetanus (Neonatal),Infectious Diseases,Acute,Severe,Tetanus neonatorum from umbilical stump infection,Newborns in developing countries; unvaccinated mother,Trismus; Rigidity; Apnea; Death
+DIS835,Tetanus (Cephalic),Infectious Diseases,Acute,Severe,Cephalic tetanus after head wound,Adults; head trauma,Cranial nerve palsies; Trismus; Risk of generalized
+DIS836,Diphtheria (Respiratory) (already)
+DIS837,Diphtheria (Cutaneous),Infectious Diseases,Acute,Moderate,Skin infection with Corynebacterium diphtheriae,Tropical; poor hygiene,Non-healing ulcer; Membranous
+DIS838,Pertussis (already)
+DIS839,Haemophilus influenzae type b (Epiglottitis) (already)
+DIS840,Haemophilus influenzae type b (Meningitis) (already)
+DIS841,Streptococcus pneumoniae (Pneumococcal Meningitis) (already)
+DIS842,Neisseria meningitidis (Meningococcal Meningitis) (already)
+DIS843,Neisseria meningitidis (Meningococcemia) (already)
+DIS844,Listeria monocytogenes (Meningitis, Neonatal),Infectious Diseases,Acute,Severe,Neonatal sepsis/meningitis from Listeria,Newborns; vertical transmission,Sepsis; Respiratory distress; Meningitis
+DIS845,Listeria monocytogenes (Meningitis, Adult),Infectious Diseases,Acute,Severe,Listeria meningitis in immunocompromised/elderly,Elderly; pregnant; immunocompromised,Meningitis; Brainstem encephalitis
+DIS846,Group B Streptococcus (Neonatal Sepsis),Infectious Diseases,Acute,Severe,Early-onset GBS disease,Newborns; maternal colonization,Sepsis; Pneumonia; Meningitis
+DIS847,Group B Streptococcus (Late-onset),Infectious Diseases,Acute,Severe,Infants 1 week to 3 months,Bacteremia; Meningitis
+DIS848,Escherichia coli (Neonatal Meningitis),Infectious Diseases,Acute,Severe,E. coli K1 meningitis in neonates,Newborns; preterm,Seizures; Hydrocephalus; Death
+DIS849,Staphylococcus aureus (Methicillin-sensitive - MSSA),Infectious Diseases,Acute,Severe,Infections ranging from skin to bacteremia,All ages; IV lines; surgery,Endocarditis; Osteomyelitis; Abscess
+DIS850,Staphylococcus aureus (Methicillin-resistant - MRSA),Infectious Diseases,Acute,Severe,Resistant staph infections,Healthcare contact; community strains,Skin infections; Pneumonia; Sepsis
+DIS851,Staphylococcus epidermidis (Coagulase-negative),Infectious Diseases,Acute,Moderate,Foreign body infections (prosthetic valves, catheters),Hospitalized; device-related,Bacteremia; Endocarditis; Graft infection
+DIS852,Enterococcus faecalis (Vancomycin-susceptible),Infectious Diseases,Acute,Moderate,UTI, bacteremia, endocarditis,Hospitalized; elderly; prior antibiotics,Endocarditis; Bacteremia
+DIS853,Enterococcus faecium (Vancomycin-resistant - VRE),Infectious Diseases,Acute,Severe,Resistant enterococcal infections,ICU; transplant; immunocompromised,Bacteremia; Endocarditis; Limited treatment options
+DIS854,Pseudomonas aeruginosa (Healthcare-associated),Infectious Diseases,Acute,Severe,Opportunistic Gram-negative infections,ICU; ventilated; neutropenic,Pneumonia; Sepsis; Malignant otitis externa
+DIS855,Acinetobacter baumannii (Multidrug-resistant),Infectious Diseases,Acute,Severe,Nosocomial infections,ICU; trauma; burns,Ventilator-associated pneumonia; Bacteremia; Meningitis
+DIS856,Stenotrophomonas maltophilia,Infectious Diseases,Acute,Severe,Opportunistic pathogen,ICU; immunocompromised; central lines,Pneumonia; Bacteremia; Catheter-related
+DIS857,Burkholderia cepacia,Infectious Diseases,Chronic,Severe,Resistant organism in cystic fibrosis,CF patients; immunocompromised,Chronic respiratory infection; Cepacia syndrome
+DIS858,Mycobacterium abscessus (Non-tuberculous mycobacteria),Infectious Diseases,Chronic,Severe,Rapid-growing mycobacterium,CF; bronchiectasis; immunocompromised,Chronic lung disease; Skin infection; Disseminated
+DIS859,Mycobacterium avium complex (MAC) - Pulmonary,Pulmonology,Chronic,Moderate,Chronic lung infection in elderly,Postmenopausal women; elderly men; bronchiectasis,Cough; Fatigue; Nodules; Cavitation
+DIS860,Mycobacterium avium complex (MAC) - Disseminated,Infectious Diseases,Chronic,Severe,Disseminated in advanced HIV,HIV with low CD4,Fever; Night sweats; Anemia; Diarrhea
+DIS861,Mycobacterium kansasii,Pulmonology,Chronic,Moderate,NTM pulmonary disease,Middle-aged; COPD; pneumoconiosis,Resembles TB; Cavitary lesions
+DIS862,Mycobacterium marinum (Fish tank granuloma),Dermatology,Chronic,Low,Skin infection from fish tanks/aquariums,Aquarium owners; fishermen,Nodules; Sporotrichoid spread; Tenosynovitis
+DIS863,Mycobacterium ulcerans (Buruli ulcer),Infectious Diseases,Chronic,Severe,Necrotizing skin infection,Sub-Saharan Africa; Australia,Painless nodule; Ulcer; Extensive necrosis; Osteomyelitis
+DIS864,Leprosy (Hansen's disease) - Tuberculoid,Infectious Diseases,Chronic,Moderate,Paucibacillary leprosy,Endemic areas; close contact,Hypopigmented patch; Anesthesia; Nerve enlargement
+DIS865,Leprosy (Hansen's disease) - Lepromatous,Infectious Diseases,Chronic,Severe,Multibacillary leprosy,As above,Skin nodules; Diffuse infiltration; Nerve damage; Eye involvement
+DIS866,Leprosy (Borderline),Infectious Diseases,Chronic,Moderate,Unstable form,As above,Variable; Immune reactions
+DIS867,Treponema pallidum (Primary Syphilis),Infectious Diseases,Acute,Moderate,Chancre at inoculation site,Sexually active; MSM,Genital ulcer; Regional lymphadenopathy
+DIS868,Treponema pallidum (Secondary Syphilis),Infectious Diseases,Acute,Moderate,Disseminated infection with rash, condyloma lata,Sexually active; untreated,Maculopapular rash; Fever; Lymphadenopathy; Meningitis
+DIS869,Treponema pallidum (Tertiary Syphilis - Gummatous),Infectious Diseases,Chronic,Severe,Late benign syphilis with gummas,Untreated syphilis years later,Destructive lesions (skin, bone, liver)
+DIS870,Treponema pallidum (Tertiary Syphilis - Cardiovascular),Infectious Diseases,Chronic,Severe,Aortitis, aortic aneurysm, aortic regurgitation,As above,Aortic aneurysm; Aortic regurgitation; Coronary ostial stenosis
+DIS871,Treponema pallidum (Neurosyphilis - General paresis),Neurology,Chronic,Severe,Progressive dementia and psychiatric symptoms,Untreated syphilis,Dementia; Personality change; Argyll Robertson pupils
+DIS872,Treponema pallidum (Neurosyphilis - Tabes dorsalis),Neurology,Chronic,Severe,Dorsal root degeneration,Ataxia; Lightning pains; Urinary incontinence; Argyll Robertson pupils
+DIS873,Borrelia burgdorferi (Lyme disease - Early localized),Infectious Diseases,Acute,Moderate,Erythema migrans,Tick exposure in endemic areas,Rash; Flu-like symptoms
+DIS874,Borrelia burgdorferi (Lyme disease - Early disseminated),Infectious Diseases,Acute,Severe,Neurologic, cardiac involvement,Multiple rashes; Cranial nerve palsy; Meningitis; Heart block
+DIS875,Borrelia burgdorferi (Lyme disease - Late),Infectious Diseases,Chronic,Moderate,Arthritis, acrodermatitis chronica atrophicans,Recurrent arthritis; Skin atrophy
+DIS876,Borrelia recurrentis (Relapsing fever - Louse-borne),Infectious Diseases,Acute,Severe,Epidemic relapsing fever,War; refugee; famine,High fever; Relapses; Jaundice; Bleeding; Death
+DIS877,Borrelia hermsii (Relapsing fever - Tick-borne),Infectious Diseases,Acute,Moderate,Sporadic,Outdoor exposure; rodents,Febrile relapses; Less severe
+DIS878,Leptospira interrogans (Leptospirosis - Anicteric),Infectious Diseases,Acute,Moderate,Mild leptospirosis,Flood; water exposure,Fever; Myalgia; Conjunctival suffusion
+DIS879,Leptospira interrogans (Leptospirosis - Icteric - Weil's disease),Infectious Diseases,Acute,Severe,Severe form with organ failure,Jaundice; Renal failure; Hemorrhage; ARDS
+DIS880,Treponema pertenue (Yaws),Infectious Diseases,Chronic,Moderate,Non-venereal treponematosis,Children in tropics,Papilloma; Bone lesions; Late destructive lesions
+DIS881,Treponema carateum (Pinta),Infectious Diseases,Chronic,Mild,Non-venereal treponematosis,Central/South America,Dyschromic skin lesions; Hyperkeratosis
+DIS882,Chlamydia trachomatis (Trachoma),Ophthalmology,Chronic,Moderate,Chronic conjunctivitis leading to blindness,Children in endemic areas; poor hygiene,Conjunctival scarring; Trichiasis; Corneal opacity
+DIS883,Chlamydia trachomatis (Lymphogranuloma venereum - LGV),Infectious Diseases,Acute,Moderate,STI causing inguinal syndrome,MSM; tropical,Genital ulcer; Inguinal lymphadenopathy; Proctocolitis
+DIS884,Chlamydia psittaci (Psittacosis) (already)
+DIS885,Coxiella burnetii (Q fever - Acute),Infectious Diseases,Acute,Severe,Acute Q fever,Sheep/goat exposure,Fever; Hepatitis; Pneumonia
+DIS886,Coxiella burnetii (Q fever - Chronic),Infectious Diseases,Chronic,Severe,Chronic infection,Valvular heart disease; pregnancy; immunocompromised,Endocarditis; Vascular infection; Osteomyelitis
+DIS887,Bartonella henselae (Cat scratch disease),Infectious Diseases,Acute,Moderate,Lymphadenitis after cat scratch,Children; cat owners,Regional lymphadenopathy; Fever; Parinaud oculoglandular syndrome
+DIS888,Bartonella henselae (Bacillary angiomatosis),Infectious Diseases,Chronic,Moderate,Angioproliferative lesions in HIV,HIV with low CD4,Red papules; Subcutaneous nodules; Bone lesions
+DIS889,Bartonella quintana (Trench fever),Infectious Diseases,Acute,Moderate,Fever, bone pain,Homeless; body lice,Relapsing fever; Bacteremia; Endocarditis
+DIS890,Bartonella quintana (Bacillary angiomatosis) (as above)
+DIS891,Brucella melitensis (Brucellosis - Acute),Infectious Diseases,Acute,Severe,Undulant fever,Unpasteurized dairy; farmers,Fever; Sweats; Arthralgia; Hepatosplenomegaly
+DIS892,Brucella melitensis (Brucellosis - Chronic),Infectious Diseases,Chronic,Moderate,Persistent infection,As above,Fatigue; Depression; Arthritis; Spondylitis
+DIS893,Francisella tularensis (Tularemia - Ulceroglandular),Infectious Diseases,Acute,Severe,Tick bite; rabbit contact,Outdoor; hunters,Ulcer; Lymphadenopathy; Fever
+DIS894,Francisella tularensis (Tularemia - Pneumonic),Infectious Diseases,Acute,Severe,Inhalational,High mortality,Cough; Pleuritic chest pain; Sepsis
+DIS895,Yersinia pestis (Plague - Bubonic),Infectious Diseases,Acute,Severe,Flea-borne; endemic,Swollen painful lymph nodes (bubo); Fever; Sepsis
+DIS896,Yersinia pestis (Plague - Pneumonic),Infectious Diseases,Acute,Severe,Person-to-person airborne,High mortality; cough; hemoptysis; Respiratory failure
+DIS897,Yersinia pestis (Plague - Septicemic),Infectious Diseases,Acute,Severe,Bloodstream without bubo,Shock; DIC; Purpura; Death
+DIS898,Pasteurella multocida (Cellulitis after animal bite),Infectious Diseases,Acute,Moderate,Dog/cat bite wound infection,Animal bite; scratch,Rapid cellulitis; Abscess; Septic arthritis
+DIS899,Capnocytophaga canimorsus (Sepsis after dog bite),Infectious Diseases,Acute,Severe,Dog bite in asplenic or immunocompromised,Asplenia; alcoholism,Sepsis; DIC; Gangrene; High mortality
+DIS900,Erysipelothrix rhusiopathiae (Erysipeloid),Dermatology,Acute,Mild,Localized skin infection from fish/pigs,Fishermen; butchers; veterinarians,Local cellulitis; Arthritis; Endocarditis (rare)
+DIS901,Spirillum minus (Rat-bite fever - Sodoku),Infectious Diseases,Acute,Moderate,Rat bite,Rodent exposure,Relapsing fever; Rash; Arthritis
+DIS902,Streptobacillus moniliformis (Rat-bite fever - Haverhill fever),Infectious Diseases,Acute,Moderate,Rat bite or ingestion of contaminated milk,Rodent exposure; raw milk,Fever; Rash; Polyarthritis; Endocarditis
+DIS903,Vibrio cholerae (Cholera),Infectious Diseases,Acute,Severe,Secretory diarrhea from cholera toxin,Endemic areas; disaster; poor sanitation,Profuse watery diarrhea; Dehydration; Electrolyte imbalance; Death
+DIS904,Vibrio parahaemolyticus (Gastroenteritis),Gastroenterology,Acute,Moderate,Seafood-borne infection,Consumption of raw/undercooked shellfish,Diarrhea; Abdominal cramps; Nausea; Self-limited
+DIS905,Vibrio vulnificus (Wound infection / Sepsis),Infectious Diseases,Acute,Severe,Seafood-borne or wound exposure in saltwater,Liver disease; immunocompromised; shellfish,Cellulitis; Bullae; Sepsis; High mortality
+DIS906,Aeromonas hydrophila (Wound infection / Gastroenteritis),Infectious Diseases,Acute,Moderate,Freshwater exposure; ingestion,Immunocompromised; trauma,Cellulitis; Diarrhea; Sepsis
+DIS907,Plesiomonas shigelloides (Gastroenteritis),Gastroenterology,Acute,Moderate,Seafood or travel-related,Travelers; shellfish,Secretory diarrhea; Abdominal pain
+DIS908,Campylobacter jejuni (Gastroenteritis),Gastroenterology,Acute,Moderate,Common bacterial diarrhea,Poultry; unpasteurized milk,Diarrhea (often bloody); Fever; Abdominal pain; Guillain-Barré complication
+DIS909,Helicobacter pylori (Gastritis),Gastroenterology,Chronic,Moderate,Infection causing chronic gastritis,All ages; developing countries,Dyspepsia; Peptic ulcer; MALT lymphoma; Gastric cancer
+DIS910,Helicobacter pylori (Peptic ulcer disease) (already)
+DIS911,Helicobacter pylori (Gastric MALT lymphoma) (already)
+DIS912,Yersinia enterocolitica (Enterocolitis),Gastroenterology,Acute,Moderate,Fever, diarrhea, pseudoappendicitis,Children; iron overload,Diarrhea; Mesenteric adenitis; Erythema nodosum; Reactive arthritis
+DIS913,Yersinia pseudotuberculosis (Mesenteric lymphadenitis),Gastroenterology,Acute,Moderate,Pseudoappendicitis,Children; adults,Abdominal pain; Fever; Diarrhea
+DIS914,Clostridium perfringens (Food poisoning),Gastroenterology,Acute,Mild,Enterotoxin-mediated,Improperly stored meat,Watery diarrhea; Abdominal cramps; Short duration
+DIS915,Clostridium perfringens (Gas gangrene),Infectious Diseases,Acute,Severe,Myonecrosis after trauma,Trauma; surgery; diabetes,Severe pain; Crepitus; Sepsis; Death
+DIS916,Clostridium tetani (Tetanus) (already)
+DIS917,Clostridium botulinum (Botulism) (already)
+DIS918,Clostridium difficile (Antibiotic-associated colitis) (already)
+DIS919,Clostridium sordellii (Toxic shock syndrome),Infectious Diseases,Acute,Severe,Postpartum; medical abortion; trauma,Rare; fulminant,Shock; Capillary leak; Hemoconcentration; High mortality
+DIS920,Bacillus anthracis (Cutaneous anthrax) (already)
+DIS921,Bacillus anthracis (Inhalational anthrax),Infectious Diseases,Acute,Severe,Bioterrorism; industrial exposure,Mediastinal widening; Hemorrhagic mediastinitis; Sepsis; Death
+DIS922,Bacillus anthracis (Gastrointestinal anthrax),Infectious Diseases,Acute,Severe,Ingestion of contaminated meat,Developing countries; ingestion,Abdominal pain; Bloody diarrhea; Sepsis
+DIS923,Bacillus cereus (Food poisoning - Emetic),Gastroenterology,Acute,Mild,Rice-related vomiting,Reheated fried rice,Nausea; Vomiting; Short incubation
+DIS924,Bacillus cereus (Food poisoning - Diarrheal),Gastroenterology,Acute,Mild,Meat/vegetable dishes,Watery diarrhea; Cramps
+DIS925,Bacillus cereus (Ocular infections),Ophthalmology,Acute,Severe,Post-traumatic endophthalmitis,Penetrating eye injury,Rapid vision loss; Panophthalmitis; Enucleation
+DIS926,Listeria monocytogenes (Foodborne febrile gastroenteritis),Gastroenterology,Acute,Mild,Mild illness in healthy,Contaminated food,Fever; Diarrhea; Self-limited
+DIS927,Listeria monocytogenes (Meningitis) (already)
+DIS928,Listeria monocytogenes (Rhombencephalitis),Neurology,Acute,Severe,Brainstem encephalitis,Immunocompromised; elderly,Cranial nerve deficits; Ataxia; Respiratory failure
+DIS929,Nocardia species (Nocardiosis - Pulmonary),Pulmonology,Chronic,Severe,Chronic pulmonary infection in immunocompromised,Immunocompromised; chronic lung disease,Cough; Fever; Nodules; Cavitation; Brain abscess
+DIS930,Nocardia species (Nocardiosis - Cutaneous),Dermatology,Acute,Moderate,Traumatic inoculation,Soil exposure; gardeners,Cellulitis; Abscess; Mycetoma
+DIS931,Nocardia species (Nocardiosis - CNS),Neurology,Chronic,Severe,Brain abscess,Immunocompromised,Headache; Seizures; Focal deficits
+DIS932,Actinomyces israelii (Actinomycosis - Cervicofacial),Infectious Diseases,Chronic,Moderate,Chronic granulomatous infection,Poor oral hygiene; dental infection,Lumpy jaw; Sinus tracts; Sulfur granules
+DIS933,Actinomyces israelii (Actinomycosis - Thoracic),Pulmonology,Chronic,Severe,Pulmonary involvement,As above,Cough; Hemoptysis; Chest wall sinus
+DIS934,Actinomyces israelii (Actinomycosis - Abdominal),Gastroenterology,Chronic,Severe,Abdominal mass; fistula,Appendicitis; IUD (pelvic),Mass; Sinus; Fever
+DIS935,Actinomyces israelii (Pelvic actinomycosis),Obstetrics and Gynecology,Chronic,Moderate,Associated with long-term IUD use,Women with IUD,Pelvic mass; Pain; Fistula
+DIS936,Whipple's disease (Tropheryma whipplei),Gastroenterology,Chronic,Severe,Multisystem infection,Adults; middle-aged; white males,Arthralgia; Diarrhea; Weight loss; CNS involvement; Endocarditis
+DIS937,Malakoplakia (E. coli, others),Urology,Chronic,Moderate,Rare inflammatory disorder,Immunocompromised; renal transplant,Urinary tract; Mass lesions; Histiocytes with Michaelis-Gutmann bodies
+DIS938,Rhinoscleroma (Klebsiella rhinoscleromatis),Otorhinolaryngology,Chronic,Moderate,Chronic granuloma of nose,Endemic; poor hygiene,Nasal obstruction; Mass; Sclerosis
+DIS939,Chronic Granulomatous Disease (CGD) - Infections,Immunology,Chronic,Severe,Phagocyte defect causing recurrent bacterial/fungal infections,Children; X-linked or AR,Recurrent abscesses; Pneumonia; Osteomyelitis; Granulomas
+DIS940,Leukocyte Adhesion Deficiency (LAD),Immunology,Chronic,Severe,Defect in leukocyte adhesion,Infants; delayed separation of cord,Recurrent infections without pus; Periodontitis
+DIS941,Hyper-IgE Syndrome (Job's syndrome),Immunology,Chronic,Moderate,STAT3 mutation,Coarse facies; eczema; recurrent pneumatoceles,Recurrent skin/lung abscesses; Eczema; Eosinophilia
+DIS942,Common Variable Immunodeficiency (CVID) - Complications,Immunology,Chronic,Severe,Hypogammaglobulinemia,Adults; recurrent sinopulmonary infections,Enteropathy; Nodular lymphoid hyperplasia; Autoimmunity; Lymphoma
+DIS943,X-linked Agammaglobulinemia (Bruton's),Immunology,Chronic,Severe,Lack of B cells,Boys; recurrent infections after 6 months,Sinopulmonary infections; Enterovirus; Arthritis
+DIS944,Severe Combined Immunodeficiency (SCID) - Typical,Immunology,Acute,Severe,Infants; failure to thrive; severe infections,Early death without transplant,Opportunistic infections; Graft-versus-host from maternal cells
+DIS945,DiGeorge Syndrome (22q11.2 deletion),Immunology,Chronic,Severe,Thymic aplasia; cardiac defects; hypocalcemia,Infants; conotruncal anomalies,T-cell deficiency; Cardiac; Palate; Hypocalcemia
+DIS946,Wiskott-Aldrich Syndrome,Immunology,Chronic,Severe,X-linked; eczema; thrombocytopenia; infections,Boys; small platelets,Eczema; Bleeding; Autoimmunity; Lymphoma
+DIS947,Ataxia-telangiectasia,Immunology,Chronic,Severe,DNA repair defect; cerebellar ataxia; telangiectasias,Children; recurrent infections,Progressive ataxia; Telangiectasias; Malignancy
+DIS948,Hereditary Angioedema (C1 inhibitor deficiency) (already)
+DIS949,Acquired Angioedema (C1 inhibitor deficiency),Immunology,Chronic,Moderate,Associated with lymphoproliferative or autoimmune disease,Adults; lymphoma; MGUS,Recurrent angioedema without urticaria
+DIS950,Mastocytosis (Cutaneous),Dermatology,Chronic,Mild,Urticaria pigmentosa in children,Children; benign,Macules; Pruritus; Darier's sign
+DIS951,Mastocytosis (Systemic Indolent),Immunology,Chronic,Moderate,Clonal mast cells in adults,Adults; KIT mutation,Urticaria pigmentosa; Anaphylaxis; Osteoporosis; GI symptoms
+DIS952,Mastocytosis (Systemic Aggressive),Immunology,Chronic,Severe,Organ dysfunction due to mast cell infiltration,Adults; poor prognosis,Cytopenias; Hepatosplenomegaly; Malabsorption; Bone lesions
+DIS953,Mast Cell Leukemia (already)
+DIS954,Myelodysplastic Syndromes (MDS) - Low risk,Hematology,Chronic,Moderate,Cytopenias with dysplasia,Elderly; asymptomatic,Anemia; Transfusion dependence; Infection
+DIS955,Myelodysplastic Syndromes (MDS) - High risk,Hematology,Chronic,Severe,Excess blasts, high risk of AML,As above,Pancytopenia; Progression to AML; Bleeding; Infection
+DIS956,Myelodysplastic/Myeloproliferative Neoplasm (MDS/MPN),Hematology,Chronic,Severe,Overlap features (CMML),Elderly; splenomegaly,Monocytosis; Cytopenias; Transformation
+DIS957,Chronic Myelomonocytic Leukemia (CMML),Hematology,Chronic,Severe,Monocytosis >1, dysplastic features,Elderly; splenomegaly,Fatigue; Infection; Bleeding; AML transformation
+DIS958,Atypical Chronic Myeloid Leukemia (aCML),Hematology,Chronic,Severe,BCR-ABL negative, neutrophilia, dysplasia,Elderly; poor prognosis,Neutrophilia; Anemia; Thrombocytopenia; AML
+DIS959,Chronic Neutrophilic Leukemia (CNL),Hematology,Chronic,Moderate,Pure neutrophilia, no dysplasia,Adults; splenomegaly,Asymptomatic; Gout; Bleeding; AML risk
+DIS960,Chronic Eosinophilic Leukemia (CEL),Hematology,Chronic,Severe,Clonal eosinophilia,Adults; organ damage,Cardiac; Lung; Neurologic; AML
+DIS961,Hypereosinophilic Syndrome (HES) (already)
+DIS962,Polycythemia Vera (already)
+DIS963,Essential Thrombocythemia (already)
+DIS964,Primary Myelofibrosis (PMF) - Prefibrotic,Hematology,Chronic,Moderate,Early stage with hypercellular marrow,Adults; JAK2/MPL/CALR mutation,Asymptomatic; Fatigue; Progression
+DIS965,Primary Myelofibrosis (PMF) - Fibrotic,Hematology,Chronic,Severe,Overt myelofibrosis with cytopenias and extramedullary hematopoiesis,Adults; massive splenomegaly,Constitutional symptoms; Cachexia; Portal hypertension; Blast phase
+DIS966,Post-PV/ET Myelofibrosis,Hematology,Chronic,Severe,Evolution from PV or ET,As above,Similar to PMF
+DIS967,Acute Myeloid Leukemia (AML) - with recurrent genetic abnormalities,Oncology,Acute,Severe,AML with t(8;21), inv(16), etc.,Adults; children,Variable prognosis; Good risk with core-binding factor
+DIS968,Acute Myeloid Leukemia (AML) - with myelodysplasia-related changes,Oncology,Acute,Severe,AML arising from MDS or with MDS karyotype,Elderly; prior MDS,Poor prognosis; Cytopenias
+DIS969,Acute Myeloid Leukemia (AML) - therapy-related,Oncology,Acute,Severe,Prior chemotherapy/radiation,Prior cancer treatment,Poor prognosis; Complex karyotype
+DIS970,Acute Myeloid Leukemia (AML) - NOS (AML with maturation),Oncology,Acute,Severe,AML not otherwise specified,All ages,Variable
+DIS971,Acute Promyelocytic Leukemia (APL) (already)
+DIS972,Acute Lymphoblastic Leukemia (ALL) - B-cell,Oncology,Acute,Severe,Precursor B-cell ALL,Children; adults,High cure rate in children; adults worse
+DIS973,Acute Lymphoblastic Leukemia (ALL) - T-cell,Oncology,Acute,Severe,Precursor T-cell ALL,Adolescents; young adults,Mediastinal mass; CNS involvement; Aggressive
+DIS974,Acute Lymphoblastic Leukemia (ALL) - Philadelphia chromosome-positive,Oncology,Acute,Severe,BCR-ABL1 positive ALL,Adults; poor prognosis,Tyrosine kinase inhibitor response
+DIS975,Burkitt Leukemia/Lymphoma (FAB L3),Oncology,Acute,Severe,Mature B-cell ALL with MYC translocation,Children; adults; HIV,Abdominal mass; Bone marrow; CNS; Highly aggressive but curable
+DIS976,Blastic Plasmacytoid Dendritic Cell Neoplasm (BPDCN) (already)
+DIS977,Hairy Cell Leukemia (already)
+DIS978,Hairy Cell Leukemia variant,Hematology,Chronic,Severe,Resistant to standard therapy,Adults; poor response,Pancytopenia; Splenomegaly; Aggressive course
+DIS979,Chronic Lymphocytic Leukemia (CLL) - with del17p,Oncology,Chronic,Severe,Poor-risk CLL with TP53 mutation,Elderly; poor prognosis,Resistant to chemoimmunotherapy; need targeted agents
+DIS980,Chronic Lymphocytic Leukemia (CLL) - with mutated IGHV,Oncology,Chronic,Moderate,Better prognosis,Indolent course; long survival
+DIS981,Chronic Lymphocytic Leukemia (CLL) - with unmutated IGHV,Oncology,Chronic,Severe,Worse prognosis,Progressive; need early treatment
+DIS982,Prolymphocytic Leukemia (PLL) - B-cell,Hematology,Chronic,Severe,Aggressive variant with prolymphocytes,Adults; elderly,High WBC; Splenomegaly; Poor response
+DIS983,Prolymphocytic Leukemia (PLL) - T-cell,Hematology,Chronic,Severe,Aggressive T-cell leukemia,Adults; hepatosplenomegaly,High WBC; Skin involvement; CNS; Very poor prognosis
+DIS984,Adult T-cell Leukemia/Lymphoma (ATLL) - Acute type,Oncology,Acute,Severe,HTLV-1 associated,Endemic (Japan, Caribbean); adults,Lymphadenopathy; Hypercalcemia; Skin lesions; Poor prognosis
+DIS985,Adult T-cell Leukemia/Lymphoma (ATLL) - Lymphoma type,Oncology,Acute,Severe,Lymphadenopathy predominant,As above,As above
+DIS986,Adult T-cell Leukemia/Lymphoma (ATLL) - Chronic type,Oncology,Chronic,Moderate,Indolent course,As above,Skin lesions; Lymphocytosis; Better prognosis
+DIS987,Adult T-cell Leukemia/Lymphoma (ATLL) - Smoldering type,Oncology,Chronic,Low,Minimal disease,As above,Skin lesions; Normal calcium; Long survival
+DIS988,Extranodal NK/T-cell Lymphoma (Nasal type) (already)
+DIS989,Enteropathy-associated T-cell Lymphoma (EATL) (already)
+DIS990,Monomorphic Epitheliotropic Intestinal T-cell Lymphoma (MEITL),Oncology,Acute,Severe,Rare T-cell lymphoma of intestine,Adults; celiac disease not required,Intestinal perforation; Obstruction; Poor prognosis
+DIS991,Indolent T-cell Lymphoproliferative Disorder of the GI Tract,Oncology,Chronic,Low,Rare, indolent,Adults; asymptomatic,Incidental; Mucosal infiltration; Excellent prognosis
+DIS992,Hepatosplenic T-cell Lymphoma,Oncology,Acute,Severe,Rare aggressive T-cell lymphoma,Young adults; immunosuppression (IBD therapy),Hepatosplenomegaly; Cytopenias; Bone marrow; Poor prognosis
+DIS993,Subcutaneous Panniculitis-like T-cell Lymphoma (already)
+DIS994,Mycosis Fungoides (Patch stage),Oncology,Chronic,Low,Early CTCL,Adults; indolent,Patches; May progress
+DIS995,Mycosis Fungoides (Plaque stage),Oncology,Chronic,Moderate,Progressive,As above,Plaques; Infiltration
+DIS996,Mycosis Fungoides (Tumor stage),Oncology,Chronic,Severe,Advanced CTCL with tumors,As above,Nodules; Ulceration; Lymph node involvement
+DIS997,Sézary Syndrome (already)
+DIS998,Primary Cutaneous CD30+ T-cell Lymphoproliferative Disorders (LyP),Oncology,Chronic,Low,Lymphomatoid papulosis,Adults; benign,Recurrent self-healing papules; CD30+
+DIS999,Primary Cutaneous Anaplastic Large Cell Lymphoma (C-ALCL),Oncology,Chronic,Moderate,Skin-limited ALCL,Adults; solitary nodule,Spontaneous regression; Good prognosis
+DIS1000,Primary Cutaneous CD4+ Small/Medium T-cell Lymphoproliferative Disorder,Oncology,Chronic,Low,Rare, indolent,Adults; solitary plaque,Excellent prognosis
+DIS1001,Primary Cutaneous Gamma-Delta T-cell Lymphoma,Oncology,Acute,Severe,Aggressive cutaneous lymphoma,Adults; poor prognosis,Necrotic plaques; Subcutaneous; Hemophagocytosis
+DIS1002,Primary Cutaneous Aggressive Epidermotropic CD8+ T-cell Lymphoma,Oncology,Acute,Severe,Rare aggressive,Adults; poor prognosis,Necrotic plaques; Ulceration; Rapid progression
+DIS1003,Angioimmunoblastic T-cell Lymphoma (AITL) (already)
+DIS1004,Anaplastic Large Cell Lymphoma (ALCL), ALK+,Oncology,Chronic,Moderate,CD30+, ALK+ T-cell lymphoma,Children; young adults; good prognosis,Peripheral lymph nodes; Extranodal; Curable
+DIS1005,Anaplastic Large Cell Lymphoma (ALCL), ALK-,Oncology,Chronic,Severe,CD30+, ALK- T-cell lymphoma,Adults; worse prognosis,Similar presentation but worse outcome
+DIS1006,Breast Implant-associated ALCL,Oncology,Chronic,Moderate,CD30+ ALCL around breast implants,Women with textured implants,Seroma; Mass; Usually indolent
+DIS1007,Follicular Lymphoma (Grade 1-2),Oncology,Chronic,Moderate,Indolent B-cell lymphoma,Adults; advanced stage,Asymptomatic lymphadenopathy; Watch and wait; Long survival
+DIS1008,Follicular Lymphoma (Grade 3A),Oncology,Chronic,Moderate,May behave more aggressively,As above,May be treated more intensively
+DIS1009,Follicular Lymphoma (Grade 3B),Oncology,Chronic,Severe,Treated as DLBCL,As above,Need anthracycline-based chemo
+DIS1010,Marginal Zone Lymphoma (MALT type) - Gastric (already)
+DIS1011,Marginal Zone Lymphoma (MALT type) - Ocular adnexa,Oncology,Chronic,Moderate,Conjunctival/orbital MALT,Adults; associated with Chlamydia psittaci?,Localized; Radiotherapy
+DIS1012,Marginal Zone Lymphoma (MALT type) - Salivary gland,Oncology,Chronic,Moderate,Associated with Sjögren's,As above,Local; May disseminate
+DIS1013,Marginal Zone Lymphoma (MALT type) - Thyroid,Oncology,Chronic,Moderate,Hashimoto's thyroiditis association,Adults; women,Indolent
+DIS1014,Marginal Zone Lymphoma (Nodal),Oncology,Chronic,Moderate,Similar to extranodal but nodal,Adults; advanced,Lymphadenopathy; Indolent
+DIS1015,Marginal Zone Lymphoma (Splenic),Oncology,Chronic,Moderate,Splenomegaly; bone marrow,Adults; HCV association,Cytopenias; Splenectomy may be curative
+DIS1016,Lymphoplasmacytic Lymphoma (Waldenström Macroglobulinemia) (already)
+DIS1017,Mantle Cell Lymphoma (Classic),Oncology,Chronic,Severe,Cyclin D1+, aggressive,Adults; elderly; male,Lymphadenopathy; Extranodal; Bone marrow; Poor prognosis
+DIS1018,Mantle Cell Lymphoma (Indolent),Oncology,Chronic,Moderate,Leukemic non-nodal form,As above,Slower progression; May watch and wait
+DIS1019,Mantle Cell Lymphoma (Blastoid),Oncology,Acute,Severe,Highly aggressive variant,As above,Very poor prognosis; Need intensive therapy
+DIS1020,Diffuse Large B-cell Lymphoma (DLBCL), NOS (already)
+DIS1021,Diffuse Large B-cell Lymphoma (DLBCL) - Germinal center B-cell type (GCB),Oncology,Chronic,Severe,Better prognosis with R-CHOP,Adults,Good outcome
+DIS1022,Diffuse Large B-cell Lymphoma (DLBCL) - Activated B-cell type (ABC),Oncology,Chronic,Severe,Worse prognosis,As above,Poorer outcome; Targeted therapies emerging
+DIS1023,Primary Mediastinal Large B-cell Lymphoma (PMBCL),Oncology,Chronic,Severe,DLBCL arising in mediastinum,Young adults; female,Mediastinal mass; SVC syndrome; Curable with R-CHOP +/- radiotherapy
+DIS1024,T-cell/Histiocyte-rich Large B-cell Lymphoma,Oncology,Chronic,Severe,Rare DLBCL variant,Adults; male; advanced,Often presents with B symptoms; aggressive
+DIS1025,EBV-positive DLBCL, NOS,Oncology,Chronic,Severe,EBV+ in older adults,Elderly; immunosuppressed,More aggressive; Poor prognosis
+DIS1026,Burkitt Lymphoma (Sporadic),Oncology,Acute,Severe,Abdominal presentation,Children; adults,Highly aggressive but curable with intensive chemo
+DIS1027,Burkitt Lymphoma (Endemic),Oncology,Acute,Severe,Jaw/face mass in African children,Children; EBV-associated,As above
+DIS1028,Burkitt Lymphoma (Immunodeficiency-associated),Oncology,Acute,Severe,HIV-associated,Adults; HIV,As above
+DIS1029,High-grade B-cell Lymphoma with MYC and BCL2 and/or BCL6 rearrangements (Double/Triple-hit),Oncology,Acute,Severe,Aggressive lymphoma with translocations,Adults; elderly; advanced,Very poor; Need intensive therapy like DA-EPOCH-R
+DIS1030,High-grade B-cell Lymphoma, NOS,Oncology,Acute,Severe,Burkitt-like or intermediate,Adults; aggressive,Poor outcome
+DIS1031,Primary CNS Lymphoma (already)
+DIS1032,Primary Vitreoretinal Lymphoma,Oncology,Chronic,Severe,DLBCL of eye,Adults; elderly; often CNS involvement later,Floaters; Vision loss; Masks uveitis
+DIS1033,Primary Testicular Lymphoma,Oncology,Chronic,Severe,DLBCL of testis,Men >60; testicular mass,High risk of CNS relapse; Contralateral testis involvement
+DIS1034,Lymphomatoid Granulomatosis,Oncology,Chronic,Severe,EBV-positive B-cell lymphoproliferation,Lungs; skin; CNS; immunocompromised,Nodules; Cavitation; Progressive
+DIS1035,Post-transplant Lymphoproliferative Disorder (PTLD) - Early lesions,Oncology,Acute,Moderate,Plasmacytic hyperplasia,Post-transplant; EBV+,Polyclonal; May regress with reduced immunosuppression
+DIS1036,PTLD - Polymorphic,Oncology,Acute,Severe,Polymorphic infiltrate,As above,Destructive; Need chemoimmunotherapy
+DIS1037,PTLD - Monomorphic (DLBCL type),Oncology,Acute,Severe,DLBCL,As above,Treat as DLBCL
+DIS1038,PTLD - Classical Hodgkin lymphoma type,Oncology,Acute,Severe,Hodgkin-like,As above,Treat as HL
+DIS1039,Histiocytic Sarcoma (already)
+DIS1040,Langerhans Cell Histiocytosis (LCH) - Single system,Oncology,Chronic,Moderate,Eosinophilic granuloma (bone),Children; young adults,Bone lesion; Diabetes insipidus if CNS involved
+DIS1041,Langerhans Cell Histiocytosis (LCH) - Multisystem,Oncology,Chronic,Severe,High-risk (liver, spleen, bone marrow),Infants; poor prognosis,Organ dysfunction; Skin; Lung; Liver; Spleen; Mortality
+DIS1042,Erdheim-Chester Disease (LCH-negative) (already)
+DIS1043,Rosaï-Dorfman Disease (Sinus histiocytosis) (already)
+DIS1044,IgG4-related Disease (already)
+DIS1045,Castleman Disease (Unicentric) - Hyaline vascular type (already)
+DIS1046,Castleman Disease (Unicentric) - Plasma cell type,Oncology,Chronic,Moderate,May have systemic symptoms,Adults; localized,Constitutional symptoms; Resection often curative
+DIS1047,Castleman Disease (Multicentric) - HHV-8-associated,Oncology,Chronic,Severe,HHV-8+ MCD in HIV or immunocompromised,HIV; elderly,Fever; Cytopenias; Organomegaly; POEMS-like; High mortality
+DIS1048,Castleman Disease (Multicentric) - Idiopathic (iMCD),Oncology,Chronic,Severe,HHV-8-negative,Adults; systemic inflammation,Thrombocytopenia; Anasarca; Fever; Reticulin fibrosis; Organomegaly (TAFRO syndrome)
+DIS1049,POEMS Syndrome (already)
+DIS1050,Tumor-induced Osteomalacia (TIO) (already)

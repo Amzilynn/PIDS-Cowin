@@ -1,0 +1,157 @@
+moa_id,mechanism_name,biological_target,physiological_effect,therapeutic_benefit,risk_notes
+MOA001,ACE Inhibition,Angiotensin-converting enzyme,Reduced angiotensin II; increased bradykinin,Lower BP; reduce proteinuria; heart failure,Angioedema; cough; hyperkalemia
+MOA002,AT1 Receptor Blockade,Angiotensin II type 1 receptor,Block vasoconstriction and aldosterone release,Lower BP; heart failure; nephroprotection,Hyperkalemia; angioedema rare
+MOA003,Beta-1 Adrenergic Blockade,Beta-1 adrenergic receptors in heart,Decreased HR; contractility; renin release,Hypertension; angina; heart failure; post-MI,Bradycardia; heart block; bronchospasm (if non-selective)
+MOA004,Beta-2 Adrenergic Agonism,Beta-2 adrenergic receptors in bronchi,Bronchodilation,Relief of bronchospasm in asthma/COPD,Tachycardia; tremor; hypokalemia
+MOA005,L-type Calcium Channel Blockade (Vascular),L-type calcium channels in vascular smooth muscle,Vasodilation; decreased peripheral resistance,Hypertension; angina,Headache; flushing; peripheral edema
+MOA006,L-type Calcium Channel Blockade (Cardiac),L-type calcium channels in heart,Decreased SA/AV node conduction; negative inotrope,Atrial fibrillation; angina; hypertension,Bradycardia; heart block; constipation (verapamil)
+MOA007,Na-Cl Cotransporter Inhibition,Na-Cl cotransporter in distal tubule,Increased sodium and water excretion,Hypertension; edema,Electrolyte imbalance; hyperuricemia
+MOA008,Na-K-2Cl Cotransporter Inhibition,Na-K-2Cl cotransporter in thick ascending limb,Potent diuresis,Edema; heart failure; hypertension,Dehydration; hypokalemia; ototoxicity
+MOA009,Mineralocorticoid Receptor Antagonism,Mineralocorticoid receptor,Block aldosterone effects; increased sodium excretion,Heart failure; resistant hypertension; cirrhosis,Hyperkalemia; gynecomastia (spironolactone)
+MOA010,HMG-CoA Reductase Inhibition,HMG-CoA reductase,Reduced cholesterol synthesis,Lower LDL; cardiovascular risk reduction,Myopathy; liver enzyme elevation; diabetes risk
+MOA011,NPC1L1 Inhibition,NPC1L1 in intestine,Reduced intestinal cholesterol absorption,Lower LDL,GI upset; myalgia (rare)
+MOA012,PCSK9 Inhibition,PCSK9,Increased LDL receptor recycling,Lower LDL significantly,Injection site reactions; flu-like symptoms
+MOA013,PPAR-alpha Activation,PPAR-alpha,Increased fatty acid oxidation; reduced triglycerides,Lower triglycerides; HDL increase,Dyspepsia; myopathy; gallstones
+MOA014,NO-mediated Vasodilation,Guanylate cyclase in smooth muscle,Vasodilation,Relief of angina; heart failure,Headache; hypotension; tolerance
+MOA015,COX-1 Inhibition (Irreversible),Cyclooxygenase-1,Reduced thromboxane A2 production,Anti-platelet effect; cardiovascular prevention,GI bleeding; ulceration
+MOA016,P2Y12 Receptor Blockade,P2Y12 receptor on platelets,Inhibition of platelet aggregation,Prevent thrombosis in ACS/stents,Bleeding; TTP (clopidogrel rare)
+MOA017,Factor Xa Inhibition,Factor Xa,Inhibition of coagulation cascade,Prevent/treat thrombosis,Bleeding; no reversal agent for some
+MOA018,Direct Thrombin Inhibition,Thrombin (factor IIa),Inhibition of fibrin formation,Prevent/treat thrombosis,Bleeding; dyspepsia
+MOA019,Vitamin K Antagonism,Inhibition of vitamin K-dependent factors (II, VII, IX, X),Reduced clotting factor synthesis,Anticoagulation,Bleeding; INR variability; drug interactions
+MOA020,Antithrombin III Activation,Antithrombin III,Accelerated inactivation of thrombin and factor Xa,Anticoagulation,Bleeding; HIT (heparin)
+MOA021,Na/K-ATPase Inhibition,Na/K-ATPase,Increased intracellular calcium in cardiac myocytes,Positive inotropy; AV node slowing,Arrhythmias; toxicity (nausea, vision)
+MOA022,Multichannel Blockade (Amiodarone),Multiple cardiac ion channels,Class III antiarrhythmic effects,Various arrhythmias,Thyroid; pulmonary; liver; corneal deposits
+MOA023,If Channel Inhibition,If channels in SA node,Slowing of sinus rate,Stable angina; heart failure,Bradycardia; visual disturbances
+MOA024,Late Na Current Inhibition,Late sodium channels in myocytes,Reduced intracellular calcium overload,Chronic angina,QT prolongation; dizziness
+MOA025,AMPK Activation,AMPK,Reduced hepatic glucose output; increased peripheral insulin sensitivity,Type 2 diabetes,GI upset; lactic acidosis (rare)
+MOA026,ATP-sensitive K Channel Closure (Sulfonylureas),SUR1/Kir6.2 in beta cells,Insulin secretion,Type 2 diabetes,Hypoglycemia; weight gain
+MOA027,DPP-4 Inhibition,DPP-4 enzyme,Increased GLP-1 and GIP levels,Type 2 diabetes,Low hypoglycemia; possible arthralgia
+MOA028,GLP-1 Receptor Agonism,GLP-1 receptors,Increased insulin; decreased glucagon; delayed gastric emptying,Type 2 diabetes; obesity,Nausea; vomiting; pancreatitis risk; thyroid C-cell tumors
+MOA029,SGLT2 Inhibition,SGLT2 in proximal tubule,Reduced glucose reabsorption,Type 2 diabetes; heart failure; CKD,UTI; euglycemic DKA; volume depletion
+MOA030,PPAR-gamma Activation,PPAR-gamma,Increased insulin sensitivity,Type 2 diabetes,Weight gain; fluid retention; fracture risk; bladder cancer concern
+MOA031,Insulin Receptor Agonism,Insulin receptors,Glucose uptake; glycogen synthesis; anabolism,Diabetes, Hypoglycemia; weight gain
+MOA032,Alpha-glucosidase Inhibition,Alpha-glucosidase in intestine,Delayed carbohydrate absorption,Type 2 diabetes,Flatulence; diarrhea
+MOA33,Amylin Receptor Agonism,Amylin receptors,Reduced glucagon; delayed gastric emptying; satiety,Type 1/2 diabetes,Nausea; hypoglycemia
+MOA034,Thyroid Hormone Receptor Activation,Thyroid hormone receptors,Increased metabolism; growth; development,Hypothyroidism,Tachycardia; anxiety; osteoporosis
+MOA035,Thyroid Peroxidase Inhibition,Thyroid peroxidase,Reduced thyroid hormone synthesis,Hyperthyroidism,Agranulocytosis; hepatotoxicity; rash
+MOA036,Osteoclast Inhibition (Bisphosphonates),Farnesyl pyrophosphate synthase in osteoclasts,Reduced bone resorption,Osteoporosis; Paget's,GI irritation; osteonecrosis of jaw; atypical fracture
+MOA037,RANKL Inhibition,RANKL on osteoclasts,Reduced osteoclast activity,Osteoporosis; bone metastases,Hypocalcemia; skin reactions; infection risk
+MOA038,Estrogen Receptor Modulation (SERMs),Estrogen receptors in bone (agonist); breast (antagonist),Bone protection; antiestrogen in breast,Osteoporosis prevention; breast cancer risk reduction,Hot flashes; DVT risk
+MOA039,Parathyroid Hormone Receptor Activation (PTH1R),PTH1R on osteoblasts,Stimulated bone formation,Osteoporosis,Nausea; hypercalcemia; osteosarcoma risk
+MOA040,Calcitonin Receptor Activation,Calcitonin receptors,Reduced osteoclast activity,Osteoporosis; Paget's; hypercalcemia,Rhinorrhea (nasal); nausea
+MOA041,GnRH Receptor Agonism,GnRH receptors in pituitary,Initial flare then downregulation,Endometriosis; prostate cancer; precocious puberty,Hot flashes; bone loss; injection site reactions
+MOA042,Aromatase Inhibition,Aromatase enzyme,Reduced estrogen synthesis,Breast cancer (hormone receptor positive),Arthralgia; hot flashes; osteoporosis
+MOA043,Dopamine D2 Antagonism (Metoclopramide),Dopamine D2 receptors in chemoreceptor trigger zone and gut,Antiemetic; prokinetic,Nausea; gastroparesis,Extrapyramidal symptoms; tardive dyskinesia
+MOA044,H+/K+ ATPase Inhibition (PPIs),H+/K+ ATPase in parietal cells,Reduced gastric acid secretion,GERD; ulcers; H. pylori,Clostridium difficile risk; hypomagnesemia; osteoporosis
+MOA045,Histamine H2 Antagonism,H2 receptors on parietal cells,Reduced gastric acid secretion,GERD; ulcers,Headache; diarrhea; rare thrombocytopenia
+MOA046,Prostaglandin E1 Analogue (Misoprostol),Prostaglandin EP receptors,Protection of gastric mucosa,NSAID ulcer prevention,Diarrhea; abortion risk
+MOA047,5-ASA Anti-inflammatory,Peroxisome proliferator-activated receptor-gamma?; multiple,Topical anti-inflammatory in colon,Ulcerative colitis; Crohn's colitis,Renal impairment; GI intolerance
+MOA048,Purine Synthesis Inhibition (Azathioprine),Inhibition of purine synthesis,Reduced lymphocyte proliferation,IBD; autoimmune hepatitis,Myelosuppression; hepatotoxicity; infection risk
+MOA049,TNF-alpha Neutralization,TNF-alpha,Reduced inflammation,IBD; rheumatoid arthritis; psoriasis,Infection risk (TB); infusion reactions; demyelination
+MOA050,Alpha4beta7 Integrin Blockade,Alpha4beta7 integrin on lymphocytes,Prevents lymphocyte gut homing,Ulcerative colitis; Crohn's disease,Infection risk; PML risk (rare)
+MOA051,IL-12/IL-23 Inhibition,p40 subunit of IL-12 and IL-23,Reduced Th1/Th17 responses,Psoriasis; Crohn's disease,Infection risk; reversible posterior leukoencephalopathy
+MOA052,JAK Inhibition,JAK1/JAK3/JAK2,Inhibition of cytokine signaling,Rheumatoid arthritis; ulcerative colitis,Infections; herpes zoster; lipid changes; thrombosis
+MOA053,5-HT3 Receptor Antagonism,5-HT3 receptors in gut and brain stem,Antiemetic,Nausea; vomiting (especially chemo-induced),Constipation; headache; QT prolongation
+MOA054,Levodopa (Dopamine Precursor),Converted to dopamine in brain,Dopamine replacement,Parkinson's disease,Nausea; dyskinesias; motor fluctuations
+MOA055,Dopamine D2/D3 Agonism,Dopamine receptors in striatum,Direct dopamine stimulation,Parkinson's disease; restless legs,Nausea; impulse control disorders; hallucinations
+MOA056,COMT Inhibition,COMT enzyme,Reduced levodopa metabolism,Adjunct to levodopa in Parkinson's,Dyskinesia; diarrhea; urine discoloration
+MOA057,MAO-B Inhibition,MAO-B enzyme,Reduced dopamine breakdown,Parkinson's disease; depression (selegiline),Hypertensive crisis with tyramine (if high dose)
+MOA058,Acetylcholinesterase Inhibition,Acetylcholinesterase,Increased acetylcholine in synapses,Alzheimer's disease,Nausea; diarrhea; bradycardia
+MOA059,NMDA Receptor Antagonism,NMDA receptor,Reduced glutamate excitotoxicity,Alzheimer's disease,Dizziness; confusion; hallucinations
+MOA060,Sodium Channel Blockade (Antiepileptics),Voltage-gated sodium channels,Stabilize neuronal membranes,Epilepsy; neuropathic pain,Dizziness; ataxia; diplopia
+MOA061,GABA Potentiation (Benzodiazepines),GABA-A receptor,Increased chloride influx,Anxiety; seizures; sedation,Dependence; tolerance; respiratory depression
+MOA062,SV2A Modulation (Levetiracetam),Synaptic vesicle protein 2A,Reduced neurotransmitter release,Epilepsy,Somnolence; behavioral changes
+MOA063,5-HT1B/1D Agonism (Triptans),5-HT1B/1D receptors on cranial vessels and trigeminal nerve,Vasoconstriction; inhibition of neuropeptide release,Acute migraine,Coronary vasospasm; paresthesia; dizziness
+MOA064,CGRP Receptor Antagonism,CGRP receptor,Blockade of vasodilatory and pain-signaling effects,Acute migraine; migraine prevention,No vasoconstriction; possible hepatic toxicity
+MOA065,CGRP Ligand/Receptor Monoclonal Antibody,CGRP or its receptor,Prevent CGRP-mediated migraine,Chronic migraine prevention,Injection site reactions; constipation
+MOA066,GABA-B Agonism (Baclofen),GABA-B receptor in spinal cord,Reduced spasticity,Spasticity; hiccups,Sedation; weakness; withdrawal seizures
+MOA067,Alpha-2 Adrenergic Agonism (Tizanidine),Central alpha-2 receptors,Reduced spasticity,Spasticity,Sedation; hypotension; dry mouth
+MOA068,Ryanodine Receptor Inhibition (Dantrolene),Ryanodine receptor on SR,Reduced calcium release,Malignant hyperthermia; spasticity,Muscle weakness; hepatotoxicity
+MOA069,DNA Crosslinking (Platinum),DNA,Inhibition of replication; apoptosis,Cancer,Nephrotoxicity; neurotoxicity; ototoxicity; nausea
+MOA070,Microtubule Stabilization (Taxanes),Microtubules,Arrest mitosis,Cancer,Neutropenia; peripheral neuropathy; hypersensitivity
+MOA071,Topoisomerase II Inhibition (Anthracyclines),Topoisomerase II,DNA strand breaks,Cancer,Cardiomyopathy; myelosuppression; alopecia
+MOA072,Thymidylate Synthase Inhibition (5-FU),Thymidylate synthase,Reduced DNA synthesis,Cancer,Myelosuppression; mucositis; hand-foot syndrome
+MOA073,DNA Synthesis Inhibition (Gemcitabine),Ribonucleotide reductase; DNA incorporation,Chain termination,Cancer,Myelosuppression; flu-like symptoms; rash
+MOA074,HER2/neu Receptor Blockade (Trastuzumab),HER2 receptor,Inhibition of HER2 signaling,HER2+ breast/gastric cancer,Cardiomyopathy; infusion reactions
+MOA075,CD20 Depletion (Rituximab),CD20 on B cells,B-cell lysis,CD20+ lymphomas; autoimmune,Infusion reactions; PML; hepatitis B reactivation
+MOA076,VEGF Inhibition (Bevacizumab),VEGF,Anti-angiogenesis,Cancer; ocular neovascularization,Hypertension; bleeding; thrombosis; GI perforation
+MOA077,BCR-ABL Tyrosine Kinase Inhibition (Imatinib),BCR-ABL tyrosine kinase,Inhibition of proliferation,CML; GIST,Edema; nausea; hepatotoxicity; cardiotoxicity
+MOA078,PD-1/PD-L1 Blockade (Checkpoint Inhibitors),PD-1 or PD-L1,Restores T-cell anti-tumor activity,Many cancers,Immune-related adverse events (pneumonitis, colitis, hepatitis, endocrinopathies)
+MOA079,CTLA-4 Blockade (Checkpoint Inhibitors),CTLA-4,Enhanced T-cell activation,Melanoma; renal,Immune-related adverse events; severe
+MOA80,mTOR Inhibition,mTOR,Inhibition of cell growth and proliferation,Cancer; tuberous sclerosis,Stomatitis; rash; pneumonitis; metabolic effects
+MOA081,Proteasome Inhibition (Bortezomib),Proteasome,Accumulation of pro-apoptotic proteins,Multiple myeloma; mantle cell lymphoma,Peripheral neuropathy; thrombocytopenia; fatigue
+MOA082,Immunomodulatory (Lenalidomide),Cereblon; anti-angiogenic; T-cell costimulation,Apoptosis of myeloma cells; immune modulation,Multiple myeloma; MDS; lymphoma,Thrombosis; rash; myelosuppression
+MOA083,HIV Reverse Transcriptase Inhibition (NRTIs),HIV reverse transcriptase,Chain termination of viral DNA,HIV,Lactic acidosis; lipodystrophy; mitochondrial toxicity
+MOA084,HIV Reverse Transcriptase Inhibition (NNRTIs),HIV reverse transcriptase,Non-competitive inhibition,HIV,Rash; hepatotoxicity; CNS effects
+MOA085,HIV Protease Inhibition (PIs),HIV protease,Inhibition of virion maturation,HIV,GI intolerance; metabolic syndrome; lipodystrophy
+MOA086,HIV Integrase Inhibition (INSTIs),HIV integrase,Inhibition of viral DNA integration,HIV,Insomnia; headache; weight gain
+MOA087,Bacterial Cell Wall Synthesis Inhibition (Beta-lactams),Penicillin-binding proteins (PBPs),Inhibition of peptidoglycan synthesis,Bacterial infections,Allergic reactions; diarrhea
+MOA088,Bacterial Protein Synthesis Inhibition (Macrolides),50S ribosomal subunit,Inhibition of translocation,Bacterial infections,QT prolongation; GI upset; cholestatic hepatitis
+MOA089,Bacterial Protein Synthesis Inhibition (Tetracyclines),30S ribosomal subunit,Inhibition of tRNA binding,Bacterial infections; acne,Photosensitivity; tooth discoloration; esophagitis
+MOA090,Bacterial Protein Synthesis Inhibition (Aminoglycosides),30S ribosomal subunit,Misreading of mRNA; bactericidal,Gram-negative infections,Nephrotoxicity; ototoxicity; neuromuscular blockade
+MOA091,DNA Gyrase/Topoisomerase IV Inhibition (Fluoroquinolones),DNA gyrase and topoisomerase IV,Inhibition of DNA replication,Bacterial infections,Tendonitis; QT prolongation; CNS effects
+MOA092,Folate Synthesis Inhibition (Sulfonamides),Dihydropteroate synthase,Inhibition of folate synthesis,Bacterial infections,Rash; Stevens-Johnson; crystalluria
+MOA093,Dihydrofolate Reductase Inhibition (Trimethoprim),Dihydrofolate reductase,Inhibition of folate synthesis,Bacterial infections; PJP,Myelosuppression; hyperkalemia; rash
+MOA094,DNA Disruption (Metronidazole),DNA of anaerobic organisms,DNA strand breakage,Anaerobes; protozoa,Metallic taste; neuropathy; disulfiram-like with alcohol
+MOA095,Protein Synthesis Inhibition (Clindamycin),50S ribosomal subunit,Inhibition of peptide bond formation,Anaerobes; Gram-positives,C. difficile colitis; rash
+MOA096,Protein Synthesis Inhibition (Linezolid),50S ribosomal subunit (early),Inhibition of initiation complex,MRSA; VRE,Myelosuppression; serotonin syndrome; neuropathy
+MOA097,Cell Membrane Disruption (Daptomycin),Cell membrane,Depolarization and cell death,Gram-positives,CPK elevation; myopathy; peripheral neuropathy
+MOA098,Ergosterol Synthesis Inhibition (Azoles),14-alpha demethylase (CYP51),Inhibition of ergosterol synthesis,Fungal infections,Hepatotoxicity; QT prolongation; drug interactions
+MOA099,Ergosterol Binding (Polyenes),Ergosterol in fungal membrane,Formation of pores,Fungal infections,Infusion reactions; nephrotoxicity
+MOA100,Beta-glucan Synthesis Inhibition (Echinocandins),Beta-glucan synthase,Disruption of fungal cell wall,Candida; Aspergillus,Infusion reactions; hepatotoxicity
+MOA101,Viral DNA Polymerase Inhibition (Acyclovir),HSV/VZV DNA polymerase,Chain termination,HSV; VZV,Renal crystals; neurotoxicity
+MOA102,Neuraminidase Inhibition (Oseltamivir),Influenza neuraminidase,Inhibition of viral release,Influenza,Nausea; vomiting; neuropsychiatric
+MOA103,NS5B Polymerase Inhibition (Sofosbuvir),HCV NS5B polymerase,Chain termination,HCV,Fatigue; headache; bradycardia with amiodarone
+MOA104,RNA Polymerase Inhibition (Remdesivir),SARS-CoV-2 RNA polymerase,Chain termination,COVID-19,Nausea; elevated transaminases
+MOA105,Mycolic Acid Synthesis Inhibition (Isoniazid),InhA,Inhibition of mycolic acid synthesis,TB,Hepatotoxicity; peripheral neuropathy
+MOA106,Bacterial RNA Synthesis Inhibition (Rifampin),RNA polymerase,Inhibition of transcription,TB; Staph,Orange secretions; hepatotoxicity; drug interactions
+MOA107,ATP Synthase Inhibition (Bedaquiline),Mycobacterial ATP synthase,Inhibition of ATP synthesis,MDR-TB,QT prolongation; hepatotoxicity
+MOA108,Microtubule Inhibition (Benzimidazoles),Beta-tubulin,Inhibition of microtubule polymerization,Helminths,GI upset; bone marrow suppression (high dose)
+MOA109,Glutamate-gated Chloride Channel Agonism (Ivermectin),Glutamate-gated chloride channels,Hyperpolarization of nerve/muscle,Parasites (nematodes, arthropods),Mazzotti reaction; neurological (high dose)
+MOA110,Calcium Influx (Praziquantel),Calcium channels in parasite membranes,Increased permeability,Schistosomiasis; cestodes,Dizziness; abdominal pain; urticaria
+MOA111,Glucocorticoid Receptor Activation (Corticosteroids),Glucocorticoid receptor,Anti-inflammatory; immunosuppression,Inflammation; autoimmune; allergy,Hyperglycemia; osteoporosis; infection; adrenal suppression
+MOA112,Leukotriene Receptor Antagonism (Montelukast),CysLT1 receptor,Block leukotriene-mediated bronchoconstriction,Asthma; allergic rhinitis,Neuropsychiatric events; headache
+MOA113,Mast Cell Stabilization (Cromolyn),Mast cell membrane,Prevention of degranulation,Asthma prophylaxis; allergic conjunctivitis,Throat irritation; cough
+MOA114,Phosphodiesterase Inhibition (Theophylline),Non-selective PDE,Increased cAMP; bronchodilation; anti-inflammatory,Asthma; COPD,Nausea; tachycardia; seizures; narrow therapeutic index
+MOA115,Anti-IgE (Omalizumab),IgE,Reduced free IgE; downregulation of receptors,Severe allergic asthma; urticaria,Anaphylaxis; injection site reactions
+MOA116,Anti-IL5 (Mepolizumab),IL-5,Reduced eosinophil production and survival,Severe eosinophilic asthma,Headache; back pain; hypersensitivity
+MOA117,Anti-IL5R (Benralizumab),IL-5 receptor,Antibody-dependent cell-mediated cytotoxicity of eosinophils,Severe eosinophilic asthma,Pharyngitis; fever; hypersensitivity
+MOA118,Anti-IL4R (Dupilumab),IL-4 receptor alpha,Blockade of IL-4 and IL-13 signaling,Asthma; atopic dermatitis; nasal polyps,Conjunctivitis; injection site reactions; eosinophilia
+MOA119,Antifibrotic (Pirfenidone),TGF-beta; oxidative stress,Anti-inflammatory; antifibrotic,IPF,GI upset; photosensitivity; rash
+MOA120,Multikinase Inhibition (Nintedanib),VEGFR, FGFR, PDGFR,Inhibition of fibrosis and angiogenesis,IPF; SSc-ILD,Diarrhea; nausea; hepatotoxicity
+MOA121,PDE5 Inhibition (Sildenafil, Tadalafil),PDE5,Increased cGMP in pulmonary vasculature and corpus cavernosum,PAH; erectile dysfunction,Headache; flushing; dyspepsia; vision changes; priapism
+MOA122,Endothelin Receptor Antagonism (Bosentan),Endothelin A and B receptors,Vasodilation; antiproliferative,PAH,Hepatotoxicity; edema; anemia; teratogenicity
+MOA123,Prostacyclin Receptor Agonism (Iloprost),IP receptor,Increased cAMP; vasodilation,PAH,Flushing; jaw pain; hypotension; syncope
+MOA124,sGC Stimulation (Riociguat),Soluble guanylate cyclase,Increased cGMP,PAH; CTEPH,Hypotension; bleeding; hemoptysis
+MOA125,Topical Calcineurin Inhibition (Tacrolimus),Calcineurin,Inhibition of T-cell activation,Atopic dermatitis;Burning; itching; long-term safety
+MOA126,Retinoid Receptor Activation (Topical Tretinoin),Retinoic acid receptors,Increased cell turnover; comedolysis,Acne; photoaging,Irritation; photosensitivity
+MOA127,Vitamin D Receptor Activation (Calcipotriene),Vitamin D receptor,Reduced keratinocyte proliferation,Psoriasis,Irritation; hypercalcemia (if large area)
+MOA128,Serotonin Reuptake Inhibition (SSRIs),Serotonin transporter (SERT),Increased synaptic serotonin,Depression; anxiety; OCD,Sexual dysfunction; GI upset; serotonin syndrome
+MOA129,Serotonin-Norepinephrine Reuptake Inhibition (SNRIs),SERT and NET,Increased serotonin and norepinephrine,Depression; anxiety; pain,Nausea; hypertension; sexual dysfunction
+MOA130,Tricyclic Antidepressant (TCA) Actions,SERT/NET; also H1, alpha1, muscarinic,Multiple receptors,Depression; neuropathic pain,Anticholinergic; sedation; cardiotoxicity
+MOA131,MAO Inhibition (MAOIs),MAO-A and MAO-B,Increased monoamines,Depression; anxiety,Hypertensive crisis; drug/food interactions
+MOA132,Dopamine D2 Antagonism (Typical Antipsychotics),D2 receptors,Reduced dopamine transmission,Schizophrenia; psychosis,Extrapyramidal symptoms; hyperprolactinemia; tardive dyskinesia
+MOA133,Dopamine D2/5-HT2A Antagonism (Atypical Antipsychotics),D2 and 5-HT2A receptors,Reduced psychosis; fewer EPS,Schizophrenia; bipolar,Weight gain; metabolic syndrome; sedation
+MOA134,Dopamine D2 Partial Agonism (Aripiprazole),D2 partial agonist,Stabilizes dopamine tone,Schizophrenia; bipolar; depression,Nausea; akathisia; insomnia
+MOA135,Lithium (Multiple actions),Inositol monophosphatase; GSK3; etc.,Mood stabilization,Bipolar disorder,Tremor; polyuria; hypothyroidism; teratogenicity
+MOA136,GABA-A Potentiation (Benzodiazepines),GABA-A receptor,Increased chloride influx,Anxiety; insomnia; seizures,Dependence; tolerance; withdrawal
+MOA137,Melatonin Receptor Agonism (Ramelteon),MT1/MT2 receptors,Sleep onset promotion,Insomnia,No abuse potential; dizziness
+MOA138,Orexin Receptor Antagonism (Suvorexant),OX1/OX2 receptors,Promote sleep,Insomnia,Next-day somnolence; suicidal ideation
+MOA139,Norepinephrine Reuptake Inhibition (Atomoxetine),NET,Increased norepinephrine,ADHD,Insomnia; decreased appetite; liver injury
+MOA140,Dopamine/Norepinephrine Reuptake Inhibition (Methylphenidate),DAT and NET,Increased dopamine and norepinephrine,ADHD; narcolepsy,Insomnia; appetite suppression; growth delay; abuse potential
+MOA141,Alpha-1A Adrenergic Blockade (Tamsulosin),Alpha-1A receptors in prostate/bladder neck,Relaxation of smooth muscle,BPH,Dizziness; retrograde ejaculation
+MOA142,5-alpha Reductase Inhibition (Finasteride),5-alpha reductase type 2,Reduced DHT,BPH; alopecia,Decreased libido; erectile dysfunction; gynecomastia; depression
+MOA143,Muscarinic Receptor Antagonism (Oxybutynin),M2/M3 receptors in bladder,Reduced detrusor contractions,Overactive bladder,Dry mouth; constipation; blurred vision; cognitive impairment
+MOA144,Beta-3 Adrenergic Agonism (Mirabegron),Beta-3 receptors in bladder,Relaxation of detrusor,Overactive bladder,Hypertension; tachycardia; urinary retention
+MOA145,V2 Receptor Agonism (Desmopressin),V2 receptors in collecting duct,Increased water reabsorption,Diabetes insipidus; nocturia,Hyponatremia; headache
+MOA146,CGRP Receptor Antagonism (Gepants),CGRP receptor,Blockade of vasodilation and pain transmission,Acute migraine,No vasoconstriction; potential hepatotoxicity
+MOA147,CGRP Ligand Neutralization (mAb),CGRP ligand,Reduced CGRP activity,Chronic migraine prevention,Constipation; hypersensitivity
+MOA148,CGRP Receptor Blockade (mAb),CGRP receptor,Reduced CGRP activity,Chronic migraine prevention,Injection site reactions; hypertension
+MOA149,5-HT1F Receptor Agonism,5-HT1F receptor,Inhibition of trigeminal nerve activation without vasoconstriction,Acute migraine,Dizziness; fatigue; paresthesia
+MOA150,Estrogen Receptor Degradation (SERD),Estrogen receptor,Complete ER antagonism and degradation,Breast cancer (HR+),Arthralgia; hot flashes; GI
+MOA151,HER2-targeted ADC (Trastuzumab emtansine),HER2 + microtubule inhibition,Targeted delivery of cytotoxic to HER2+ cells,HER2+ breast cancer,Thrombocytopenia; hepatotoxicity; cardiac
+MOA152,KRAS G12C Inhibition,KRAS G12C mutant,Inhibition of downstream signaling,KRAS G12C cancers,Diarrhea; nausea; hepatotoxicity
+MOA153,CFTR Potentiation,CFTR channel at cell surface,Increased chloride transport in CF patients with gating mutations,CF (class III and IV),Headache; URI; rash
+MOA154,CFTR Correction,CFTR protein processing,Increased CFTR trafficking to cell surface,CF (F508del),As above; drug interactions
+MOA155,SMN2 Splicing Modification (Nusinersen),SMN2 pre-mRNA,Inclusion of exon 7 in SMN2 transcript,Spinal muscular atrophy,Thrombocytopenia; renal toxicity; post-lumbar puncture headache
+MOA156,AAV-mediated Gene Replacement,Delivery of functional gene copy,Production of missing protein,Inherited retinal disease; SMA; hemophilia,Hepatotoxicity; immune response; oncogenicity risk

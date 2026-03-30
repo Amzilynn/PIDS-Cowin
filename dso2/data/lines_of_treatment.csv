@@ -1,0 +1,16 @@
+line_id,line_name,definition,when_used,decision_criteria
+LT001,1st Line,Initial therapy for a condition typically with best efficacy/safety balance,At diagnosis or initial presentation of disease,Stage; patient preference; comorbidities; cost
+LT002,2nd Line,Therapy after failure or intolerance of first-line,After inadequate response or adverse effects to 1st line,Failure criteria; specific contraindications
+LT003,3rd Line,Subsequent therapy after two prior lines,Refractory disease or progression,Resistance; performance status; biomarkers
+LT004,Adjuvant,Therapy given after primary treatment to reduce risk of recurrence,After curative-intent surgery for cancer,Pathologic risk factors; tumor stage; genomic markers
+LT005,Neoadjuvant,Therapy given before primary treatment to improve outcomes,Before surgery for cancer (to downstage),Tumor size; location; surgical feasibility
+LT006,Maintenance,Long-term therapy to sustain remission or prevent relapse,After achieving response to induction (e.g., cancer, autoimmune),Response status; tolerability; disease risk
+LT007,Salvage,Last-line aggressive therapy for refractory disease,Advanced disease failing multiple lines,Performance status; organ function; patient wishes
+LT008,Prophylaxis,Therapy to prevent occurrence of disease or complications,High-risk individuals or prior events,Risk assessment; evidence of benefit
+LT009,Palliative,Therapy aimed at symptom relief rather than cure,Advanced incurable disease,Symptoms; quality of life; goals of care
+LT010,Induction,Intensive initial therapy to achieve rapid control,Acute severe conditions (e.g., leukemia, autoimmune),Disease severity; need for rapid response
+LT011,Consolidation,Therapy after induction to deepen response,After remission in leukemia, etc.,Residual disease; risk of relapse
+LT012,Pre-emptive,Therapy given based on biomarker without waiting for disease,When risk marker indicates high likelihood of disease,Biomarker positivity; preemptive efficacy proven
+LT013,Switch Therapy,Changing from one drug to another within same line due to intolerance or lack of efficacy,During same line of treatment,Adverse effects; patient preference; efficacy
+LT014,Add-on Therapy,Adding another agent to existing regimen,Inadequate response to monotherapy,Synergy; complementary mechanisms; safety of combination
+LT015,Step-down Therapy,Reducing intensity after disease control,After achieving remission (e.g., steroid taper),Stable disease; risk of flare

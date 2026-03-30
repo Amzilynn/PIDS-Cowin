@@ -1,0 +1,31 @@
+therapeutic_area_id,therapeutic_area_name,description,typical_conditions,risk_level
+TA001,Cardiology,Diagnosis and treatment of heart and vascular disorders,Hypertension; Coronary artery disease; Heart failure; Arrhythmias,High
+TA002,Endocrinology,Study of hormones and metabolic disorders,Diabetes mellitus; Thyroid disorders; Osteoporosis; Adrenal insufficiency,Medium
+TA003,Gastroenterology,Management of digestive system diseases,GERD; Peptic ulcer; IBD; Irritable bowel syndrome; Hepatitis,Medium
+TA004,Neurology,Disorders of the nervous system,Stroke; Epilepsy; Parkinson's disease; Multiple sclerosis; Migraine,High
+TA005,Oncology,Diagnosis and treatment of cancer,Breast cancer; Lung cancer; Colorectal cancer; Leukemia; Lymphoma,High
+TA006,Infectious Diseases,Management of infections caused by pathogens,HIV/AIDS; Tuberculosis; Pneumonia; Sepsis; Meningitis,High
+TA007,Pulmonology,Diseases of the respiratory tract,Asthma; COPD; Pulmonary fibrosis; Sleep apnea; Lung cancer,Medium
+TA008,Dermatology,Skin, hair and nail disorders,Acne; Psoriasis; Eczema; Skin infections; Melanoma,Low
+TA009,Psychiatry,Mental health disorders,Depression; Anxiety; Schizophrenia; Bipolar disorder; ADHD,Medium
+TA010,Rheumatology,Autoimmune and inflammatory joint diseases,Rheumatoid arthritis; Osteoarthritis; Lupus; Gout; Ankylosing spondylitis,Medium
+TA011,Ophthalmology,Eye diseases and disorders,Glaucoma; Cataracts; Diabetic retinopathy; Macular degeneration; Conjunctivitis,Low
+TA012,Nephrology,Kidney diseases and electrolyte imbalances,Chronic kidney disease; Acute kidney injury; Glomerulonephritis; Diabetic nephropathy; Hypertension,High
+TA013,Hematology,Blood disorders,Anemia; Hemophilia; Sickle cell disease; Thrombosis; Leukemia,High
+TA014,Immunology,Immune system disorders,Primary immunodeficiencies; Allergies; Autoimmune diseases; Transplant rejection,Medium
+TA015,Obstetrics and Gynecology,Female reproductive health and pregnancy,Pregnancy complications; Endometriosis; PCOS; Menopause; Cervical cancer,Medium
+TA016,Urology,Urinary tract and male reproductive system,BPH; Kidney stones; Urinary tract infections; Erectile dysfunction; Prostate cancer,Medium
+TA017,Otorhinolaryngology,Ear, nose and throat disorders,Otitis media; Sinusitis; Tonsillitis; Hearing loss; Vertigo,Low
+TA018,Orthopedics,Musculoskeletal system disorders,Fractures; Osteoarthritis; Back pain; Osteoporosis; Sports injuries,Medium
+TA019,Hepatology,Liver diseases,Hepatitis B/C; Cirrhosis; Fatty liver; Liver cancer; Alcoholic liver disease,High
+TA020,Allergy and Immunology,Allergic and hypersensitivity disorders,Allergic rhinitis; Asthma; Food allergies; Anaphylaxis; Drug allergies,Low
+TA021,Critical Care,Management of life-threatening conditions,Sepsis; ARDS; Multi-organ failure; Shock; Trauma,High
+TA022,Pain Medicine,Assessment and treatment of chronic pain,Neuropathic pain; Fibromyalgia; Chronic back pain; Cancer pain; Migraine,Medium
+TA023,Sleep Medicine,Disorders of sleep,Insomnia; Sleep apnea; Narcolepsy; Restless legs syndrome; Circadian rhythm disorders,Low
+TA024,Clinical Genetics,Hereditary disorders and genetic counseling,Cystic fibrosis; Huntington's disease; Down syndrome; Muscular dystrophy; Fragile X,Medium
+TA025,Geriatrics,Healthcare of older adults,Multimorbidity; Polypharmacy; Dementia; Frailty; Falls,High
+TA026,Pediatric Cardiology,Congenital and acquired heart disease in children,Congenital heart defects; Kawasaki disease; Pediatric arrhythmias,High
+TA027,Interventional Radiology,Minimally invasive image-guided procedures,Aneurysm repair; Tumor embolization; Biopsy; Drainage,Medium
+TA028,Clinical Pharmacology,Study of drug effects and interactions in humans,Adverse drug reactions; Pharmacogenomics; Therapeutic drug monitoring,Low
+TA029,Sports Medicine,Prevention and treatment of sports-related injuries,Concussion; Ligament tears; Stress fractures; Tendinopathy,Low
+TA030,Palliative Medicine,Management of symptoms in serious illness,Pain; Dyspnea; Nausea; End-of-life care,Medium

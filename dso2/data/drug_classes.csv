@@ -1,0 +1,318 @@
+drug_class_id,drug_class_name,therapeutic_area,mechanism_of_action_summary,clinical_use_scope,complexity_level
+DC001,ACE Inhibitors,Cardiology,Inhibition of angiotensin-converting enzyme reducing angiotensin II,Hypertension; Heart failure; Diabetic nephropathy,Medium
+DC002,Angiotensin II Receptor Blockers (ARBs),Cardiology,Blockade of AT1 receptors reducing vasoconstriction,Hypertension; Heart failure; Diabetic nephropathy,Medium
+DC003,Beta-Blockers (Cardioselective),Cardiology,Selective blockade of beta-1 adrenergic receptors,Hypertension; Angina; Heart failure; Post-MI,Medium
+DC004,Beta-Blockers (Non-selective),Cardiology,Blockade of beta-1 and beta-2 receptors,Hypertension; Angina; Migraine prophylaxis; Glaucoma,Medium
+DC005,Calcium Channel Blockers (Dihydropyridine),Cardiology,Inhibition of L-type calcium channels in vascular smooth muscle,Hypertension; Angina; Raynaud's,Low
+DC006,Calcium Channel Blockers (Non-dihydropyridine),Cardiology,Inhibition of L-type calcium channels in heart and vessels,Atrial fibrillation; Angina; Hypertension,Medium
+DC007,Thiazide Diuretics,Cardiology,Inhibition of Na-Cl cotransporter in distal tubule,Hypertension; Edema; Heart failure,Low
+DC008,Loop Diuretics,Cardiology,Inhibition of Na-K-2Cl cotransporter in loop of Henle,Edema; Heart failure; Hypertension; Renal failure,Medium
+DC009,Potassium-sparing Diuretics,Cardiology,Antagonism of aldosterone or inhibition of ENaC,Heart failure; Hypertension; Cirrhosis,Medium
+DC007,Aldosterone Antagonists,Cardiology,Competitive antagonism of mineralocorticoid receptor,Heart failure; Post-MI; Resistant hypertension,Medium
+DC010,Statins,Cardiology,Inhibition of HMG-CoA reductase,Hyperlipidemia; Cardiovascular risk reduction,Low
+DC011,Ezetimibe,Cardiology,Inhibition of intestinal cholesterol absorption,Hyperlipidemia; Add-on to statins,Low
+DC012,PCSK9 Inhibitors,Cardiology,Monoclonal antibodies increasing LDL receptor recycling,Hyperlipidemia; Familial hypercholesterolemia,High
+DC013,Fibrates,Cardiology,Activation of PPAR-alpha reducing triglycerides,Hypertriglyceridemia; Mixed dyslipidemia,Low
+DC014,Omega-3 Fatty Acids,Cardiology,Reduction of triglyceride synthesis,Hypertriglyceridemia,Low
+DC015,Nitrates,Cardiology,Vasodilation via nitric oxide release,Angina; Heart failure,Low
+DC016,Antiplatelet Agents (Aspirin),Cardiology,Irreversible COX-1 inhibition reducing thromboxane A2,Secondary prevention of cardiovascular events,Low
+DC017,P2Y12 Inhibitors (Clopidogrel),Cardiology,Irreversible inhibition of platelet P2Y12 receptor,Acute coronary syndrome; Post-stent,Medium
+DC018,Direct Oral Anticoagulants (DOACs),Cardiology,Direct inhibition of factor Xa or thrombin,Atrial fibrillation; VTE treatment/prophylaxis,Medium
+DC019,Warfarin,Cardiology,Inhibition of vitamin K-dependent clotting factors,Atrial fibrillation; VTE; Mechanical valves,High
+DC020,Heparin (Unfractionated),Cardiology,Activation of antithrombin III,Acute VTE; ACS; DVT prophylaxis,Medium
+DC021,Low Molecular Weight Heparin,Cardiology,Activation of antithrombin III with factor Xa specificity,VTE treatment/prophylaxis; ACS,Medium
+DC022,Digoxin,Cardiology,Inhibition of Na/K-ATPase increasing intracellular calcium,Heart failure; Atrial fibrillation,High
+DC023,Amiodarone,Cardiology,Multichannel blocker (K, Na, Ca, beta-blocking),Ventricular and supraventricular arrhythmias,High
+DC024,Lidocaine (IV),Cardiology,Na channel blocker (Class Ib),Ventricular arrhythmias; Post-MI,High
+DC025,Ivabradine,Cardiology,Inhibition of funny current in SA node,Stable angina; Heart failure,Medium
+DC026,Ranolazine,Cardiology,Inhibition of late Na current,Chronic angina,Medium
+DC027,Metformin,Endocrinology,Activation of AMPK reducing hepatic glucose output,Type 2 diabetes,Low
+DC028,Sulfonylureas,Endocrinology,Stimulation of insulin secretion from pancreatic beta cells,Type 2 diabetes,Low
+DC029,DPP-4 Inhibitors,Endocrinology,Inhibition of DPP-4 increasing incretin levels,Type 2 diabetes,Low
+DC030,GLP-1 Receptor Agonists,Endocrinology,Activation of GLP-1 receptors increasing insulin and reducing glucagon,Type 2 diabetes; Obesity,Medium
+DC031,SGLT2 Inhibitors,Endocrinology,Inhibition of renal glucose reabsorption,Type 2 diabetes; Heart failure; CKD,Medium
+DC032,Thiazolidinediones,Endocrinology,Activation of PPAR-gamma improving insulin sensitivity,Type 2 diabetes,Medium
+DC033,Insulin (Rapid-acting),Endocrinology,Replacement of insulin for glycemic control,Type 1 diabetes; Type 2 diabetes,High
+DC034,Insulin (Long-acting),Endocrinology,Basal insulin replacement,Type 1 diabetes; Type 2 diabetes,High
+DC035,Alpha-glucosidase Inhibitors,Endocrinology,Inhibition of intestinal carbohydrate absorption,Type 2 diabetes,Low
+DC036,Amylin Analogs,Endocrinology,Activation of amylin receptors reducing glucagon and delaying gastric emptying,Type 1 diabetes; Type 2 diabetes,High
+DC037,Dopamine Agonists (Bromocriptine),Endocrinology,Activation of dopamine receptors in hypothalamus,Type 2 diabetes,Medium
+DC038,Bile Acid Sequestrants,Endocrinology,Binding bile acids increasing insulin sensitivity,Type 2 diabetes,Low
+DC039,Levothyroxine,Endocrinology,Replacement of thyroid hormone,Hypothyroidism,Low
+DC040,Antithyroid Drugs (Methimazole),Endocrinology,Inhibition of thyroid peroxidase,Hyperthyroidism,Medium
+DC041,Radioactive Iodine,Endocrinology,Destruction of thyroid follicular cells,Hyperthyroidism; Thyroid cancer,High
+DC042,Bisphosphonates,Endocrinology,Inhibition of osteoclast-mediated bone resorption,Osteoporosis; Paget's disease,Low
+DC043,Denosumab,Endocrinology,RANKL inhibitor reducing osteoclast activity,Osteoporosis; Bone metastases,Medium
+DC044,Selective Estrogen Receptor Modulators (SERMs),Endocrinology,Estrogen agonist/antagonist in bone,Osteoporosis; Breast cancer prevention,Medium
+DC045,Parathyroid Hormone Analogs (Teriparatide),Endocrinology,Stimulation of bone formation,Osteoporosis,High
+DC046,Calcitonin,Endocrinology,Inhibition of osteoclast activity,Osteoporosis; Paget's; Hypercalcemia,Low
+DC047,Estrogen (Hormone Therapy),Endocrinology,Activation of estrogen receptors,Menopause symptoms; Osteoporosis prevention,Medium
+DC048,Progestins,Endocrinology,Activation of progesterone receptors,Contraception; Endometriosis; HRT,Medium
+DC049,Combined Oral Contraceptives,Endocrinology,Combination of estrogen and progestin,Contraception; Cycle control; Acne,Medium
+DC050,GnRH Agonists,Endocrinology,Initial stimulation then suppression of gonadotropins,Endometriosis; Prostate cancer; Precocious puberty,High
+DC051,Aromatase Inhibitors,Endocrinology,Inhibition of estrogen synthesis,Breast cancer (hormone receptor positive),Medium
+DC052,Gonadotropins (FSH, LH),Endocrinology,Stimulation of ovarian follicular development,Infertility,High
+DC053,Clomiphene,Endocrinology,Estrogen receptor antagonist in hypothalamus stimulating gonadotropins,Ovulation induction,Medium
+DC054,Metoclopramide,Gastroenterology,Dopamine D2 antagonist with prokinetic properties,Gastroparesis; Nausea,Low
+DC055,Proton Pump Inhibitors (PPIs),Gastroenterology,Irreversible inhibition of H+/K+ ATPase in parietal cells,GERD; Peptic ulcer; Zollinger-Ellison; H. pylori,Low
+DC056,H2 Receptor Antagonists,Gastroenterology,Competitive inhibition of histamine H2 receptors on parietal cells,GERD; Peptic ulcer; Gastritis,Low
+DC057,Antacids,Gastroenterology,Neutralization of gastric acid,Dyspepsia; Heartburn,Low
+DC058,Sucralfate,Gastroenterology,Forms protective barrier over ulcers,Peptic ulcer disease; Stress ulcer prophylaxis,Low
+DC059,Misoprostol,Gastroenterology,Prostaglandin E1 analog protecting gastric mucosa,NSAID-induced ulcer prevention,Low
+DC060,5-ASA Compounds (Mesalamine),Gastroenterology,Topical anti-inflammatory in colon,Ulcerative colitis; Crohn's colitis,Low
+DC061,Corticosteroids (Systemic),Gastroenterology,Suppression of immune response,Moderate-severe IBD; Autoimmune hepatitis,Medium
+DC062,Immunomodulators (Azathioprine),Gastroenterology,Inhibition of purine synthesis reducing lymphocyte proliferation,IBD; Autoimmune hepatitis,High
+DC063,Anti-TNF Agents (Infliximab),Gastroenterology,Neutralization of TNF-alpha,Moderate-severe IBD; Rheumatoid arthritis,High
+DC064,Anti-integrin Agents (Vedolizumab),Gastroenterology,Blockade of alpha4beta7 integrin preventing lymphocyte gut homing,Ulcerative colitis; Crohn's disease,High
+DC065,Anti-IL12/23 Agents (Ustekinumab),Gastroenterology,Inhibition of IL-12 and IL-23,Psoriasis; Crohn's disease,High
+DC066,JAK Inhibitors (Tofacitinib),Gastroenterology,Inhibition of JAK enzymes reducing cytokine signaling,Ulcerative colitis; Rheumatoid arthritis,High
+DC067,Antiemetics (Ondansetron),Gastroenterology,5-HT3 receptor antagonist,Nausea; Vomiting; Chemotherapy-induced,Low
+DC068,Laxatives (Stimulant),Gastroenterology,Stimulation of colonic motility,Constipation; Bowel prep,Low
+DC069,Laxatives (Osmotic),Gastroenterology,Osmotic retention of fluid in bowel,Constipation; Bowel prep,Low
+DC070,Antidiarrheals (Loperamide),Gastroenterology,Opioid receptor agonist reducing peristalsis,Diarrhea,Low
+DC071,Antispasmodics (Hyoscine),Gastroenterology,Anticholinergic reducing smooth muscle spasm,IBS; Abdominal cramps,Low
+DC072,Ursodeoxycholic Acid,Gastroenterology,Reduction of cholesterol saturation in bile,Primary biliary cholangitis; Gallstone dissolution,Low
+DC073,Levodopa/Carbidopa,Neurology,Precursor of dopamine with peripheral decarboxylase inhibitor,Parkinson's disease,Medium
+DC074,Dopamine Agonists (Pramipexole),Neurology,Activation of dopamine D2/D3 receptors,Parkinson's disease; Restless legs,Medium
+DC075,COMT Inhibitors (Entacapone),Neurology,Inhibition of catechol-O-methyltransferase prolonging levodopa effect,Parkinson's disease,Medium
+DC076,MAO-B Inhibitors (Selegiline),Neurology,Inhibition of MAO-B reducing dopamine breakdown,Parkinson's disease,Medium
+DC077,Anticholinergics (Parkinson's),Neurology,Blockade of muscarinic receptors,Parkinson's tremor; Drug-induced parkinsonism,Low
+DC078,Amantadine,Neurology,Antiviral with NMDA antagonist properties,Parkinson's dyskinesia; Influenza,Low
+DC079,Acetylcholinesterase Inhibitors (Donepezil),Neurology,Inhibition of acetylcholinesterase increasing acetylcholine,Alzheimer's disease,Medium
+DC080,NMDA Receptor Antagonists (Memantine),Neurology,Non-competitive NMDA antagonist,Alzheimer's disease,Medium
+DC081,Antiepileptics (Phenytoin),Neurology,Na channel stabilization,Partial and generalized seizures,High
+DC082,Antiepileptics (Carbamazepine),Neurology,Na channel inhibition; possibly other,Partial seizures; Trigeminal neuralgia; Bipolar,High
+DC083,Antiepileptics (Valproate),Neurology,Multiple mechanisms: Na channel, GABA potentiation,Generalized seizures; Bipolar; Migraine,High
+DC084,Antiepileptics (Lamotrigine),Neurology,Na channel inhibition; glutamate release inhibition,Partial and generalized seizures; Bipolar,Medium
+DC085,Antiepileptics (Levetiracetam),Neurology,SV2A modulation,Partial and generalized seizures,Medium
+DC086,Antiepileptics (Topiramate),Neurology,Multiple mechanisms including Na channel, GABA potentiation,Partial seizures; Migraine prophylaxis; Bipolar,Medium
+DC087,Benzodiazepines (Clonazepam),Neurology,GABA-A receptor potentiation,Status epilepticus; Anxiety; Myoclonus,High
+DC088,Barbiturates (Phenobarbital),Neurology,GABA-A potentiation; glutamate inhibition,Generalized seizures; Status epilepticus,High
+DC089,Triptans (Sumatriptan),Neurology,5-HT1B/1D receptor agonist causing vasoconstriction,Acute migraine,Low
+DC090,Ergot Derivatives,Neurology,5-HT1 receptor agonist; vasoconstrictor,Migraine; Cluster headache,High
+DC091,CGRP Antagonists (Gepants),Neurology,Inhibition of CGRP receptor,Acute migraine; Migraine prevention,Medium
+DC092,CGRP Monoclonal Antibodies,Neurology,Neutralization of CGRP or its receptor,Migraine prevention,High
+DC093,Muscle Relaxants (Baclofen),Neurology,GABA-B agonist,Spasticity; Hiccups,Medium
+DC094,Tizanidine,Neurology,Alpha-2 adrenergic agonist reducing spasticity,Spasticity,Medium
+DC095,Dantrolene,Neurology,Inhibition of ryanodine receptor reducing calcium release,Malignant hyperthermia; Spasticity,High
+DC096,Immunomodulators for MS (Interferon beta),Neurology,Anti-inflammatory and antiviral effects,Multiple sclerosis (relapsing),High
+DC097,Glatiramer Acetate,Neurology,Immunomodulatory; mimics myelin basic protein,Multiple sclerosis (relapsing),High
+DC098,Natalizumab,Neurology,Anti-alpha4 integrin preventing lymphocyte CNS entry,Multiple sclerosis (relapsing),High
+DC099,Fingolimod,Neurology,Sphingosine-1-phosphate receptor modulator trapping lymphocytes in nodes,Multiple sclerosis (relapsing),High
+DC100,Dimethyl Fumarate,Neurology,Activation of Nrf2 pathway,Multiple sclerosis (relapsing),High
+DC101,Teriflunomide,Neurology,Inhibition of dihydroorotate dehydrogenase reducing lymphocyte proliferation,Multiple sclerosis (relapsing),High
+DC102,Alemtuzumab,Neurology,Anti-CD52 depleting lymphocytes,Multiple sclerosis (relapsing),High
+DC103,Ocrelizumab,Neurology,Anti-CD20 depleting B cells,Multiple sclerosis (primary progressive),High
+DC104,Platinum-based Chemotherapy (Cisplatin),Oncology,Crosslinking DNA inhibiting replication,Multiple solid tumors,High
+DC105,Taxanes (Paclitaxel),Oncology,Stabilization of microtubules inhibiting mitosis,Breast; Ovarian; Lung,High
+DC106,Anthracyclines (Doxorubicin),Oncology,Intercalation with DNA; topoisomerase II inhibition,Multiple cancers,High
+DC107,Antimetabolites (5-FU),Oncology,Inhibition of thymidylate synthase,Colorectal; Breast; Head & neck,High
+DC108,Antimetabolites (Gemcitabine),Oncology,Inhibition of DNA synthesis,Pancreatic; Lung; Bladder,High
+DC109,Alkylating Agents (Cyclophosphamide),Oncology,Crosslinking DNA,Lymphoma; Leukemia; Breast; Ovarian,High
+DC110,Topoisomerase Inhibitors (Etoposide),Oncology,Inhibition of topoisomerase II,Lung; Testicular; Lymphoma,High
+DC111,Monoclonal Antibodies (Trastuzumab),Oncology,HER2/neu receptor blockade,HER2+ breast cancer; Gastric,High
+DC112,Monoclonal Antibodies (Rituximab),Oncology,CD20 depletion,Non-Hodgkin lymphoma; CLL; Autoimmune,High
+DC113,Monoclonal Antibodies (Bevacizumab),Oncology,VEGF inhibition anti-angiogenesis,Colorectal; Lung; Renal; Glioblastoma,High
+DC114,Tyrosine Kinase Inhibitors (Imatinib),Oncology,BCR-ABL; c-KIT; PDGFR inhibition,CML; GIST,High
+DC115,Immune Checkpoint Inhibitors (PD-1),Oncology,Blockade of PD-1/PD-L1 pathway,Melanoma; Lung; Renal; Many others,High
+DC116,Immune Checkpoint Inhibitors (CTLA-4),Oncology,Blockade of CTLA-4,Melanoma; Renal,High
+DC117,mTOR Inhibitors (Everolimus),Oncology,Inhibition of mTOR,Renal; Breast; Neuroendocrine; Tuberous sclerosis,High
+DC118,Proteasome Inhibitors (Bortezomib),Oncology,Inhibition of proteasome,Multiple myeloma; Mantle cell lymphoma,High
+DC119,Immunomodulatory Drugs (Lenalidomide),Oncology,Multiple: anti-angiogenic; immunomodulatory,Multiple myeloma; MDS; Lymphoma,High
+DC120,Histone Deacetylase Inhibitors,Oncology,Epigenetic modification,CTCL; Multiple myeloma,High
+DC121,ARVs (NRTIs),Infectious Diseases,Chain termination of HIV reverse transcription,HIV,High
+DC122,ARVs (NNRTIs),Infectious Diseases,Non-competitive inhibition of HIV reverse transcriptase,HIV,High
+DC123,ARVs (Protease Inhibitors),Infectious Diseases,Inhibition of HIV protease preventing virion maturation,HIV,High
+DC124,ARVs (Integrase Inhibitors),Infectious Diseases,Inhibition of HIV integrase,HIV,High
+DC125,ARVs (Entry Inhibitors),Infectious Diseases,Blocking HIV entry via CCR5 or fusion,HIV,High
+DC126,Antibiotics (Penicillins),Infectious Diseases,Inhibition of bacterial cell wall synthesis,Broad spectrum bacterial infections,Low
+DC127,Antibiotics (Cephalosporins),Infectious Diseases,Inhibition of cell wall synthesis,Broad spectrum bacterial infections,Low
+DC128,Antibiotics (Carbapenems),Infectious Diseases,Inhibition of cell wall synthesis,Serious Gram-negative infections; ESBL,High
+DC129,Antibiotics (Macrolides),Infectious Diseases,Inhibition of bacterial protein synthesis (50S),Respiratory; Atypical; STIs,Low
+DC130,Antibiotics (Tetracyclines),Infectious Diseases,Inhibition of bacterial protein synthesis (30S),Acne; Atypical; Rickettsia; STIs,Low
+DC131,Antibiotics (Aminoglycosides),Infectious Diseases,Inhibition of protein synthesis (30S) bactericidal,Serious Gram-negative infections; Synergy,High
+DC132,Antibiotics (Fluoroquinolones),Infectious Diseases,Inhibition of DNA gyrase and topoisomerase IV,UTI; Respiratory; GI,Medium
+DC133,Antibiotics (Sulfonamides),Infectious Diseases,Inhibition of folate synthesis,UTI; Nocardia; Toxoplasmosis,Low
+DC134,Antibiotics (Trimethoprim),Infectious Diseases,Inhibition of dihydrofolate reductase,UTI; PJP prophylaxis,Low
+DC135,Antibiotics (Metronidazole),Infectious Diseases,Disruption of DNA in anaerobic organisms,Anaerobes; Protozoa; H. pylori,Low
+DC136,Antibiotics (Clindamycin),Infectious Diseases,Inhibition of protein synthesis (50S),Anaerobes; Skin; Bone; Toxoplasmosis,Medium
+DC137,Antibiotics (Linezolid),Infectious Diseases,Inhibition of protein synthesis (50S),MRSA; VRE,High
+DC138,Antibiotics (Daptomycin),Infectious Diseases,Disruption of cell membrane,Gram-positive infections; MRSA; VRE,High
+DC139,Antifungals (Azoles),Infectious Diseases,Inhibition of ergosterol synthesis,Superficial and systemic fungal infections,Medium
+DC140,Antifungals (Polyenes),Infectious Diseases,Binding to ergosterin causing cell leakage,Severe systemic fungal infections,High
+DC141,Antifungals (Echinocandins),Infectious Diseases,Inhibition of beta-glucan synthesis,Candidemia; Aspergillosis,High
+DC142,Antifungals (Flucytosine),Infectious Diseases,Inhibition of DNA/RNA synthesis,Cryptococcus; Candida (combination),High
+DC143,Antivirals (Acyclovir),Infectious Diseases,Inhibition of viral DNA polymerase,HSV; VZV,Low
+DC144,Antivirals (Ganciclovir),Infectious Diseases,Inhibition of viral DNA polymerase,CMV,High
+DC145,Antivirals (Oseltamivir),Infectious Diseases,Neuraminidase inhibition,Influenza A and B,Medium
+DC146,Antivirals (Ribavirin),Infectious Diseases,Multiple mechanisms including IMPDH inhibition,RSV; Hepatitis C (with IFN); Viral hemorrhagic fevers,High
+DC147,Antivirals (Sofosbuvir),Infectious Diseases,NS5B polymerase inhibitor,Hepatitis C,High
+DC148,Antivirals (Direct-acting anti-HCV),Infectious Diseases,Inhibition of NS3/4A protease, NS5A, etc.,Hepatitis C,High
+DC149,Antivirals (Remdesivir),Infectious Diseases,RNA polymerase inhibitor,COVID-19; Ebola,High
+DC150,Antivirals (Lamivudine),Infectious Diseases,Reverse transcriptase inhibitor (NRTI),Hepatitis B; HIV,Medium
+DC151,Antivirals (Adefovir),Infectious Diseases,Reverse transcriptase inhibitor (NtRTI),Hepatitis B,High
+DC152,Antivirals (Entecavir),Infectious Diseases,Reverse transcriptase inhibitor (NRTI),Hepatitis B,High
+DC153,Antivirals (Tenofovir),Infectious Diseases,Reverse transcriptase inhibitor (NtRTI),Hepatitis B; HIV,High
+DC154,Antivirals (Interferon-alpha),Infectious Diseases,Immunomodulatory and antiviral,Chronic hepatitis B/C; CML; Melanoma,High
+DC155,Antimalarials (Chloroquine),Infectious Diseases,Inhibition of heme polymerization in parasite,Malaria; Amebiasis; Autoimmune (SLE),Medium
+DC156,Antimalarials (Artemisinin),Infectious Diseases,Generation of free radicals damaging parasite proteins,Malaria,Medium
+DC157,Antimalarials (Mefloquine),Infectious Diseases,Unknown,Malaria prophylaxis; Treatment,High
+DC158,Antimalarials (Atovaquone-Proguanil),Infectious Diseases,Inhibition of electron transport and folate synthesis,Malaria prophylaxis; Treatment,Medium
+DC159,Antimalarials (Quinine),Infectious Diseases,Interference with heme polymerase,Severe malaria,High
+DC160,Antituberculars (Isoniazid),Infectious Diseases,Inhibition of mycolic acid synthesis,TB,High
+DC161,Antituberculars (Rifampin),Infectious Diseases,Inhibition of bacterial RNA synthesis,TB; Leprosy; Legionella; Staph,High
+DC162,Antituberculars (Pyrazinamide),Infectious Diseases,Unknown, active in acidic environment,TB,High
+DC163,Antituberculars (Ethambutol),Infectious Diseases,Inhibition of arabinosyl transferase,TB,High
+DC164,Antituberculars (Streptomycin),Infectious Diseases,Inhibition of protein synthesis (30S),TB (second-line); Plague,High
+DC165,Antituberculars (Fluoroquinolones for TB),Infectious Diseases,Inhibition of DNA gyrase,Multidrug-resistant TB,High
+DC166,Antituberculars (Bedaquiline),Infectious Diseases,Inhibition of mycobacterial ATP synthase,Multidrug-resistant TB,High
+DC167,Antituberculars (Delamanid),Infectious Diseases,Inhibition of mycolic acid synthesis,Multidrug-resistant TB,High
+DC168,Anthelmintics (Albendazole),Infectious Diseases,Inhibition of microtubule synthesis,Intestinal helminths; Hydatid; Neurocysticercosis,Low
+DC169,Anthelmintics (Mebendazole),Infectious Diseases,Inhibition of microtubule synthesis,Intestinal helminths,Low
+DC170,Anthelmintics (Ivermectin),Infectious Diseases,Glutamate-gated chloride channel agonist,Onchocerciasis; Strongyloidiasis; Scabies,Medium
+DC171,Anthelmintics (Praziquantel),Infectious Diseases,Increase membrane permeability to calcium,Schistosomiasis; Cestodes; Trematodes,Medium
+DC172,Anthelmintics (Diethylcarbamazine),Infectious Diseases,Unknown, microfilariacidal,Lymphatic filariasis; Loa loa,High
+DC173,Antiprotozoals (Metronidazole) (same as 135)
+DC174,Antiprotozoals (Tinidazole),Infectious Diseases,Similar to metronidazole,Amebiasis; Giardiasis; Trichomoniasis,Low
+DC175,Antiprotozoals (Pentamidine),Infectious Diseases,Inhibition of nucleic acid synthesis,Pneumocystis jirovecii; Leishmaniasis,High
+DC176,Antiprotozoals (Suramin),Infectious Diseases,Inhibition of parasitic enzymes,African trypanosomiasis,High
+DC177,Antiprotozoals (Melarsoprol),Infectious Diseases,Binding to trypanothione,African trypanosomiasis (second stage),High
+DC178,Antiprotozoals (Eflornithine),Infectious Diseases,Inhibition of ornithine decarboxylase,African trypanosomiasis (T. brucei gambiense),High
+DC179,Antiprotozoals (Nifurtimox),Infectious Diseases,Generation of reactive oxygen,Chagas disease,High
+DC180,Antiprotozoals (Benznidazole),Infectious Diseases,Similar to nifurtimox,Chagas disease,High
+DC181,Antiprotozoals (Miltefosine),Infectious Diseases,Inhibition of cell membrane synthesis,Leishmaniasis,High
+DC182,Antiprotozoals (Amphotericin B) (see polyenes)
+DC183,Antiprotozoals (Paromomycin),Infectious Diseases,Inhibition of protein synthesis (30S),Leishmaniasis; Amebiasis,Medium
+DC184,Inhaled Corticosteroids (Fluticasone),Pulmonology,Activation of glucocorticoid receptors reducing inflammation,Asthma; COPD,Low
+DC185,Inhaled Long-acting Beta Agonists (LABA),Pulmonology,Activation of beta-2 adrenergic receptors bronchodilation,Asthma; COPD (with ICS),Medium
+DC186,Inhaled Short-acting Beta Agonists (SABA),Pulmonology,Activation of beta-2 adrenergic receptors,Acute bronchospasm,Low
+DC187,Inhaled Long-acting Muscarinic Antagonists (LAMA),Pulmonology,Blockade of M3 muscarinic receptors bronchodilation,COPD; Asthma,Medium
+DC188,Inhaled Short-acting Muscarinic Antagonists (SAMA),Pulmonology,Blockade of M3 receptors,Acute COPD exacerbation,Low
+DC189,Leukotriene Receptor Antagonists (Montelukast),Pulmonology,Blockade of cysteinyl leukotriene receptors,Asthma; Allergic rhinitis,Low
+DC190,Mast Cell Stabilizers (Cromolyn),Pulmonology,Inhibition of mast cell degranulation,Asthma prophylaxis; Allergic conjunctivitis,Low
+DC191,Methylxanthines (Theophylline),Pulmonology,Non-selective phosphodiesterase inhibition; adenosine antagonism,Asthma; COPD,High
+DC192,Anti-IgE (Omalizumab),Pulmonology,Neutralization of IgE,Severe allergic asthma; Chronic urticaria,High
+DC193,Anti-IL5 (Mepolizumab),Pulmonology,Neutralization of IL-5 reducing eosinophils,Severe eosinophilic asthma,High
+DC194,Anti-IL5R (Benralizumab),Pulmonology,Blockade of IL-5 receptor depleting eosinophils,Severe eosinophilic asthma,High
+DC195,Anti-IL4R (Dupilumab),Pulmonology,Blockade of IL-4 and IL-13 signaling,Asthma; Atopic dermatitis; Nasal polyps,High
+DC196,Antifibrotics (Pirfenidone),Pulmonology,Anti-inflammatory and antifibrotic,Idiopathic pulmonary fibrosis,High
+DC197,Antifibrotics (Nintedanib),Pulmonology,Inhibition of multiple tyrosine kinases,IPF; SSc-ILD,High
+DC198,Pulmonary Vasodilators (PDE5 inhibitors),Pulmonology,Inhibition of PDE5 increasing cGMP,Pulmonary arterial hypertension,High
+DC199,Pulmonary Vasodilators (Endothelin antagonists),Pulmonology,Blockade of endothelin receptors,Pulmonary arterial hypertension,High
+DC200,Pulmonary Vasodilators (Prostacyclin analogs),Pulmonology,Activation of IP receptors increasing cAMP,Pulmonary arterial hypertension,High
+DC201,Pulmonary Vasodilators (sGC stimulators),Pulmonology,Stimulation of soluble guanylate cyclase,Pulmonary arterial hypertension,High
+DC202,Topical Corticosteroids (Dermatology),Dermatology,Anti-inflammatory via glucocorticoid receptor,Inflammatory skin disorders (eczema, psoriasis),Low
+DC203,Topical Calcineurin Inhibitors (Tacrolimus),Dermatology,Inhibition of calcineurin reducing T-cell activation,Atopic dermatitis; Vitiligo,Medium
+DC204,Topical Retinoids (Tretinoin),Dermatology,Activation of retinoid receptors,Acne; Photoaging,Low
+DC205,Topical Antibiotics (Clindamycin),Dermatology,Bacterial protein synthesis inhibition,Acne; Bacterial skin infections,Low
+DC206,Topical Antifungals (Clotrimazole),Dermatology,Ergosterol synthesis inhibition,Superficial fungal infections,Low
+DC207,Topical Antivirals (Acyclovir),Dermatology,DNA polymerase inhibition,Herpes labialis,Low
+DC208,Topical Vitamin D Analogs (Calcipotriene),Dermatology,Activation of vitamin D receptors,Psoriasis,Low
+DC209,Topical Coal Tar,Dermatology,Antiproliferative,Psoriasis; Seborrheic dermatitis,Low
+DC210,Topical Anthralin,Dermatology,Antiproliferative,Psoriasis,Low
+DC211,Systemic Retinoids (Acitretin),Dermatology,Activation of retinoid receptors,Severe psoriasis; Keratinization disorders,High
+DC212,Systemic Retinoids (Isotretinoin),Dermatology,Reduction of sebum production; normalization of follicular keratinization,Severe nodular acne,High
+DC213,Biologics for Psoriasis (Anti-TNF),Dermatology,TNF inhibition,Plaque psoriasis; Psoriatic arthritis,High
+DC214,Biologics for Psoriasis (Anti-IL17),Dermatology,IL-17 inhibition,Plaque psoriasis; Psoriatic arthritis,High
+DC215,Biologics for Psoriasis (Anti-IL23),Dermatology,IL-23 inhibition,Plaque psoriasis,High
+DC216,Phosphodiesterase-4 Inhibitors (Apremilast),Dermatology,Inhibition of PDE4 increasing cAMP,Psoriasis; Psoriatic arthritis,Medium
+DC217,Janus Kinase Inhibitors (Topical),Dermatology,Inhibition of JAK-STAT pathway,Atopic dermatitis,Medium
+DC218,Antidepressants (SSRIs),Psychiatry,Inhibition of serotonin reuptake,Depression; Anxiety; OCD; PTSD,Low
+DC219,Antidepressants (SNRIs),Psychiatry,Inhibition of serotonin and norepinephrine reuptake,Depression; Anxiety; Neuropathic pain; Fibromyalgia,Medium
+DC220,Antidepressants (TCAs),Psychiatry,Inhibition of serotonin and norepinephrine reuptake; multiple receptor actions,Depression; Neuropathic pain; Migraine prophylaxis,High
+DC221,Antidepressants (MAOIs),Psychiatry,Irreversible inhibition of MAO-A and MAO-B,Depression (atypical); Anxiety; Parkinson's,High
+DC222,Antidepressants (NaSSAs),Psychiatry,Antagonism of alpha2-adrenoceptors and 5-HT2/5-HT3 receptors,Depression; Anxiety,Medium
+DC223,Antipsychotics (Typical - Haloperidol),Psychiatry,Dopamine D2 receptor blockade,Schizophrenia; Acute psychosis; Tourette's,High
+DC224,Antipsychotics (Atypical - Risperidone),Psychiatry,Dopamine D2 and serotonin 5-HT2A blockade,Schizophrenia; Bipolar; Autism irritability,Medium
+DC225,Antipsychotics (Atypical - Olanzapine),Psychiatry,Multiple receptor antagonism,Schizophrenia; Bipolar; Agitation,Medium
+DC226,Antipsychotics (Atypical - Quetiapine),Psychiatry,Multiple receptor antagonism,Schizophrenia; Bipolar; Depression augmentation; Insomnia,Medium
+DC227,Antipsychotics (Atypical - Aripiprazole),Psychiatry,Partial dopamine agonist; 5-HT2A antagonist,Schizophrenia; Bipolar; Depression augmentation; Tourette's,Medium
+DC228,Antipsychotics (Clozapine),Psychiatry,Multiple receptor actions, but unique,Refractory schizophrenia; Suicide risk reduction,High
+DC229,Mood Stabilizers (Lithium),Psychiatry,Multiple: inhibition of inositol monophosphatase; GSK3, etc.,Bipolar disorder (mania and maintenance),High
+DC230,Mood Stabilizers (Valproate) (see anticonvulsants)
+DC231,Mood Stabilizers (Lamotrigine) (see anticonvulsants)
+DC232,Mood Stabilizers (Carbamazepine) (see anticonvulsants)
+DC233,Anxiolytics (Benzodiazepines),Psychiatry,GABA-A potentiation,Anxiety; Insomnia; Seizures; Alcohol withdrawal,High
+DC234,Anxiolytics (Buspirone),Psychiatry,5-HT1A partial agonist,Generalized anxiety disorder,Low
+DC235,Hypnotics (Z-drugs),Psychiatry,GABA-A selective agonism,Insomnia,High
+DC236,Psychostimulants (Methylphenidate),Psychiatry,Inhibition of dopamine and norepinephrine reuptake,ADHD; Narcolepsy,High
+DC237,Psychostimulants (Amphetamines),Psychiatry,Inhibition of reuptake and release of dopamine and norepinephrine,ADHD; Narcolepsy,High
+DC238,Non-stimulant ADHD (Atomoxetine),Psychiatry,Selective norepinephrine reuptake inhibition,ADHD,Medium
+DC239,Anti-dementia (Cholinesterase inhibitors) (see neurology)
+DC240,Anti-dementia (Memantine) (see neurology)
+DC241,NSAIDs (Non-selective),Rheumatology,Inhibition of COX-1 and COX-2 reducing prostaglandins,Pain; Inflammation; Fever,Low
+DC242,COX-2 Selective Inhibitors,Rheumatology,Selective inhibition of COX-2,Arthritis; Pain; Dysmenorrhea,Medium
+DC243,Corticosteroids (Systemic),Rheumatology,Anti-inflammatory and immunosuppressive,Rheumatoid arthritis; SLE; Vasculitis,High
+DC244,DMARDs (Methotrexate),Rheumatology,Inhibition of dihydrofolate reductase and other pathways,Rheumatoid arthritis; Psoriatic arthritis; IBD,High
+DC245,DMARDs (Leflunomide),Rheumatology,Inhibition of dihydroorotate dehydrogenase,Rheumatoid arthritis; Psoriatic arthritis,High
+DC246,DMARDs (Sulfasalazine),Rheumatology,Anti-inflammatory and immunomodulatory,Rheumatoid arthritis; IBD,Medium
+DC247,DMARDs (Hydroxychloroquine),Rheumatology,Inhibition of TLR signaling; antigen presentation,Rheumatoid arthritis; SLE; Antiphospholipid,Medium
+DC248,Biologic DMARDs (Anti-TNF),Rheumatology,TNF inhibition,Rheumatoid arthritis; Psoriatic arthritis; Ankylosing spondylitis; IBD,High
+DC249,Biologic DMARDs (Anti-IL6),Rheumatology,IL-6 receptor blockade,Rheumatoid arthritis; Juvenile idiopathic arthritis,High
+DC250,Biologic DMARDs (Anti-CD20) (Rituximab),Rheumatology,B-cell depletion,Rheumatoid arthritis; ANCA vasculitis; SLE,High
+DC251,Biologic DMARDs (Abatacept),Rheumatology,CTLA-4 fusion protein inhibiting T-cell activation,Rheumatoid arthritis; Psoriatic arthritis,High
+DC252,Biologic DMARDs (Anti-IL1),Rheumatology,IL-1 inhibition,Cryopyrin-associated periodic syndromes; RA; Still's,High
+DC253,JAK Inhibitors (Tofacitinib, Baricitinib),Rheumatology,JAK inhibition,Rheumatoid arthritis; Psoriatic arthritis; Ulcerative colitis,High
+DC254,Uricosurics (Probenecid),Rheumatology,Inhibition of renal urate reabsorption,Gout,Medium
+DC255,Xanthine Oxidase Inhibitors (Allopurinol),Rheumatology,Inhibition of xanthine oxidase reducing urate,Gout; Tumor lysis syndrome,Low
+DC256,Xanthine Oxidase Inhibitors (Febuxostat),Rheumatology,Selective inhibition of xanthine oxidase,Gout,Medium
+DC257,Colchicine,Rheumatology,Inhibition of microtubule polymerization reducing inflammation,Gout; Familial Mediterranean fever,High
+DC258,Anti-glaucoma (Prostaglandin Analogs),Ophthalmology,Increase uveoscleral outflow,Open-angle glaucoma; Ocular hypertension,Low
+DC259,Anti-glaucoma (Beta-blockers),Ophthalmology,Reduction of aqueous humor production,Glaucoma,Low
+DC260,Anti-glaucoma (Alpha-2 Agonists),Ophthalmology,Reduction of aqueous production and increase outflow,Glaucoma; Ocular hypertension,Low
+DC261,Anti-glaucoma (Carbonic Anhydrase Inhibitors),Ophthalmology,Inhibition of aqueous humor production,Glaucoma,Low
+DC262,Anti-glaucoma (Rho Kinase Inhibitors),Ophthalmology,Increase outflow via trabecular meshwork,Glaucoma,Medium
+DC263,Mydriatics/Cycloplegics,Ophthalmology,Anticholinergic or alpha-adrenergic causing dilation,Examination; Uveitis,Low
+DC264,Ocular Anti-inflammatories (Corticosteroids),Ophthalmology,Anti-inflammatory,Ocular inflammation; Post-op,Low
+DC265,Ocular Anti-inflammatories (NSAIDs),Ophthalmology,COX inhibition,Allergic conjunctivitis; Post-op inflammation,Low
+DC266,Ocular Anti-infectives (Antibiotics),Ophthalmology,Bacterial killing,Bacterial conjunctivitis; Keratitis,Low
+DC267,Ocular Anti-infectives (Antivirals),Ophthalmology,Viral DNA polymerase inhibition,Herpetic keratitis,Medium
+DC268,Ocular Anti-allergy (Mast cell stabilizers, Antihistamines),Ophthalmology,Mast cell stabilization; H1 antagonism,Allergic conjunctivitis,Low
+DC269,Ocular Lubricants,Ophthalmology,Lubrication and stabilization of tear film,Dry eye,Low
+DC270,Ocular Immunomodulators (Cyclosporine),Ophthalmology,Inhibition of T-cell activation,Keratoconjunctivitis sicca; Uveitis,Medium
+DC271,Ocular VEGF Inhibitors (Ranibizumab),Ophthalmology,VEGF inhibition,Wet AMD; Diabetic macular edema; RVO,High
+DC272,Ocular VEGF Inhibitors (Aflibercept),Ophthalmology,VEGF inhibition,Wet AMD; DME; RVO,High
+DC273,Anti-VEGF (Bevacizumab off-label),Ophthalmology,VEGF inhibition,Retinal diseases,High
+DC274,Erythropoiesis-Stimulating Agents (EPO),Nephrology,Activation of erythropoietin receptor,Anemia in CKD; Chemotherapy-induced anemia,Medium
+DC275,Phosphate Binders (Calcium-based),Nephrology,Binding phosphate in gut,Hyperphosphatemia in CKD,Low
+DC276,Phosphate Binders (Sevelamer),Nephrology,Binding phosphate,Hyperphosphatemia in CKD,Medium
+DC277,Phosphate Binders (Lanthanum),Nephrology,Binding phosphate,Hyperphosphatemia in CKD,Medium
+DC277,Vitamin D Analogs (Calcitriol),Nephrology,Activation of vitamin D receptor,Secondary hyperparathyroidism in CKD,Medium
+DC278,Calcimimetics (Cinacalcet),Nephrology,Activation of calcium-sensing receptor,Secondary hyperparathyroidism; Hypercalcemia,High
+DC279,Anticoagulation for Dialysis (Heparin),Nephrology,Activation of antithrombin,Prevention of clotting during hemodialysis,Low
+DC280,Anticoagulation (Citrate),Nephrology,Chelation of calcium inhibiting coagulation,Regional anticoagulation in CRRT,High
+DC281,Immunosuppressants (Calcineurin Inhibitors),Nephrology,Inhibition of calcineurin reducing T-cell activation,Solid organ transplant; Autoimmune,High
+DC282,Immunosuppressants (Mycophenolate),Nephrology,Inhibition of IMPDH reducing lymphocyte proliferation,Transplant; Autoimmune,High
+DC283,Immunosuppressants (Sirolimus),Nephrology,mTOR inhibition,Transplant; Autoimmune,High
+DC284,Immunosuppressants (Azathioprine) (see Gastroenterology)
+DC285,Immunosuppressants (Cyclophosphamide) (see Oncology)
+DC286,Antihistamines (H1 - Sedating),Allergy and Immunology,Inverse agonist at H1 receptor,Allergic rhinitis; Urticaria; Pruritus,Low
+DC287,Antihistamines (H1 - Non-sedating),Allergy and Immunology,Inverse agonist at H1 receptor (peripheral selective),Allergic rhinitis; Urticaria,Low
+DC288,Leukotriene Receptor Antagonists (see Pulmonology)
+DC289,Cromolyn (see Pulmonology)
+DC290,Epinephrine (Auto-injector),Allergy and Immunology,Alpha and beta adrenergic agonist,Anaphylaxis; Severe allergic reaction,High
+DC291,Immunotherapy (Allergen extracts),Allergy and Immunology,Induction of immune tolerance to allergen,Allergic rhinitis; Asthma; Venom allergy,High
+DC292,Omalizumab (Anti-IgE) (see Pulmonology)
+DC293,Dupilumab (Anti-IL4R) (see Pulmonology)
+DC294,Alpha-blockers (Tamsulosin),Urology,Selective alpha-1A adrenergic blockade,BPH; Ureteral stones,Low
+DC295,5-alpha Reductase Inhibitors (Finasteride),Urology,Inhibition of 5-alpha reductase reducing DHT,BPH; Male pattern baldness,Low
+DC296,PDE5 Inhibitors (Sildenafil),Urology,Inhibition of PDE5 increasing cGMP,Erectile dysfunction; PAH,Medium
+DC297,Anticholinergics for OAB (Oxybutynin),Urology,Muscarinic receptor blockade,Overactive bladder; Urinary incontinence,Low
+DC298,Beta-3 Agonists (Mirabegron),Urology,Activation of beta-3 adrenergic receptors relaxing detrusor,Overactive bladder,Medium
+DC299,Alpha-agonists (Midodrine),Urology,Alpha-1 adrenergic agonist,Orthostatic hypotension,Medium
+DC300,Desmopressin,Urology,V2 receptor agonist increasing water reabsorption,Nocturnal enuresis; Diabetes insipidus,MediumDC312,Combination Inhaled Corticosteroid/LABA (Fixed-dose),Pulmonology,Glucocorticoid receptor activation + beta-2 adrenergic agonism,Asthma; COPD maintenance,Medium
+DC312,Combination Inhaled Corticosteroid/LABA (Fixed-dose),Pulmonology,Glucocorticoid receptor activation + beta-2 adrenergic agonism,Asthma; COPD maintenance,Medium
+DC313,Combination LAMA/LABA (Fixed-dose),Pulmonology,M3 muscarinic antagonism + beta-2 agonism,COPD maintenance,Medium
+DC314,Combination SABA/SAMA (Fixed-dose),Pulmonology,Beta-2 agonism + muscarinic antagonism,Acute asthma/COPD exacerbation,Low
+DC315,CGRP Monoclonal Antibodies (Preventive),Neurology,Neutralization of CGRP or its receptor,Migraine prevention,High
+DC316,Anti-CGRP Gepants (Acute),Neurology,CGRP receptor antagonism,Acute migraine treatment,Medium
+DC317,Anti-CGRP Gepants (Preventive),Neurology,CGRP receptor antagonism,Migraine prevention,Medium
+DC318,Ditans (5-HT1F agonists),Neurology,5-HT1F receptor agonism without vasoconstriction,Acute migraine treatment,Medium
+DC319,Selective Estrogen Receptor Degraders (SERDs),Oncology,Estrogen receptor antagonism and degradation,Breast cancer (HR+),High
+DC320,Antibody-Drug Conjugates (HER2-targeted),Oncology,Targeted delivery of cytotoxic agent to HER2+ cells,HER2+ breast cancer,High
+DC321,KRAS G12C Inhibitors,Oncology,Inhibition of mutant KRAS G12C,KRAS G12C-mutated NSCLC; CRC,High
+DC322,CFTR Modulators (Potentiators),Pulmonology,Enhance CFTR channel function,Cystic fibrosis (specific mutations),High
+DC323,CFTR Modulators (Correctors),Pulmonology,Improve CFTR processing,CF,High
+DC324,CFTR Modulators (Amplifiers),Pulmonology,Increase CFTR production,CF,High
+DC325,Antisense Oligonucleotides,Neurology,Modify RNA splicing or degradation,Spinal muscular atrophy; Duchenne; Huntington's,High
+DC326,Gene Therapies,Neurology; Hematology; Ophthalmology,Replace or edit defective gene,Inherited retinal diseases; SMA; hemophilia,High

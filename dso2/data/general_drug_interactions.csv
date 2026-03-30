@@ -1,0 +1,131 @@
+﻿Médicament,Supplément/Substance,Type interaction,Sévérité,Explication détaillée,Conduite à tenir
+Warfarine (AVK),Vitamine K,ANTAGONISME DIRECT,haute,La vitamine K est l'antidote de la warfarine. Complètement antagoniste.,Apport stable en vit K alimentaire. Ne JAMAIS supplémenter en K sans avis.
+Warfarine (AVK),Vitamine E (>400 UI),POTENTIALISATION,haute,La vitamine E inhibe la carboxylase vit K-dépendante et l'agrégation plaquettaire.,Ne pas dépasser 200 UI/j sous AVK. Surveillance INR.
+Warfarine (AVK),Oméga 3 (>3g/j),POTENTIALISATION,modérée,L'EPA/DHA à haute dose ont un effet anti-plaquettaire → augmentation du risque hémorragique.,Jusqu'à 2g/j: OK. Au-delà: surveillance INR. Signaler au médecin.
+Warfarine (AVK),Millepertuis,RÉDUCTION EFFICACITÉ,haute,Le millepertuis induit le CYP2C9 et CYP3A4 → métabolisme accéléré de la warfarine → chute de l'INR.,CONTRE-INDIQUÉ. Risque de thrombose par perte d'effet anticoagulant.
+Warfarine (AVK),Ginkgo biloba,POTENTIALISATION,modérée,Le ginkgo inhibe le PAF (Platelet Activating Factor) → effet anti-plaquettaire additif.,Prudence. Déconseillé sous anticoagulants.
+Warfarine (AVK),Ail (allicine),POTENTIALISATION,modérée,L'allicine inhibe la thromboxane synthétase → effet anti-plaquettaire additif.,Ail alimentaire normal: OK. Gélules d'ail concentré: surveillance INR.
+Warfarine (AVK),Dong Quai (Angélique),POTENTIALISATION,modérée,Contient des coumarines naturelles → effet anticoagulant additif.,Déconseillé sous AVK.
+Warfarine (AVK),Cranberry (canneberge),POTENTIALISATION,modérée,Inhibition du CYP2C9 → ralentissement du métabolisme de la warfarine.,Surveillance INR si consommation régulière.
+Warfarine (AVK),Coenzyme Q10,RÉDUCTION EFFICACITÉ,modérée,Le CoQ10 a une structure chimique proche de la vitamine K2 → antagonisme possible.,Surveillance INR si ajout ou arrêt de CoQ10.
+Warfarine (AVK),Danshen (Salvia miltiorrhiza),POTENTIALISATION,haute,Le danshen inhibe le CYP et a une activité anticoagulante propre → hémorragies rapportées.,CONTRE-INDIQUÉ sous AVK.
+Antibiotiques (tous),Probiotiques,INTERACTION,faible,Les antibiotiques détruisent les probiotiques co-administrés mais les probiotiques limitent la diarrhée associée.,Prendre les probiotiques 2h APRÈS l'antibiotique. POURSUIVRE 2 semaines après la fin de l'antibiothérapie.
+"NACO (rivaroxaban, apixaban)",Millepertuis,RÉDUCTION EFFICACITÉ,haute,Le millepertuis induit la P-gp et le CYP3A4 → réduction des taux de NACO.,CONTRE-INDIQUÉ. Risque thromboembolique.
+NACO,Curcuma,POTENTIALISATION,modérée,Le curcuma inhibe le CYP3A4 et la P-gp → augmentation des taux de NACO.,Prudence sous NACO. Signaler la prise de curcuma.
+Clopidogrel,Oméga 3,POTENTIALISATION,modérée,Effet anti-plaquettaire additif.,Prudence si forte dose d'oméga 3.
+Aspirine,Ginkgo biloba,POTENTIALISATION,modérée,Double inhibition plaquettaire → risque hémorragique accru.,Déconseillé.
+"Antihypertenseurs (IEC, ARA2)",Potassium,HYPERKALIÉMIE,haute,Les IEC/ARA2 réduisent l'excrétion rénale du K⁺. Ajout de K⁺ → hyperkaliémie → arythmie potentiellement mortelle.,⚠️ NE JAMAIS supplémenter en potassium sous IEC/ARA2 sans contrôle biologique.
+Antihypertenseurs,Réglisse,ANTAGONISME,haute,La réglisse cause rétention de sodium + perte de potassium + HTA → annule l'antihypertenseur.,CONTRE-INDICATION de la réglisse sous antihypertenseur.
+Antihypertenseurs,CoQ10,POTENTIALISATION,faible,Le CoQ10 a un léger effet hypotenseur propre (4-11 mmHg systolique).,Surveiller la TA. Ajustement posologique possible.
+Antihypertenseurs,Ail,POTENTIALISATION,faible,L'ail réduit la TA de 5-8 mmHg en moyenne.,Surveillance TA si consommation importante.
+Antihypertenseurs,Magnésium (IV),POTENTIALISATION,modérée,Le magnésium IV est un vasodilatateur → hypotension additive.,"Prudence en IV, oral: risque minime."
+Bêta-bloquants,Caféine/Guarana/Maté,ANTAGONISME,modérée,La caféine augmente la fréquence cardiaque et la TA → antagonise les β-bloquants.,Limiter la caféine sous bêta-bloquants.
+Inhibiteurs calciques,Pamplemousse,POTENTIALISATION,haute,Le pamplemousse inhibe le CYP3A4 → surdosage en inhibiteur calcique → hypotension sévère.,"⚠️ INTERDIT avec félodipine, nifédipine, amlodipine. Effet dure 72h."
+Diurétiques thiazidiques,Calcium,HYPERCALCÉMIE,modérée,Les thiazidiques réduisent l'excrétion rénale du calcium → hypercalcémie si supplémenté.,Surveiller la calcémie si supplément de calcium sous thiazidique.
+Diurétiques de l'anse (furosémide),Magnésium,DÉPLÉTION,haute,Le furosémide augmente la perte urinaire de magnésium → carence probable.,Supplémenter en magnésium si diurétique de l'anse au long cours.
+Diurétiques hypokaliémiants,Réglisse,POTENTIALISATION,haute,Double perte de potassium → hypokaliémie sévère → arythmie.,CONTRE-INDIQUÉ.
+Spironolactone,Potassium,HYPERKALIÉMIE,haute,La spironolactone épargne le potassium. Ajout de K⁺ → hyperkaliémie.,⚠️ NE JAMAIS supplémenter en potassium sous spironolactone.
+Metformine,Berbérine,HYPOGLYCÉMIE ADDITIVE,haute,La berbérine active l'AMPK comme la metformine → double effet hypoglycémiant + risque d'acidose lactique.,⚠️ NE PAS associer. Risque d'hypoglycémie sévère.
+Metformine,Chrome,POTENTIALISATION,modérée,Le chrome améliore la sensibilité à l'insuline → potentialise la metformine.,Surveillance glycémique. Adapter la dose de metformine si besoin.
+Metformine,Cannelle,POTENTIALISATION,faible,La cannelle améliore modérément la sensibilité à l'insuline.,Surveillance glycémique.
+Metformine,Vitamine B12,DÉPLÉTION,haute,La metformine réduit l'absorption de la B12 de 10-30% → carence en B12 chez 10-30% des patients après >3 ans.,DOSER la B12 annuellement. Supplémenter si carence.
+Metformine,Acide alpha-lipoïque,POTENTIALISATION,modérée,L'ALA améliore la sensibilité à l'insuline → potentialise la metformine.,Surveillance glycémique renforcée.
+Metformine,Gymnema sylvestre,POTENTIALISATION,modérée,Le gymnema réduit l'absorption du glucose intestinal et stimule les cellules β pancréatiques.,Risque d'hypoglycémie additive. Surveillance.
+Sulfamides hypoglycémiants,Chrome,POTENTIALISATION,modérée,Risque d'hypoglycémie additive.,Surveillance glycémique.
+Insuline,Chrome,POTENTIALISATION,modérée,Le chrome augmente la sensibilité à l'insuline → besoin en insuline peut diminuer.,Surveillance glycémique. Ajustement possible des doses d'insuline.
+Insuline,Magnésium,SYNERGIE,faible,Le magnésium est nécessaire à la signalisation de l'insuline. Corriger la carence améliore la réponse insulinique.,Supplémenter en magnésium chez le diabétique carencé.
+Antidiabétiques (tous),Fenugrec,POTENTIALISATION,modérée,Le fenugrec réduit la glycémie post-prandiale via la 4-hydroxyisoleucine.,Surveillance glycémique.
+Antidiabétiques (tous),Ginseng,POTENTIALISATION,faible,Le ginseng peut réduire légèrement la glycémie.,Surveillance glycémique.
+Antidiabétiques (tous),Nopal (figuier de barbarie),POTENTIALISATION,faible,Le nopal réduit l'absorption du glucose intestinal (fibres solubles).,Surveillance glycémique.
+"ISRS (fluoxétine, sertraline, etc.)",Millepertuis,SYNDROME SÉROTONINERGIQUE,haute,⚠️ Le millepertuis inhibe la recapture de sérotonine COMME les ISRS → syndrome sérotoninergique potentiellement mortel.,CONTRE-INDICATION ABSOLUE. Jamais ensemble.
+ISRS,5-HTP,SYNDROME SÉROTONINERGIQUE,haute,Le 5-HTP est converti directement en sérotonine → excès sérotoninergique.,CONTRE-INDICATION ABSOLUE.
+ISRS,L-Tryptophane,SYNDROME SÉROTONINERGIQUE,haute,Le tryptophane est le précurseur du 5-HTP puis de la sérotonine → risque sérotoninergique.,CONTRE-INDICATION.
+ISRS,SAMe (S-adénosylméthionine),SYNDROME SÉROTONINERGIQUE,haute,"Le SAMe augmente les niveaux de sérotonine, dopamine et noradrénaline.",CONTRE-INDICATION sous ISRS.
+ISRS,Oméga 3,SYNERGIE,faible,L'EPA/DHA peut améliorer l'efficacité des ISRS (études: augmentation du taux de rémission).,Association bénéfique et sûre. Oméga 3 comme adjuvant.
+ISRS,Vitamine D,SYNERGIE,faible,La vitamine D régule la tryptophane hydroxylase → indirectement soutient la sérotonine.,Supplémenter si carence (fréquente chez les dépressifs).
+ISRS,Ginkgo biloba,POTENTIALISATION,modérée,Le ginkgo peut moduler les récepteurs sérotoninergiques. Effets additifs possibles.,Surveiller les signes de syndrome sérotoninergique.
+IMAO,Tyramine alimentaire,CRISE HYPERTENSIVE,critique,"⚠️ DANGER VITAL. Les IMAO empêchent la dégradation de la tyramine → crise hypertensive (fromages affinés, charcuterie, vin).",RÉGIME STRICT sans tyramine obligatoire sous IMAO.
+IMAO,5-HTP / Tryptophane,SYNDROME SÉROTONINERGIQUE,critique,Les IMAO empêchent la dégradation de la sérotonine. Ajout d'un précurseur → syndrome sérotoninergique mortel.,CONTRE-INDICATION ABSOLUE. Délai de washout: 2 semaines après arrêt IMAO.
+IMAO,Ginseng,CONFLIT,modérée,Cas rapportés de manie et céphalées avec l'association IMAO + ginseng.,Déconseillé.
+"IRSNA (venlafaxine, duloxétine)",Millepertuis,SYNDROME SÉROTONINERGIQUE,haute,Même risque que les ISRS → syndrome sérotoninergique.,CONTRE-INDICATION ABSOLUE.
+Lithium,Iode,ANTAGONISME THYROÏDIEN,haute,Le lithium bloque la synthèse des hormones thyroïdiennes. L'iode en excès aggrave cet effet (Wolff-Chaikoff).,Surveiller la TSH sous lithium. Éviter les compléments iodés.
+Lithium,Psyllium/Fibres,RÉDUCTION ABSORPTION,modérée,Les fibres peuvent réduire l'absorption du lithium → sous-dosage.,Prendre le lithium 2h avant ou après les fibres.
+"Statines (atorvastatine, simvastatine)",Coenzyme Q10,DÉPLÉTION,haute,Les statines bloquent la voie du mévalonate → réduisent la synthèse endogène de CoQ10 de 40%. Cause les myalgies.,SUPPLÉMENTER en CoQ10 (100-200mg/j) sous statines. Réduit les myalgies de 40%.
+"Statines (atorvastatine, simvastatine)",Pamplemousse,SURDOSAGE,haute,Le pamplemousse inhibe le CYP3A4 → augmentation des taux de statine de 200-500% → rhabdomyolyse.,"⚠️ INTERDIT avec simvastatine, atorvastatine, lovastatine. Pravastatine et rosuvastatine: OK."
+Statines,Millepertuis,RÉDUCTION EFFICACITÉ,haute,Le millepertuis induit le CYP3A4 → métabolisme accéléré → perte d'efficacité hypocholestérolémiante.,CONTRE-INDIQUÉ.
+Statines,Niacine (vitamine B3),POTENTIALISATION + MYOPATHIE,modérée,La niacine + statine = risque accru de myopathie et rhabdomyolyse.,L'association statine + niacine n'est plus recommandée. Surveiller CPK.
+Statines,Levure de riz rouge,SURDOSAGE,haute,La levure de riz rouge contient de la monacoline K = LOVASTATINE naturelle → double dose de statine.,⚠️ NE JAMAIS associer. La levure de riz rouge EST une statine.
+Statines,Vitamine D,SYNERGIE,faible,La carence en vitamine D est associée à plus de myalgies sous statines. Corriger la carence améliore la tolérance.,Supplémenter en vitamine D chez tout patient sous statine.
+Statines,Oméga 3,SYNERGIE,faible,Association classique: statines (LDL) + oméga 3 (triglycérides). Complémentaires.,Association bénéfique et sûre. Recommandée si TG élevés.
+Lévothyroxine,Calcium,RÉDUCTION ABSORPTION,haute,Le calcium chélate la lévothyroxine dans l'intestin → réduction de l'absorption de 40%.,Prendre la lévothyroxine 4h AVANT le calcium. LE MATIN À JEUN.
+Lévothyroxine,Fer,RÉDUCTION ABSORPTION,haute,Le fer chélate la lévothyroxine → réduction de l'absorption.,Espacer de 4h.
+Lévothyroxine,Soja,RÉDUCTION ABSORPTION,modérée,Les isoflavones de soja réduisent l'absorption de la lévothyroxine.,Espacer de 4h. Alternativement: doser la TSH et ajuster la dose.
+Lévothyroxine,Café,RÉDUCTION ABSORPTION,modérée,Le café réduit l'absorption de la lévothyroxine de 30%.,Prendre la lévothyroxine 30-60 min AVANT le café.
+Lévothyroxine,IPP (oméprazole),RÉDUCTION ABSORPTION,modérée,Les IPP augmentent le pH gastrique → réduction de l'absorption de la lévothyroxine.,Augmenter la dose de lévothyroxine si IPP au long cours. Doser la TSH.
+Lévothyroxine,Noix (excès),RÉDUCTION ABSORPTION,faible,Les fibres des noix peuvent réduire l'absorption.,Espacer.
+Lévothyroxine,Ashwagandha,POTENTIALISATION THYROÏDIENNE,modérée,L'ashwagandha augmente la T3 et T4 → risque d'hyperthyroïdie si lévothyroxine déjà dosée.,⚠️ Surveillance thyroïdienne étroite. Ajuster ou éviter.
+Ciclosporine,Millepertuis,RÉDUCTION EFFICACITÉ,critique,⚠️ Le millepertuis réduit les taux de ciclosporine de 50-65% → rejet de greffe rapporté.,CONTRE-INDICATION ABSOLUE. Cas de rejet de greffe documentés.
+Ciclosporine,Pamplemousse,SURDOSAGE,haute,Inhibition CYP3A4 → augmentation des taux de ciclosporine → néphrotoxicité.,INTERDIT.
+Ciclosporine,Échinacée,CONFLIT,modérée,L'échinacée stimule l'immunité → antagonise l'immunosuppression.,Déconseillé.
+Ciclosporine,Berbérine,SURDOSAGE,haute,La berbérine inhibe le CYP3A4 et la P-gp → augmentation des taux de ciclosporine.,CONTRE-INDIQUÉ.
+Tacrolimus,Millepertuis,RÉDUCTION EFFICACITÉ,critique,Mêmes risques qu'avec la ciclosporine. Induction CYP3A4 et P-gp.,CONTRE-INDICATION ABSOLUE.
+Azathioprine,Allopurinol,SURDOSAGE,critique,L'allopurinol inhibe la xanthine oxydase → accumulation d'azathioprine → aplasie médullaire.,Si association nécessaire: RÉDUIRE azathioprine de 75%.
+Immunosuppresseurs (tous),Échinacée,ANTAGONISME,modérée,Stimulation de l'immunité innée → antagonise l'immunosuppression thérapeutique.,"Déconseillé. Inclut astragale, reishi, shiitake, maitake."
+Immunosuppresseurs (tous),Champignons médicinaux,ANTAGONISME,modérée,Les β-glucanes stimulent les macrophages et les cellules NK.,Déconseillé.
+Contraceptifs oraux,Millepertuis,RÉDUCTION EFFICACITÉ,haute,⚠️ Le millepertuis induit le CYP3A4 → métabolisme accéléré de l'œstrogène → grossesse non désirée.,CONTRE-INDIQUÉ. Cas de grossesses non désirées documentés.
+Contraceptifs oraux,Charbon actif,RÉDUCTION ABSORPTION,haute,Le charbon adsorbe le contraceptif si pris simultanément → perte d'efficacité.,Prendre le charbon 3h avant ou après la pilule.
+Contraceptifs oraux,Chitosan,RÉDUCTION ABSORPTION,modérée,Le chitosan peut adsorber les hormones liposolubles.,Espacer de 4h.
+Contraceptifs oraux,Antibiotiques (rifampicine),RÉDUCTION EFFICACITÉ,critique,La rifampicine induit massivement le CYP3A4 → contraception inefficace.,⚠️ Contraception mécanique OBLIGATOIRE pendant et 1 mois après la rifampicine.
+Contraceptifs oraux,Pamplemousse,POTENTIALISATION,faible,Inhibition CYP3A4 → légère augmentation des taux d'œstrogène.,Risque théorique faible.
+Carbamazépine,Millepertuis,RÉDUCTION EFFICACITÉ,haute,Double induction enzymatique (carbamazépine auto-induit le CYP + millepertuis renforce) → sous-dosage possible.,CONTRE-INDIQUÉ.
+Carbamazépine/Phénytoïne,Acide folique,DÉPLÉTION + INTERACTION,modérée,Les antiépileptiques réduisent les taux de folate. Mais le folate peut accélérer le métabolisme de la phénytoïne.,Supplémenter en folate MAIS doser les taux de l'antiépileptique.
+Phénytoïne,Calcium/Vitamine D,DÉPLÉTION,haute,La phénytoïne accélère le métabolisme de la vitamine D → ostéomalacie et hypocalcémie.,Supplémenter en calcium + vitamine D sous phénytoïne au long cours.
+Valproate,L-Carnitine,DÉPLÉTION,haute,"Le valproate séquestre la carnitine → carence en L-carnitine → hyperammoniémie, hépatotoxicité.","SUPPLÉMENTER en L-carnitine (50-100mg/kg/j) sous valproate prolongé, surtout chez l'enfant."
+Antiépileptiques (tous),Vitamine D,DÉPLÉTION,haute,Quasi tous les antiépileptiques accélèrent le catabolisme de la vitamine D (CYP24A1).,Doser 25-OH-D3 et supplémenter systématiquement.
+Antiépileptiques (inducteurs),Vitamine B9,DÉPLÉTION,haute,"Carbamazépine, phénytoïne et phénobarbital réduisent les folates de 40-60%.","Supplémenter en acide folique 5mg/j, surtout si femme en âge de procréer."
+"IPP (oméprazole, ésoméprazole)",Magnésium,DÉPLÉTION,haute,Les IPP >1 an réduisent l'absorption du magnésium → hypomagnésémie symptomatique.,Doser le magnésium annuellement sous IPP. Supplémenter si besoin.
+IPP,Calcium,RÉDUCTION ABSORPTION,modérée,Le pH gastrique élevé réduit la dissolution du carbonate de calcium. Le citrate de calcium n'est pas affecté.,Utiliser le CITRATE de calcium (pas le carbonate) sous IPP.
+IPP,Fer,RÉDUCTION ABSORPTION,modérée,Le pH élevé réduit la conversion Fe³⁺ → Fe²⁺ → moindre absorption.,Prendre le fer avec de la vitamine C pour compenser.
+IPP,Vitamine B12,DÉPLÉTION,modérée,Les IPP réduisent l'acidité nécessaire à la libération de la B12 des protéines alimentaires.,Doser la B12 après >2 ans d'IPP. Supplémenter si besoin.
+IPP,Zinc,DÉPLÉTION,modérée,L'acidité réduite diminue l'absorption du zinc.,"Surveiller les signes de carence en zinc: immunité, goût, cicatrisation."
+Corticoïdes oraux (prednisone),Calcium + Vitamine D,DÉPLÉTION,haute,Les corticoïdes réduisent l'absorption du calcium et accélèrent la perte osseuse → ostéoporose cortisonique.,TOUJOURS supplémenter Ca (1000mg) + Vit D (800-1000 UI) sous corticothérapie prolongée (>3 mois).
+Corticoïdes,Réglisse,POTENTIALISATION,haute,"La réglisse inhibe la 11β-HSD2 → augmente l'effet des corticoïdes endogènes → rétention sodée, HTA.",CONTRE-INDIQUÉ. Double effet corticoïdien.
+Corticoïdes,Chrome,DÉPLÉTION,modérée,Les corticoïdes peuvent induire une hyperglycémie et une perte urinaire de chrome.,Supplémenter en chrome si corticothérapie prolongée et hyperglycémie.
+Corticoïdes,Vitamine C,DÉPLÉTION,modérée,Les corticoïdes augmentent les besoins en vitamine C (stress oxydatif accru).,Supplémenter en vitamine C.
+Corticoïdes,Échinacée,ANTAGONISME,modérée,L'échinacée stimule l'immunité que les corticoïdes tentent de supprimer.,Déconseillé sous corticoïdes immunosuppresseurs.
+Tétracyclines (doxycycline),Calcium/Fer/Magnésium/Zinc,CHÉLATION,haute,Les cations divalents chélatent les tétracyclines → perte d'efficacité quasi totale.,NE JAMAIS prendre ensemble. Espacer de 2h avant et 4h après la tétracycline.
+Fluoroquinolones (ciprofloxacine),Calcium/Fer/Magnésium/Zinc,CHÉLATION,haute,Même mécanisme que les tétracyclines. Chélation dans l'intestin.,Espacer de 2h avant et 6h après la fluoroquinolone.
+Fluoroquinolones,Caféine,POTENTIALISATION,modérée,"La ciprofloxacine inhibe le CYP1A2 → réduction de 33% du métabolisme de la caféine → insomnie, palpitations.",Réduire la caféine sous ciprofloxacine/enoxacine.
+Aminosides (gentamicine),Magnésium,DÉPLÉTION,haute,Les aminosides causent une perte rénale de magnésium (néphrotoxicité tubulaire).,Supplémenter en magnésium si aminoside prolongé.
+Isoniazide,Vitamine B6,DÉPLÉTION,haute,L'isoniazide inactive la pyridoxine → neuropathie périphérique.,TOUJOURS co-prescrire pyridoxine 25-50mg/j.
+Rifampicine,Tout traitement CYP,RÉDUCTION EFFICACITÉ,critique,La rifampicine est le PLUS PUISSANT inducteur enzymatique connu → réduit l'effet de quasi tous les médicaments.,Vérifier TOUTES les interactions. Ajuster les posologies. Contraception mécanique.
+Chimiothérapie (tous),Antioxydants haute dose,CONFLIT,haute,La chimio génère des radicaux libres pour tuer les cellules cancéreuses. Les antioxydants peuvent protéger les cellules tumorales.,"⚠️ PAS d'antioxydants haute dose pendant la chimio active (vitamine C >200mg, vit E >100 UI, NAC, sélénium)."
+Chimiothérapie (méthotrexate),Acide folique,INTERACTION COMPLEXE,haute,Le MTX est un anti-folate. Le folate est donné 24-48h APRÈS le MTX pour protéger les cellules saines (rescue).,Acide folinique prescrit dans le protocole. Ne pas prendre de folate AVANT ou PENDANT le MTX.
+Chimiothérapie,Millepertuis,CONFLIT,haute,Le millepertuis induit les CYP → réduit les taux de chimio → échec thérapeutique.,CONTRE-INDICATION ABSOLUE.
+Tamoxifène,Millepertuis,RÉDUCTION EFFICACITÉ,haute,Induction CYP → réduction de conversion en endoxifène (métabolite actif).,CONTRE-INDIQUÉ.
+Tamoxifène,Soja/Isoflavones,CONFLIT,modérée,Les isoflavones ont une activité œstrogénique faible → peuvent interférer.,Par précaution: déconseillé.
+Anesthésiques,Valériane,POTENTIALISATION,modérée,La valériane est GABAergique → potentialise l'anesthésie → réveil retardé.,ARRÊTER la valériane 2 semaines avant toute chirurgie programmée.
+Anesthésiques,Millepertuis,INTERACTION,modérée,Le millepertuis peut prolonger ou raccourcir l'anesthésie selon les agents utilisés.,ARRÊTER 2 semaines avant chirurgie.
+Chirurgie,Ginkgo biloba,RISQUE HÉMORRAGIQUE,haute,Effet anti-plaquettaire → saignement peropératoire accru.,ARRÊTER le ginkgo 2 semaines avant chirurgie.
+Chirurgie,Ail (concentré),RISQUE HÉMORRAGIQUE,modérée,Effet anti-plaquettaire de l'allicine à forte dose.,Arrêter les compléments d'ail 1 semaine avant chirurgie.
+Chirurgie,Oméga 3 (>3g),RISQUE HÉMORRAGIQUE,modérée,Effet anti-plaquettaire à haute dose.,Arrêter >3g d'oméga 3 une semaine avant chirurgie. <2g: pas de problème.
+Chirurgie,Vitamine E (>400 UI),RISQUE HÉMORRAGIQUE,modérée,Effet anti-plaquettaire à haute dose.,Arrêter 1 semaine avant chirurgie.
+Saquinavir,Ail,RÉDUCTION EFFICACITÉ,haute,L'ail réduit les taux de saquinavir de 50% → échec thérapeutique → résistance virale.,CONTRE-INDIQUÉ sous saquinavir.
+Indinavir,Millepertuis,RÉDUCTION EFFICACITÉ,critique,Le millepertuis réduit les taux d'indinavir de 57% → charge virale incontrôlée.,CONTRE-INDICATION ABSOLUE avec tous les antiprotéases VIH.
+ARV (tous les antiprotéases),Millepertuis,RÉDUCTION EFFICACITÉ,critique,Induction CYP3A4 → sous-dosage thérapeutique → sélection de résistances.,CONTRE-INDICATION ABSOLUE.
+ARV (tous),Vitamine C haute dose (>1g),INTERACTION,faible,La vitamine C peut modifier le pH urinaire → altérer l'excrétion de certains ARV.,"Pas de preuve clinique forte, mais ne pas dépasser 1g/j de vitamine C sous ARV."
+Digoxine,Millepertuis,RÉDUCTION EFFICACITÉ,haute,Le millepertuis induit la P-gp → diminution de l'absorption et augmentation de l'excrétion de la digoxine.,CONTRE-INDIQUÉ.
+Digoxine,Réglisse,POTENTIALISATION TOXICITÉ,haute,La réglisse cause une hypokaliémie → augmente la toxicité de la digoxine.,CONTRE-INDIQUÉ. Hypokaliémie + digoxine → arythmie mortelle.
+Digoxine,Fibres/Psyllium,RÉDUCTION ABSORPTION,modérée,Les fibres chélatent la digoxine dans l'intestin.,Prendre la digoxine 2h avant les fibres.
+Digoxine,Calcium IV,POTENTIALISATION TOXICITÉ,haute,Le calcium potentialise l'effet toxique de la digoxine sur le cœur.,⚠️ Calcium IV contre-indiqué sous digoxine. Oral: prudence.
+Digoxine,Magnésium (carence),POTENTIALISATION TOXICITÉ,modérée,L'hypomagnésémie augmente la sensibilité cardiaque à la digoxine.,Maintenir un magnésium normal sous digoxine.
+Benzodiazépines,Valériane,POTENTIALISATION SÉDATION,modérée,"Effets GABAergiques additifs → somnolence excessive, confusion.",Prudence. Réduire la dose si association.
+Benzodiazépines,Kava kava,POTENTIALISATION,haute,Le kava est un puissant GABAergique → potentialisation sédative + hépatotoxicité.,⚠️ DÉCONSEILLÉ. Kava retiré du marché dans plusieurs pays.
+Lévodopa (Parkinson),Fer,CHÉLATION,haute,Le fer chélate la lévodopa dans l'intestin → perte d'efficacité antiparkinsonienne.,Espacer de 2h minimum.
+Lévodopa,Vitamine B6 (>10mg),ANTAGONISME,haute,La pyridoxine >10mg accélère la décarboxylation périphérique de la lévodopa → moins de lévodopa atteint le cerveau.,⚠️ Ne pas dépasser 10mg de B6/j sous lévodopa SEULE. Si lévodopa + carbidopa: pas de restriction.
+Lévodopa,BCAA,COMPÉTITION,modérée,Les BCAA et la lévodopa utilisent le même transporteur au niveau de la BHE.,Limiter les BCAA chez les patients parkinsoniens.
+Méthotrexate (polyarthrite),Acide folique,DÉPLÉTION + PROTECTION,haute,"Le MTX faible dose (7.5-25mg/sem) déplete le folate → stomatite, anémie. Le folate protège sans annuler l'effet anti-rhumatismal.",Acide folique 5mg le lendemain du MTX. Systématique.
+Méthotrexate,AINS,POTENTIALISATION TOXICITÉ,haute,Les AINS réduisent l'excrétion rénale du MTX → surdosage → aplasie médullaire.,"⚠️ Éviter les AINS sous MTX. Ibuprofène, aspirine: contre-indiqués."
+Allopurinol,Fer,INTERACTION,modérée,L'allopurinol peut augmenter l'accumulation hépatique du fer.,Prudence si surcharge en fer.
+Bisphosphonates (alendronate),Calcium,RÉDUCTION ABSORPTION,haute,Le calcium chélate le bisphosphonate → perte d'efficacité anti-ostéoporotique.,"Prendre le bisphosphonate LE MATIN À JEUN, eau plate. Calcium 2h APRÈS minimum."
+Bisphosphonates,Fer,CHÉLATION,haute,Le fer chélate le bisphosphonate.,Espacer d'au moins 2h.
