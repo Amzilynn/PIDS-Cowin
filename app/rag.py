@@ -7,6 +7,7 @@ import os
 import re
 import json
 from collections import Counter
+import unicodedata
 
 import chromadb
 from chromadb.config import Settings as ChromaSettings
@@ -15,6 +16,85 @@ from chromadb.utils import embedding_functions
 
 def _tokenize(text: str) -> List[str]:
     return re.findall(r"[a-zA-ZÀ-ÿ0-9]{2,}", (text or "").lower())
+
+
+def _normalize_text(text: str) -> str:
+    clean = unicodedata.normalize("NFKD", text or "")
+    clean = "".join(char for char in clean if not unicodedata.combining(char))
+    clean = clean.lower()
+    clean = re.sub(r"\s+", " ", clean)
+    return clean.strip()
+
+
+_DOSAGE_PATTERN = re.compile(
+    r"\b\d+(?:[\.,]\d+)?\s?(?:mg|g|mcg|µg|ug|ml|%|ui)(?:\s*/\s*\d+(?:[\.,]\d+)?\s?(?:mg|g|mcg|µg|ug|ml|%|ui))?\b",
+    re.IGNORECASE,
+)
+_PACK_PATTERN = re.compile(
+    r"\b(?:bo[iî]te|bte|tube|flacon|ampoule|sachet|sachets|ovule|ovules|suppositoire|suppositoires)\s*(?:de)?\s*\d+(?:[\.,]\d+)?(?:\s?(?:cp|gelules?|ml|mg|g|doses?))?\b",
+    re.IGNORECASE,
+)
+
+
+def _extract_query_features(text: str) -> Dict[str, str]:
+    normalized = _normalize_text(text)
+    dosage_match = _DOSAGE_PATTERN.search(normalized)
+    pack_match = _PACK_PATTERN.search(normalized)
+    return {
+        "normalized": normalized,
+        "dosage": dosage_match.group(0).strip() if dosage_match else "",
+        "pack": pack_match.group(0).strip() if pack_match else "",
+    }
+
+
+def _extract_doc_features(text: str) -> Dict[str, str]:
+    normalized = _normalize_text(text)
+
+    base_match = re.search(r"\[produit_base\]\s*([^\|\n]+)", normalized)
+    dosage_match = re.search(r"\[dosage_variante\]\s*([^\|\n]+)", normalized)
+    pack_match = re.search(r"\[pack_variante\]\s*([^\|\n]+)", normalized)
+
+    fallback_dosage = _DOSAGE_PATTERN.search(normalized)
+    fallback_pack = _PACK_PATTERN.search(normalized)
+
+    return {
+        "normalized": normalized,
+        "product_base": base_match.group(1).strip() if base_match else "",
+        "dosage": dosage_match.group(1).strip() if dosage_match else (fallback_dosage.group(0).strip() if fallback_dosage else ""),
+        "pack": pack_match.group(1).strip() if pack_match else (fallback_pack.group(0).strip() if fallback_pack else ""),
+    }
+
+
+def _product_variant_adjustment(question: str, document: str) -> float:
+    query_features = _extract_query_features(question)
+    doc_features = _extract_doc_features(document)
+
+    adjustment = 0.0
+    normalized_query = query_features["normalized"]
+    product_base = doc_features["product_base"]
+
+    if product_base:
+        base_tokens = [token for token in re.findall(r"[a-z0-9]{3,}", product_base) if token not in {"boite", "tube", "flacon"}]
+        if base_tokens and all(token in normalized_query for token in base_tokens[:2]):
+            adjustment += 0.08
+
+    query_dosage = query_features["dosage"]
+    doc_dosage = doc_features["dosage"]
+    if query_dosage and doc_dosage:
+        if query_dosage == doc_dosage:
+            adjustment += 0.18
+        elif query_dosage not in doc_features["normalized"]:
+            adjustment -= 0.10
+
+    query_pack = query_features["pack"]
+    doc_pack = doc_features["pack"]
+    if query_pack and doc_pack:
+        if query_pack == doc_pack:
+            adjustment += 0.14
+        elif query_pack not in doc_features["normalized"]:
+            adjustment -= 0.08
+
+    return adjustment
 
 
 def _lexical_score(question: str, document: str) -> float:
@@ -58,6 +138,8 @@ def _rerank_candidates(
         document_text = str(candidate.get("text", ""))
         lexical = _lexical_score(question, document_text)
         combined_score = (alpha_semantic * semantic_score) + (alpha_lexical * lexical)
+        combined_score += _product_variant_adjustment(question, document_text)
+        combined_score = max(0.0, min(1.0, combined_score))
 
         candidates.append(
             {

@@ -1,4 +1,7 @@
 gradio==5.22.0
+fastapi==0.115.12
+starlette==0.46.2
+uvicorn==0.34.2
 numpy==2.2.4
 scikit-learn==1.6.1
 pypdf==5.4.0

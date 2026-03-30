@@ -61,6 +61,74 @@ def _is_valid_cell(value: object) -> bool:
     return text.lower() not in {"nan", "none", "null"}
 
 
+def _normalize_search_text(text: str) -> str:
+    clean = unicodedata.normalize("NFKD", text or "")
+    clean = "".join(char for char in clean if not unicodedata.combining(char))
+    clean = clean.lower()
+    clean = re.sub(r"\s+", " ", clean)
+    return clean.strip()
+
+
+_DOSAGE_PATTERN = re.compile(
+    r"\b\d+(?:[\.,]\d+)?\s?(?:mg|g|mcg|µg|ug|ml|%|ui)(?:\s*/\s*\d+(?:[\.,]\d+)?\s?(?:mg|g|mcg|µg|ug|ml|%|ui))?\b",
+    re.IGNORECASE,
+)
+
+_PACK_PATTERN = re.compile(
+    r"\b(?:bo[iî]te|bte|tube|flacon|ampoule|sachet|sachets|ovule|ovules|suppositoire|suppositoires)\s*(?:de)?\s*\d+(?:[\.,]\d+)?(?:\s?(?:cp|gelules?|gellules?|ml|mg|g|doses?))?\b",
+    re.IGNORECASE,
+)
+
+
+def _extract_variant_features(normalized_row: Dict[str, object]) -> Dict[str, str]:
+    product_candidates = [
+        "produit",
+        "product",
+        "nom",
+        "product_name",
+        "name",
+    ]
+
+    product_name = ""
+    for candidate in product_candidates:
+        value = normalized_row.get(candidate)
+        if _is_valid_cell(value):
+            product_name = str(value).strip()
+            break
+
+    description = ""
+    for candidate in ["description", "indications", "indication"]:
+        value = normalized_row.get(candidate)
+        if _is_valid_cell(value):
+            description = str(value).strip()
+            break
+
+    search_space = " ".join(part for part in [product_name, description] if part).strip()
+    normalized_search_space = _normalize_search_text(search_space)
+
+    dosage_match = _DOSAGE_PATTERN.search(normalized_search_space)
+    pack_match = _PACK_PATTERN.search(normalized_search_space)
+
+    dosage_value = dosage_match.group(0).strip() if dosage_match else ""
+    pack_value = pack_match.group(0).strip() if pack_match else ""
+
+    product_base = product_name
+    if product_base:
+        base_norm = _normalize_search_text(product_base)
+        base_norm = _DOSAGE_PATTERN.sub(" ", base_norm)
+        base_norm = _PACK_PATTERN.sub(" ", base_norm)
+        base_norm = re.sub(r"\b(?:boite|bte|tube|flacon|ampoule|sachet|sachets|ovule|ovules|suppositoire|suppositoires)\b", " ", base_norm)
+        base_norm = re.sub(r"\s+", " ", base_norm).strip(" ,.-")
+        product_base = base_norm or product_name
+
+    return {
+        "product_name": product_name,
+        "product_base": product_base,
+        "dosage": dosage_value,
+        "pack": pack_value,
+    }
+
+
 def _normalize_colname(name: str) -> str:
     clean = (name or "").strip().replace("�", "")
     clean = unicodedata.normalize("NFKD", clean)
@@ -209,6 +277,21 @@ def _read_csv_rows(file_path: Path) -> List[str]:
 
                 parts: List[str] = []
                 used_keys = set()
+                variant = _extract_variant_features(normalized_row)
+
+                if variant["product_name"]:
+                    parts.append(f"[PRODUIT] {variant['product_name']}")
+                if variant["product_base"]:
+                    parts.append(f"[PRODUIT_BASE] {variant['product_base']}")
+                if variant["dosage"]:
+                    parts.append(f"[DOSAGE_VARIANTE] {variant['dosage']}")
+                if variant["pack"]:
+                    parts.append(f"[PACK_VARIANTE] {variant['pack']}")
+
+                if variant["product_name"]:
+                    for candidate in ["produit", "product", "nom", "product_name", "name"]:
+                        if candidate in normalized_row:
+                            used_keys.add(candidate)
 
                 if isinstance(focus_columns, list) and focus_columns:
                     for col in focus_columns:

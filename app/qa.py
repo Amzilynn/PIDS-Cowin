@@ -514,17 +514,20 @@ def _answer_with_langchain(
         ]
     )
     chain = prompt | llm | StrOutputParser()
-    return chain.invoke(
-        {
-            "system_prompt": selected_system_prompt,
-            "role_instruction": role_instruction,
-            "conversation_history": conversation_history,
-            "question": question,
-            "context": context,
-            "target_language": target_language,
-            "output_contract": output_contract,
-        }
-    )
+    try:
+        return chain.invoke(
+            {
+                "system_prompt": selected_system_prompt,
+                "role_instruction": role_instruction,
+                "conversation_history": conversation_history,
+                "question": question,
+                "context": context,
+                "target_language": target_language,
+                "output_contract": output_contract,
+            }
+        )
+    except Exception:
+        return None
 
 
 def answer_question(

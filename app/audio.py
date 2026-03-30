@@ -6,6 +6,8 @@ import tempfile
 import wave
 import audioop
 import os
+import time
+import uuid
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 from faster_whisper import WhisperModel
@@ -38,6 +40,29 @@ _NO_AUDIO_MESSAGES = {
     "en": "No audio recording detected. Please speak and try again.",
     "es": "No se detectó ninguna grabación de audio. Por favor hable e inténtelo de nuevo."
 }
+
+
+_TTS_OUTPUT_DIR = Path(".gradio_tts")
+_TTS_MAX_AGE_SECONDS = 60 * 60
+
+
+def _ensure_tts_output_dir() -> Path:
+    output_dir = _TTS_OUTPUT_DIR
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return output_dir
+
+
+def _cleanup_old_tts_files(output_dir: Path, max_age_seconds: int = _TTS_MAX_AGE_SECONDS) -> None:
+    now = time.time()
+    try:
+        for path in output_dir.glob("*.mp3"):
+            try:
+                if now - path.stat().st_mtime > max_age_seconds:
+                    path.unlink(missing_ok=True)
+            except OSError:
+                continue
+    except OSError:
+        return
 
 
 def _get_whisper_model(size: str, device: str, compute_type: str) -> WhisperModel:
@@ -262,40 +287,48 @@ def synthesize_speech(text: str, lang: str = "fr", timeout_sec: int = 20, max_ch
     if len(content) > max_chars:
         content = content[:max_chars]
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as file:
-        output_path = file.name
+    output_dir = _ensure_tts_output_dir()
+    _cleanup_old_tts_files(output_dir)
+
+    final_path = output_dir / f"tts_{uuid.uuid4().hex}.mp3"
+    temp_path = output_dir / f"tts_{uuid.uuid4().hex}.part"
+    output_path = str(final_path)
     lang_code = _LANGUAGE_CODES.get(lang, "fr")
 
     def _save_tts() -> None:
-        gTTS(text=content, lang=lang_code).save(output_path)
+        gTTS(text=content, lang=lang_code).save(str(temp_path))
 
     try:
         with ThreadPoolExecutor(max_workers=1) as executor:
             future = executor.submit(_save_tts)
             future.result(timeout=max(3, timeout_sec))
 
-        if not os.path.exists(output_path):
+        if not temp_path.exists():
             return None
 
-        if os.path.getsize(output_path) <= 0:
+        if temp_path.stat().st_size <= 0:
             try:
-                os.remove(output_path)
+                temp_path.unlink(missing_ok=True)
             except OSError:
                 pass
             return None
 
+        os.replace(str(temp_path), output_path)
+
         return output_path
     except TimeoutError:
         try:
-            if os.path.exists(output_path):
-                os.remove(output_path)
+            temp_path.unlink(missing_ok=True)
+            if final_path.exists():
+                final_path.unlink(missing_ok=True)
         except OSError:
             pass
         return None
     except Exception:
         try:
-            if os.path.exists(output_path):
-                os.remove(output_path)
+            temp_path.unlink(missing_ok=True)
+            if final_path.exists():
+                final_path.unlink(missing_ok=True)
         except OSError:
             pass
         return None

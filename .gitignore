@@ -6,3 +6,5 @@ index/
 __pycache__/
 app/__pycache__/
 *.pyc
+.gradio/
+.gradio_tts/
