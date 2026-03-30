@@ -49,12 +49,21 @@ class VitalAgent:
         self._client = OpenAI(
             base_url="http://localhost:11434/v1",
             api_key="ollama",
+            timeout=120,
         )
         print(f"VitalAgent ready — session {self.session_id} | persona: {self.persona}")
 
     def detect_intent(self, user_message: str) -> str:
         """Detect conversation intent, persona-aware."""
         msg = user_message.lower().strip()
+        
+        # Greeting - simple short response
+        greeting_kw = [
+            "bonjour", "salut", "bonsoir", "coucou", "hello",
+            "bonjour!", "salut!", "bonjour.", "salut."
+        ]
+        if msg in greeting_kw or msg.startswith("bonjour") and len(msg) < 15:
+            return "GREETING"
         
         # Safety checks apply to both personas
         safety_kw = [
@@ -112,10 +121,24 @@ class VitalAgent:
         except Exception as exc:
             return json.dumps({"error": str(exc)}, ensure_ascii=False)
 
+    def _get_greeting_response(self) -> str:
+        """Return a short greeting response based on persona."""
+        if self.persona == "medical":
+            return "Bonjour ! Je suis le délégué médical VITAL. Comment puis-je vous aider aujourd'hui ?"
+        else:
+            return "Bonjour ! Je suis le délégué commercial VITAL. Comment puis-je vous servir ?"
+
     def chat(self, user_message: str) -> str:
         """Run one user turn: optional tool calls, then French assistant reply."""
         try:
             self.last_intent = self.detect_intent(user_message)
+            
+            # Handle greetings with a simple short response
+            if self.last_intent == "GREETING":
+                greeting = self._get_greeting_response()
+                self.conversation_history.append({"role": "user", "content": user_message})
+                self.conversation_history.append({"role": "assistant", "content": greeting})
+                return greeting
             
             # --- AUTO RETRIEVAL (RAG) FOR SMALL/LOCAL MODELS ---
             # Instead of relying strictly on LLM tool syntax generation (which 8B models fail at),
@@ -226,12 +249,20 @@ class VitalAgent:
             if len(self.conversation_history) > max_msgs:
                 self.conversation_history = self.conversation_history[-max_msgs:]
             return response_text
+        except TimeoutError:
+            print(f"Timeout in session {self.session_id}")
+            return "La réponse prend plus de temps que prévu. L'IA travaille... Veuillez réessayer dans quelques instants."
         except Exception as exc:
-            print(exc)
-            return (
-                "Je suis désolé, je n'ai pas pu traiter votre "
-                "demande. Pourriez-vous reformuler?"
-            )
+            error_msg = str(exc).lower()
+            if "connection" in error_msg or "connect" in error_msg:
+                print(f"Ollama connection error: {exc}")
+                return "Le serveur IA n'est pas accessible. Vérifiez qu'Ollama est en cours d'exécution."
+            elif "timeout" in error_msg:
+                print(f"Timeout in session {self.session_id}: {exc}")
+                return "La réponse prend trop de temps. Le modèle est peut-être surchargé. Réessayez."
+            else:
+                print(f"Chat error in session {self.session_id}: {exc}")
+                return f"Désolé, une erreur technique s'est produite. [Erreur: {type(exc).__name__}]"
 
     def reset_conversation(self) -> None:
         """Clear history and rebuild the default system prompt."""
