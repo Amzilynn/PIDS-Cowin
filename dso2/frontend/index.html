@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Test Console</title>
+    <title>API Test Console - Voice Enabled</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; min-height: 100vh; padding: 20px; }
@@ -41,11 +41,42 @@
         .chat-history { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 10px; background: #0d1b2a; border-radius: 5px; }
         .intent { font-size: 11px; color: #aaa; margin-top: 5px; }
         label { display: block; margin-bottom: 5px; color: #aaa; font-size: 13px; }
+        
+        /* Voice Controls */
+        .voice-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
+        .mic-btn { background: #9c27b0; font-size: 18px; padding: 12px 18px; }
+        .mic-btn:hover { background: #7b1fa2; }
+        .mic-btn.recording { background: #f44336; animation: pulse 1s infinite; }
+        .tts-toggle { background: #ff9800; }
+        .tts-toggle.active { background: #4caf50; }
+        .transcript-box { background: #0d1b2a; border: 1px solid #333; border-radius: 5px; padding: 10px; margin-bottom: 10px; font-size: 14px; color: #888; min-height: 40px; }
+        .transcript-box .live { color: #00d9ff; }
+        .transcript-box.recording-live { border-color: #f44336; }
+        .browsers-note { font-size: 12px; color: #666; margin-top: 10px; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .speaking { animation: speakingPulse 0.5s infinite alternate; }
+        @keyframes speakingPulse {
+            from { box-shadow: 0 0 5px #4caf50; }
+            to { box-shadow: 0 0 15px #4caf50; }
+        }
+        
+        .voice-indicator { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #888; }
+        .voice-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+        .voice-dot.speaking { background: #4caf50; animation: dotPulse 0.5s infinite alternate; }
+        @keyframes dotPulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.5); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>API Test Console</h1>
+        <h1>API Test Console - Voice Enabled</h1>
 
         <div class="section">
             <h2>Session Management</h2>
@@ -68,6 +99,20 @@
 
         <div class="section">
             <h2>Chat</h2>
+            
+            <div class="voice-controls">
+                <button class="mic-btn" id="micBtn" onclick="toggleRecording()" title="Click to record voice">🎤</button>
+                <button class="tts-toggle" id="ttsToggle" onclick="toggleTTS()" title="Toggle auto-speak">🔊 TTS: ON</button>
+                <div class="voice-indicator" id="voiceIndicator">
+                    <div class="voice-dot" id="voiceDot"></div>
+                    <span id="voiceStatus">TTS Ready</span>
+                </div>
+            </div>
+            
+            <div class="transcript-box" id="transcriptBox">
+                <span id="transcriptText">Click the mic to start speaking...</span>
+            </div>
+            
             <div class="chat-history" id="chatHistory">
                 <div id="typingIndicator" style="display: none; padding: 15px; color: #888; font-style: italic;">
                     <span id="typingText">L'agent réfléchit...</span>
@@ -78,6 +123,7 @@
                 <textarea id="chatMessage" placeholder="Type your message in French..."></textarea>
                 <button onclick="sendChat()" class="btn-chat" id="sendBtn">Send Message</button>
             </div>
+            <div class="browsers-note">⚠️ For best experience, use Chrome or Edge. Voice features require microphone permission.</div>
         </div>
 
         <div class="section">
@@ -108,7 +154,450 @@
         const API_BASE = 'http://localhost:8000';
         let currentSessionId = null;
         let currentPersona = null;
+        
+        // Voice Settings
+        let ttsEnabled = true;
+        let recognition = null;
+        let isRecording = false;
+        let transcriptBuffer = '';
+        let currentUtterance = null;
+        
+        // TTS Configuration - French (France) Only
+        const TTS_CONFIG = {
+            lang: 'fr-FR',
+            rate: 0.95,
+            pitch: 1.05,
+            volume: 1.0
+        };
 
+        // Check browser support
+        function checkBrowserSupport() {
+            const hasSpeechRecognition = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
+            const hasSpeechSynthesis = ('speechSynthesis' in window);
+            
+            if (!hasSpeechRecognition) {
+                document.getElementById('micBtn').disabled = true;
+                document.getElementById('micBtn').title = 'Speech recognition not supported in this browser';
+                console.warn('Speech Recognition not supported');
+            }
+            
+            if (!hasSpeechSynthesis) {
+                document.getElementById('ttsToggle').disabled = true;
+                console.warn('Speech Synthesis not supported');
+            }
+            
+            return hasSpeechRecognition && hasSpeechSynthesis;
+        }
+
+        // Initialize Speech Recognition
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                console.error('Speech Recognition not supported');
+                return null;
+            }
+            
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'fr-FR';
+            
+            recognition.onstart = () => {
+                isRecording = true;
+                updateMicUI(true);
+                transcriptBuffer = '';
+                document.getElementById('transcriptText').textContent = 'Enregistrement en cours...';
+                document.getElementById('transcriptBox').classList.add('recording-live');
+            };
+            
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                let finalTranscript = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+                
+                if (finalTranscript) {
+                    transcriptBuffer += finalTranscript + ' ';
+                }
+                
+                const displayText = (transcriptBuffer + interimTranscript).trim();
+                document.getElementById('transcriptText').innerHTML = 
+                    `<span class="live">${displayText || 'Enregistrement en cours...'}</span>`;
+            };
+            
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                if (event.error !== 'no-speech' && event.error !== 'aborted') {
+                    document.getElementById('transcriptText').textContent = `Erreur: ${event.error}`;
+                }
+                stopRecording();
+            };
+            
+            recognition.onend = () => {
+                if (isRecording) {
+                    // Restart if still recording
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        stopRecording();
+                    }
+                }
+            };
+            
+            return recognition;
+        }
+
+        // Toggle Recording
+        function toggleRecording() {
+            if (!recognition) {
+                recognition = initSpeechRecognition();
+            }
+            
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        function startRecording() {
+            if (!recognition) {
+                recognition = initSpeechRecognition();
+            }
+            
+            try {
+                recognition.start();
+            } catch (e) {
+                console.error('Failed to start recognition:', e);
+            }
+        }
+
+        function stopRecording() {
+            isRecording = false;
+            recognition?.stop();
+            updateMicUI(false);
+            document.getElementById('transcriptBox').classList.remove('recording-live');
+            
+            const finalText = transcriptBuffer.trim();
+            if (finalText) {
+                document.getElementById('transcriptText').textContent = finalText;
+                document.getElementById('chatMessage').value = finalText;
+                // Auto-send after recording stops
+                setTimeout(() => {
+                    sendChat();
+                    transcriptBuffer = '';
+                }, 500);
+            } else {
+                document.getElementById('transcriptText').textContent = 'Click the mic to start speaking...';
+            }
+        }
+
+        function updateMicUI(recording) {
+            const micBtn = document.getElementById('micBtn');
+            if (recording) {
+                micBtn.classList.add('recording');
+                micBtn.textContent = '⏹';
+            } else {
+                micBtn.classList.remove('recording');
+                micBtn.textContent = '🎤';
+            }
+        }
+
+        // Text-to-Speech Functions - Enhanced Human-like Voice
+        let selectedVoice = null;
+        let speechQueue = [];
+        let isSpeakingQueue = false;
+        
+        // Select the best French (France) voice ONLY - strict filtering
+        function selectBestFrenchVoice() {
+            const voices = speechSynthesis.getVoices();
+            if (voices.length === 0) return null;
+            
+            // EXACT match for French from France only - NOT Canada, Belgium, etc.
+            const frenchFranceVoices = voices.filter(v => {
+                const lang = v.lang.toLowerCase();
+                const name = v.name.toLowerCase();
+                
+                // Must be fr-FR exactly (France), not fr-CA, not fr-BE
+                if (lang !== 'fr-fr') return false;
+                
+                // Exclude voices that sound wrong
+                if (name.includes('german') || name.includes('allemand')) return false;
+                if (name.includes('english') || name.includes('anglais')) return false;
+                if (name.includes('dutch') || name.includes('néérland')) return false;
+                if (name.includes('spanish') || name.includes('espagnol')) return false;
+                if (name.includes('italian') || name.includes('italien')) return false;
+                
+                return true;
+            });
+            
+            // Priority for French France voices
+            const voicePriority = [
+                'Hortense',      // Microsoft French female
+                'Denise',        // Microsoft French female  
+                'Julie',         // Microsoft French female
+                'Sabine',        // Microsoft French female
+                'Google',        // Google French
+            ];
+            
+            // Try to find best French France voice
+            for (const pattern of voicePriority) {
+                const voice = frenchFranceVoices.find(v => v.name.includes(pattern));
+                if (voice) return voice;
+            }
+            
+            // Any French France voice
+            if (frenchFranceVoices.length > 0) {
+                return frenchFranceVoices[0];
+            }
+            
+            // Last resort: French (any region) but exclude bad ones
+            const anyFrenchVoices = voices.filter(v => {
+                const lang = v.lang.toLowerCase();
+                const name = v.name.toLowerCase();
+                if (!lang.startsWith('fr')) return false;
+                if (name.includes('german') || name.includes('allemand')) return false;
+                if (name.includes('english') || name.includes('anglais')) return false;
+                return true;
+            });
+            
+            if (anyFrenchVoices.length > 0) {
+                return anyFrenchVoices[0];
+            }
+            
+            console.warn('No suitable French voice found');
+            return null;
+        }
+
+        // Preprocess text for natural speech
+        function preprocessForSpeech(text) {
+            if (!text) return '';
+            
+            let cleaned = text
+                .replace(/\*\*/g, '')           // Remove bold
+                .replace(/\*/g, '')             // Remove italic
+                .replace(/#/g, '')              // Remove headers
+                .replace(/\|/g, ' ')           // Remove table chars
+                .replace(/https?:\/\/[^\s]+/g, '')  // Remove URLs
+                .replace(/\s+/g, ' ')          // Normalize spaces
+                .trim();
+            
+            // Replace common abbreviations for better pronunciation
+            const replacements = [
+                [/(\d+)%/g, '$1 pour cent'],
+                [/\bDr\b/gi, 'Docteur'],
+                [/\bPr\b/gi, 'Professeur'],
+                [/\bMr\b/gi, 'Monsieur'],
+                [/\bMme\b/gi, 'Madame'],
+                [/\bMlle\b/gi, 'Mademoiselle'],
+                [/\betc\b/gi, 'et cétéra'],
+            ];
+            
+            replacements.forEach(([pattern, replacement]) => {
+                cleaned = cleaned.replace(pattern, replacement);
+            });
+            
+            return cleaned;
+        }
+
+        // Split text into natural sentence chunks
+        function splitIntoSentences(text) {
+            // Split on sentence-ending punctuation, keeping the punctuation
+            const sentences = text.split(/(?<=[.!?])\s+/);
+            return sentences.filter(s => s.trim().length > 0);
+        }
+
+        // Detect sentence type for prosody variation
+        function getSentenceConfig(sentence) {
+            const config = {
+                pitch: 1.0,
+                rate: 0.95,
+                emphasis: false
+            };
+            
+            const lowerSentence = sentence.toLowerCase();
+            
+            // Questions - slightly higher pitch, slower
+            if (/[?]$/.test(sentence) || 
+                /^(est-ce que|comment|pourquoi|qu'est-ce que|qui|quand|où|combien)/i.test(lowerSentence)) {
+                config.pitch = 1.15;
+                config.rate = 0.9;
+                return config;
+            }
+            
+            // Exclamations - higher pitch, slightly faster
+            if (/[!]$/.test(sentence) || 
+                /(génial|super|excellent|magnifique|bravo|merci|superbe)/i.test(lowerSentence)) {
+                config.pitch = 1.1;
+                config.rate = 1.05;
+                config.emphasis = true;
+                return config;
+            }
+            
+            // Important statements - emphasis
+            if (/(attention|important|rappelez|attention|vérifiez|n'oubliez)/i.test(lowerSentence)) {
+                config.emphasis = true;
+                config.rate = 0.9;
+                return config;
+            }
+            
+            // Greetings - friendly, slightly faster
+            if (/(bonjour|bonsoir|salut|merci|au revoir|bonne journée)/i.test(lowerSentence)) {
+                config.rate = 1.0;
+                config.emphasis = true;
+                return config;
+            }
+            
+            return config;
+        }
+
+        // Main speak function with human-like variation
+        function speakText(text) {
+            if (!ttsEnabled) return;
+            if (!text || !text.trim()) return;
+            
+            // Stop any current speech
+            stopSpeaking();
+            
+            // Preprocess the text
+            const cleanedText = preprocessForSpeech(text);
+            if (!cleanedText) return;
+            
+            // Split into sentences for natural flow
+            const sentences = splitIntoSentences(cleanedText);
+            
+            // Queue all sentences
+            speechQueue = sentences.map((sentence, index) => ({
+                text: sentence,
+                config: getSentenceConfig(sentence),
+                delay: index === 0 ? 0 : 300 + Math.random() * 200 // Natural pause between sentences
+            }));
+            
+            // Start speaking the queue
+            isSpeakingQueue = true;
+            speakNextInQueue();
+        }
+
+        function speakNextInQueue() {
+            if (!isSpeakingQueue || speechQueue.length === 0) {
+                isSpeakingQueue = false;
+                updateVoiceUI(false);
+                return;
+            }
+            
+            const item = speechQueue.shift();
+            
+            // Small delay before speaking (natural hesitation)
+            setTimeout(() => {
+                if (!ttsEnabled || !isSpeakingQueue) return;
+                
+                const utterance = new SpeechSynthesisUtterance(item.text);
+                
+                // Apply voice settings
+                utterance.lang = TTS_CONFIG.lang;
+                utterance.pitch = item.config.pitch;
+                utterance.rate = item.config.rate;
+                utterance.volume = TTS_CONFIG.volume;
+                
+                // Use selected voice
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+                
+                utterance.onstart = () => {
+                    updateVoiceUI(true);
+                };
+                
+                utterance.onend = () => {
+                    // Speak next sentence
+                    speakNextInQueue();
+                };
+                
+                utterance.onerror = (event) => {
+                    console.error('TTS error:', event.error);
+                    speakNextInQueue(); // Continue to next sentence even if one fails
+                };
+                
+                currentUtterance = utterance;
+                speechSynthesis.speak(utterance);
+                
+            }, item.delay);
+        }
+
+        function stopSpeaking() {
+            isSpeakingQueue = false;
+            speechQueue = [];
+            speechSynthesis.cancel();
+            updateVoiceUI(false);
+        }
+
+        function toggleTTS() {
+            ttsEnabled = !ttsEnabled;
+            const btn = document.getElementById('ttsToggle');
+            const statusText = document.getElementById('voiceStatus');
+            
+            if (ttsEnabled) {
+                btn.classList.add('active');
+                btn.textContent = '🔊 TTS: ON';
+                statusText.textContent = 'TTS Ready';
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '🔇 TTS: OFF';
+                statusText.textContent = 'TTS Disabled';
+                stopSpeaking();
+            }
+        }
+
+        function updateVoiceUI(speaking) {
+            const dot = document.getElementById('voiceDot');
+            const statusText = document.getElementById('voiceStatus');
+            
+            if (speaking) {
+                dot.classList.add('speaking');
+                statusText.textContent = 'Speaking...';
+            } else {
+                dot.classList.remove('speaking');
+                statusText.textContent = ttsEnabled ? 'TTS Ready' : 'TTS Disabled';
+            }
+        }
+
+        // Initialize voices when they load
+        if ('speechSynthesis' in window) {
+            speechSynthesis.onvoiceschanged = () => {
+                const voices = speechSynthesis.getVoices();
+                console.log('=== VOICE DEBUG ===');
+                console.log('Total voices:', voices.length);
+                
+                // Log ALL voices for debugging
+                console.log('All voices:');
+                voices.forEach((v, i) => {
+                    console.log(`  ${i}: "${v.name}" - ${v.lang} ${v.localService ? '(local)' : '(remote)'}`);
+                });
+                
+                // Select the best French voice
+                selectedVoice = selectBestFrenchVoice();
+                
+                if (selectedVoice) {
+                    console.log('✅ Selected voice:', selectedVoice.name, '-', selectedVoice.lang);
+                } else {
+                    console.log('❌ No suitable French voice found!');
+                }
+                console.log('===================');
+            };
+            
+            // Try to load voices immediately (Chrome needs this)
+            speechSynthesis.getVoices();
+        }
+
+        // Session Display Update
         function updateSessionDisplay(sessionId, persona) {
             currentSessionId = sessionId;
             currentPersona = persona;
@@ -116,6 +605,7 @@
             document.getElementById('currentPersona').textContent = persona || 'None';
         }
 
+        // Start Session
         async function startSession() {
             const persona = document.getElementById('personaSelect').value;
             const customId = document.getElementById('customSessionId').value;
@@ -135,9 +625,12 @@
             if (response.ok) {
                 updateSessionDisplay(data.session_id, data.persona);
                 document.getElementById('customSessionId').value = data.session_id;
+                // Speak greeting
+                speakText("Session démarrée. Je suis votre délégué " + persona + " VITAL.");
             }
         }
 
+        // Typing Indicator
         let typingInterval;
         function showTyping(show) {
             const indicator = document.getElementById('typingIndicator');
@@ -165,6 +658,7 @@
             }
         }
 
+        // Send Chat
         async function sendChat() {
             if (!currentSessionId) {
                 alert('No active session! Start a session first.');
@@ -190,6 +684,8 @@
 
                 if (response.ok) {
                     addChatMessage('agent', data.agent_response, data.intent);
+                    // Auto-speak the agent's response
+                    speakText(data.agent_response);
                 } else {
                     addChatMessage('agent', `Erreur: ${data.detail || 'Une erreur est survenue'}`, 'ERROR');
                 }
@@ -201,6 +697,7 @@
             document.getElementById('chatMessage').value = '';
         }
 
+        // Add Chat Message
         function addChatMessage(type, text, intent = null) {
             const history = document.getElementById('chatHistory');
             const div = document.createElement('div');
@@ -214,17 +711,22 @@
             history.scrollTop = history.scrollHeight;
         }
 
+        // List Sessions
         async function listSessions() {
             const response = await fetch(`${API_BASE}/sessions`);
             const data = await response.json();
             showResponse(response.status, data);
         }
 
+        // Delete Session
         async function deleteSession() {
             if (!currentSessionId) {
                 alert('No active session to delete.');
                 return;
             }
+
+            stopRecording();
+            stopSpeaking();
 
             const response = await fetch(`${API_BASE}/session/${currentSessionId}`, {
                 method: 'DELETE'
@@ -237,14 +739,18 @@
                 updateSessionDisplay(null, null);
                 document.getElementById('customSessionId').value = '';
                 document.getElementById('chatHistory').innerHTML = '';
+                document.getElementById('transcriptText').textContent = 'Click the mic to start speaking...';
             }
         }
 
+        // Reset Session
         async function resetSession() {
             if (!currentSessionId) {
                 alert('No active session to reset.');
                 return;
             }
+
+            stopSpeaking();
 
             const response = await fetch(`${API_BASE}/session/${currentSessionId}/reset`, {
                 method: 'POST'
@@ -255,9 +761,11 @@
 
             if (response.ok) {
                 document.getElementById('chatHistory').innerHTML = '';
+                speakText('Conversation réinitialisée.');
             }
         }
 
+        // Raw Request
         async function sendRequest() {
             const method = document.getElementById('method').value;
             const url = document.getElementById('url').value;
@@ -283,6 +791,7 @@
             showResponse(response.status, data);
         }
 
+        // Show Response
         function showResponse(status, data) {
             const statusEl = document.getElementById('status');
             const responseEl = document.getElementById('response');
@@ -297,12 +806,40 @@
             responseEl.textContent = JSON.stringify(data, null, 2);
         }
 
+        // Keyboard shortcut
         document.getElementById('chatMessage').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 sendChat();
             }
         });
+
+        // Initialize on load
+        window.onload = () => {
+            checkBrowserSupport();
+            // Initialize TTS with ON state
+            document.getElementById('ttsToggle').classList.add('active');
+            
+            // Preload voices and select French voice
+            if ('speechSynthesis' in window) {
+                speechSynthesis.getVoices();
+                
+                // Sometimes voices load async, so try again after a delay
+                setTimeout(() => {
+                    const voices = speechSynthesis.getVoices();
+                    selectedVoice = selectBestFrenchVoice();
+                    if (selectedVoice) {
+                        console.log('Delayed voice selection:', selectedVoice.name);
+                    }
+                }, 1000);
+            }
+        };
+
+        // Cleanup on page unload
+        window.onbeforeunload = () => {
+            stopRecording();
+            stopSpeaking();
+        };
     </script>
 </body>
 </html>
