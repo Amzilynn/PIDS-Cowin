@@ -5,6 +5,7 @@
 # dso2 local virtual environment
 dso2/.venv/
 *.csv
+.venv
 # Python Cache
 __pycache__/
 *.pyc

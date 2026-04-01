@@ -44,8 +44,6 @@
         
         /* Voice Controls */
         .voice-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
-        .tts-toggle { background: #ff9800; }
-        .tts-toggle.active { background: #4caf50; }
         .stop-btn { background: #ef5350; color: #fff; }
         .stop-btn:hover { background: #d84343; }
         .input-row { display: flex; gap: 10px; align-items: center; }
@@ -148,8 +146,6 @@
             <h2>Chat</h2>
             
             <div class="voice-controls">
-                <button class="tts-toggle" id="ttsToggle" onclick="toggleTTS()" title="Toggle auto-speak">TTS: ON</button>
-                <button class="stop-btn btn-small" id="stopSpeechBtn" onclick="stopSpeaking()" title="Stop speaking">Stop</button>
                 <div class="voice-indicator" id="voiceIndicator">
                     <div class="voice-wave" id="voiceWave"><span></span><span></span><span></span><span></span></div>
                     <span id="voiceStatus">Voice ready</span>
@@ -175,6 +171,7 @@
                         </svg>
                     </button>
                     <button onclick="sendChat()" class="btn-chat" id="sendBtn">Send Message</button>
+                    <button class="stop-btn btn-small" id="stopSpeechBtn" onclick="stopSpeech()" title="Stop audio" aria-label="Stop audio">⏹</button>
                 </div>
             </div>
             <div class="browsers-note">⚠️ For best experience, use Chrome or Edge. Voice features require microphone permission.</div>
@@ -206,11 +203,9 @@
 
     <script>
         const CONFIG = {
-            elevenLabsApiKey: 'YOUR_API_KEY_HERE',
-            voiceId: '21m00Tcm4TlvDq8ikWAM',
             language: 'fr-FR',
             autoSubmitOnSpeech: true,
-            fallbackToWebSpeech: true
+            edgeTtsEndpoint: 'http://127.0.0.1:5500/tts'
         };
 
         const API_BASE = 'http://localhost:8000';
@@ -224,7 +219,6 @@
                 transcriptGeneralError: 'Erreur de reconnaissance vocale.',
                 voiceReady: 'Voix prete',
                 voiceSpeaking: 'En train de parler',
-                voiceOff: 'Voix desactivee',
                 sendBusy: 'En cours...',
                 sendReady: 'Send Message',
                 noSession: 'No active session! Start a session first.',
@@ -244,7 +238,6 @@
                 transcriptGeneralError: 'Speech recognition error.',
                 voiceReady: 'Voice ready',
                 voiceSpeaking: 'Speaking',
-                voiceOff: 'Voice disabled',
                 sendBusy: 'Sending...',
                 sendReady: 'Send Message',
                 noSession: 'No active session! Start a session first.',
@@ -271,14 +264,10 @@
         let sttError = null;
 
         // =============================
-        // TTS MODULE (ElevenLabs first)
+        // TTS MODULE (Edge TTS audio stream)
         // =============================
-        let ttsEnabled = true;
-        let selectedFallbackVoice = null;
-        let currentSpeechUtterance = null;
         let currentAudio = null;
-        let currentAudioUrl = null;
-        let elevenLabsAbortController = null;
+        let currentAudioUrl = '';
         let activeAgentBubble = null;
 
         function setTranscriptText(text, { live = false, error = false } = {}) {
@@ -493,312 +482,61 @@
                 markLatestAgentBubbleSpeaking(true);
             } else {
                 voiceWave.classList.remove('active');
-                statusText.textContent = ttsEnabled ? UI_TEXT.voiceReady : UI_TEXT.voiceOff;
+                statusText.textContent = UI_TEXT.voiceReady;
                 markLatestAgentBubbleSpeaking(false);
             }
         }
 
-        function isElevenLabsConfigured() {
-            return Boolean(CONFIG.elevenLabsApiKey) && CONFIG.elevenLabsApiKey !== 'YOUR_API_KEY_HERE';
-        }
-
-        function selectBestFallbackVoice() {
-            if (!('speechSynthesis' in window)) {
-                return null;
-            }
-
-            const voices = speechSynthesis.getVoices();
-            if (!voices.length) {
-                return null;
-            }
-
-            const normalizedLang = CONFIG.language.toLowerCase();
-            const exact = voices.find((voice) => voice.lang.toLowerCase() === normalizedLang);
-            if (exact) {
-                return exact;
-            }
-
-            const family = normalizedLang.split('-')[0];
-            const familyVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith(family));
-            if (familyVoice) {
-                return familyVoice;
-            }
-
-            return voices[0] || null;
-        }
-
-        async function safeReadText(response) {
-            try {
-                return await response.text();
-            } catch {
-                return '';
-            }
-        }
-
-        async function speakWithElevenLabs(text) {
-            if (!isElevenLabsConfigured()) {
-                throw new Error('ElevenLabs API key missing.');
-            }
-
-            if (!window.MediaSource || !MediaSource.isTypeSupported('audio/mpeg')) {
-                throw new Error('Streaming audio playback is not supported in this browser.');
-            }
-
-            elevenLabsAbortController = new AbortController();
-            const endpoint = `https://api.elevenlabs.io/v1/text-to-speech/${CONFIG.voiceId}/stream`;
-
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                signal: elevenLabsAbortController.signal,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'xi-api-key': CONFIG.elevenLabsApiKey,
-                    Accept: 'audio/mpeg'
-                },
-                body: JSON.stringify({
-                    text,
-                    model_id: 'eleven_multilingual_v2',
-                    voice_settings: {
-                        stability: 0.45,
-                        similarity_boost: 0.75,
-                        style: 0.2,
-                        use_speaker_boost: true
-                    }
-                })
-            });
-
-            if (!response.ok) {
-                const details = await safeReadText(response);
-                throw new Error(`ElevenLabs failed (${response.status}) ${details}`.trim());
-            }
-
-            if (!response.body) {
-                throw new Error('No audio stream returned by ElevenLabs.');
-            }
-
-            const reader = response.body.getReader();
-            const mediaSource = new MediaSource();
-            currentAudioUrl = URL.createObjectURL(mediaSource);
-            currentAudio = new Audio(currentAudioUrl);
-
-            currentAudio.onended = () => {
-                updateVoiceUI(false);
-            };
-            currentAudio.onerror = () => {
-                updateVoiceUI(false);
-            };
-
-            return new Promise((resolve, reject) => {
-                let sourceBuffer;
-                const queue = [];
-                let playbackStarted = false;
-                let streamEnded = false;
-                let settled = false;
-
-                const settle = (value, error = null) => {
-                    if (settled) {
-                        return;
-                    }
-                    settled = true;
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(value);
-                    }
-                };
-
-                const finalizeStreamIfReady = () => {
-                    if (
-                        streamEnded
-                        && sourceBuffer
-                        && !sourceBuffer.updating
-                        && queue.length === 0
-                        && mediaSource.readyState === 'open'
-                    ) {
-                        try {
-                            mediaSource.endOfStream();
-                        } catch {
-                            // No-op: stream may already be finalized.
-                        }
-                    }
-                };
-
-                const appendNextChunk = () => {
-                    if (!sourceBuffer || sourceBuffer.updating || queue.length === 0) {
-                        finalizeStreamIfReady();
-                        return;
-                    }
-
-                    const chunk = queue.shift();
-                    try {
-                        sourceBuffer.appendBuffer(chunk);
-                    } catch (error) {
-                        settle(false, error);
-                    }
-                };
-
-                mediaSource.addEventListener('sourceopen', () => {
-                    try {
-                        sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
-                    } catch (error) {
-                        settle(false, error);
-                        return;
-                    }
-
-                    sourceBuffer.addEventListener('updateend', async () => {
-                        if (!playbackStarted) {
-                            playbackStarted = true;
-                            updateVoiceUI(true);
-                            try {
-                                await currentAudio.play();
-                            } catch {
-                                // Some browsers may require a user gesture. Keep streaming so user can press play.
-                            }
-                            settle(true);
-                        }
-                        appendNextChunk();
-                    });
-
-                    sourceBuffer.addEventListener('error', () => {
-                        settle(false, new Error('Audio decoding failed while buffering stream.'));
-                    });
-
-                    (async () => {
-                        try {
-                            while (true) {
-                                const { done, value } = await reader.read();
-                                if (done) {
-                                    streamEnded = true;
-                                    finalizeStreamIfReady();
-                                    if (!playbackStarted) {
-                                        settle(false, new Error('Empty ElevenLabs stream response.'));
-                                    }
-                                    break;
-                                }
-
-                                queue.push(value);
-                                appendNextChunk();
-                            }
-                        } catch (error) {
-                            if (error.name === 'AbortError') {
-                                settle(false, new Error('Audio stream cancelled.'));
-                                return;
-                            }
-                            settle(false, error);
-                        }
-                    })();
-                }, { once: true });
-            });
-        }
-
-        async function speakWithWebSpeechFallback(text) {
-            if (!('speechSynthesis' in window)) {
-                return false;
-            }
-
-            if (!selectedFallbackVoice) {
-                selectedFallbackVoice = selectBestFallbackVoice();
-            }
-
-            return new Promise((resolve) => {
-                const utterance = new SpeechSynthesisUtterance(text.replace(/([,;:])/g, '$1 '));
-                utterance.lang = CONFIG.language;
-                utterance.rate = 0.9;
-                utterance.pitch = 1.0;
-                utterance.volume = 1.0;
-                if (selectedFallbackVoice) {
-                    utterance.voice = selectedFallbackVoice;
-                }
-
-                utterance.onstart = () => {
-                    updateVoiceUI(true);
-                };
-                utterance.onend = () => {
-                    updateVoiceUI(false);
-                    resolve(true);
-                };
-                utterance.onerror = () => {
-                    updateVoiceUI(false);
-                    resolve(false);
-                };
-
-                currentSpeechUtterance = utterance;
-                speechSynthesis.cancel();
-                speechSynthesis.speak(utterance);
-            });
-        }
-
+        // REMOVED: ElevenLabs and Web Speech synthesis TTS implementation.
+        // ADDED: Edge TTS playback via local /tts endpoint.
         async function speakText(text) {
-            if (!ttsEnabled) {
-                return;
-            }
-
             const cleanText = sanitizeSpeechText(text);
             if (!cleanText) {
                 return;
             }
 
-            stopSpeaking();
-
             try {
-                const started = await speakWithElevenLabs(cleanText);
-                if (!started && CONFIG.fallbackToWebSpeech) {
-                    await speakWithWebSpeechFallback(cleanText);
-                }
+                stopSpeech();
+                const sourceUrl = CONFIG.edgeTtsEndpoint + '?text=' + encodeURIComponent(cleanText);
+                currentAudioUrl = sourceUrl;
+                currentAudio = new Audio(sourceUrl);
+
+                currentAudio.onplay = () => {
+                    updateVoiceUI(true);
+                };
+                currentAudio.onended = () => {
+                    updateVoiceUI(false);
+                };
+                currentAudio.onerror = () => {
+                    updateVoiceUI(false);
+                    console.error('Edge TTS server not running. Start tts_server.py');
+                };
+
+                await currentAudio.play();
             } catch (error) {
-                if (CONFIG.fallbackToWebSpeech) {
-                    await speakWithWebSpeechFallback(cleanText);
-                }
+                updateVoiceUI(false);
+                console.error('Edge TTS server not running. Start tts_server.py');
             }
         }
 
-        function stopSpeaking() {
-            if (elevenLabsAbortController) {
-                try {
-                    elevenLabsAbortController.abort();
-                } catch {
-                    // Ignore cancellation errors.
-                }
-                elevenLabsAbortController = null;
+        function stopSpeech() {
+            if (!currentAudio) {
+                updateVoiceUI(false);
+                return;
             }
 
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.removeAttribute('src');
-                currentAudio.load();
-                currentAudio = null;
-            }
-
-            if (currentAudioUrl) {
-                URL.revokeObjectURL(currentAudioUrl);
-                currentAudioUrl = null;
-            }
-
-            if ('speechSynthesis' in window) {
-                speechSynthesis.cancel();
-                currentSpeechUtterance = null;
-            }
-
-            updateVoiceUI(false);
-        }
-
-        function toggleTTS() {
-            ttsEnabled = !ttsEnabled;
-            const btn = document.getElementById('ttsToggle');
-            if (ttsEnabled) {
-                btn.classList.add('active');
-                btn.textContent = 'TTS: ON';
-            } else {
-                btn.classList.remove('active');
-                btn.textContent = 'TTS: OFF';
-                stopSpeaking();
-            }
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            currentAudio.onplay = null;
+            currentAudio.onended = null;
+            currentAudio.onerror = null;
+            currentAudio = null;
+            currentAudioUrl = '';
             updateVoiceUI(false);
         }
 
         function checkBrowserSupport() {
             const micBtn = document.getElementById('micBtn');
-            const ttsToggle = document.getElementById('ttsToggle');
             const stopSpeechBtn = document.getElementById('stopSpeechBtn');
 
             if (!speechRecognitionSupported()) {
@@ -807,12 +545,9 @@
                 setTranscriptText(UI_TEXT.transcriptNotSupported, { error: true });
             }
 
-            const canUseElevenStreaming = window.MediaSource && MediaSource.isTypeSupported('audio/mpeg');
-            const canFallback = CONFIG.fallbackToWebSpeech && ('speechSynthesis' in window);
-            if (!canUseElevenStreaming && !canFallback) {
-                ttsToggle.disabled = true;
+            if (!('Audio' in window)) {
                 stopSpeechBtn.disabled = true;
-                ttsToggle.title = 'No supported TTS engine available in this browser.';
+                stopSpeechBtn.title = 'Audio playback is not supported in this browser.';
             }
         }
 
@@ -947,7 +682,7 @@
             }
 
             stopRecording();
-            stopSpeaking();
+            stopSpeech();
 
             try {
                 const response = await fetch(`${API_BASE}/session/${currentSessionId}`, {
@@ -974,7 +709,7 @@
                 return;
             }
 
-            stopSpeaking();
+            stopSpeech();
 
             try {
                 const response = await fetch(`${API_BASE}/session/${currentSessionId}/reset`, {
@@ -1049,21 +784,13 @@
         window.onload = () => {
             document.getElementById('chatMessage').placeholder = UI_TEXT.placeholder;
             setTranscriptText(UI_TEXT.transcriptIdle);
-            document.getElementById('ttsToggle').classList.add('active');
             updateVoiceUI(false);
             checkBrowserSupport();
-
-            if ('speechSynthesis' in window) {
-                speechSynthesis.onvoiceschanged = () => {
-                    selectedFallbackVoice = selectBestFallbackVoice();
-                };
-                selectedFallbackVoice = selectBestFallbackVoice();
-            }
         };
 
         window.onbeforeunload = () => {
             stopRecording();
-            stopSpeaking();
+            stopSpeech();
         };
     </script>
 </body>
