@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtualenv
+venv/
+.env
+.env.*
+
+# IDE / editors
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln
+*.swp
+*.bak
+*.tmp
+
+# Data / model cache
+chroma_db/
+vectordb/
+Data/*.json
+Data/*.pkl
+Data/*.db
+Data/*.sqlite
+*.cache
+*.log
+
+# HuggingFace / models
+~/.cache/huggingface/
+**/cache/
+*.pt
+*.bin
+
+# Audio temp files
+*.wav
+*.mp3
+*.ogg
+*.flac
+
+# Logs
+*.log
+session.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / keys
+*.pem
+*.key
+credentials.json
+config.ini
