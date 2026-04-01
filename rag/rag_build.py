@@ -8,10 +8,10 @@ import os
 
 def build_rag():
     # créer JSON à partir du CSV si nécessaire
-    if not os.path.exists("Data/vital_products.json"):
+    if not os.path.exists("../Data/vital_products.json"):
         csv_to_json()
 
-    data = load_json("Data/vital_products.json")
+    data = load_json("../Data/vital_products.json")
     documents = build_documents(data)
     chunks = chunk_by_product(documents)
 
@@ -26,7 +26,7 @@ def build_rag():
 
 
 def load_or_build_rag():
-    if os.path.exists("./chroma_db"):
+    if os.path.exists("../chroma_db"):
         print("Rechargement de Chroma depuis le disque…")
         store = ChromaStore()
     else:

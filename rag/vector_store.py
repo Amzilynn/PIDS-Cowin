@@ -5,7 +5,7 @@ from chromadb.config import Settings
 
 class ChromaStore:
     def __init__(self, collection_name="vital_products"):
-        self.client = chromadb.PersistentClient(path="./chroma_db")
+        self.client = chromadb.PersistentClient(path="../chroma_db")
 
         self.collection = self.client.get_or_create_collection(
             name=collection_name

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Avatar Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset & font */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container */
+        .chat-container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        /* Button */
+        #recordBtn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        #recordBtn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* Status */
+        #status {
+            margin-bottom: 15px;
+            font-style: italic;
+            color: #555;
+        }
+
+        /* Response text */
+        #responseText {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
+            min-height: 50px;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+        }
+
+        /* Audio */
+        #responseAudio {
+            width: 100%;
+            outline: none;
+        }
+
+        /* Footer info */
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <h2>💊 Doctor Avatar Chat</h2>
+    <button id="recordBtn">🎤 Enregistrer votre voix</button>
+    <p id="status">Appuyez sur le bouton pour parler...</p>
+    <div id="responseText">La réponse apparaîtra ici...</div>
+    <audio id="responseAudio" controls></audio>
+    <div class="footer">Powered by Vital - AI Medical Assistant</div>
+</div>
+
+<script>
+let mediaRecorder;
+let audioChunks = [];
+
+document.getElementById("recordBtn").onclick = async () => {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = async () => {
+            const blob = new Blob(audioChunks, { type: "audio/wav" });
+            const file = new File([blob], "user_audio.wav", { type: "audio/wav" });
+
+            document.getElementById("status").innerText = "Envoi au serveur...";
+
+            const formData = new FormData();
+            formData.append("audio", file);
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/chat", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+                document.getElementById("responseText").innerText = data.text;
+
+                const audioElement = document.getElementById("responseAudio");
+                audioElement.src = data.audio;
+                audioElement.play();
+
+                document.getElementById("status").innerText = "Réponse reçue !";
+            } catch (err) {
+                document.getElementById("status").innerText = "Erreur : " + err;
+                console.error(err);
+            }
+        };
+
+        mediaRecorder.start();
+        document.getElementById("status").innerText = "Enregistrement en cours...";
+        setTimeout(() => {
+            mediaRecorder.stop();
+        }, 5000);
+    }
+};
+</script>
+
+</body>
+</html>

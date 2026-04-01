@@ -3,8 +3,10 @@ import csv
 import json
 import os
 
-csv_path = os.path.join("Data", "vital_products.csv")
-json_path = os.path.join("Data", "vital_products.json")
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # dso1_doctor_avatar/
+csv_path = os.path.join(BASE_DIR, "Data", "vital_products.csv")
+json_path = os.path.join(BASE_DIR, "Data", "vital_products.json")
 
 def csv_to_json():
     products = []

@@ -45,3 +45,16 @@ async def _speak_async(text, voice):
 def speak_text(text, lang="en"):
     voice = get_voice(lang)
     asyncio.run(_speak_async(text, voice))
+
+
+async def _speak_to_file(text, voice, filename):
+    try:
+        communicate = edge_tts.Communicate(text, voice=voice)
+        await communicate.save(filename)
+    except Exception as e:
+        print(f"[Voice error] {e}")
+
+# voice.py
+async def speak_text_file(text, voice, filename):
+    await _speak_to_file(text, voice, filename)
+

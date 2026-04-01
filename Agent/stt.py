@@ -10,7 +10,7 @@ def record_audio(fs=16000, silence_threshold=0.01, silence_duration=1.5):
 
     recording = []
     silence_counter = 0
-    chunk_duration = 2  # 300 ms
+    chunk_duration = 2
     chunk_size = int(fs * chunk_duration)
 
     while True:
@@ -51,3 +51,14 @@ def speech_to_text():
 
     return text, lang
 
+def speech_to_text_file(audio_path):
+    """
+    Transcrit un fichier audio existant
+    """
+    print(f"Transcription de {audio_path} ...")
+    result = model.transcribe(audio_path, fp16=False)
+    text = result.get("text", "").strip()
+    lang = result.get("language", "fr")
+    print("Texte détecté:", text)
+    print("Langue détectée:", lang)
+    return text, lang
