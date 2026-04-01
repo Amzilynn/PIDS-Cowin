@@ -71,15 +71,15 @@ def ask_avatar(messages):
         response = requests.post(
             "http://localhost:11434/api/chat",
             json={
-                "model": "llama3.1",
+                "model": "mistral",
                 "messages": messages,
                 "stream": False,
                 "options": {
                     "temperature": 0.7,
-                    "num_predict": 100
+                    "num_predict": 150
                 }
             },
-            timeout=120
+           
         )
         response.raise_for_status()
         return response.json()["message"]["content"]
