@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Console - Voice Enabled</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 30px; color: #00d9ff; }
+        .section { background: #16213e; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .section h2 { color: #00d9ff; margin-bottom: 15px; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        input, select, textarea { background: #0f3460; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 5px; font-size: 14px; }
+        input:focus, select:focus, textarea:focus { outline: 2px solid #00d9ff; border-color: #00d9ff; }
+        .url-input { flex: 1; min-width: 300px; }
+        .method-select { width: 100px; background: #0f3460; }
+        button { background: #00d9ff; color: #1a1a2e; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        button:hover { background: #00b8d4; }
+        button:disabled { background: #555; cursor: not-allowed; }
+        .btn-small { padding: 8px 15px; font-size: 13px; }
+        .btn-chat { background: #4caf50; }
+        .btn-chat:hover { background: #388e3c; }
+        textarea { width: 100%; min-height: 80px; resize: vertical; font-family: monospace; }
+        .response { background: #0d1b2a; border: 1px solid #333; border-radius: 5px; padding: 15px; margin-top: 15px; max-height: 300px; overflow-y: auto; }
+        .response pre { white-space: pre-wrap; word-break: break-all; font-size: 13px; }
+        .status { font-weight: bold; margin-bottom: 10px; }
+        .status-2xx { color: #4caf50; }
+        .status-4xx { color: #ff9800; }
+        .status-5xx { color: #f44336; }
+        .session-info { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
+        .session-info span { background: #0f3460; padding: 8px 15px; border-radius: 5px; font-size: 13px; }
+        .session-info strong { color: #00d9ff; }
+        .chat-container { display: flex; flex-direction: column; gap: 15px; }
+        .chat-message { padding: 15px; border-radius: 10px; max-width: 85%; }
+        .chat-message.user { background: #0f3460; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-message.agent { background: #1e5f74; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .chat-message .sender { font-size: 12px; color: #00d9ff; margin-bottom: 5px; }
+        .chat-message .text { line-height: 1.5; }
+        .chat-history { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 10px; background: #0d1b2a; border-radius: 5px; }
+        .intent { font-size: 11px; color: #aaa; margin-top: 5px; }
+        label { display: block; margin-bottom: 5px; color: #aaa; font-size: 13px; }
+        
+        /* Voice Controls */
+        .voice-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
+        .tts-toggle { background: #ff9800; }
+        .tts-toggle.active { background: #4caf50; }
+        .stop-btn { background: #ef5350; color: #fff; }
+        .stop-btn:hover { background: #d84343; }
+        .input-row { display: flex; gap: 10px; align-items: center; }
+        .icon-button {
+            width: 46px;
+            height: 46px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 999px;
+        }
+        .mic-btn { background: #177ea6; color: #fff; border: 1px solid #2b9bcc; }
+        .mic-btn:hover { background: #1d8db8; }
+        .mic-btn.recording {
+            background: #d32f2f;
+            border-color: #ef5350;
+            animation: pulse 1.05s infinite;
+            box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7);
+        }
+        .mic-icon { width: 20px; height: 20px; fill: currentColor; }
+        .transcript-box { background: #0d1b2a; border: 1px solid #333; border-radius: 5px; padding: 10px; margin-bottom: 10px; font-size: 14px; color: #888; min-height: 40px; }
+        .transcript-box .live { color: #00d9ff; }
+        .transcript-box .error { color: #ff8a80; }
+        .transcript-box.recording-live { border-color: #ef5350; }
+        .browsers-note { font-size: 12px; color: #666; margin-top: 10px; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .voice-indicator { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #888; }
+        .voice-wave { display: flex; align-items: flex-end; gap: 3px; height: 16px; }
+        .voice-wave span {
+            width: 3px;
+            height: 6px;
+            background: #4caf50;
+            border-radius: 2px;
+            opacity: 0.35;
+            animation: wave 0.9s ease-in-out infinite;
+            animation-play-state: paused;
+        }
+        .voice-wave span:nth-child(2) { animation-delay: 0.15s; }
+        .voice-wave span:nth-child(3) { animation-delay: 0.3s; }
+        .voice-wave span:nth-child(4) { animation-delay: 0.45s; }
+        .voice-wave.active span {
+            opacity: 1;
+            animation-play-state: running;
+        }
+        @keyframes wave {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1.7); }
+        }
+        .chat-message.agent.speaking-indicator {
+            border: 1px solid rgba(112, 255, 210, 0.45);
+            box-shadow: 0 0 0 2px rgba(112, 255, 210, 0.12), 0 0 16px rgba(112, 255, 210, 0.25);
+        }
+        .chat-message.agent.speaking-indicator::after {
+            content: '';
+            position: absolute;
+            inset: auto 10px 8px 10px;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, transparent, #7fffd4, transparent);
+            animation: speakingLine 1.4s linear infinite;
+            opacity: 0.65;
+        }
+        .chat-message { position: relative; }
+        @keyframes speakingLine {
+            0% { transform: translateX(-25%); }
+            100% { transform: translateX(25%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Test Console - Voice Enabled</h1>
+
+        <div class="section">
+            <h2>Session Management</h2>
+            <div class="session-info">
+                <span>Session ID: <strong id="currentSessionId">None</strong></span>
+                <span>Persona: <strong id="currentPersona">None</strong></span>
+            </div>
+            <div class="row">
+                <select id="personaSelect" class="method-select">
+                    <option value="medical">medical</option>
+                    <option value="commercial" selected>commercial</option>
+                </select>
+                <input type="text" id="customSessionId" placeholder="Custom Session ID (optional)" style="flex: 1;">
+                <button onclick="startSession()">Start Session</button>
+                <button onclick="listSessions()" class="btn-small">List Sessions</button>
+                <button onclick="deleteSession()" class="btn-small" style="background: #f44336;">Delete</button>
+                <button onclick="resetSession()" class="btn-small">Reset</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Chat</h2>
+            
+            <div class="voice-controls">
+                <button class="tts-toggle" id="ttsToggle" onclick="toggleTTS()" title="Toggle auto-speak">TTS: ON</button>
+                <button class="stop-btn btn-small" id="stopSpeechBtn" onclick="stopSpeaking()" title="Stop speaking">Stop</button>
+                <div class="voice-indicator" id="voiceIndicator">
+                    <div class="voice-wave" id="voiceWave"><span></span><span></span><span></span><span></span></div>
+                    <span id="voiceStatus">Voice ready</span>
+                </div>
+            </div>
+            
+            <div class="transcript-box" id="transcriptBox">
+                <span id="transcriptText">Click the mic to start speaking...</span>
+            </div>
+            
+            <div class="chat-history" id="chatHistory">
+                <div id="typingIndicator" style="display: none; padding: 15px; color: #888; font-style: italic;">
+                    <span id="typingText">L'agent réfléchit...</span>
+                    <span id="typingDots">...</span>
+                </div>
+            </div>
+            <div class="chat-container" style="margin-top: 15px;">
+                <textarea id="chatMessage" placeholder="Type your message in French..."></textarea>
+                <div class="input-row">
+                    <button class="mic-btn icon-button" id="micBtn" onclick="toggleRecording()" title="Click to record voice" aria-label="Record voice">
+                        <svg class="mic-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 14a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v4a3 3 0 0 0 3 3Zm5-3a1 1 0 1 1 2 0 7 7 0 0 1-6 6.92V21h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-3.08A7 7 0 0 1 5 11a1 1 0 1 1 2 0 5 5 0 0 0 10 0Z"/>
+                        </svg>
+                    </button>
+                    <button onclick="sendChat()" class="btn-chat" id="sendBtn">Send Message</button>
+                </div>
+            </div>
+            <div class="browsers-note">⚠️ For best experience, use Chrome or Edge. Voice features require microphone permission.</div>
+        </div>
+
+        <div class="section">
+            <h2>Raw Request</h2>
+            <div class="row">
+                <select id="method" class="method-select">
+                    <option>GET</option>
+                    <option>POST</option>
+                    <option>DELETE</option>
+                </select>
+                <input type="text" id="url" class="url-input" value="http://localhost:8000/health">
+                <button onclick="sendRequest()">Send</button>
+            </div>
+            <label>Body (JSON)</label>
+            <textarea id="body" placeholder='{"key": "value"}'></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Response</h2>
+            <div class="response">
+                <div id="status" class="status">No request yet</div>
+                <pre id="response"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            elevenLabsApiKey: 'YOUR_API_KEY_HERE',
+            voiceId: '21m00Tcm4TlvDq8ikWAM',
+            language: 'fr-FR',
+            autoSubmitOnSpeech: true,
+            fallbackToWebSpeech: true
+        };
+
+        const API_BASE = 'http://localhost:8000';
+        const UI_TEXT = CONFIG.language.toLowerCase().startsWith('fr')
+            ? {
+                transcriptIdle: 'Cliquez sur le micro pour parler...',
+                transcriptListening: 'Je vous ecoute...',
+                transcriptNoSpeech: 'Aucune parole detectee. Reessayez.',
+                transcriptMicDenied: 'Microphone refuse. Autorisez le micro dans le navigateur.',
+                transcriptNotSupported: 'Reconnaissance vocale non supportee dans ce navigateur.',
+                transcriptGeneralError: 'Erreur de reconnaissance vocale.',
+                voiceReady: 'Voix prete',
+                voiceSpeaking: 'En train de parler',
+                voiceOff: 'Voix desactivee',
+                sendBusy: 'En cours...',
+                sendReady: 'Send Message',
+                noSession: 'No active session! Start a session first.',
+                noSessionDelete: 'No active session to delete.',
+                noSessionReset: 'No active session to reset.',
+                connectError: 'Erreur de connexion au serveur.',
+                startGreeting: (persona) => `Session demarree. Je suis votre delegue ${persona} VITAL.`,
+                resetMessage: 'Conversation reinitialisee.',
+                placeholder: 'Type your message in French...'
+            }
+            : {
+                transcriptIdle: 'Click the microphone and start speaking...',
+                transcriptListening: 'Listening...',
+                transcriptNoSpeech: 'No speech detected. Please try again.',
+                transcriptMicDenied: 'Microphone access denied. Allow microphone permissions in your browser.',
+                transcriptNotSupported: 'Speech recognition is not supported in this browser.',
+                transcriptGeneralError: 'Speech recognition error.',
+                voiceReady: 'Voice ready',
+                voiceSpeaking: 'Speaking',
+                voiceOff: 'Voice disabled',
+                sendBusy: 'Sending...',
+                sendReady: 'Send Message',
+                noSession: 'No active session! Start a session first.',
+                noSessionDelete: 'No active session to delete.',
+                noSessionReset: 'No active session to reset.',
+                connectError: 'Server connection error.',
+                startGreeting: (persona) => `Session started. I am your ${persona} VITAL delegate.`,
+                resetMessage: 'Conversation reset.',
+                placeholder: 'Type your message...'
+            };
+
+        let currentSessionId = null;
+        let currentPersona = null;
+        let typingInterval = null;
+
+        // =============================
+        // STT MODULE (Speech-to-Text)
+        // =============================
+        let recognition = null;
+        let isRecording = false;
+        let transcriptBuffer = '';
+        let interimBuffer = '';
+        let captureFinalized = false;
+        let sttError = null;
+
+        // =============================
+        // TTS MODULE (ElevenLabs first)
+        // =============================
+        let ttsEnabled = true;
+        let selectedFallbackVoice = null;
+        let currentSpeechUtterance = null;
+        let currentAudio = null;
+        let currentAudioUrl = null;
+        let elevenLabsAbortController = null;
+        let activeAgentBubble = null;
+
+        function setTranscriptText(text, { live = false, error = false } = {}) {
+            const transcriptText = document.getElementById('transcriptText');
+            const safeText = text || UI_TEXT.transcriptIdle;
+            if (live) {
+                transcriptText.innerHTML = `<span class="live">${safeText}</span>`;
+                return;
+            }
+            if (error) {
+                transcriptText.innerHTML = `<span class="error">${safeText}</span>`;
+                return;
+            }
+            transcriptText.textContent = safeText;
+        }
+
+        function updateMicUI(recording) {
+            const micBtn = document.getElementById('micBtn');
+            const transcriptBox = document.getElementById('transcriptBox');
+            if (recording) {
+                micBtn.classList.add('recording');
+                transcriptBox.classList.add('recording-live');
+            } else {
+                micBtn.classList.remove('recording');
+                transcriptBox.classList.remove('recording-live');
+            }
+        }
+
+        function speechRecognitionSupported() {
+            return Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
+        }
+
+        function getSpeechRecognitionInstance() {
+            if (recognition) {
+                return recognition;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                return null;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = CONFIG.language;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                captureFinalized = false;
+                sttError = null;
+                transcriptBuffer = '';
+                interimBuffer = '';
+                updateMicUI(true);
+                setTranscriptText(UI_TEXT.transcriptListening, { live: true });
+            };
+
+            recognition.onresult = (event) => {
+                let interim = '';
+                for (let i = event.resultIndex; i < event.results.length; i += 1) {
+                    const part = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        transcriptBuffer += `${part} `;
+                    } else {
+                        interim += part;
+                    }
+                }
+                interimBuffer = interim;
+                const liveText = `${transcriptBuffer}${interimBuffer}`.trim();
+                setTranscriptText(liveText || UI_TEXT.transcriptListening, { live: true });
+            };
+
+            recognition.onerror = (event) => {
+                sttError = event.error;
+                const errorMap = {
+                    'not-allowed': UI_TEXT.transcriptMicDenied,
+                    'service-not-allowed': UI_TEXT.transcriptMicDenied,
+                    'no-speech': UI_TEXT.transcriptNoSpeech,
+                    'audio-capture': UI_TEXT.transcriptMicDenied,
+                    'network': UI_TEXT.transcriptGeneralError,
+                    'language-not-supported': UI_TEXT.transcriptNotSupported
+                };
+                const message = errorMap[event.error] || `${UI_TEXT.transcriptGeneralError} (${event.error})`;
+                setTranscriptText(message, { error: true });
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                updateMicUI(false);
+                finalizeSpeechCapture();
+            };
+
+            return recognition;
+        }
+
+        function finalizeSpeechCapture() {
+            if (captureFinalized) {
+                return;
+            }
+            captureFinalized = true;
+
+            const finalText = `${transcriptBuffer}${interimBuffer}`.trim();
+            if (!finalText) {
+                if (!sttError) {
+                    setTranscriptText(UI_TEXT.transcriptNoSpeech, { error: true });
+                }
+                return;
+            }
+
+            setTranscriptText(finalText);
+            const chatBox = document.getElementById('chatMessage');
+            chatBox.value = finalText;
+
+            if (CONFIG.autoSubmitOnSpeech) {
+                void sendChat();
+            }
+        }
+
+        function startRecording() {
+            const instance = getSpeechRecognitionInstance();
+            if (!instance) {
+                setTranscriptText(UI_TEXT.transcriptNotSupported, { error: true });
+                return;
+            }
+
+            if (isRecording) {
+                return;
+            }
+
+            try {
+                instance.lang = CONFIG.language;
+                instance.start();
+            } catch (error) {
+                setTranscriptText(`${UI_TEXT.transcriptGeneralError} ${error.message || ''}`.trim(), { error: true });
+            }
+        }
+
+        function stopRecording() {
+            if (!recognition) {
+                return;
+            }
+            if (!isRecording) {
+                updateMicUI(false);
+                return;
+            }
+            try {
+                recognition.stop();
+            } catch {
+                isRecording = false;
+                updateMicUI(false);
+                finalizeSpeechCapture();
+            }
+        }
+
+        function toggleRecording() {
+            if (!speechRecognitionSupported()) {
+                setTranscriptText(UI_TEXT.transcriptNotSupported, { error: true });
+                return;
+            }
+
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        function sanitizeSpeechText(text) {
+            if (!text) {
+                return '';
+            }
+
+            return text
+                .replace(/\*\*/g, '')
+                .replace(/\*/g, '')
+                .replace(/#/g, '')
+                .replace(/\|/g, ' ')
+                .replace(/https?:\/\/[^\s]+/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function markLatestAgentBubbleSpeaking(isSpeaking) {
+            if (!isSpeaking) {
+                if (activeAgentBubble) {
+                    activeAgentBubble.classList.remove('speaking-indicator');
+                    activeAgentBubble = null;
+                }
+                return;
+            }
+
+            const bubbles = document.querySelectorAll('.chat-message.agent');
+            const latest = bubbles[bubbles.length - 1];
+            if (!latest) {
+                return;
+            }
+
+            if (activeAgentBubble && activeAgentBubble !== latest) {
+                activeAgentBubble.classList.remove('speaking-indicator');
+            }
+            activeAgentBubble = latest;
+            activeAgentBubble.classList.add('speaking-indicator');
+        }
+
+        function updateVoiceUI(speaking) {
+            const voiceWave = document.getElementById('voiceWave');
+            const statusText = document.getElementById('voiceStatus');
+
+            if (speaking) {
+                voiceWave.classList.add('active');
+                statusText.textContent = UI_TEXT.voiceSpeaking;
+                markLatestAgentBubbleSpeaking(true);
+            } else {
+                voiceWave.classList.remove('active');
+                statusText.textContent = ttsEnabled ? UI_TEXT.voiceReady : UI_TEXT.voiceOff;
+                markLatestAgentBubbleSpeaking(false);
+            }
+        }
+
+        function isElevenLabsConfigured() {
+            return Boolean(CONFIG.elevenLabsApiKey) && CONFIG.elevenLabsApiKey !== 'YOUR_API_KEY_HERE';
+        }
+
+        function selectBestFallbackVoice() {
+            if (!('speechSynthesis' in window)) {
+                return null;
+            }
+
+            const voices = speechSynthesis.getVoices();
+            if (!voices.length) {
+                return null;
+            }
+
+            const normalizedLang = CONFIG.language.toLowerCase();
+            const exact = voices.find((voice) => voice.lang.toLowerCase() === normalizedLang);
+            if (exact) {
+                return exact;
+            }
+
+            const family = normalizedLang.split('-')[0];
+            const familyVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith(family));
+            if (familyVoice) {
+                return familyVoice;
+            }
+
+            return voices[0] || null;
+        }
+
+        async function safeReadText(response) {
+            try {
+                return await response.text();
+            } catch {
+                return '';
+            }
+        }
+
+        async function speakWithElevenLabs(text) {
+            if (!isElevenLabsConfigured()) {
+                throw new Error('ElevenLabs API key missing.');
+            }
+
+            if (!window.MediaSource || !MediaSource.isTypeSupported('audio/mpeg')) {
+                throw new Error('Streaming audio playback is not supported in this browser.');
+            }
+
+            elevenLabsAbortController = new AbortController();
+            const endpoint = `https://api.elevenlabs.io/v1/text-to-speech/${CONFIG.voiceId}/stream`;
+
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                signal: elevenLabsAbortController.signal,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'xi-api-key': CONFIG.elevenLabsApiKey,
+                    Accept: 'audio/mpeg'
+                },
+                body: JSON.stringify({
+                    text,
+                    model_id: 'eleven_multilingual_v2',
+                    voice_settings: {
+                        stability: 0.45,
+                        similarity_boost: 0.75,
+                        style: 0.2,
+                        use_speaker_boost: true
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                const details = await safeReadText(response);
+                throw new Error(`ElevenLabs failed (${response.status}) ${details}`.trim());
+            }
+
+            if (!response.body) {
+                throw new Error('No audio stream returned by ElevenLabs.');
+            }
+
+            const reader = response.body.getReader();
+            const mediaSource = new MediaSource();
+            currentAudioUrl = URL.createObjectURL(mediaSource);
+            currentAudio = new Audio(currentAudioUrl);
+
+            currentAudio.onended = () => {
+                updateVoiceUI(false);
+            };
+            currentAudio.onerror = () => {
+                updateVoiceUI(false);
+            };
+
+            return new Promise((resolve, reject) => {
+                let sourceBuffer;
+                const queue = [];
+                let playbackStarted = false;
+                let streamEnded = false;
+                let settled = false;
+
+                const settle = (value, error = null) => {
+                    if (settled) {
+                        return;
+                    }
+                    settled = true;
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(value);
+                    }
+                };
+
+                const finalizeStreamIfReady = () => {
+                    if (
+                        streamEnded
+                        && sourceBuffer
+                        && !sourceBuffer.updating
+                        && queue.length === 0
+                        && mediaSource.readyState === 'open'
+                    ) {
+                        try {
+                            mediaSource.endOfStream();
+                        } catch {
+                            // No-op: stream may already be finalized.
+                        }
+                    }
+                };
+
+                const appendNextChunk = () => {
+                    if (!sourceBuffer || sourceBuffer.updating || queue.length === 0) {
+                        finalizeStreamIfReady();
+                        return;
+                    }
+
+                    const chunk = queue.shift();
+                    try {
+                        sourceBuffer.appendBuffer(chunk);
+                    } catch (error) {
+                        settle(false, error);
+                    }
+                };
+
+                mediaSource.addEventListener('sourceopen', () => {
+                    try {
+                        sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
+                    } catch (error) {
+                        settle(false, error);
+                        return;
+                    }
+
+                    sourceBuffer.addEventListener('updateend', async () => {
+                        if (!playbackStarted) {
+                            playbackStarted = true;
+                            updateVoiceUI(true);
+                            try {
+                                await currentAudio.play();
+                            } catch {
+                                // Some browsers may require a user gesture. Keep streaming so user can press play.
+                            }
+                            settle(true);
+                        }
+                        appendNextChunk();
+                    });
+
+                    sourceBuffer.addEventListener('error', () => {
+                        settle(false, new Error('Audio decoding failed while buffering stream.'));
+                    });
+
+                    (async () => {
+                        try {
+                            while (true) {
+                                const { done, value } = await reader.read();
+                                if (done) {
+                                    streamEnded = true;
+                                    finalizeStreamIfReady();
+                                    if (!playbackStarted) {
+                                        settle(false, new Error('Empty ElevenLabs stream response.'));
+                                    }
+                                    break;
+                                }
+
+                                queue.push(value);
+                                appendNextChunk();
+                            }
+                        } catch (error) {
+                            if (error.name === 'AbortError') {
+                                settle(false, new Error('Audio stream cancelled.'));
+                                return;
+                            }
+                            settle(false, error);
+                        }
+                    })();
+                }, { once: true });
+            });
+        }
+
+        async function speakWithWebSpeechFallback(text) {
+            if (!('speechSynthesis' in window)) {
+                return false;
+            }
+
+            if (!selectedFallbackVoice) {
+                selectedFallbackVoice = selectBestFallbackVoice();
+            }
+
+            return new Promise((resolve) => {
+                const utterance = new SpeechSynthesisUtterance(text.replace(/([,;:])/g, '$1 '));
+                utterance.lang = CONFIG.language;
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                if (selectedFallbackVoice) {
+                    utterance.voice = selectedFallbackVoice;
+                }
+
+                utterance.onstart = () => {
+                    updateVoiceUI(true);
+                };
+                utterance.onend = () => {
+                    updateVoiceUI(false);
+                    resolve(true);
+                };
+                utterance.onerror = () => {
+                    updateVoiceUI(false);
+                    resolve(false);
+                };
+
+                currentSpeechUtterance = utterance;
+                speechSynthesis.cancel();
+                speechSynthesis.speak(utterance);
+            });
+        }
+
+        async function speakText(text) {
+            if (!ttsEnabled) {
+                return;
+            }
+
+            const cleanText = sanitizeSpeechText(text);
+            if (!cleanText) {
+                return;
+            }
+
+            stopSpeaking();
+
+            try {
+                const started = await speakWithElevenLabs(cleanText);
+                if (!started && CONFIG.fallbackToWebSpeech) {
+                    await speakWithWebSpeechFallback(cleanText);
+                }
+            } catch (error) {
+                if (CONFIG.fallbackToWebSpeech) {
+                    await speakWithWebSpeechFallback(cleanText);
+                }
+            }
+        }
+
+        function stopSpeaking() {
+            if (elevenLabsAbortController) {
+                try {
+                    elevenLabsAbortController.abort();
+                } catch {
+                    // Ignore cancellation errors.
+                }
+                elevenLabsAbortController = null;
+            }
+
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.removeAttribute('src');
+                currentAudio.load();
+                currentAudio = null;
+            }
+
+            if (currentAudioUrl) {
+                URL.revokeObjectURL(currentAudioUrl);
+                currentAudioUrl = null;
+            }
+
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                currentSpeechUtterance = null;
+            }
+
+            updateVoiceUI(false);
+        }
+
+        function toggleTTS() {
+            ttsEnabled = !ttsEnabled;
+            const btn = document.getElementById('ttsToggle');
+            if (ttsEnabled) {
+                btn.classList.add('active');
+                btn.textContent = 'TTS: ON';
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = 'TTS: OFF';
+                stopSpeaking();
+            }
+            updateVoiceUI(false);
+        }
+
+        function checkBrowserSupport() {
+            const micBtn = document.getElementById('micBtn');
+            const ttsToggle = document.getElementById('ttsToggle');
+            const stopSpeechBtn = document.getElementById('stopSpeechBtn');
+
+            if (!speechRecognitionSupported()) {
+                micBtn.disabled = true;
+                micBtn.title = UI_TEXT.transcriptNotSupported;
+                setTranscriptText(UI_TEXT.transcriptNotSupported, { error: true });
+            }
+
+            const canUseElevenStreaming = window.MediaSource && MediaSource.isTypeSupported('audio/mpeg');
+            const canFallback = CONFIG.fallbackToWebSpeech && ('speechSynthesis' in window);
+            if (!canUseElevenStreaming && !canFallback) {
+                ttsToggle.disabled = true;
+                stopSpeechBtn.disabled = true;
+                ttsToggle.title = 'No supported TTS engine available in this browser.';
+            }
+        }
+
+        function updateSessionDisplay(sessionId, persona) {
+            currentSessionId = sessionId;
+            currentPersona = persona;
+            document.getElementById('currentSessionId').textContent = sessionId || 'None';
+            document.getElementById('currentPersona').textContent = persona || 'None';
+        }
+
+        async function startSession() {
+            const persona = document.getElementById('personaSelect').value;
+            const customId = document.getElementById('customSessionId').value;
+
+            const body = { persona };
+            if (customId) {
+                body.session_id = customId;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/session/start`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                const data = await response.json();
+                showResponse(response.status, data);
+
+                if (response.ok) {
+                    updateSessionDisplay(data.session_id, data.persona);
+                    document.getElementById('customSessionId').value = data.session_id;
+                    void speakText(UI_TEXT.startGreeting(persona));
+                }
+            } catch (error) {
+                showResponse(500, { error: error.message || UI_TEXT.connectError });
+            }
+        }
+
+        function showTyping(show) {
+            const indicator = document.getElementById('typingIndicator');
+            const dots = document.getElementById('typingDots');
+            const sendBtn = document.getElementById('sendBtn');
+
+            if (show) {
+                indicator.style.display = 'block';
+                sendBtn.disabled = true;
+                sendBtn.textContent = UI_TEXT.sendBusy;
+
+                let dotCount = 0;
+                typingInterval = setInterval(() => {
+                    dotCount = (dotCount + 1) % 4;
+                    dots.textContent = '.'.repeat(dotCount);
+                }, 500);
+            } else {
+                indicator.style.display = 'none';
+                sendBtn.disabled = false;
+                sendBtn.textContent = UI_TEXT.sendReady;
+                if (typingInterval) {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                }
+            }
+        }
+
+        async function sendChat() {
+            if (!currentSessionId) {
+                alert(UI_TEXT.noSession);
+                return;
+            }
+
+            const message = document.getElementById('chatMessage').value;
+            if (!message.trim()) {
+                return;
+            }
+
+            addChatMessage('user', message);
+            showTyping(true);
+
+            try {
+                const response = await fetch(`${API_BASE}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: currentSessionId, message })
+                });
+
+                const data = await response.json();
+                showTyping(false);
+                showResponse(response.status, data);
+
+                if (response.ok) {
+                    addChatMessage('agent', data.agent_response, data.intent);
+                    void speakText(data.agent_response);
+                } else {
+                    addChatMessage('agent', `Erreur: ${data.detail || 'Une erreur est survenue'}`, 'ERROR');
+                }
+            } catch {
+                showTyping(false);
+                addChatMessage('agent', UI_TEXT.connectError, 'ERROR');
+            }
+
+            document.getElementById('chatMessage').value = '';
+        }
+
+        function addChatMessage(type, text, intent = null) {
+            const history = document.getElementById('chatHistory');
+            const div = document.createElement('div');
+            div.className = `chat-message ${type}`;
+            div.innerHTML = `
+                <div class="sender">${type === 'user' ? 'You' : 'Agent (' + (currentPersona || '') + ')'}</div>
+                <div class="text">${text}</div>
+                ${intent ? `<div class="intent">Intent: ${intent}</div>` : ''}
+            `;
+            history.appendChild(div);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        async function listSessions() {
+            try {
+                const response = await fetch(`${API_BASE}/sessions`);
+                const data = await response.json();
+                showResponse(response.status, data);
+            } catch (error) {
+                showResponse(500, { error: error.message || UI_TEXT.connectError });
+            }
+        }
+
+        async function deleteSession() {
+            if (!currentSessionId) {
+                alert(UI_TEXT.noSessionDelete);
+                return;
+            }
+
+            stopRecording();
+            stopSpeaking();
+
+            try {
+                const response = await fetch(`${API_BASE}/session/${currentSessionId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+                showResponse(response.status, data);
+
+                if (response.ok) {
+                    updateSessionDisplay(null, null);
+                    document.getElementById('customSessionId').value = '';
+                    document.getElementById('chatHistory').innerHTML = '';
+                    setTranscriptText(UI_TEXT.transcriptIdle);
+                }
+            } catch (error) {
+                showResponse(500, { error: error.message || UI_TEXT.connectError });
+            }
+        }
+
+        async function resetSession() {
+            if (!currentSessionId) {
+                alert(UI_TEXT.noSessionReset);
+                return;
+            }
+
+            stopSpeaking();
+
+            try {
+                const response = await fetch(`${API_BASE}/session/${currentSessionId}/reset`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+                showResponse(response.status, data);
+
+                if (response.ok) {
+                    document.getElementById('chatHistory').innerHTML = '';
+                    void speakText(UI_TEXT.resetMessage);
+                }
+            } catch (error) {
+                showResponse(500, { error: error.message || UI_TEXT.connectError });
+            }
+        }
+
+        async function sendRequest() {
+            const method = document.getElementById('method').value;
+            const url = document.getElementById('url').value;
+            const body = document.getElementById('body').value;
+
+            const options = {
+                method,
+                headers: { 'Content-Type': 'application/json' }
+            };
+
+            if (body && method !== 'GET') {
+                options.body = body;
+            }
+
+            try {
+                const response = await fetch(url, options);
+                let data;
+                try {
+                    data = await response.json();
+                } catch {
+                    data = await response.text();
+                }
+                showResponse(response.status, data);
+            } catch (error) {
+                showResponse(500, { error: error.message || UI_TEXT.connectError });
+            }
+        }
+
+        function showResponse(status, data) {
+            const statusEl = document.getElementById('status');
+            const responseEl = document.getElementById('response');
+
+            statusEl.textContent = `Status: ${status}`;
+            statusEl.className = 'status';
+
+            if (status >= 200 && status < 300) {
+                statusEl.classList.add('status-2xx');
+            } else if (status >= 400 && status < 500) {
+                statusEl.classList.add('status-4xx');
+            } else if (status >= 500) {
+                statusEl.classList.add('status-5xx');
+            }
+
+            responseEl.textContent = JSON.stringify(data, null, 2);
+        }
+
+        document.getElementById('chatMessage').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                void sendChat();
+            }
+        });
+
+        window.onload = () => {
+            document.getElementById('chatMessage').placeholder = UI_TEXT.placeholder;
+            setTranscriptText(UI_TEXT.transcriptIdle);
+            document.getElementById('ttsToggle').classList.add('active');
+            updateVoiceUI(false);
+            checkBrowserSupport();
+
+            if ('speechSynthesis' in window) {
+                speechSynthesis.onvoiceschanged = () => {
+                    selectedFallbackVoice = selectBestFallbackVoice();
+                };
+                selectedFallbackVoice = selectBestFallbackVoice();
+            }
+        };
+
+        window.onbeforeunload = () => {
+            stopRecording();
+            stopSpeaking();
+        };
+    </script>
+</body>
+</html>
