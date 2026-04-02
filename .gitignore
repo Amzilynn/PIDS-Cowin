@@ -1,0 +1,14 @@
+# Jupyter Checkpoints
+.ipynb_checkpoints/
+*.ipynb
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment Variables
+.env
+
+# Models
+models/
