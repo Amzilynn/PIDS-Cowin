@@ -18,6 +18,9 @@ speechbrain==1.0.2
 # torch 2.6.0 + torchvision 0.21.0 are a matched stable pair for Python 3.10
 torch==2.6.0
 torchvision==0.21.0
+# timm 0.9.16 — EfficientNet-B2 emotion backend (compatible with torch 2.6.0)
+timm==0.9.16
+huggingface-hub>=0.21.0
 # Use onnxruntime (CPU) or onnxruntime-gpu if CUDA is available
 onnxruntime==1.17.3
 
@@ -38,6 +41,7 @@ protobuf==3.20.3
 soundfile==0.12.1
 soxr==0.3.7
 six==1.16.0
+setuptools==69.5.1
 
 # ── Dashboard ─────────────────────────────────────────────────
 streamlit==1.33.0

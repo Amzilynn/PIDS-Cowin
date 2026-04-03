@@ -110,33 +110,39 @@ class ToneAnalyzer:
         return chunks_per_second * self.WINDOW_SEC
 
     def _capture_loop(self):
-        """Continuously reads audio and triggers analysis every WINDOW_SEC."""
+        """Continuously reads audio and triggers analysis every 1.5s."""
+        last_analyze_time = time.time()
         while self._running:
             try:
                 raw = self._stream.read(self.CHUNK, exception_on_overflow=False)
                 samples = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768.0
                 self._buffer.append(samples)
 
-                # Analyse once we have a full window
+                # Analyse once we have a reasonably full window AND haven't analyzed recently
                 if len(self._buffer) == self._buffer.maxlen:
-                    audio = np.concatenate(list(self._buffer))
-                    result = self._analyze(audio)
-                    with self._result_lock:
-                        self._latest_result = result
-            except Exception:
+                    now = time.time()
+                    if now - last_analyze_time >= 1.5:
+                        audio = np.concatenate(list(self._buffer))
+                        result = self._analyze(audio)
+                        with self._result_lock:
+                            self._latest_result = result
+                        last_analyze_time = time.time()
+            except Exception as e:
+                import traceback; traceback.print_exc()
                 time.sleep(0.1)
 
     def _analyze(self, audio: np.ndarray) -> ToneResult:
         sr = self.SAMPLE_RATE
 
         # ── Pitch (F0) ───────────────────────────────────────
-        f0, _, _ = librosa.pyin(
+        # Using yin instead of pyin for a massive ~15x speedup
+        f0 = librosa.yin(
             audio,
-            fmin=librosa.note_to_hz("C2"),   # ~65 Hz
-            fmax=librosa.note_to_hz("C7"),   # ~2093 Hz
+            fmin=65,
+            fmax=2093,
             sr=sr,
         )
-        f0_valid = f0[~np.isnan(f0)] if f0 is not None else np.array([])
+        f0_valid = f0[f0 > 0] if f0 is not None else np.array([])
         pitch_mean     = float(np.mean(f0_valid))     if len(f0_valid) > 0 else 0.0
         pitch_variance = float(np.var(f0_valid))      if len(f0_valid) > 0 else 0.0
 

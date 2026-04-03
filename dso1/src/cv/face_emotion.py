@@ -1,6 +1,12 @@
 """
 Facial Emotion Recognition
-Detects face landmarks and classifies emotions using DeepFace.
+Detects face landmarks and classifies emotions.
+
+Backend priority (auto mode)
+-----------------------------
+1. EfficientNet-B2  — PyTorch, fastest & most accurate (requires timm)
+2. DeepFace         — TF-based, high accuracy
+3. FER              — lightweight fallback
 """
 
 import cv2
@@ -19,6 +25,14 @@ try:
     _FER_AVAILABLE = True
 except ImportError:
     _FER_AVAILABLE = False
+
+try:
+    import timm  # noqa: F401
+    import torch  # noqa: F401
+    from .efficientnet_emotion import EfficientNetB2EmotionClassifier
+    _EFFICIENTNET_AVAILABLE = True
+except ImportError:
+    _EFFICIENTNET_AVAILABLE = False
 
 
 EMOTIONS = ["angry", "disgust", "fear", "happy", "sad", "surprise", "neutral"]
@@ -44,17 +58,26 @@ class FaceEmotionAnalyzer:
         Raises ImportError if neither is installed.
     """
 
-    def __init__(self, backend: str = "auto", skip_frames: int = 3):
+    def __init__(
+        self,
+        backend: str = "auto",
+        skip_frames: int = 3,
+        efficientnet_checkpoint: str | None = None,
+        efficientnet_device: str = "auto",
+    ):
         """
         Args:
-            backend:     "deepface" | "fer" | "auto"
-            skip_frames: Run emotion model every N frames (performance tweak).
+            backend:                   "efficientnet" | "deepface" | "fer" | "auto"
+            skip_frames:               Run emotion model every N frames (performance tweak).
+            efficientnet_checkpoint:   Path to a local .pth weights file for EfficientNet-B2.
+                                       If None, auto-downloads or falls back to ImageNet weights.
+            efficientnet_device:       "auto" | "cuda" | "cpu" for EfficientNet-B2 inference.
         """
         self._skip_frames = skip_frames
         self._frame_count = 0
         self._last_result: EmotionResult | None = None
 
-        # MediaPipe for face mesh + iris (eye contact)
+        # MediaPipe: face mesh + iris (eye contact)
         self.mp_face_mesh = mp.solutions.face_mesh
         self.face_mesh = self.mp_face_mesh.FaceMesh(
             max_num_faces=1,
@@ -63,21 +86,44 @@ class FaceEmotionAnalyzer:
             min_tracking_confidence=0.5,
         )
 
-        # Choose emotion backend
+        # MediaPipe: lightweight face detector used to crop for EfficientNet-B2
+        self.mp_face_det = mp.solutions.face_detection
+        self._face_detector = self.mp_face_det.FaceDetection(
+            model_selection=0,          # 0 = short-range (<2 m), fast
+            min_detection_confidence=0.5,
+        )
+
+        # ── Resolve backend ──────────────────────────────────────────────────
         if backend == "auto":
-            if _DEEPFACE_AVAILABLE:
+            if _EFFICIENTNET_AVAILABLE:
+                backend = "efficientnet"
+            elif _DEEPFACE_AVAILABLE:
                 backend = "deepface"
             elif _FER_AVAILABLE:
                 backend = "fer"
             else:
                 raise ImportError(
-                    "Install either 'deepface' or 'fer':\n"
+                    "No emotion backend found. Install one of:\n"
+                    "  pip install timm==0.9.16 torch torchvision  # EfficientNet-B2 (recommended)\n"
                     "  pip install deepface\n"
                     "  pip install fer"
                 )
 
+        if backend == "efficientnet" and not _EFFICIENTNET_AVAILABLE:
+            raise ImportError(
+                "EfficientNet-B2 backend requires timm and torch:\n"
+                "  pip install timm==0.9.16"
+            )
+
         self._backend = backend
-        if backend == "fer":
+
+        # Backend-specific initialisation
+        if backend == "efficientnet":
+            self._efficientnet = EfficientNetB2EmotionClassifier(
+                device=efficientnet_device,
+                checkpoint_path=efficientnet_checkpoint,
+            )
+        elif backend == "fer":
             self._fer = FER(mtcnn=True)
 
     def analyze(self, frame_bgr: np.ndarray) -> EmotionResult:
@@ -147,9 +193,12 @@ class FaceEmotionAnalyzer:
     # ─── Private helpers ───────────────────────────────────────────────────
 
     def _run_emotion_model(self, frame_bgr: np.ndarray) -> dict[str, float] | None:
-        """Run whichever backend is available. Returns normalized score dict."""
+        """Dispatch to whichever backend is active. Returns normalised score dict."""
         try:
-            if self._backend == "deepface":
+            if self._backend == "efficientnet":
+                return self._run_efficientnet(frame_bgr)
+
+            elif self._backend == "deepface":
                 analysis = DeepFace.analyze(
                     frame_bgr,
                     actions=["emotion"],
@@ -172,6 +221,58 @@ class FaceEmotionAnalyzer:
             return None
 
         return None
+
+    def _run_efficientnet(self, frame_bgr: np.ndarray) -> dict[str, float] | None:
+        """
+        Crop the face from the frame then run EfficientNet-B2 inference.
+        Returns normalised emotion dict, or None if no face is detected.
+        """
+        face_crop = self._crop_face(frame_bgr)
+        if face_crop is None:
+            return None
+        return self._efficientnet.predict(face_crop)
+
+    def _crop_face(
+        self,
+        frame_bgr: np.ndarray,
+        pad: float = 0.20,
+    ) -> np.ndarray | None:
+        """
+        Use MediaPipe FaceDetection to locate and crop the primary face.
+
+        Parameters
+        ----------
+        frame_bgr:
+            Full BGR camera frame.
+        pad:
+            Fractional padding added around the tight bounding box
+            (0.20 = 20 % on each side) so the model sees forehead/chin.
+
+        Returns
+        -------
+        np.ndarray | None
+            BGR face crop, or None if no face is detected.
+        """
+        h, w = frame_bgr.shape[:2]
+        rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
+        result = self._face_detector.process(rgb)
+
+        if not result.detections:
+            return None
+
+        det = result.detections[0]  # use highest-confidence detection
+        bb  = det.location_data.relative_bounding_box
+
+        # Convert relative coords → pixel coords with padding
+        x1 = max(0, int((bb.xmin - pad * bb.width)  * w))
+        y1 = max(0, int((bb.ymin - pad * bb.height) * h))
+        x2 = min(w, int((bb.xmin + (1 + pad) * bb.width)  * w))
+        y2 = min(h, int((bb.ymin + (1 + pad) * bb.height) * h))
+
+        if x2 <= x1 or y2 <= y1:
+            return None
+
+        return frame_bgr[y1:y2, x1:x2]
 
     def _detect_eye_contact(self, frame_bgr: np.ndarray) -> bool:
         """
@@ -208,3 +309,4 @@ class FaceEmotionAnalyzer:
 
     def close(self):
         self.face_mesh.close()
+        self._face_detector.close()

@@ -16,3 +16,6 @@ models/
 sessions/
 err.txt
 pip_error.log
+audio_err.txt
+audio_err2.txt
+buf.json
