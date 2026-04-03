@@ -1,14 +1,50 @@
-import requests
-import csv
-import json
-import os
-from datetime import datetime
+print("START")
+
+try:
+    print("IMPORTS...")
+    import requests
+    import csv
+    import json
+    import os
+    from datetime import datetime
+    from groq import Groq
+    from dotenv import load_dotenv
+    print("IMPORT OK")
+except Exception as e:
+    print("ERROR:", e)
+    exit()
+
 from Agent.prompts import SYSTEM_PROMPT
-from Agent.voice import speak_text
+from Agent.voice import speak_text, is_speaking
 from Agent.stt import speech_to_text
 
 from rag.rag_build import load_or_build_rag
 from rag.retriever import Retriever
+
+
+
+load_dotenv()
+print(os.getenv("GROQ_API_KEY"))
+
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+ 
+GROQ_MODEL = "llama-3.3-70b-versatile"
+
+print("START")
+
+# ─── Mots-clés qui déclenchent la recherche RAG ───────────────────────────────
+# Le RAG n'est activé QUE si le délégué parle d'un produit
+PRODUCT_TRIGGER_KEYWORDS = [
+    "produit", "product", "médicament", "medicine", "drug",
+    "présenter", "present", "proposer", "propose",
+    "comprimé", "capsule", "sirop", "complément",
+    "indication", "posologie", "dosage", "traitement", "effet",
+    "principe actif", "composition", "contre-indication",
+]
+def should_use_rag(text: str) -> bool:
+    """Retourne True seulement si le délégué parle d'un produit."""
+    text_lower = text.lower()
+    return any(kw in text_lower for kw in PRODUCT_TRIGGER_KEYWORDS)
 
 # ─── Chargement des délégués ───────────────────────────────────────────────
 
@@ -64,36 +100,20 @@ def save_session(delegue, messages):
         print(f"[Erreur] Impossible de sauvegarder la session : {e}")
 
 
-# ─── Appel à Ollama ────────────────────────────────────────────────────────
+# ─── Appel à Groq ────────────────────────────────────────────────────────
 
-def ask_avatar(messages):
+def ask_avatar(messages: list) -> str | None:
     try:
-        response = requests.post(
-            "http://localhost:11434/api/chat",
-            json={
-                "model": "mistral",
-                "messages": messages,
-                "stream": False,
-                "options": {
-                    "temperature": 0.7,
-                    "num_predict": 150
-                }
-            },
-            timeout=120
+        response = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=messages,
+            max_tokens=120,        # réponses courtes = plus naturel
+            temperature=0.5,
         )
-        response.raise_for_status()
-        return response.json()["message"]["content"]
-
-    except requests.exceptions.ConnectionError:
-        print("[Erreur] Ollama n'est pas lancé. Démarre-le avec : ollama serve")
-        return None
-    except requests.exceptions.Timeout:
-        print("[Erreur] Ollama met trop de temps à répondre.")
-        return None
+        return response.choices[0].message.content.strip()
     except Exception as e:
-        print(f"[Erreur] Problème avec Ollama : {e}")
+        print(f"[Erreur Groq] {e}")
         return None
-
 
 # ─── Programme principal ───────────────────────────────────────────────────
 
@@ -126,6 +146,10 @@ def main():
     
     while True:
         try:
+            # 🔴 attendre que l’avatar finisse de parler
+            while is_speaking:
+                continue
+
             user_input, lang = speech_to_text()
         except KeyboardInterrupt:
             print("\n\nSession interrompue.")
@@ -140,23 +164,37 @@ def main():
 
         
 
-             # 🔹 1️⃣ Recherche RAG
-        relevant_docs = retriever.retrieve(user_input, k=3)
-        context_text = "\n".join(relevant_docs)
-
-       # 🔹 2️⃣ Ajouter le contexte au prompt
-        messages.append({"role": "system", "content": f"Voici des informations sur les produits Vital :\n{context_text}"})
+        print(f"\n🗣️  Délégué : {user_input}")
+ 
+        # ── RAG conditionnel : uniquement si le délégué parle d'un produit ──
+        messages_to_send = list(messages)  # copie pour ne pas polluer l'historique
+ 
+        if should_use_rag(user_input):
+            relevant_docs = retriever.retrieve(user_input, k=3)  # k=2 suffit
+            if relevant_docs:
+                context_text = "\n".join(relevant_docs)
+                # Injecté comme message système temporaire, pas stocké dans l'historique
+                messages_to_send.append({
+                    "role": "system",
+                    "content": (
+                        "CONTEXTE PRODUIT (Use this context ONLY if the delegate is clearly talking about this product. Otherwise ignore it.) :\n" + context_text
+                    )
+                })
+ 
         # Ajouter le message de l'utilisateur
-        messages.append({"role": "user", "content": user_input})
-        avatar_reply = ask_avatar(messages)
-
+        messages_to_send.append({"role": "user", "content": user_input})
+ 
+        avatar_reply = ask_avatar(messages_to_send)
+ 
         if avatar_reply is None:
-            messages.pop()  # annule le message si pas de réponse
+            print("[⚠️] Pas de réponse, réessaie.")
             continue
-
-        print(f"\nAvatar : {avatar_reply}\n")
+ 
+        print(f"\n🤖 Avatar : {avatar_reply}\n")
         speak_text(avatar_reply, lang)
-
+ 
+        # Stocker dans l'historique réel (sans le contexte RAG temporaire)
+        messages.append({"role": "user", "content": user_input})
         messages.append({"role": "assistant", "content": avatar_reply})
 
     save_session(current_user, messages)

@@ -10,7 +10,7 @@ def record_audio(fs=16000, silence_threshold=0.01, silence_duration=1.5):
 
     recording = []
     silence_counter = 0
-    chunk_duration = 2  # 300 ms
+    chunk_duration = 3  # 300 ms
     chunk_size = int(fs * chunk_duration)
 
     while True:
@@ -50,4 +50,3 @@ def speech_to_text():
     print("Langue détectée:", lang)
 
     return text, lang
-
