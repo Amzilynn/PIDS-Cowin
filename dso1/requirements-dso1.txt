@@ -1,0 +1,49 @@
+# ── Computer Vision & Pose ──────────────────────────────────
+# mediapipe 0.10.9 is the last version with mp.solutions API on Windows
+opencv-python==4.9.0.80
+mediapipe==0.10.9
+
+# ── Facial Emotion Recognition ───────────────────────────────
+# deepface 0.0.93 works with TF 2.21 + tf-keras shim
+deepface==0.0.93
+fer==22.5.1
+
+# ── Audio / Tone Analysis ────────────────────────────────────
+# PyAudio 0.2.14 is the last version compatible with cffi <2.0 on Windows
+PyAudio==0.2.14
+librosa==0.10.1
+speechbrain==1.0.2
+
+# ── Deep Learning ────────────────────────────────────────────
+# torch 2.6.0 + torchvision 0.21.0 are a matched stable pair for Python 3.10
+torch==2.6.0
+torchvision==0.21.0
+# Use onnxruntime (CPU) or onnxruntime-gpu if CUDA is available
+onnxruntime==1.17.3
+
+# ── Data & Utilities ─────────────────────────────────────────
+# numpy MUST stay on 1.x — mediapipe, librosa, numba all break on numpy 2.x
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.13.1
+
+# ── Sub-dependency pins (prevent pip backtracking) ────────────
+# cffi 2.0 is incompatible with PyAudio and several audio libs
+cffi==1.17.1
+# flatbuffers 25.x is broken with mediapipe 0.10.9; use 23.x
+# flatbuffers==23.5.26
+# protobuf: mediapipe needs <5, TF 2.21 needs >=3.20
+protobuf==3.20.3
+# soundfile and soxr for librosa
+soundfile==0.12.1
+soxr==0.3.7
+six==1.16.0
+
+# ── Dashboard ─────────────────────────────────────────────────
+streamlit==1.33.0
+plotly==5.22.0
+
+# ── TF / Keras Compatibility ──────────────────────────────────
+# mediapipe 0.10.9 forces protobuf<4, so we cannot use TF 2.21+ (which requires protobuf>=6).
+# Downgrading to TF 2.15.1 natively uses Keras 2, removing the need for tf-keras.
+tensorflow==2.15.1
