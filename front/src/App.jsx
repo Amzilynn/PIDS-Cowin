@@ -1,65 +1,58 @@
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-
 import LoginPage from './views/auth/LoginPage';
-import AdminApp from './views/admin/AdminApp';
-import DelegateLayout from './views/delegate/DelegateLayout';
-import EvaluationPage from './views/delegate/EvaluationPage';
-import TrainingPage from './views/delegate/TrainingPage';
-import AssistantPage from './views/delegate/AssistantPage';
-import DoctorGuestPage from './views/doctor/DoctorGuestPage';
-import DSO1Page from './views/dso/DSO1Page';
-import DSO2Page from './views/dso/DSO2Page';
-import DSO3Page from './views/dso/DSO3Page';
-import DSO4Page from './views/dso/DSO4Page';
+import MainLayout from './components/MainLayout';
 
-function ProtectedRoute({ children, allowedRole }) {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/" replace />;
-  if (allowedRole && user.role !== allowedRole) return <Navigate to="/" replace />;
-  return children;
-}
+// Admin Pages
+import AdminDashboard from './views/admin/AdminDashboard';
 
-function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<LoginPage />} />
+// Delegate Pages
+import DelegateHome from './views/delegate/DelegateHome';
+import TrainingRoom from './views/delegate/TrainingRoom';
+import VisitPlanner from './views/delegate/VisitPlanner';
+import EvaluationResults from './views/delegate/EvaluationResults';
 
-      {/* Admin */}
-      <Route path="/admin/*" element={
-        <ProtectedRoute allowedRole="admin"><AdminApp /></ProtectedRoute>
-      } />
+// Doctor Pages
+import DoctorView from './views/doctor/DoctorView';
 
-      {/* Delegate */}
-      <Route path="/delegate" element={
-        <ProtectedRoute allowedRole="delegate"><DelegateLayout /></ProtectedRoute>
-      }>
-        <Route index element={<Navigate to="evaluation" replace />} />
-        <Route path="evaluation" element={<EvaluationPage />} />
-        <Route path="training" element={<TrainingPage />} />
-        <Route path="assistant" element={<AssistantPage />} />
-      </Route>
-
-      {/* Doctor guest */}
-      <Route path="/doctor" element={<DoctorGuestPage />} />
-
-      {/* DSO */}
-      <Route path="/dso/1" element={<DSO1Page />} />
-      <Route path="/dso/2" element={<DSO2Page />} />
-      <Route path="/dso/3" element={<DSO3Page />} />
-      <Route path="/dso/4" element={<DSO4Page />} />
-
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  );
-}
-
+/**
+ * MedDelegate Pro - Root Application
+ * Role-based routing system with premium layout wrapping
+ */
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+      <Routes>
+        {/* Authentication */}
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<Navigate to="/" replace />} />
+
+        {/* Admin Workspace */}
+        <Route path="/admin" element={<MainLayout role="admin" />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="delegates" element={<div className="p-10 text-brand-navy font-black">Delegate Management View (Planned)</div>} />
+          <Route path="reports" element={<div className="p-10 text-brand-navy font-black">Analytics Reports View (Planned)</div>} />
+        </Route>
+
+        {/* Delegate Workspace */}
+        <Route path="/delegate" element={<MainLayout role="delegate" />}>
+          <Route index element={<Navigate to="home" replace />} />
+          <Route path="home" element={<DelegateHome />} />
+          <Route path="training" element={<TrainingRoom />} />
+          <Route path="planner" element={<VisitPlanner />} />
+          <Route path="results" element={<EvaluationResults />} />
+        </Route>
+
+        {/* Doctor Workspace */}
+        <Route path="/doctor" element={<MainLayout role="doctor" />}>
+          <Route index element={<Navigate to="receiver" replace />} />
+          <Route path="receiver" element={<DoctorView />} />
+        </Route>
+
+        {/* Global Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </BrowserRouter>
   );
 }

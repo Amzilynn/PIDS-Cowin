@@ -2,8 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Brand Colors from Logo */
+  --brand-navy: #0B1B2B;
+  --brand-teal: #4E8C8A;
+  --brand-aqua: #5CA3A1;
+  --brand-slate: #1E293B;
+  --brand-accent: #3B82F6;
+  
+  /* UI Surface Colors */
+  --bg-main: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --border-subtle: #E2E8F0;
+  
+  /* Text */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+}
+
 @layer base {
   body {
-    @apply antialiased font-sans bg-[#F8FAFC] text-slate-900 overflow-hidden;
+    @apply antialiased font-sans bg-[var(--bg-main)] text-[var(--text-primary)] overflow-hidden;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+
+  /* Custom Scrollbar for Premium Feel */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+  
+  .premium-shadow {
+    box-shadow: 0 10px 30px -10px rgba(11, 27, 43, 0.1);
+  }
+  
+  .btn-primary {
+    @apply px-6 py-3 bg-[var(--brand-navy)] text-white font-semibold rounded-xl 
+           hover:bg-slate-800 focus:ring-4 focus:ring-slate-200 transition-all active:scale-95;
+  }
+}
+
+/* Custom Animations */
+@keyframes pulse-ecg {
+  0%, 100% { transform: scaleY(1); opacity: 0.5; }
+  50% { transform: scaleY(1.5); opacity: 1; }
+}
+
+.animate-ecg {
+  animation: pulse-ecg 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
