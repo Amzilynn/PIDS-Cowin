@@ -49,7 +49,7 @@ export default function PractitionerView() {
                  {isDoctor ? <Stethoscope size={20} /> : <Activity size={20} />}
               </div>
               <div>
-                 <p className="text-[10px] font-black uppercase tracking-widest opacity-40 leading-none mb-1">Espace de Réception Professionnelle</p>
+                 <p className="text-[10px] font-black uppercase tracking-widest text-md-primary leading-none mb-1">Espace de Réception DSO2 Intelligence</p>
                  <h1 className="text-sm font-black text-md-on-background uppercase tracking-tight">{practitionerName}</h1>
               </div>
            </div>
@@ -62,12 +62,6 @@ export default function PractitionerView() {
                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]" /> En Direct
               </div>
            </div>
-           
-           <button 
-             className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20"
-           >
-              Évaluer la présentation
-           </button>
         </div>
       </div>
 
@@ -105,38 +99,14 @@ export default function PractitionerView() {
                  <h4 className="text-[10px] font-black uppercase tracking-widest opacity-60">Mémo Praticien</h4>
               </div>
               <p className="text-sm font-bold leading-relaxed opacity-80 uppercase tracking-tighter italic">
-                 "Ce délégué a un rang DSO Élite. Ses recommandations sont prioritaires pour votre établissement."
+                 "Ce délégué a un rang DSO2 Élite. Ses recommandations sont prioritaires pour votre établissement."
               </p>
            </div>
         </div>
 
         {/* COL 3 : Fiche Produit & Feedback (30%) */}
         <div className="flex-[0.3] p-8 h-full bg-md-surface-container/50 flex flex-col gap-6 overflow-hidden">
-           
-           {/* Fiche Produit Interactive */}
-           <div className="md-card p-10 bg-md-on-background text-white flex flex-col gap-8 relative overflow-hidden group shadow-2xl border border-white/5">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-md-primary/20 blur-[80px] -z-10 group-hover:scale-150 transition-all duration-1000" />
-              <div className="flex items-center justify-between relative z-10">
-                 <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl">
-                    <Package size={28} className="text-md-primary" />
-                 </div>
-                 <div className="text-right">
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-1">Documentation Active</p>
-                    <h4 className="text-2xl font-black tracking-tighter italic leading-none text-md-primary uppercase">{productTitle}</h4>
-                 </div>
-              </div>
-              
-              <div className="relative z-10 space-y-4">
-                 <div className="flex items-center gap-4 text-xs font-black uppercase tracking-widest opacity-60">
-                    <CheckCircle2 size={16} className="text-emerald-500" /> Indication : Traitement 1ère Intention
-                 </div>
-                 <button className="w-full h-14 bg-white/5 hover:bg-md-primary hover:text-white rounded-2xl border border-white/10 transition-all font-black text-[10px] uppercase tracking-widest mt-4 group shadow-lg">
-                    Télécharger la fiche technique (PDF)
-                    <Zap size={14} className="inline ml-3 group-hover:fill-current" />
-                 </button>
-              </div>
-           </div>
-
+           {/* Feedback temps réel / Chat (occupe désormais tout l'espace disponible vers le haut) */}
            {/* Feedback temps réel / Chat */}
            <div className="flex-1 min-h-0">
               <ChatPanel />

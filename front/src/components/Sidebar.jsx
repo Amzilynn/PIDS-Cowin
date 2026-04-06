@@ -48,11 +48,7 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
         { to: '/delegate/profil', icon: User, label: 'Mon Profil' },
       ],
       practitioner: [
-        { to: '/practitioner/home', icon: LayoutDashboard, label: 'Accueil' },
-        { to: '/practitioner/presentations', icon: PlusSquare, label: 'Présentations Reçues' },
-        { to: '/delegate/presentation', icon: PlusSquare, label: 'Salle de Présentation (BO2)' },
-        { to: '/practitioner/agenda', icon: MapIcon, label: 'Mon Agenda' },
-        { to: '/practitioner/profil', icon: User, label: 'Mon Profil' },
+        { to: '/practitioner/presentations', icon: PlusSquare, label: 'Salle de Présentation (BO2)' },
       ]
   };
 

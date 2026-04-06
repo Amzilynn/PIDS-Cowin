@@ -32,7 +32,8 @@ export default function Avatar3D({ type = 'doctor' }) {
             <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse' : 'bg-md-outline/30'}`} />
             <span className="text-[11px] font-black uppercase tracking-widest text-md-on-background">{status}</span>
          </div>
-         <BadgeDSO rating="DSO1" />
+         <div className="flex items-center gap-3 invisible">
+         </div>
       </div>
 
       {/* Zone Avatar Principal */}
@@ -87,7 +88,7 @@ export default function Avatar3D({ type = 'doctor' }) {
                {isActive ? (type === 'doctor' ? 'Dr. Martin (Médecin)' : 'Mme Berthier (Pharmacienne)') : 'Avatar en attente'}
             </h3>
             <p className="text-xs font-bold text-md-on-surface-variant opacity-60 text-center uppercase tracking-widest leading-relaxed">
-               Analyse par vision par ordinateur <br/> Prête pour évaluation DSO1
+               Analyse par vision par ordinateur <br/> Prête pour évaluation DSO2
             </p>
          </div>
 

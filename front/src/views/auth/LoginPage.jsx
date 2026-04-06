@@ -87,7 +87,7 @@ export default function LoginPage() {
         <div className="flex flex-col items-center mb-6 space-y-4">
           <Logo className="h-24 mb-2" showText={false} />
           <div className="text-center">
-            <h1 className="text-3xl font-black tracking-tighter text-md-on-background mb-1 leading-tight">Connectez-vous à <br/><span className="text-md-primary italic">MedDelegate Pro</span></h1>
+            <h1 className="text-3xl font-black tracking-tighter text-md-on-background mb-1 leading-tight">Connectez-vous à <br/><span className="text-md-primary italic">Avalive</span></h1>
             <p className="text-xs font-medium text-md-on-surface-variant opacity-60 tracking-tight">Intelligence terrain & formation pharmaceutique</p>
           </div>
         </div>
