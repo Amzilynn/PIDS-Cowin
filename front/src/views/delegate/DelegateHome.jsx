@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const performanceData = [
   { day: 'Lun', score: 72 }, { day: 'Mar', score: 85 }, { day: 'Mer', score: 78 },
@@ -27,6 +27,7 @@ const performanceData = [
 
 export default function DelegateHome({ subRole = 'medical' }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const isMedical = subRole === 'medical';
   const roleTitle = isMedical ? 'Délégué Médical' : 'Délégué Commercial';
   const presentedTo = isMedical ? 'médecin' : 'pharmacien';
@@ -34,6 +35,32 @@ export default function DelegateHome({ subRole = 'medical' }) {
   const navigateTo = (path) => {
     navigate(`${path}?role=delegate&sub=${subRole}`);
   };
+
+  if (location.pathname.includes('profil')) {
+    return (
+      <div className="space-y-12 animate-fade-in pb-20 relative">
+         <h1 className="text-6xl font-black uppercase text-md-on-background tracking-tighter">Éditer le Profil</h1>
+         <div className="md-card max-w-3xl p-10 bg-white shadow-xl mt-8 border-none">
+            <h2 className="text-xl font-black uppercase tracking-tight mb-8">Informations Personnelles</h2>
+            <div className="space-y-6">
+                <div>
+                   <label className="block text-[11px] font-black uppercase tracking-[0.2em] opacity-60 mb-3">Nom Complet</label>
+                   <input type="text" className="w-full bg-md-surface-container border border-md-outline/10 p-4 rounded-2xl font-bold" defaultValue={isMedical ? 'Sarah Khalil' : 'Marc Dupont'} />
+                </div>
+                <div>
+                   <label className="block text-[11px] font-black uppercase tracking-[0.2em] opacity-60 mb-3">Rôle</label>
+                   <input type="text" className="w-full bg-md-surface-container border border-md-outline/10 p-4 rounded-2xl font-bold opacity-60 text-md-on-surface-variant" disabled defaultValue={roleTitle} />
+                </div>
+                <div>
+                   <label className="block text-[11px] font-black uppercase tracking-[0.2em] opacity-60 mb-3">Email</label>
+                   <input type="email" className="w-full bg-md-surface-container border border-md-outline/10 p-4 rounded-2xl font-bold" defaultValue={`${isMedical ? 'sarah' : 'marc'}@meddelegate.pro`} />
+                </div>
+                <button className="btn-primary !h-14 uppercase tracking-[0.2em] text-[11px] font-black mt-8 w-full md:w-auto px-8 !rounded-xl shadow-xl">Enregistrer les modifications</button>
+            </div>
+         </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-12 animate-fade-in pb-20 relative">
@@ -51,34 +78,16 @@ export default function DelegateHome({ subRole = 'medical' }) {
            </div>
            <h1 className="text-6xl font-black text-md-on-background tracking-tighter leading-[0.9] uppercase">Bonjour, <br/><span className={`${isMedical ? 'text-md-primary' : 'text-emerald-500'} italic lowercase`}>{isMedical ? 'Sarah' : 'Marc'}.</span></h1>
            <p className="text-md-on-surface-variant font-bold text-xl leading-relaxed max-w-lg mt-4 opacity-70 italic tracking-tight">
-             Prête pour votre session d'excellence aujourd'hui en tant que <span className={`font-black not-italic ${isMedical ? 'text-md-on-background' : 'text-emerald-600'}`}>{roleTitle}</span> ?
+             Prêts pour votre session d'excellence aujourd'hui en tant que <span className={`font-black not-italic ${isMedical ? 'text-md-on-background' : 'text-emerald-600'}`}>{roleTitle}</span> ?
            </p>
         </div>
-        
-        <motion.div 
-           whileHover={{ y: -8, scale: 1.02 }}
-           className="p-8 bg-md-on-background text-white rounded-[48px] shadow-2xl flex items-center gap-8 group cursor-pointer border border-white/10"
-        >
-           <div className="w-20 h-20 rounded-full bg-md-primary/20 flex items-center justify-center border-4 border-white/5 relative group-hover:bg-md-primary/40 transition-colors">
-              <Star size={32} fill="var(--color-md-primary)" className="group-hover:rotate-12 transition-transform" />
-              <div className="absolute inset-0 bg-md-primary/20 blur-xl rounded-full animate-pulse" />
-           </div>
-           <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 leading-none mb-2">Certification Actuelle</p>
-              <h3 className="text-3xl font-black tracking-tighter leading-none uppercase italic text-md-primary">Élite DSO1</h3>
-              <div className="mt-2 flex items-center gap-2">
-                 <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                 <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Profil Validé</span>
-              </div>
-           </div>
-        </motion.div>
       </div>
 
       {/* Main Action Grid (4 Cards - BO1 to BO4) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
          {[
            { 
-             title: 'Formation (BO1)', 
+             title: 'Formation', 
              desc: 'Simulateur cognitif & flux conversationnel IA', 
              cta: 'Lancer Simulation', 
              icon: BrainCircuit, 
@@ -86,7 +95,7 @@ export default function DelegateHome({ subRole = 'medical' }) {
              path: '/delegate/training'
            },
            { 
-             title: `Présentation (BO2)`, 
+             title: `Présentation`, 
              desc: `Pitching clinique haute-fidélité au ${presentedTo}`, 
              cta: 'Commencer Session', 
              icon: PlusSquare, 
@@ -94,7 +103,7 @@ export default function DelegateHome({ subRole = 'medical' }) {
              path: '/delegate/presentation'
            },
            { 
-             title: 'Produits (BO3)', 
+             title: 'Produits', 
              desc: 'Analyse prédictive des gammes prioritaires', 
              cta: 'Recommandations', 
              icon: PackageCheck, 
@@ -102,14 +111,14 @@ export default function DelegateHome({ subRole = 'medical' }) {
              path: '/delegate/produits'
            },
            { 
-             title: 'Visites (BO4)', 
+             title: 'Visites', 
              desc: 'Planification optimale & itinéraire IA', 
              cta: 'Ma Tournée', 
              icon: MapIcon, 
              color: 'bg-md-on-background/5 text-md-on-background',
              path: '/delegate/planner'
            },
-         ].filter(c => c.title !== 'Présentation (BO2)').map((card, i) => (
+         ].filter(c => c.title !== 'Présentation').map((card, i) => (
             <motion.div 
                whileHover={{ y: -12, scale: 1.02 }}
                key={i} 
@@ -140,7 +149,7 @@ export default function DelegateHome({ subRole = 'medical' }) {
          <div className="lg:col-span-8 md-card p-12 flex flex-col gap-10 bg-white border-none shadow-xl">
             <div className="flex items-center justify-between">
                <div className="space-y-1">
-                  <h3 className="text-2xl font-black text-md-on-background tracking-tighter uppercase">Courbe de Performance DSO</h3>
+                  <h3 className="text-2xl font-black text-md-on-background tracking-tighter uppercase">Courbe de Performance</h3>
                   <p className="text-xs font-bold text-md-on-surface-variant opacity-60 uppercase tracking-widest italic leading-none">Progression analytique sur les 7 derniers jours</p>
                </div>
                <div className="flex items-center gap-3 px-6 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-full shadow-sm">

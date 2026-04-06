@@ -60,19 +60,20 @@ export default function VisitPlanner() {
   };
 
   return (
-    <div className="h-[calc(100vh-140px)] flex flex-col lg:flex-row gap-8 animate-fade-in relative z-10 pb-10">
+    <div className="flex flex-col lg:flex-row gap-8 animate-fade-in relative z-10 pb-10 min-h-[800px]">
       
       {/* Background Glows Signature */}
       <div className="fixed top-20 right-10 w-[500px] h-[500px] organic-glow bg-md-primary/10 rounded-full pointer-events-none -z-10" />
 
       {/* COLONNE GAUCHE: Carte Interactive RÉELLE (60%) */}
-      <div className="lg:flex-[0.65] min-h-[500px] bg-white rounded-[48px] p-6 relative overflow-hidden group shadow-2xl border border-md-outline/10 h-full">
-        <MapContainer 
-          center={[48.8500, 2.3500]} 
-          zoom={14} 
-          className="w-full h-full rounded-[36px] grayscale hover:grayscale-0 transition-all duration-700"
-          zoomControl={false}
-        >
+      <div className="lg:flex-[0.65] min-h-[700px] flex flex-col bg-white rounded-[48px] p-6 relative overflow-hidden group shadow-2xl border border-md-outline/10">
+        <div className="flex-1 w-full relative rounded-[36px] overflow-hidden z-0">
+          <MapContainer 
+            center={[48.8500, 2.3500]} 
+            zoom={14} 
+            className="absolute inset-0 w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
+            zoomControl={false}
+          >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; Avalive Intelligence'
@@ -107,6 +108,7 @@ export default function VisitPlanner() {
              className="animate-pulse"
           />
         </MapContainer>
+        </div>
 
         {/* Contrôles flottants sur la carte */}
         <div className="absolute top-12 left-12 z-[1000] flex flex-col gap-6">
@@ -123,7 +125,7 @@ export default function VisitPlanner() {
               ) : (
                 <div className="flex items-center gap-4">
                    <Navigation2 size={24} className="group-hover:rotate-45 transition-transform duration-500" />
-                   <span className="text-[11px] font-black uppercase tracking-[0.3em]">Optimiser l'Itinéraire (BO4)</span>
+                   <span className="text-[11px] font-black uppercase tracking-[0.3em]">Optimiser l'Itinéraire</span>
                 </div>
               )}
               {!optimizing && <div className="absolute inset-0 shimmer-anim opacity-15 pointer-events-none" />}
@@ -133,7 +135,7 @@ export default function VisitPlanner() {
                <p className="text-[10px] font-black text-md-on-background uppercase tracking-[0.4em] mb-2 opacity-50">Priorités du Secteur</p>
                <div className="flex items-center gap-4 group">
                   <div className="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-[0_0_12px_#f43f5e] animate-pulse" />
-                  <span className="text-[11px] font-black text-md-on-surface-variant uppercase tracking-widest tracking-tighter">Urgent (DSO-High)</span>
+                  <span className="text-[11px] font-black text-md-on-surface-variant uppercase tracking-widest tracking-tighter">Urgent (Priorité Haute)</span>
                </div>
                <div className="flex items-center gap-4 group">
                   <div className="w-3.5 h-3.5 rounded-full bg-amber-500 shadow-[0_0_12px_#f59e0b]" />
@@ -180,8 +182,8 @@ export default function VisitPlanner() {
                </div>
             </div>
 
-            {/* Liste scrollable */}
-            <div className="flex-1 overflow-y-auto p-10 space-y-6 scrollbar-none relative z-10">
+            {/* Liste */}
+            <div className="p-10 space-y-6 relative z-10">
                {visits.map((v, i) => (
                   <motion.div 
                     layout

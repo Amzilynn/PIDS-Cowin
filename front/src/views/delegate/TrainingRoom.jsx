@@ -56,7 +56,7 @@ export default function TrainingRoom() {
                  <BrainCircuit size={20} />
               </div>
               <div>
-                 <p className="text-[10px] font-black uppercase tracking-widest text-md-primary leading-none mb-1">Module Simulator BO1</p>
+                 <p className="text-[10px] font-black uppercase tracking-widest text-md-primary leading-none mb-1">Module Formation</p>
                  <h1 className="text-sm font-black text-md-on-background uppercase tracking-tight">Salle de Formation {isMedical ? 'Médicale' : 'Commerciale'}</h1>
               </div>
            </div>
@@ -81,57 +81,23 @@ export default function TrainingRoom() {
         </div>
       </div>
 
-      {/* Théâtre de Simulation Principal (3 Colonnes) */}
-      <div className="flex-1 flex overflow-hidden">
+      {/* Théâtre de Simulation Principal (3 Colonnes Alignées) */}
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 overflow-hidden">
         
-        {/* COL 1 : Avatar de Formation (40%) */}
-        <div className="flex-[0.4] p-8 relative flex flex-col">
-           <div className="absolute inset-0 bg-md-primary/[0.03] -z-10" />
+        {/* COL 1 : Avatar de Formation */}
+        <div className="md-card !p-0 overflow-hidden relative flex flex-col bg-md-surface-container border-none shadow-2xl">
            <Avatar3D type={isMedical ? 'doctor' : 'pharmacist'} />
-           
-           {/* Overlay Analytics */}
-           <div className="mt-8 grid grid-cols-2 gap-6">
-              <div className="md-card !p-5 bg-white/60 backdrop-blur-md border-none flex flex-col gap-3">
-                 <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-black uppercase text-md-outline tracking-widest leading-none">Réactivité IA</span>
-                    <Zap size={14} className="text-amber-500" />
-                 </div>
-                 <div className="h-1.5 bg-md-surface-container-low rounded-full overflow-hidden">
-                    <motion.div initial={{ width: 0 }} animate={{ width: '85%' }} className="h-full bg-amber-500" />
-                 </div>
-              </div>
-              <div className="md-card !p-5 bg-white/60 backdrop-blur-md border-none flex flex-col gap-3">
-                 <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-black uppercase text-md-outline tracking-widest leading-none">Score DSO1</span>
-                    <Award size={14} className="text-md-primary" />
-                 </div>
-                 <div className="h-1.5 bg-md-surface-container-low rounded-full overflow-hidden">
-                    <motion.div initial={{ width: 0 }} animate={{ width: '92%' }} className="h-full bg-md-primary" />
-                 </div>
-              </div>
+        </div>
+
+        {/* COL 2 : Caméra du Délégué */}
+        <div className="md-card !p-0 overflow-hidden bg-md-surface-container-low/30 relative flex flex-col shadow-xl border-none">
+           <div className="flex-1 flex flex-col p-4 w-full h-full">
+              <CameraPanel label="Flux Délégué" />
            </div>
         </div>
 
-        {/* COL 2 : Caméra du Délégué (30%) */}
-        <div className="flex-[0.3] p-8 border-x border-md-outline/10 bg-md-surface-container-low/30 relative flex flex-col">
-           <div className="flex-1">
-              <CameraPanel label="Délégué" />
-           </div>
-           
-           <div className="mt-8 p-6 bg-md-on-background text-white rounded-[28px] shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-md-primary/20 blur-2xl -z-10" />
-              <div className="flex items-center gap-3 mb-4">
-                 <ShieldCheck size={16} className="text-md-primary" />
-                 <h4 className="text-[10px] font-black uppercase tracking-widest opacity-60">Analyse de Posture</h4>
-              </div>
-              <p className="text-xs font-bold leading-relaxed opacity-80 uppercase tracking-tighter italic">
-                 "Maintenez un contact visuel direct avec l'avatar pour optimiser votre score de communication."
-              </p>
-           </div>
-        </div>
-
-        {/* COL 3 : Panneau de Chat Interactif (30%) */}
-        <div className="flex-[0.3] p-8 h-full bg-md-surface-container/50">
+        {/* COL 3 : Panneau de Chat Interactif */}
+        <div className="md-card !p-0 overflow-hidden bg-md-surface-container/50 relative flex flex-col shadow-xl border-none w-full h-full">
            <ChatPanel />
         </div>
 

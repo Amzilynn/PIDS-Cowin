@@ -41,13 +41,13 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
     ],
       delegate: [
         { to: '/delegate/home', icon: LayoutDashboard, label: 'Accueil' },
-        { to: '/delegate/training', icon: BrainCircuit, label: 'Formation (BO1)' },
-        { to: '/delegate/produits', icon: PackageCheck, label: 'Mes Produits (BO3)' },
-        { to: '/delegate/planner', icon: MapIcon, label: 'Ma Tournée (BO4)' },
+        { to: '/delegate/training', icon: BrainCircuit, label: 'Formation' },
+        { to: '/delegate/produits', icon: PackageCheck, label: 'Mes Produits' },
+        { to: '/delegate/planner', icon: MapIcon, label: 'Ma Tournée' },
         { to: '/delegate/profil', icon: User, label: 'Mon Profil' },
       ],
       practitioner: [
-        { to: '/practitioner/presentations', icon: PlusSquare, label: 'Salle de Présentation (BO2)' },
+        { to: '/practitioner/presentations', icon: PlusSquare, label: 'Salle de Présentation' },
       ]
   };
 
