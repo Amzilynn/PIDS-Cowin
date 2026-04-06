@@ -7,24 +7,40 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          navy: '#0B1B2B',
-          teal: '#4E8C8A',
-          aqua: '#5CA3A1',
-          slate: '#1E293B',
-          accent: '#3B82F6',
-        }
+        'md-primary': 'var(--color-md-primary)',
+        'md-on-primary': 'var(--color-md-on-primary)',
+        'md-secondary-container': 'var(--color-md-secondary-container)',
+        'md-on-secondary-container': 'var(--color-md-on-secondary-container)',
+        'md-tertiary': 'var(--color-md-tertiary)',
+        'md-on-tertiary': 'var(--color-md-on-tertiary)',
+        'md-surface': 'var(--color-md-surface)',
+        'md-surface-container': 'var(--color-md-surface-container)',
+        'md-surface-container-low': 'var(--color-md-surface-container-low)',
+        'md-on-background': 'var(--color-md-on-background)',
+        'md-on-surface-variant': 'var(--color-md-on-surface-variant)',
+        'md-outline': 'var(--color-md-outline)',
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
-        '3xl': '1.5rem',
-        '4xl': '2rem',
+        'pill': '9999px',
+        'card': '24px',
+        'hero': '48px',
+        'dialog': '28px',
       },
-      backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #0B1B2B 0%, #1E293B 100%)',
-        'medical-gradient': 'linear-gradient(135deg, #4E8C8A 0%, #5CA3A1 100%)',
+      transitionTimingFunction: {
+        'md-emphasized': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+      animation: {
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+      },
+      keyframes: {
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        }
       }
     },
   },

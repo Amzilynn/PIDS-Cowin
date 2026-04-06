@@ -1,58 +1,65 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from './views/auth/LoginPage';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import MainLayout from './components/MainLayout';
-
-// Admin Pages
+import LoginPage from './views/auth/LoginPage';
 import AdminDashboard from './views/admin/AdminDashboard';
-
-// Delegate Pages
 import DelegateHome from './views/delegate/DelegateHome';
 import TrainingRoom from './views/delegate/TrainingRoom';
+import PresentationRoom from './views/delegate/PresentationRoom';
 import VisitPlanner from './views/delegate/VisitPlanner';
 import EvaluationResults from './views/delegate/EvaluationResults';
+import ProductRecommendations from './views/delegate/ProductRecommendations';
+import PractitionerView from './views/practitioner/PractitionerView';
 
-// Doctor Pages
-import DoctorView from './views/doctor/DoctorView';
+// Utilitaire pour extraire les paramètres de rôle de l'URL
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
-/**
- * MedDelegate Pro - Root Application
- * Role-based routing system with premium layout wrapping
- */
 export default function App() {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const roleParam = query.get('role') || 'delegate';
+  const subRoleParam = query.get('sub') || 'medical';
+  const searchStr = location.search;
+
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Authentication */}
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<Navigate to="/" replace />} />
+    <Routes>
+      {/* Page de Connexion sans Sidebar */}
+      <Route path="/" element={<LoginPage />} />
 
-        {/* Admin Workspace */}
-        <Route path="/admin" element={<MainLayout role="admin" />}>
-          <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="delegates" element={<div className="p-10 text-brand-navy font-black">Delegate Management View (Planned)</div>} />
-          <Route path="reports" element={<div className="p-10 text-brand-navy font-black">Analytics Reports View (Planned)</div>} />
-        </Route>
+      {/* Routes Administrateur */}
+      <Route path="/admin" element={<MainLayout role="admin" />}>
+        <Route index element={<Navigate to={`dashboard${searchStr}`} replace />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="stats" element={<AdminDashboard />} />
+        <Route path="delegues" element={<AdminDashboard />} />
+        <Route path="parametres" element={<AdminDashboard />} />
+      </Route>
 
-        {/* Delegate Workspace */}
-        <Route path="/delegate" element={<MainLayout role="delegate" />}>
-          <Route index element={<Navigate to="home" replace />} />
-          <Route path="home" element={<DelegateHome />} />
-          <Route path="training" element={<TrainingRoom />} />
-          <Route path="planner" element={<VisitPlanner />} />
-          <Route path="results" element={<EvaluationResults />} />
-        </Route>
+      {/* Routes Délégué (Médical ou Commercial) */}
+      <Route path="/delegate" element={<MainLayout role="delegate" subRole={subRoleParam} />}>
+        <Route index element={<Navigate to={`home${searchStr}`} replace />} />
+        <Route path="home" element={<DelegateHome subRole={subRoleParam} />} />
+        <Route path="training" element={<TrainingRoom type={subRoleParam} />} />
+        <Route path="presentation" element={<PresentationRoom subRole={subRoleParam} />} />
+        <Route path="produits" element={<ProductRecommendations subRole={subRoleParam} />} />
+        <Route path="planner" element={<VisitPlanner />} />
+        <Route path="results" element={<EvaluationResults />} />
+        <Route path="profil" element={<DelegateHome subRole={subRoleParam} />} />
+      </Route>
 
-        {/* Doctor Workspace */}
-        <Route path="/doctor" element={<MainLayout role="doctor" />}>
-          <Route index element={<Navigate to="receiver" replace />} />
-          <Route path="receiver" element={<DoctorView />} />
-        </Route>
+      {/* Routes Praticien (Médecin ou Pharmacien) */}
+      <Route path="/practitioner" element={<MainLayout role="practitioner" subRole={subRoleParam} />}>
+        <Route index element={<Navigate to={`presentations${searchStr}`} replace />} />
+        <Route path="home" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
+        <Route path="presentations" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
+        <Route path="agenda" element={<VisitPlanner />} /> {/* Réutilisation du Planner compatible */}
+        <Route path="profil" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
+      </Route>
 
-        {/* Global Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+      {/* Redirection par défaut */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

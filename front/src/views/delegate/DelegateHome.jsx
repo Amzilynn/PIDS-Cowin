@@ -1,202 +1,210 @@
 import React from 'react';
 import { 
-  Play, 
-  Map as MapIcon, 
-  Box, 
-  TrendingUp, 
-  Calendar, 
-  ChevronRight, 
+  BrainCircuit, 
+  PlusSquare, 
+  PackageCheck, 
+  Map as MapIcon,
+  TrendingUp,
+  Award,
+  Calendar,
+  MessageSquare,
+  ArrowRight,
+  ChevronRight,
+  Activity,
   Star,
-  Clock,
-  ArrowRight
+  Zap,
+  Target
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
-const recommendedProducts = [
-  { id: 1, name: "Cardia-Max Pro", category: "Cardiology", focus: "HFpEF", score: 92 },
-  { id: 2, name: "Gluco-Shield Elite", category: "Endocrine", focus: "T2D Management", score: 85 },
-  { id: 3, name: "Renal-Active v2", category: "Nephrology", focus: "CKD Stage 3", score: 78 }
+const performanceData = [
+  { day: 'Lun', score: 72 }, { day: 'Mar', score: 85 }, { day: 'Mer', score: 78 },
+  { day: 'Jeu', score: 91 }, { day: 'Ven', score: 88 }, { day: 'Sam', score: 94 },
+  { day: 'Dim', score: 90 },
 ];
 
-const stats = [
-  { label: 'Overall Readiness', value: '84%', icon: Star, color: 'text-amber-500 bg-amber-50' },
-  { label: 'Simulations Done', value: '12/15', icon: Play, color: 'text-brand-teal bg-brand-teal/5' },
-  { label: 'Map Efficiency', value: '76.8%', icon: MapIcon, color: 'text-blue-500 bg-blue-50' },
-  { label: 'Next Scheduled', value: '14:30', icon: Clock, color: 'text-brand-navy bg-brand-navy/5' },
-];
+export default function DelegateHome({ subRole = 'medical' }) {
+  const navigate = useNavigate();
+  const isMedical = subRole === 'medical';
+  const roleTitle = isMedical ? 'Délégué Médical' : 'Délégué Commercial';
+  const presentedTo = isMedical ? 'médecin' : 'pharmacien';
 
-export default function DelegateHome({ user = { name: "Sarah" } }) {
+  const navigateTo = (path) => {
+    navigate(`${path}?role=delegate&sub=${subRole}`);
+  };
+
   return (
-    <div className="space-y-8 animate-fade-in-up">
-      {/* Welcome Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-           <div className="flex items-center gap-2 mb-2">
-              <span className="text-[10px] font-black bg-brand-teal text-white px-3 py-1 rounded-full uppercase tracking-widest">Medical Sector</span>
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Zone: North District</span>
+    <div className="space-y-12 animate-fade-in pb-20 relative">
+      {/* Background Organic Glow */}
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] organic-glow bg-md-primary/10 rounded-full -z-10" />
+      
+      {/* Personalized Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 relative z-10">
+        <div className="space-y-4">
+           <div className="flex items-center gap-4">
+               <div className="w-12 h-12 rounded-2xl bg-md-secondary-container flex items-center justify-center text-md-primary shadow-lg shadow-md-primary/10 transition-transform hover:rotate-12">
+                  <Zap size={24} fill="currentColor" />
+               </div>
+               <span className="text-[11px] font-black text-md-primary uppercase tracking-[0.5em] leading-none">Unité de Performance Active</span>
            </div>
-           <h1 className="text-4xl font-black text-brand-navy tracking-tighter">Welcome Back, <span className="text-brand-teal">{user.name}</span>.</h1>
-           <p className="text-slate-500 font-semibold mt-1">Ready for your daily training and territory optimization?</p>
+           <h1 className="text-6xl font-black text-md-on-background tracking-tighter leading-[0.9] uppercase">Bonjour, <br/><span className={`${isMedical ? 'text-md-primary' : 'text-emerald-500'} italic lowercase`}>{isMedical ? 'Sarah' : 'Marc'}.</span></h1>
+           <p className="text-md-on-surface-variant font-bold text-xl leading-relaxed max-w-lg mt-4 opacity-70 italic tracking-tight">
+             Prête pour votre session d'excellence aujourd'hui en tant que <span className={`font-black not-italic ${isMedical ? 'text-md-on-background' : 'text-emerald-600'}`}>{roleTitle}</span> ?
+           </p>
         </div>
         
-        <div className="flex items-center gap-4">
-           <button className="px-8 py-4 bg-brand-navy text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-brand-navy/20 flex items-center gap-3 hover:scale-105 transition-all">
-              Launch Simulator <Play size={16} fill="currentColor" />
-           </button>
-        </div>
-      </div>
-
-      {/* Stats Summary Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {stats.map((s, i) => (
-          <motion.div 
-            key={i}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="p-6 bg-white rounded-4xl border border-slate-200 shadow-sm"
-          >
-             <div className={`w-10 h-10 rounded-2xl ${s.color} flex items-center justify-center mb-4`}>
-                <s.icon size={18} />
-             </div>
-             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{s.label}</p>
-             <h3 className="text-2xl font-black text-brand-navy tracking-tight">{s.value}</h3>
-          </motion.div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* BO4: Visit Strategy Map Preview */}
-        <div className="lg:col-span-2 space-y-6">
-           <div className="flex items-center justify-between">
-              <h2 className="text-xl font-extrabold text-brand-navy tracking-tight">Daily Visit Strategy <span className="text-brand-teal">(BO4)</span></h2>
-              <button className="text-[10px] font-black text-brand-teal uppercase tracking-widest flex items-center gap-2 hover:underline">
-                 Optimize Map <ArrowRight size={12} />
-              </button>
+        <motion.div 
+           whileHover={{ y: -8, scale: 1.02 }}
+           className="p-8 bg-md-on-background text-white rounded-[48px] shadow-2xl flex items-center gap-8 group cursor-pointer border border-white/10"
+        >
+           <div className="w-20 h-20 rounded-full bg-md-primary/20 flex items-center justify-center border-4 border-white/5 relative group-hover:bg-md-primary/40 transition-colors">
+              <Star size={32} fill="var(--color-md-primary)" className="group-hover:rotate-12 transition-transform" />
+              <div className="absolute inset-0 bg-md-primary/20 blur-xl rounded-full animate-pulse" />
            </div>
-           
-           <div className="relative h-[360px] bg-slate-100 rounded-[48px] border-4 border-white shadow-2xl overflow-hidden group">
-              {/* This would be the Leaflet map in a real implementation */}
-              <div className="absolute inset-0 bg-[#f9fafb] flex items-center justify-center">
-                 <div className="w-full h-full opacity-40 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=40.7128,-74.0060&zoom=13&size=800x400&sensor=false')] bg-cover bg-center grayscale" />
-                 <div className="absolute inset-0 bg-brand-navy/5" />
-                 
-                 {/* Map Overlays: Destinations */}
-                 {[
-                    { t: '15%', l: '30%', n: 'Dr. Ross' },
-                    { t: '45%', l: '60%', n: 'Clinic Med-X' },
-                    { t: '70%', l: '20%', n: 'Apex Pharma' }
-                 ].map((p, i) => (
-                    <motion.div 
-                       key={i}
-                       style={{ top: p.t, left: p.l }}
-                       initial={{ scale: 0 }}
-                       animate={{ scale: 1 }}
-                       transition={{ delay: 0.5 + (i * 0.2) }}
-                       className="absolute flex flex-col items-center gap-2"
-                    >
-                       <div className="w-4 h-4 bg-brand-teal rounded-full border-4 border-white shadow-lg ring-4 ring-brand-teal/20" />
-                       <div className="px-3 py-1 bg-white rounded-lg shadow-xl text-[9px] font-black text-brand-navy uppercase tracking-tight opacity-0 group-hover:opacity-100 transition-opacity">
-                          {p.n}
-                       </div>
-                    </motion.div>
-                 ))}
-                 
-                 {/* Route Line Simulation */}
-                 <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
-                    <motion.path 
-                       d="M200,100 L350,200 L150,300" 
-                       stroke="#4E8C8A" 
-                       strokeWidth="4" 
-                       strokeDasharray="10 5" 
-                       fill="none"
-                       initial={{ pathLength: 0 }}
-                       animate={{ pathLength: 1 }}
-                       transition={{ duration: 2, repeat: Infinity }}
-                    />
-                 </svg>
-              </div>
-              
-              {/* Itinerary Overlay Card */}
-              <div className="absolute bottom-6 left-6 right-6 p-6 glass-card rounded-4xl flex items-center justify-between">
-                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-brand-navy flex flex-col items-center justify-center text-white">
-                       <span className="text-[10px] font-black uppercase text-brand-teal leading-none mb-0.5">MAR</span>
-                       <span className="text-xl font-black leading-none">05</span>
-                    </div>
-                    <div>
-                       <p className="text-brand-navy font-extrabold text-sm tracking-tight">Optimal Routing Ready</p>
-                       <p className="text-slate-500 font-bold text-xs">3 Visits • Est. Duration 4h 20m</p>
-                    </div>
-                 </div>
-                 <button className="p-4 bg-brand-navy text-white rounded-2xl shadow-xl shadow-brand-navy/20 active:scale-95 transition-all">
-                    <MapIcon size={20} />
-                 </button>
+           <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 leading-none mb-2">Certification Actuelle</p>
+              <h3 className="text-3xl font-black tracking-tighter leading-none uppercase italic text-md-primary">Élite DSO1</h3>
+              <div className="mt-2 flex items-center gap-2">
+                 <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                 <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Profil Validé</span>
               </div>
            </div>
-        </div>
-
-        {/* BO3: Smart Product Recommender */}
-        <div className="space-y-6">
-           <div className="flex items-center justify-between">
-              <h2 className="text-xl font-extrabold text-brand-navy tracking-tight">AI Recommender <span className="text-brand-teal">(BO3)</span></h2>
-           </div>
-           
-           <div className="space-y-4">
-              {recommendedProducts.map((p, i) => (
-                 <motion.div 
-                    key={i}
-                    whileHover={{ x: 6 }}
-                    className="p-6 bg-white rounded-4xl border border-slate-200 shadow-sm flex flex-col gap-4 group"
-                 >
-                    <div className="flex items-start justify-between">
-                       <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand-teal group-hover:bg-brand-teal group-hover:text-white transition-all">
-                          <Box size={20} />
-                       </div>
-                       <div className="text-right">
-                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Priority Index</p>
-                          <p className="text-sm font-black text-brand-navy">{p.score}%</p>
-                       </div>
-                    </div>
-                    
-                    <div>
-                       <h4 className="text-lg font-black text-brand-navy tracking-tight">{p.name}</h4>
-                       <p className="text-[10px] font-bold text-brand-teal uppercase tracking-widest">{p.category} • {p.focus}</p>
-                    </div>
-                    
-                    <button className="mt-2 w-full py-3 border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:border-brand-teal group-hover:text-brand-teal transition-all">
-                       Review Detailing Assets
-                    </button>
-                 </motion.div>
-              ))}
-              
-              <div className="p-8 bg-brand-gradient rounded-4xl text-white text-center flex flex-col items-center gap-4 shadow-xl">
-                 <div className="w-12 h-12 rounded-full border-2 border-brand-teal/40 flex items-center justify-center">
-                    <TrendingUp size={20} className="text-brand-teal" />
-                 </div>
-                 <p className="text-xs font-bold leading-relaxed">Your detailing score on <span className="text-brand-teal font-black">SGLT2 inhibitors</span> is increasing. Recommending advanced cardio modules.</p>
-                 <button className="w-full py-3 bg-brand-teal text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-brand-aqua transition-colors">
-                    Start Learning Path
-                 </button>
-              </div>
-           </div>
-        </div>
+        </motion.div>
       </div>
 
-      <style jsx>{`
-        .glass-card {
-          background: rgba(255, 255, 255, 0.7);
-          backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-        }
-      `}</style>
+      {/* Main Action Grid (4 Cards - BO1 to BO4) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+         {[
+           { 
+             title: 'Formation (BO1)', 
+             desc: 'Simulateur cognitif & flux conversationnel IA', 
+             cta: 'Lancer Simulation', 
+             icon: BrainCircuit, 
+             color: 'bg-md-primary/10 text-md-primary',
+             path: '/delegate/training'
+           },
+           { 
+             title: `Présentation (BO2)`, 
+             desc: `Pitching clinique haute-fidélité au ${presentedTo}`, 
+             cta: 'Commencer Session', 
+             icon: PlusSquare, 
+             color: 'bg-indigo-500/10 text-indigo-600',
+             path: '/delegate/presentation'
+           },
+           { 
+             title: 'Produits (BO3)', 
+             desc: 'Analyse prédictive des gammes prioritaires', 
+             cta: 'Recommandations', 
+             icon: PackageCheck, 
+             color: 'bg-emerald-500/10 text-emerald-600',
+             path: '/delegate/produits'
+           },
+           { 
+             title: 'Visites (BO4)', 
+             desc: 'Planification optimale & itinéraire IA', 
+             cta: 'Ma Tournée', 
+             icon: MapIcon, 
+             color: 'bg-md-on-background/5 text-md-on-background',
+             path: '/delegate/planner'
+           },
+         ].filter(c => c.title !== 'Présentation (BO2)').map((card, i) => (
+            <motion.div 
+               whileHover={{ y: -12, scale: 1.02 }}
+               key={i} 
+               onClick={() => navigateTo(card.path)}
+               className="md-card flex flex-col items-start gap-10 group bg-white border-none shadow-xl hover:shadow-2xl cursor-pointer p-10 overflow-hidden relative"
+            >
+               <div className="absolute top-0 right-0 w-32 h-32 bg-md-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700" />
+               
+               <div className={`w-16 h-16 rounded-[24px] ${card.color} flex items-center justify-center shadow-inner group-hover:shadow-md transition-all duration-500 relative z-10`}>
+                  <card.icon size={30} strokeWidth={2.5} />
+               </div>
+               <div className="flex-1 relative z-10">
+                   <h4 className="text-2xl font-black text-md-on-background tracking-tighter uppercase leading-none">{card.title}</h4>
+                   <p className="text-xs font-bold text-md-on-surface-variant opacity-60 mt-3 leading-relaxed uppercase tracking-widest">{card.desc}</p>
+               </div>
+               <button className="relative z-10 w-full btn-tonal !h-14 group flex items-center justify-between px-8 border border-md-outline/10 shadow-sm hover:shadow-md transition-all !rounded-2xl">
+                  <span className="text-[11px] font-black uppercase tracking-[0.2em]">{card.cta}</span>
+                  <ChevronRight size={18} className="group-hover:translate-x-2 transition-transform" />
+               </button>
+            </motion.div>
+         ))}
+      </div>
+
+      {/* Metrics & Activity Summary */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10">
+         
+         {/* Performance AreaChart */}
+         <div className="lg:col-span-8 md-card p-12 flex flex-col gap-10 bg-white border-none shadow-xl">
+            <div className="flex items-center justify-between">
+               <div className="space-y-1">
+                  <h3 className="text-2xl font-black text-md-on-background tracking-tighter uppercase">Courbe de Performance DSO</h3>
+                  <p className="text-xs font-bold text-md-on-surface-variant opacity-60 uppercase tracking-widest italic leading-none">Progression analytique sur les 7 derniers jours</p>
+               </div>
+               <div className="flex items-center gap-3 px-6 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-full shadow-sm">
+                  <TrendingUp size={20} className="text-emerald-500" />
+                  <span className="text-xs font-black text-emerald-500 uppercase tracking-widest leading-none">+18.4%</span>
+               </div>
+            </div>
+            
+            <div className="h-[300px] w-full mt-4">
+               <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={performanceData}>
+                     <defs>
+                        <linearGradient id="colorScoreHome" x1="0" y1="0" x2="0" y2="1">
+                           <stop offset="5%" stopColor="var(--color-md-primary)" stopOpacity={0.4}/>
+                           <stop offset="95%" stopColor="var(--color-md-primary)" stopOpacity={0}/>
+                        </linearGradient>
+                     </defs>
+                     <XAxis dataKey="day" hide />
+                     <Tooltip 
+                        contentStyle={{ borderRadius: '28px', border: 'none', boxShadow: '0 20px 50px -10px rgba(0,0,0,0.1)', padding: '24px', backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)' }}
+                        itemStyle={{ fontWeight: 900, color: 'var(--color-md-primary)', textTransform: 'uppercase', fontSize: '14px' }}
+                     />
+                     <Area 
+                        type="monotone" 
+                        dataKey="score" 
+                        stroke="var(--color-md-primary)" 
+                        strokeWidth={8} 
+                        fillOpacity={1} 
+                        fill="url(#colorScoreHome)" 
+                        animationDuration={2000}
+                     />
+                  </AreaChart>
+               </ResponsiveContainer>
+            </div>
+         </div>
+
+         {/* Prochaine Étape / Focus */}
+         <div className="lg:col-span-4 flex flex-col gap-8">
+            <div className="bg-md-on-background text-white p-12 rounded-[48px] flex-1 flex flex-col justify-between shadow-2xl relative overflow-hidden group border border-white/5">
+               <div className="absolute top-0 right-0 w-64 h-64 organic-glow bg-md-primary/20 blur-[100px] -z-10 group-hover:scale-150 transition-all duration-1000" />
+               
+               <div className="relative z-10">
+                  <div className="flex items-center gap-4 mb-10">
+                     <div className="w-12 h-12 bg-md-primary rounded-2xl flex items-center justify-center text-white shadow-xl shadow-md-primary/30">
+                        <Calendar size={24} />
+                     </div>
+                     <h4 className="text-[11px] font-black uppercase tracking-[0.4em] opacity-50">Focus Terrain</h4>
+                  </div>
+                  <h3 className="text-4xl font-black tracking-tighter leading-[1] mb-4 uppercase">Visite Critique au <br /><span className="text-md-primary italic lowercase">Dr. Jean-Pierre.</span></h3>
+                  <div className="flex items-center gap-3 text-xs font-bold opacity-40 uppercase tracking-[0.2em] italic">
+                     <Target size={16} /> Paris 16e — 14:30 Aujourd'hui
+                  </div>
+               </div>
+               
+               <button 
+                 onClick={() => navigateTo('/delegate/planner')}
+                 className="relative z-10 w-full py-6 bg-white/5 hover:bg-md-primary hover:text-white rounded-3xl border border-white/10 transition-all duration-500 font-black text-[12px] uppercase tracking-[0.3em] mt-10 group shadow-lg"
+               >
+                  Préparer la Tournée
+                  <ArrowRight size={20} className="inline ml-4 group-hover:translate-x-3 transition-transform" />
+               </button>
+            </div>
+         </div>
+      </div>
     </div>
   );
 }

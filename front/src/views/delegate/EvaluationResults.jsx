@@ -1,176 +1,218 @@
 import React from 'react';
 import { 
+  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, 
+  ResponsiveContainer, RadialBarChart, RadialBar, Legend, Tooltip 
+} from 'recharts';
+import { 
   Award, 
-  Target, 
   TrendingUp, 
   CheckCircle2, 
   AlertCircle, 
-  ChevronRight,
-  TrendingDown,
-  Star,
+  ArrowRight, 
+  Star, 
+  BrainCircuit, 
+  MessageSquare, 
+  Zap,
   Activity,
-  Download
+  UserCheck,
+  ShieldCheck,
+  Target
 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { 
-  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer 
-} from 'recharts';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
-const radarData = [
-  { subject: 'Clinical Knowledge', A: 92, fullMark: 100 },
-  { subject: 'Pitch Confidence', A: 78, fullMark: 100 },
-  { subject: 'Eye Contact', A: 85, fullMark: 100 },
-  { subject: 'Objection Handling', A: 64, fullMark: 100 },
-  { subject: 'Empathy', A: 88, fullMark: 100 },
-  { subject: 'Compliance', A: 96, fullMark: 100 },
+const radialData = [
+  { name: 'Score Global', value: 87, fill: 'var(--color-md-primary)' }
+];
+
+const competenceData = [
+  { subject: 'Produit', A: 90, fullMark: 100 },
+  { subject: 'Communication', A: 98, fullMark: 100 },
+  { subject: 'Argumentation', A: 86, fullMark: 100 },
+  { subject: 'Présentation', A: 92, fullMark: 100 },
+  { subject: 'Objections', A: 75, fullMark: 100 },
 ];
 
 export default function EvaluationResults() {
-  const overallScore = 84;
-  const dsoRating = "DSO-A+";
+  const navigate = useNavigate();
 
   return (
-    <div className="space-y-8 animate-fade-in-up">
-      {/* Header with DSO Badge */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-10 bg-brand-navy rounded-[48px] border border-white/10 shadow-2xl relative overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-brand-teal/10 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3" />
-        
-        <div className="relative z-10">
-           <div className="flex items-center gap-3 mb-2">
-              <span className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em]">Session Identity: #SIM-2026-X42</span>
-           </div>
-           <h1 className="text-4xl font-black text-white tracking-tighter mb-2">Mission <span className="text-brand-teal">Evaluation</span> Complete.</h1>
-           <p className="text-white/50 font-semibold text-lg">Your performance has been audited by Ava Intelligence v4.1</p>
-        </div>
+    <div className="space-y-12 animate-fade-in pb-20 relative z-10">
+      {/* Background Decor - Organic Glow Signature */}
+      <div className="fixed bottom-0 left-0 w-[800px] h-[800px] bg-md-primary/5 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none -z-10" />
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10" />
 
-        <motion.div 
-           initial={{ scale: 0.8, opacity: 0 }}
-           animate={{ scale: 1, opacity: 1 }}
-           className="relative z-10 flex flex-col items-center p-8 bg-white rounded-3xl shadow-xl shadow-brand-navy/20"
-        >
-           <div className="w-20 h-20 rounded-full bg-brand-teal/10 flex items-center justify-center text-brand-teal mb-4 relative">
-              <Star size={40} className="fill-current animate-pulse" />
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-emerald-500 rounded-full border-4 border-white" />
-           </div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 text-center font-sans leading-none">Global Certified Rating</p>
-           <h2 className="text-2xl font-black text-brand-navy tracking-tight uppercase leading-none">{dsoRating}</h2>
-        </motion.div>
+      {/* Header Résultat - Impact Visuel Maximum */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+         <div className="space-y-6 text-center md:text-left flex-1">
+            <div className="flex items-center justify-center md:justify-start gap-4">
+               <div className="w-12 h-12 rounded-2xl bg-md-primary/10 text-md-primary flex items-center justify-center shadow-lg shadow-md-primary/5">
+                  <Award size={24} />
+               </div>
+               <span className="text-[11px] font-black text-md-primary uppercase tracking-[0.5em] leading-none">Certification de Session v2.4</span>
+            </div>
+            <h1 className="text-7xl font-black text-md-on-background tracking-tighter leading-[0.9] uppercase">Analyse de <br/><span className="text-md-primary italic lowercase">performance.</span></h1>
+            <p className="text-md-on-surface-variant font-bold text-xl leading-relaxed max-w-xl italic opacity-70 tracking-tight">
+               Évaluation haute-fidélité de votre session simulator. Vos scores DSO reflètent une excellente maîtrise du protocole clinique.
+            </p>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-4">
+               <div className="px-6 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center gap-3">
+                  <ShieldCheck size={18} className="text-emerald-500" />
+                  <span className="text-xs font-black text-emerald-500 uppercase tracking-widest leading-none">Profil Validé DSO1</span>
+               </div>
+               <div className="px-6 py-3 bg-md-primary/10 border border-md-primary/20 rounded-full flex items-center gap-3">
+                  <Target size={18} className="text-md-primary" />
+                  <span className="text-xs font-black text-md-primary uppercase tracking-widest leading-none">+12% vs Moyenne</span>
+               </div>
+            </div>
+         </div>
+
+         {/* Radial Score Gauge - Centre d'Intérêt */}
+         <div className="relative w-80 h-80 flex items-center justify-center group">
+            <div className="absolute inset-0 bg-md-primary/5 rounded-full blur-3xl animate-pulse group-hover:bg-md-primary/10 transition-all duration-1000" />
+            <ResponsiveContainer width="100%" height="100%">
+               <RadialBarChart 
+                 cx="50%" cy="50%" 
+                 innerRadius="75%" outerRadius="100%" 
+                 barSize={18} 
+                 data={radialData} 
+                 startAngle={90} endAngle={-270}
+               >
+                  <RadialBar 
+                    minAngle={15} 
+                    background={{ fill: 'var(--color-md-surface-container-low)' }} 
+                    clockWise={true} 
+                    dataKey="value" 
+                    cornerRadius={20}
+                    className="drop-shadow-2xl"
+                  />
+               </RadialBarChart>
+            </ResponsiveContainer>
+            <div className="absolute inset-0 flex flex-col items-center justify-center transform group-hover:scale-110 transition-transform duration-700">
+               <motion.span 
+                 initial={{ opacity: 0, scale: 0.5 }} 
+                 animate={{ opacity: 1, scale: 1 }} 
+                 transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+                 className="text-7xl font-black text-md-on-background tracking-tighter"
+               >
+                 87<span className="text-3xl text-md-primary font-bold">/100</span>
+               </motion.span>
+               <span className="text-[11px] font-black text-md-primary uppercase tracking-[0.4em] mt-3 opacity-60">Score Médical</span>
+            </div>
+         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Radar Analysis Chart */}
-        <div className="p-10 bg-white rounded-[40px] border border-slate-200 shadow-sm flex flex-col">
-           <div className="flex items-center justify-between mb-8">
-              <div>
-                 <h3 className="text-xl font-extrabold text-brand-navy tracking-tight">Competency Architecture</h3>
-                 <p className="text-[10px] font-black text-brand-teal uppercase tracking-widest">Normalized Audit Metrics</p>
-              </div>
-              <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand-teal">
-                 <Activity size={20} />
-              </div>
-           </div>
-           
-           <div className="flex-1 min-h-[360px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                 <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-                   <PolarGrid stroke="#e2e8f0" />
-                   <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fontWeight: 800, fill: '#64748b' }} />
-                   <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                   <Radar 
-                      name="SARAH" 
-                      dataKey="A" 
-                      stroke="#4E8C8A" 
-                      fill="#4E8C8A" 
-                      fillOpacity={0.2} 
-                      strokeWidth={3}
-                   />
-                 </RadarChart>
-              </ResponsiveContainer>
-           </div>
-           
-           <div className="mt-6 flex items-center justify-center gap-8">
-              <div className="flex items-center gap-2">
-                 <div className="w-3 h-3 rounded-full bg-brand-teal/20 border-2 border-brand-teal" />
-                 <span className="text-xs font-bold text-slate-500">Current Session</span>
-              </div>
-              <div className="flex items-center gap-2">
-                 <div className="w-3 h-3 rounded-full bg-slate-100 border-2 border-slate-200" />
-                 <span className="text-xs font-bold text-slate-400">Regional Average</span>
-              </div>
-           </div>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+         
+         {/* Detailed Metrics - Pill-style progress bars */}
+         <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-5 gap-8">
+            {[
+               { label: 'Produit', value: 90, icon: BrainCircuit, color: 'bg-emerald-500' },
+               { label: 'Communication', value: 92, icon: MessageSquare, color: 'bg-md-primary' },
+               { label: 'Argumentation', value: 86, icon: TrendingUp, color: 'bg-indigo-500' },
+               { label: 'Présentation', value: 92, icon: UserCheck, color: 'bg-md-on-background' },
+               { label: 'Objections', value: 75, icon: AlertCircle, color: 'bg-rose-500' },
+            ].map((metric, i) => (
+               <motion.div 
+                 key={i} 
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: i * 0.1, duration: 0.6 }}
+                 className="md-card p-8 flex flex-col gap-8 group hover:translate-y-[-10px] bg-white border-none shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
+               >
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-md-primary/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className={`w-14 h-14 rounded-[20px] ${metric.color} text-white flex items-center justify-center shadow-lg relative z-10 transition-transform group-hover:rotate-12`}>
+                     <metric.icon size={26} strokeWidth={2.5} />
+                  </div>
+                  <div className="space-y-4 relative z-10">
+                     <div className="flex items-center justify-between">
+                        <p className="text-[10px] font-black uppercase text-md-on-surface-variant tracking-[0.2em] opacity-60 leading-none">{metric.label}</p>
+                        <span className="text-base font-black text-md-on-background tracking-tighter">{metric.value}%</span>
+                     </div>
+                     <div className="w-full h-2 bg-md-surface-container-low rounded-pill overflow-hidden shadow-inner">
+                        <motion.div 
+                           initial={{ width: 0 }} 
+                           animate={{ width: `${metric.value}%` }} 
+                           transition={{ duration: 2, ease: "easeOut", delay: 0.8 }}
+                           className={`h-full ${metric.color} rounded-pill shadow-lg opacity-80`} 
+                        />
+                     </div>
+                  </div>
+               </motion.div>
+            ))}
+         </div>
 
-        {/* Detailed Breakdown & Tips */}
-        <div className="space-y-6 flex flex-col h-full">
-           <div className="grid grid-cols-2 gap-6">
-              {[
-                 { label: 'Overall Progress', value: '84%', icon: TrendingUp, color: 'emerald' },
-                 { label: 'Global Ranking', value: 'TOP 12%', icon: Award, color: 'brand-teal' }
-              ].map((card, i) => (
-                 <div key={i} className="p-6 bg-white rounded-4xl border border-slate-200 shadow-sm flex flex-col gap-4">
-                    <div className={`w-10 h-10 rounded-2xl bg-brand-teal/5 flex items-center justify-center text-brand-teal`}>
-                       <card.icon size={20} />
-                    </div>
-                    <div>
-                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">{card.label}</p>
-                       <h4 className="text-2xl font-black text-brand-navy tracking-tight leading-none">{card.value}</h4>
-                    </div>
-                 </div>
-              ))}
-           </div>
+         {/* Radar Map - Cartographie Visuelle (8 Cols) */}
+         <div className="lg:col-span-8 md-card p-12 flex flex-col gap-10 bg-white border-none shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full bg-md-primary/[0.02] pointer-events-none -z-10" />
+            <div className="space-y-1">
+               <h3 className="text-2xl font-black text-md-on-background tracking-tighter text-center uppercase leading-none">Cartographie des Compétences</h3>
+               <p className="text-xs font-bold text-md-on-surface-variant opacity-60 text-center uppercase tracking-widest mt-2 underline underline-offset-8 decoration-2 decoration-md-primary/20">Analyse pluridimensionnelle IA</p>
+            </div>
+            <div className="h-[450px] w-full mt-6">
+               <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart cx="50%" cy="50%" outerRadius="80%" data={competenceData}>
+                     <PolarGrid stroke="var(--color-md-outline)" strokeOpacity={0.1} />
+                     <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fontWeight: 900, fill: 'var(--color-md-on-surface-variant)', textTransform: 'uppercase', tracking: '2px' }} />
+                     <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                     <Radar 
+                        name="Ma Performance" 
+                        dataKey="A" 
+                        stroke="var(--color-md-primary)" 
+                        fill="var(--color-md-primary)" 
+                        fillOpacity={0.5} 
+                        strokeWidth={6} 
+                        animationDuration={2500}
+                     />
+                  </RadarChart>
+               </ResponsiveContainer>
+            </div>
+         </div>
 
-           <div className="flex-1 p-10 bg-white rounded-[40px] border border-slate-200 shadow-sm overflow-hidden relative">
-              <h3 className="text-xl font-extrabold text-brand-navy tracking-tight mb-8">Intelligence <span className="text-brand-teal">Insights</span> & Tips</h3>
-              
-              <div className="space-y-8">
-                 {[
-                    { type: 'SUCCESS', icon: CheckCircle2, color: 'text-emerald-500', msg: "Clinical depth on SGLT2i kidney data is consistent and accurate. You demonstrated high professionalism during objections." },
-                    { type: 'IMPROVEMENT', icon: TrendingDown, color: 'text-brand-teal', msg: "Pitch confidence dropped by 14% when discussing ROI for the patient loyalty program. Suggest reviewing the Commercial Assets module." },
-                    { type: 'ACTION', icon: AlertCircle, color: 'text-brand-navy', msg: "Schedule a BO1 simulation for 'Specialist Objections' to bridge the current handling gap." }
-                 ].map((tip, i) => (
-                    <motion.div 
-                       key={i}
-                       initial={{ x: 20, opacity: 0 }}
-                       animate={{ x: 0, opacity: 1 }}
-                       transition={{ delay: i * 0.1 }}
-                       className="flex items-start gap-4"
-                    >
-                       <tip.icon size={20} className={`${tip.color} mt-1`} />
-                       <div>
-                          <p className={`text-[10px] font-black uppercase tracking-widest ${tip.color} mb-1`}>{tip.type}</p>
-                          <p className="text-sm font-semibold text-slate-600 leading-relaxed">{tip.msg}</p>
-                       </div>
-                    </motion.div>
-                 ))}
-              </div>
+         {/* Axes d'Amélioration & Action (4 Cols) */}
+         <div className="lg:col-span-4 flex flex-col gap-10 h-full">
+            <div className="md-card p-12 flex flex-col gap-12 bg-md-on-background text-white rounded-[48px] shadow-2xl relative overflow-hidden flex-1 border border-white/5">
+               <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/10 blur-[100px] pointer-events-none -z-10 group-hover:scale-150 transition-all duration-1000" />
+               
+               <div className="relative z-10 flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-2xl bg-rose-500 flex items-center justify-center text-white shadow-xl shadow-rose-500/30 animate-pulse">
+                     <AlertCircle size={28} />
+                  </div>
+                  <h3 className="text-2xl font-black text-white tracking-tighter leading-none uppercase italic">Axe de Progès</h3>
+               </div>
+               
+               <div className="relative z-10 space-y-10">
+                  {[
+                     { title: "Raffinement Technique", desc: "Approfondir les mécanismes de transport cellulaire lors des objections.", icon: Zap, color: 'text-amber-500' },
+                     { title: "Rythme de Pitch", desc: "Optimiser les pauses narratives pour favoriser l'implication du praticien.", icon: Activity, color: 'text-emerald-500' },
+                     { title: "Postoure IA", desc: "Maintenir l'alignement face à la caméra (IA-Vision) à 85% du temps.", icon: BrainCircuit, color: 'text-md-primary' },
+                  ].map((tip, i) => (
+                     <div key={i} className="flex gap-6 group cursor-default">
+                        <div className={`mt-1 flex-shrink-0 group-hover:scale-125 transition-transform duration-500 ${tip.color}`}>
+                           <tip.icon size={22} strokeWidth={2.5} />
+                        </div>
+                        <div className="space-y-2">
+                           <h4 className="text-base font-black text-white uppercase tracking-tight leading-none">{tip.title}</h4>
+                           <p className="text-xs font-bold text-white/50 leading-relaxed uppercase tracking-widest">{tip.desc}</p>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+               
+               <div className="mt-auto pt-10 relative z-10">
+                  <button 
+                    onClick={() => navigate('/delegate/home')}
+                    className="w-full h-20 bg-md-primary text-white rounded-pill text-[12px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-6 shadow-2xl shadow-md-primary/40 group hover:scale-105 active:scale-95 transition-all relative overflow-hidden"
+                  >
+                     <span className="relative z-10">Nouvelle Session</span>
+                     <ArrowRight size={24} className="relative z-10 group-hover:translate-x-3 transition-transform duration-500" />
+                     <div className="absolute inset-0 shimmer-anim opacity-20 pointer-events-none" />
+                  </button>
+               </div>
+            </div>
+         </div>
 
-              <div className="mt-12 flex flex-col gap-3">
-                 <button className="w-full py-4 bg-brand-navy text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-brand-navy/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
-                    Download Official Cert <Download size={14} />
-                 </button>
-                 <button className="w-full py-4 border-2 border-slate-100 text-slate-400 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:border-brand-teal hover:text-brand-teal transition-all flex items-center justify-center gap-3">
-                    Review Simulation History <ChevronRight size={14} />
-                 </button>
-              </div>
-              
-              {/* Subtle background pulse animation in the corner */}
-              <div className="absolute top-0 right-0 p-8 opacity-5">
-                 <Target size={120} />
-              </div>
-           </div>
-        </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 }

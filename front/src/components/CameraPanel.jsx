@@ -1,71 +1,166 @@
-import React from 'react';
-import { Camera, CameraOff, Video } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Camera, CameraOff, Video, Mic, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function CameraPanel({ 
-  isActive = false, 
-  onToggle = () => {}, 
-  userName = "Medical Delegate",
-  className = ""
-}) {
-  return (
-    <div className={`relative bg-brand-slate rounded-3xl overflow-hidden border-2 transition-all duration-500 ${isActive ? 'border-brand-teal ring-4 ring-brand-teal/20' : 'border-white/10'} ${className}`}>
-      {/* Black screen placeholder */}
-      <div className="absolute inset-0 bg-black flex items-center justify-center">
-        {!isActive ? (
-          <div className="flex flex-col items-center gap-4 text-white/20">
-            <CameraOff size={48} strokeWidth={1.5} />
-            <p className="text-[10px] font-black uppercase tracking-[0.3em]">Camera Disabled</p>
-          </div>
-        ) : (
-          <div className="w-full h-full bg-slate-900 flex items-center justify-center relative overflow-hidden">
-             {/* Simulated video scanning overlay */}
-             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-             <div className="absolute top-0 left-0 w-full h-1 bg-brand-teal/40 blur-sm animate-[scan_3s_linear_infinite]" />
-             
-             {/* Silhouette for Delegate Placeholder */}
-             <div className="w-24 h-24 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                <Video size={40} className="text-white/20" />
-             </div>
-          </div>
-        )}
-      </div>
+export default function CameraPanel({ label = "Délégué" }) {
+  const [isActive, setIsActive] = useState(false);
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+  const [micLevel, setMicLevel] = useState([0, 0, 0, 0, 0, 0]);
 
-      {/* Overlay Status */}
-      <div className="absolute top-4 left-4 flex items-center gap-2 group">
-        <div className={`w-2 h-2 rounded-full transition-all duration-500 ${isActive ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-rose-500 shadow-[0_0_10px_#f43f5e]'}`} />
-        <span className="text-[10px] font-black text-white bg-black/40 blur-border backdrop-blur-md px-3 py-1.5 rounded-full uppercase tracking-widest border border-white/10">
-          Feed: {isActive ? 'Live' : 'Offline'}
-        </span>
-      </div>
-
-      {/* Control Button */}
-      <button 
-        onClick={onToggle}
-        className={`absolute top-4 right-4 p-3 rounded-2xl border backdrop-blur-md transition-all active:scale-90 ${isActive ? 'bg-brand-teal text-white border-brand-teal' : 'bg-white/5 text-white border-white/10 dark-hover hover:bg-white/10'}`}
-      >
-        {isActive ? <Camera size={18} /> : <CameraOff size={18} />}
-      </button>
-
-      {/* Delegate Info */}
-      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-        <div className="px-4 py-2 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10">
-           <p className="text-white font-extrabold text-[11px] uppercase tracking-tight">{userName}</p>
-        </div>
-        
-        {isActive && (
-           <div className="flex items-center gap-1 text-emerald-400 font-black text-[9px] uppercase tracking-widest animate-pulse">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" /> Connected
-           </div>
-        )}
-      </div>
-
-      <style jsx>{`
-        @keyframes scan {
-          0% { top: 0; }
-          100% { top: 100%; }
+  // Gestion du flux Caméra Réel
+  useEffect(() => {
+    async function startCamera() {
+      if (isActive) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { width: 1280, height: 720, facingMode: 'user' },
+            audio: false 
+          });
+          streamRef.current = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+          }
+        } catch (err) {
+          console.error("Erreur caméra:", err);
+          setIsActive(false);
+          alert("Impossible d'accéder à la caméra. Vérifiez les permissions.");
         }
-      `}</style>
+      } else {
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach(track => track.stop());
+          streamRef.current = null;
+        }
+      }
+    }
+    startCamera();
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [isActive]);
+
+  // Simulation de l'animation du micro quand actif
+  useEffect(() => {
+    let interval;
+    if (isActive) {
+      interval = setInterval(() => {
+        setMicLevel(prev => prev.map(() => Math.random() * 100));
+      }, 150);
+    } else {
+      setMicLevel([0, 0, 0, 0, 0, 0]);
+    }
+    return () => clearInterval(interval);
+  }, [isActive]);
+
+  return (
+    <div className="md-card h-full flex flex-col relative overflow-hidden bg-md-surface-container-low border-2 border-dashed border-md-primary/20">
+      
+      {/* Background patterns */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--color-md-primary) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+      
+      {/* Header Statut */}
+      <div className="flex items-center justify-between mb-6 relative z-10 px-2">
+         <div className="flex items-center gap-3">
+            <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse shadow-[0_0_12px_#10b981]' : 'bg-md-outline/40'}`} />
+            <span className="text-[11px] font-black uppercase tracking-widest text-md-on-background">Flux {label}</span>
+         </div>
+         {isActive && (
+            <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-pill">
+               <Shield size={12} className="text-emerald-500" />
+               <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-tighter">Sécurisé</span>
+            </div>
+         )}
+      </div>
+
+      {/* Zone Caméra Principal */}
+      <div className="flex-1 flex flex-col items-center justify-center relative rounded-[20px] overflow-hidden bg-md-surface-container/50 border border-md-outline/5 shimmer-anim shadow-inner">
+         <AnimatePresence mode="wait">
+           {!isActive ? (
+             <motion.div 
+               key="inactive"
+               initial={{ opacity: 0, scale: 0.9 }}
+               animate={{ opacity: 1, scale: 1 }}
+               exit={{ opacity: 0, scale: 1.1 }}
+               className="flex flex-col items-center gap-6 text-md-outline/40"
+             >
+                <div className="w-24 h-24 rounded-full bg-white/50 border border-dashed border-md-outline/20 flex items-center justify-center shadow-sm">
+                   <CameraOff size={40} />
+                </div>
+                <div className="text-center">
+                   <p className="text-sm font-black uppercase tracking-widest text-md-on-background opacity-40">Caméra désactivée</p>
+                   <p className="text-[10px] font-bold mt-1 max-w-[200px] leading-relaxed italic">Autorisez l'accès pour commencer la simulation</p>
+                </div>
+             </motion.div>
+           ) : (
+             <motion.div 
+                key="active"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="w-full h-full relative"
+             >
+                {/* Flux vidéo réel */}
+                <video 
+                   ref={videoRef}
+                   autoPlay 
+                   playsInline 
+                   muted 
+                   className="w-full h-full object-cover scale-x-[-1] transition-opacity duration-700" 
+                />
+                
+                {/* Overlay Silhouette UI - Moins opaque en mode actif */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+                   <Video size={120} strokeWidth={1} className="text-white" />
+                </div>
+
+                <div className="absolute bottom-6 left-6 flex items-center gap-2">
+                   <div className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-emerald-500">
+                      <Mic size={14} />
+                   </div>
+                   <div className="flex items-end gap-1 h-4">
+                      {micLevel.map((level, i) => (
+                        <motion.div 
+                          key={i}
+                          animate={{ height: `${level}%` }}
+                          className="w-1 bg-emerald-500 rounded-full transition-all duration-150"
+                          style={{ minHeight: '2px' }}
+                        />
+                      ))}
+                   </div>
+                </div>
+             </motion.div>
+           )}
+         </AnimatePresence>
+      </div>
+
+      {/* Contrôles Inférieurs */}
+      <div className="mt-8 flex justify-center relative z-10">
+         <button 
+           onClick={() => setIsActive(!isActive)}
+           className={`btn-pill px-10 transition-all ${
+             isActive 
+               ? 'bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100' 
+               : 'btn-primary'
+           }`}
+         >
+            {isActive ? (
+               <>
+                  <CameraOff size={18} /> Désactiver
+               </>
+            ) : (
+               <>
+                  <Camera size={18} /> Activer la caméra
+               </>
+            )}
+         </button>
+      </div>
+
+      {/* Decorative corners */}
+      <div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-md-primary/20 rounded-tl-[24px]" />
+      <div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-md-primary/20 rounded-tr-[24px]" />
+      <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-md-primary/20 rounded-bl-[24px]" />
+      <div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-md-primary/20 rounded-br-[24px]" />
     </div>
   );
 }

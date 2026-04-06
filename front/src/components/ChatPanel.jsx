@@ -1,128 +1,182 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, Mic, MicOff, User, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, User, ChevronRight, MessageSquare, Clock } from 'lucide-react';
 
-export default function ChatPanel({ 
-  messages = [], 
-  onSend = () => {}, 
-  isTyping = false, 
-  title = "Evaluation Stream" 
-}) {
-  const [input, setInput] = React.useState('');
+export default function ChatPanel() {
+  const [messages, setMessages] = useState([]); // Démarrage VIDE
+  const [inputValue, setInputValue] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+  const scrollRef = useRef(null);
+  const timerRef = useRef(null);
 
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-    onSend(input);
-    setInput('');
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, isTyping]);
+
+  const handleSend = () => {
+    if (!inputValue.trim()) return;
+    
+    const newMessage = {
+      id: Date.now(),
+      text: inputValue,
+      sender: 'user',
+      time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    };
+    
+    setMessages([...messages, newMessage]);
+    setInputValue('');
+    
+    // Simulation réponse avatar
+    setIsTyping(true);
+    setTimeout(() => {
+      setIsTyping(false);
+      const botMessage = {
+        id: Date.now() + 1,
+        text: "C'est une excellente question. Laissez-moi vous expliquer en quoi ce produit est révolutionnaire pour vos patients.",
+        sender: 'bot',
+        time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages(prev => [...prev, botMessage]);
+    }, 2000);
+  };
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      clearInterval(timerRef.current);
+      setRecordingTime(0);
+      // Simulation transcription
+      setInputValue("Transcription vocale en cours de traitement...");
+      setTimeout(() => setInputValue("Bonjour Docteur, je souhaitais vous présenter notre nouvelle gamme."), 1000);
+    } else {
+      setIsRecording(true);
+      timerRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+    }
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-4xl border border-slate-200 shadow-xl overflow-hidden glass-card">
-      {/* Header */}
-      <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-brand-navy flex items-center justify-center text-white shadow-xl shadow-brand-navy/20">
-            <MessageSquare size={18} />
-          </div>
-          <div>
-            <h3 className="text-brand-navy font-extrabold text-sm tracking-tight capitalize">{title}</h3>
-            <p className="text-[10px] font-bold text-brand-teal uppercase tracking-widest">Medical Context: ACTIVE</p>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-brand-teal/10 rounded-full">
-           <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-pulse" />
-           <span className="text-[9px] font-black text-brand-teal uppercase tracking-widest">Live Audit</span>
+    <div className="flex flex-col h-full bg-md-surface-container rounded-[28px] border border-md-outline/10 overflow-hidden shadow-lg">
+      {/* En-tête du Chat */}
+      <div className="px-6 py-4 border-b border-md-outline/10 bg-white/50 backdrop-blur-md flex items-center justify-between">
+        <h3 className="text-sm font-black text-md-on-background uppercase tracking-widest">Conversation en cours</h3>
+        <div className="flex items-center gap-2">
+           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+           <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Direct</span>
         </div>
       </div>
 
-      {/* Messages list */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-thin">
-        <AnimatePresence initial={false}>
-          {messages.map((msg, i) => (
+      {/* Zone des Messages (Démarrage VIDE) */}
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-md-primary/10"
+      >
+        <AnimatePresence>
+          {messages.length === 0 && !isTyping && (
             <motion.div 
-              key={i} 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex items-end gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               className="h-full flex flex-col items-center justify-center text-center opacity-30 grayscale"
             >
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shadow-md flex-shrink-0 mb-1 transition-all ${msg.role === 'user' ? 'bg-brand-navy text-white' : 'bg-brand-teal text-white'}`}>
-                <User size={16} />
+               <div className="w-16 h-16 rounded-full bg-md-primary/10 flex items-center justify-center mb-4">
+                  <Bot size={32} className="text-md-primary" />
+               </div>
+               <p className="text-xs font-bold uppercase tracking-widest text-md-on-background">Aucun message pour le moment</p>
+               <p className="text-[10px] mt-1">Commencez la discussion ou utilisez le micro.</p>
+            </motion.div>
+          )}
+
+          {messages.map((msg) => (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              key={msg.id}
+              className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+            >
+              <div className="flex items-center gap-2 mb-1 px-2">
+                 <span className="text-[9px] font-black uppercase text-md-outline tracking-tighter">{msg.sender === 'user' ? 'Délégué' : 'Avatar'}</span>
+                 <span className="text-[9px] font-medium text-md-outline opacity-60">{msg.time}</span>
               </div>
-              
-              <div className={`flex flex-col gap-1 max-w-[75%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                <div className={`px-5 py-4 rounded-3xl text-sm leading-relaxed font-semibold transition-all shadow-sm ${
-                  msg.role === 'user' 
-                    ? 'bg-brand-navy text-white rounded-br-sm' 
-                    : 'bg-slate-100 text-brand-navy rounded-bl-sm border border-slate-200'
-                }`}>
-                  {msg.text}
-                </div>
-                <div className="flex items-center gap-1.5 px-1 opacity-40">
-                   <Clock size={10} />
-                   <span className="text-[9px] font-black uppercase tracking-widest">{msg.timestamp || 'Just now'}</span>
-                </div>
+              <div className={`max-w-[85%] px-5 py-3.5 rounded-[20px] text-sm font-medium shadow-sm ${
+                msg.sender === 'user' 
+                  ? 'bg-md-primary text-white rounded-tr-none' 
+                  : 'bg-white text-md-on-background rounded-tl-none border border-md-outline/5'
+              }`}>
+                {msg.text}
               </div>
             </motion.div>
           ))}
+          
+          {isTyping && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-start">
+               <div className="bg-white px-5 py-3 rounded-[20px] rounded-tl-none border border-md-outline/5 flex gap-1 items-center h-10 shadow-sm">
+                  {[0, 1, 2].map(i => (
+                    <motion.div 
+                      key={i}
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{ repeat: Infinity, duration: 0.6, delay: i * 0.2 }}
+                      className="w-1.5 h-1.5 bg-md-primary rounded-full"
+                    />
+                  ))}
+               </div>
+            </motion.div>
+          )}
         </AnimatePresence>
-
-        {isTyping && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            className="flex items-center gap-3 text-brand-teal"
-          >
-            <div className="w-8 h-8 rounded-xl bg-brand-teal/10 flex items-center justify-center">
-              <User size={12} />
-            </div>
-            <div className="flex gap-1.5 px-1 py-1">
-              {[0, 1, 2].map((i) => (
-                <motion.div
-                  key={i}
-                  animate={{ scale: [1, 1.5, 1] }}
-                  transition={{ repeat: Infinity, duration: 1, delay: i * 0.2 }}
-                  className="w-1.5 h-1.5 bg-brand-teal rounded-full"
-                />
-              ))}
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest">Representative Typing...</span>
-          </motion.div>
-        )}
       </div>
 
-      {/* Input area */}
-      <div className="p-8 border-t border-slate-100 bg-white">
-        <form onSubmit={handleSend} className="relative flex items-center gap-4 group">
-          <div className="flex-1 relative">
-            <input 
-              type="text" 
-              placeholder="Enter clinical response..." 
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="w-full pl-8 pr-16 py-4 bg-slate-50 border border-slate-200 rounded-[28px] text-sm font-bold text-brand-navy outline-none focus:border-brand-teal focus:ring-4 focus:ring-brand-teal/5 shadow-inner transition-all placeholder:text-slate-400"
-            />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-               <button 
-                  type="submit" 
-                  disabled={!input.trim()}
-                  className="w-10 h-10 bg-brand-navy text-white rounded-2xl flex items-center justify-center hover:bg-slate-800 transition-all disabled:opacity-20 shadow-xl shadow-brand-navy/20 active:scale-90"
-               >
-                 <ChevronRight size={18} />
-               </button>
-            </div>
-          </div>
-          
-          <button 
-             type="submit" 
-             disabled={!input.trim()}
-             className="px-6 py-4 bg-brand-teal text-white rounded-3xl font-extrabold text-xs uppercase tracking-widest flex items-center gap-3 shadow-xl shadow-brand-teal/20 hover:scale-105 active:scale-95 transition-all disabled:grayscale disabled:opacity-50"
-          >
-            <Send size={16} />
-            Send Detailing
-          </button>
-        </form>
+      {/* Zone de Saisie */}
+      <div className="p-6 bg-white/80 backdrop-blur-md border-t border-md-outline/10 space-y-4">
+        {/* Barre d'Input */}
+        <div className="relative group">
+           <input
+             type="text"
+             value={inputValue}
+             onChange={(e) => setInputValue(e.target.value)}
+             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+             placeholder="Votre message..."
+             className="w-full h-14 bg-md-surface-container-low border-b-2 border-md-outline/20 px-6 rounded-t-[16px] text-base font-medium focus:outline-none focus:border-md-primary transition-all group-hover:bg-md-surface-container"
+           />
+           {isRecording && (
+              <div className="absolute inset-0 bg-rose-500 rounded-t-[16px] flex items-center justify-between px-6 text-white animate-pulse">
+                 <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-white rounded-full animate-ping" />
+                    <span className="text-sm font-black uppercase tracking-widest">Enregistrement en cours...</span>
+                 </div>
+                 <span className="font-mono font-bold">{formatTime(recordingTime)}</span>
+              </div>
+           )}
+        </div>
+
+        {/* Contrôles */}
+        <div className="flex items-center justify-between">
+           <button 
+             onClick={toggleRecording}
+             className={`w-12 h-12 rounded-full flex items-center justify-center transition-all active:scale-95 shadow-md ${
+               isRecording ? 'bg-rose-500 text-white animate-bounce' : 'bg-md-surface-container-low text-md-primary hover:bg-md-primary/10'
+             }`}
+           >
+              {isRecording ? <MicOff size={22} /> : <Mic size={22} />}
+           </button>
+
+           <button 
+             onClick={handleSend}
+             disabled={!inputValue.trim()}
+             className="btn-primary flex-1 ml-4 !h-12 !rounded-pill uppercase text-[11px] font-black tracking-widest disabled:opacity-50 disabled:grayscale transition-all"
+           >
+              Envoyer <Send size={18} />
+           </button>
+        </div>
       </div>
     </div>
   );

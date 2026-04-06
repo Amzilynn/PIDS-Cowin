@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   LayoutDashboard, 
   BrainCircuit, 
@@ -8,92 +8,147 @@ import {
   User,
   Settings,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  Menu,
+  X,
+  PlusSquare,
+  PackageCheck,
+  Stethoscope,
+  Store
 } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 
-export default function Sidebar({ role = 'delegate' }) {
+export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(true);
+
+  // Normalisation des rôles pour l'affichage
+  const isDelegate = role === 'delegate';
+  const isMedicalDelegate = isDelegate && subRole === 'medical';
+  const isCommercialDelegate = isDelegate && subRole === 'commercial';
+  
+  const isPractitioner = role === 'practitioner';
+  const isDoctor = isPractitioner && (subRole === 'doctor' || subRole === 'medical');
+  const isPharmacist = isPractitioner && (subRole === 'pharmacist' || subRole === 'commercial');
 
   const menuItems = {
     admin: [
-      { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Analytics Hub' },
-      { to: '/admin/delegates', icon: User, label: 'Professionals' },
-      { to: '/admin/reports', icon: BarChart3, label: 'Sector Reports' },
+      { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Vue Générale' },
+      { to: '/admin/stats', icon: BarChart3, label: 'Statistiques' },
+      { to: '/admin/delegues', icon: User, label: 'Délégués' },
+      { to: '/admin/parametres', icon: Settings, label: 'Paramètres' },
     ],
-    delegate: [
-      { to: '/delegate/home', icon: LayoutDashboard, label: 'Command Center' },
-      { to: '/delegate/training', icon: BrainCircuit, label: 'Skill Simulator' },
-      { to: '/delegate/planner', icon: MapIcon, label: 'Visit Optimizer' },
-      { to: '/delegate/results', icon: BarChart3, label: 'Performance' },
-    ],
-    doctor: [
-      { to: '/doctor/receiver', icon: LayoutDashboard, label: 'Receiver Mode' },
-    ]
+      delegate: [
+        { to: '/delegate/home', icon: LayoutDashboard, label: 'Accueil' },
+        { to: '/delegate/training', icon: BrainCircuit, label: 'Formation (BO1)' },
+        { to: '/delegate/produits', icon: PackageCheck, label: 'Mes Produits (BO3)' },
+        { to: '/delegate/planner', icon: MapIcon, label: 'Ma Tournée (BO4)' },
+        { to: '/delegate/profil', icon: User, label: 'Mon Profil' },
+      ],
+      practitioner: [
+        { to: '/practitioner/home', icon: LayoutDashboard, label: 'Accueil' },
+        { to: '/practitioner/presentations', icon: PlusSquare, label: 'Présentations Reçues' },
+        { to: '/delegate/presentation', icon: PlusSquare, label: 'Salle de Présentation (BO2)' },
+        { to: '/practitioner/agenda', icon: MapIcon, label: 'Mon Agenda' },
+        { to: '/practitioner/profil', icon: User, label: 'Mon Profil' },
+      ]
   };
 
   const activeMenu = menuItems[role] || menuItems.delegate;
 
+  const getRoleLabel = () => {
+    if (role === 'admin') return 'Administrateur';
+    if (isMedicalDelegate) return 'Délégué Médical';
+    if (isCommercialDelegate) return 'Délégué Commercial';
+    if (isDoctor) return 'Médecin';
+    if (isPharmacist) return 'Pharmacien';
+    return 'Utilisateur';
+  };
+
   return (
-    <div className="w-80 h-screen bg-brand-navy flex flex-col p-8 border-r border-white/5 relative overflow-hidden">
-      {/* Background Decorative Glow */}
-      <div className="absolute top-0 left-0 w-full h-full bg-brand-teal/5 blur-[80px] -translate-x-1/2 -translate-y-1/2" />
-      
-      <div className="relative z-10 mb-16 px-2">
-         <Logo showText={true} />
-      </div>
+    <>
+      {/* Bouton Toggle Mobile */}
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="lg:hidden fixed top-6 left-6 z-[60] w-12 h-12 bg-md-primary rounded-2xl flex items-center justify-center text-white shadow-xl active:scale-95 transition-all"
+      >
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
 
-      <nav className="relative z-10 flex-1 space-y-3">
-         {activeMenu.map((item) => (
-            <NavLink
-               key={item.to}
-               to={item.to}
-               className={({ isActive }) => 
-                  `flex items-center justify-between px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all group ${
-                     isActive 
-                        ? 'bg-brand-teal text-white shadow-xl shadow-brand-teal/20' 
-                        : 'text-white/40 hover:text-white hover:bg-white/5'
-                  }`
-               }
-            >
-               {({ isActive }) => (
-                  <>
-                     <div className="flex items-center gap-4">
-                        <item.icon size={18} strokeWidth={isActive ? 3 : 2} />
-                        <span>{item.label}</span>
-                     </div>
-                     <ChevronRight size={14} className={`transition-opacity ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-                  </>
-               )}
-            </NavLink>
-         ))}
-      </nav>
+      <aside className={`fixed inset-y-0 left-0 z-50 bg-md-surface-container border-r border-md-outline/10 h-screen transition-all duration-500 ease-[cubic-bezier(0.2,0,0,1)] ${isOpen ? 'w-80 translate-x-0' : 'w-0 -translate-x-full lg:w-20 lg:translate-x-0 overflow-hidden'} flex flex-col p-8 overflow-y-auto`}>
+        
+        {/* Glow Décoratif */}
+        <div className="absolute top-0 left-0 w-64 h-64 organic-glow bg-md-primary/5 -translate-x-1/2 -translate-y-1/2" />
+        
+        {/* Section Logo */}
+        <div className="relative z-10 mb-16 flex items-center gap-4">
+           <Logo showText={isOpen} className={`${isOpen ? 'h-10' : 'h-8 opacity-0 lg:opacity-100'} transition-all`} />
+        </div>
 
-      <div className="relative z-10 mt-auto space-y-6">
-         {/* User Quick Info */}
-         <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex items-center gap-4">
-            <div className="w-10 h-10 rounded-2xl bg-brand-teal flex items-center justify-center text-white shadow-lg">
-               <User size={18} />
-            </div>
-            <div>
-               <p className="text-white font-black text-xs tracking-tight">Sarah Khalil</p>
-               <p className="text-[10px] font-bold text-brand-teal uppercase opacity-60 tracking-widest">{role} Unit</p>
-            </div>
-         </div>
+        {/* Menu de Navigation */}
+        <nav className="relative z-10 flex-1 space-y-3">
+           {activeMenu.map((item) => (
+              <NavLink
+                 key={item.to}
+                 to={`${item.to}?role=${role}&sub=${subRole}`}
+                 className={({ isActive }) => 
+                    `flex items-center justify-between px-6 py-4 rounded-pill font-bold transition-all duration-300 group ${
+                       isActive 
+                          ? 'bg-md-primary text-white shadow-lg shadow-md-primary/25 translate-x-1' 
+                          : 'text-md-on-surface-variant hover:bg-md-primary/10 hover:text-md-primary hover:translate-x-1'
+                    } ${!isOpen && 'lg:justify-center lg:px-0 lg:w-12 lg:h-12'}`
+                 }
+              >
+                 {({ isActive }) => (
+                    <>
+                       <div className="flex items-center gap-4">
+                          <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} className="transition-transform duration-500 group-hover:scale-110" />
+                          <span className={`text-[13px] uppercase tracking-widest leading-none ${!isOpen && 'hidden'}`}>{item.label}</span>
+                       </div>
+                       {isOpen && <ChevronRight size={14} className={`opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${isActive ? 'opacity-100' : ''}`} />}
+                    </>
+                 )}
+              </NavLink>
+           ))}
+        </nav>
 
-         <div className="flex items-center gap-2">
-            <button 
-              onClick={() => navigate('/')}
-              className="flex-1 flex items-center justify-center gap-3 py-4 bg-white/5 hover:bg-rose-500/10 border border-white/10 hover:border-rose-500/20 text-white/40 hover:text-rose-500 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
-            >
-               <LogOut size={16} /> Sign Out
-            </button>
-            <button className="p-4 bg-white/5 border border-white/10 text-white/40 hover:text-white rounded-2xl transition-all">
-               <Settings size={18} />
-            </button>
-         </div>
-      </div>
-    </div>
+        {/* Section Inférieure : Utilisateur & Déconnexion */}
+        <div className="relative z-10 mt-10 space-y-6">
+           {/* Badge d'Identification */}
+           {isOpen && (
+             <div className="p-5 bg-md-secondary-container/30 rounded-[28px] border border-md-secondary-container/50 flex flex-col gap-1 shadow-inner group overflow-hidden relative">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-md-primary/5 rounded-full blur-xl -translate-y-1/2 translate-x-1/2" />
+                <p className="text-[10px] font-black text-md-on-surface-variant uppercase tracking-widest opacity-60 relative z-10">Rôle Actif</p>
+                <div className="flex items-center gap-2 relative z-10">
+                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                   <p className="text-sm font-black text-md-primary truncate uppercase tracking-tighter">
+                      {getRoleLabel()}
+                   </p>
+                </div>
+             </div>
+           )}
+
+           <div className={`flex items-center gap-3 ${!isOpen && 'lg:flex-col lg:items-center'}`}>
+              <button 
+                onClick={() => navigate('/')}
+                className={`flex-1 btn-pill bg-white/50 border border-md-outline/10 text-rose-500 hover:bg-rose-50 hover:border-rose-200 shadow-sm ${!isOpen && 'lg:w-12 lg:h-12 !p-0 !rounded-2xl'}`}
+              >
+                 <LogOut size={20} className="transition-transform group-hover:rotate-12" /> 
+                 <span className={`${!isOpen && 'hidden'} text-[11px] font-black uppercase tracking-widest`}>Déconnexion</span>
+              </button>
+           </div>
+        </div>
+      </aside>
+
+      {/* Overlay Mobile */}
+      {isOpen && (
+        <div 
+          onClick={() => setIsOpen(false)}
+          className="lg:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
+        />
+      )}
+    </>
   );
 }
