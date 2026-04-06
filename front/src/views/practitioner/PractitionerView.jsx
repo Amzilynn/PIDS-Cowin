@@ -65,23 +65,24 @@ export default function PractitionerView() {
         </div>
       </div>
 
-      {/* Interface de Réception Principal (3 Colonnes) */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 min-h-0 relative z-10">
+      {/* Interface Principal : Unified Side-by-Side Layout */}
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-[2fr_1.2fr] gap-8 p-8 min-h-0 relative z-10">
         
-        {/* COL 1 : Avatar de Formation */}
-        <div className="md-card !p-0 overflow-hidden relative flex flex-col bg-md-surface-container border-none shadow-2xl">
-           <Avatar3D type="delegate" />
-        </div>
+        {/* COL 1 : Card Unifiée (Avatar + Caméra côte à côte) */}
+        <div className="md-card !p-0 overflow-hidden bg-md-surface-container border-none shadow-2xl flex flex-row divide-x divide-md-outline/5">
+           {/* Section Avatar */}
+           <div className="flex-1 min-h-0 flex flex-col relative">
+              <Avatar3D type="delegate" />
+           </div>
 
-        {/* COL 2 : Caméra du Praticien */}
-        <div className="md-card !p-0 overflow-hidden bg-md-surface-container-low/30 relative flex flex-col shadow-xl border-none">
-           <div className="flex-1 flex flex-col p-4 w-full h-full">
+           {/* Section Caméra */}
+           <div className="flex-1 min-h-0 p-6 flex flex-col relative">
               <CameraPanel label="Flux Praticien" />
            </div>
         </div>
 
-        {/* COL 3 : Panneau de Chat Interactif */}
-        <div className="md-card !p-0 overflow-hidden bg-md-surface-container/50 relative flex flex-col shadow-xl border-none w-full h-full">
+        {/* COL 2 : Chat Panel (Slightly expanded) - Custom Container to prevent modal scaling */}
+        <div className="bg-md-surface-container/60 rounded-[32px] overflow-hidden relative flex flex-col shadow-2xl border border-md-outline/5">
            <ChatPanel persona={isDoctor ? 'medical' : 'commercial'} />
         </div>
       </div>

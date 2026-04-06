@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Square, User, ShieldCheck, HeartPulse, Activity } from 'lucide-react';
+import { Play, Square, User, ShieldCheck, HeartPulse, Activity, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Avatar3D({ type = 'doctor' }) {
   const [status, setStatus] = useState('En attente'); // En attente, Initialisation, En ligne
   const [isActive, setIsActive] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
 
   const startSession = () => {
     setStatus('Initialisation...');
+    setRating(0); // Reset rating on new start
     setTimeout(() => {
       setStatus('En ligne');
       setIsActive(true);
@@ -15,7 +18,7 @@ export default function Avatar3D({ type = 'doctor' }) {
   };
 
   const endSession = () => {
-    setStatus('En attente');
+    setStatus('Discussion terminée');
     setIsActive(false);
   };
 
@@ -92,20 +95,51 @@ export default function Avatar3D({ type = 'doctor' }) {
             </p>
          </div>
 
-         <div className="flex justify-center gap-4 w-full">
+         {/* Rating System */}
+         {(status === 'Discussion terminée' || rating > 0) && (
+            <div className="flex flex-col items-center gap-2 mb-2">
+               <span className="text-[10px] font-black uppercase text-md-primary/60 tracking-widest">Évaluer l'agent</span>
+               <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                     <button
+                        key={star}
+                        onMouseEnter={() => setHoverRating(star)}
+                        onMouseLeave={() => setHoverRating(0)}
+                        onClick={() => setRating(star)}
+                        className="transition-all duration-300 hover:scale-125 active:scale-95"
+                     >
+                        <Star 
+                           size={20} 
+                           fill={(hoverRating || rating) >= star ? '#F59E0B' : 'transparent'} 
+                           className={(hoverRating || rating) >= star ? 'text-amber-500 fill-amber-500' : 'text-md-outline/30'}
+                        />
+                     </button>
+                  ))}
+               </div>
+            </div>
+         )}
+
+         <div className="flex justify-center w-full">
             <button 
-              onClick={startSession}
-              disabled={isActive}
-              className={`btn-pill flex-1 !h-10 text-xs font-black transition-all shadow-md ${isActive ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'btn-primary'}`}
+              onClick={isActive ? endSession : startSession}
+              className={`btn-pill w-full !h-11 text-[11px] font-black uppercase tracking-widest transition-all shadow-md flex items-center justify-center gap-3 transform active:scale-[0.98] ${
+                isActive 
+                  ? 'bg-rose-500 text-white shadow-rose-500/20 hover:bg-rose-600' 
+                  : 'btn-primary'
+              }`}
             >
-               <Play size={16} fill="currentColor" className="mr-2" /> {isActive ? 'Connecté' : 'Démarrer'}
-            </button>
-            <button 
-              onClick={endSession}
-              disabled={!isActive}
-              className="btn-pill flex-[0.7] !h-10 text-xs border-2 border-md-outline/10 text-md-on-surface-variant font-black hover:bg-rose-50 hover:text-rose-600 active:scale-95 disabled:opacity-30 disabled:grayscale transition-all bg-white"
-            >
-               <Square size={14} fill="currentColor" className="mr-2" /> Terminer
+               {status === 'Initialisation...' ? (
+                  <div className="flex items-center gap-2">
+                     <span className="w-2 h-2 rounded-full bg-white animate-bounce" />
+                     <span className="w-2 h-2 rounded-full bg-white animate-bounce delay-100" />
+                     <span className="w-2 h-2 rounded-full bg-white animate-bounce delay-200" />
+                  </div>
+               ) : (
+                  <>
+                     {isActive ? <Square size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
+                     {isActive ? 'Terminer la Session' : 'Démarrer'}
+                  </>
+               )}
             </button>
          </div>
       </div>

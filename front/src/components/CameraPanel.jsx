@@ -55,7 +55,7 @@ export default function CameraPanel({ label = "Délégué" }) {
   }, [isActive]);
 
   return (
-    <div className="md-card h-full flex flex-col relative overflow-hidden bg-md-surface-container-low border-2 border-dashed border-md-primary/20">
+    <div className="h-full flex flex-col relative overflow-hidden">
       
       {/* Background patterns */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--color-md-primary) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
@@ -64,7 +64,7 @@ export default function CameraPanel({ label = "Délégué" }) {
       <div className="flex items-center justify-between mb-6 relative z-10 px-2">
          <div className="flex items-center gap-3">
             <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse shadow-[0_0_12px_#10b981]' : 'bg-md-outline/40'}`} />
-            <span className="text-[11px] font-black uppercase tracking-widest text-md-on-background">Flux {label}</span>
+            <span className="text-[11px] font-black uppercase tracking-widest text-md-on-background">{label}</span>
          </div>
          {isActive && (
             <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-pill">
@@ -75,7 +75,7 @@ export default function CameraPanel({ label = "Délégué" }) {
       </div>
 
       {/* Zone Caméra Principal */}
-      <div className="flex-1 flex flex-col items-center justify-center relative rounded-[20px] overflow-hidden bg-md-surface-container/50 border border-md-outline/5 shimmer-anim shadow-inner">
+      <div className="flex-1 flex flex-col items-center justify-center relative rounded-[20px] overflow-hidden bg-transparent">
          <AnimatePresence mode="wait">
            {!isActive ? (
              <motion.div 
@@ -152,10 +152,7 @@ export default function CameraPanel({ label = "Délégué" }) {
       </div>
 
       {/* Decorative corners */}
-      <div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-md-primary/20 rounded-tl-[24px]" />
-      <div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-md-primary/20 rounded-tr-[24px]" />
-      <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-md-primary/20 rounded-bl-[24px]" />
-      <div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-md-primary/20 rounded-br-[24px]" />
+      {/* Removing decorative corners */}
     </div>
   );
 }
