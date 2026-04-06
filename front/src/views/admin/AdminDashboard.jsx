@@ -27,7 +27,9 @@ import {
   LayoutDashboard,
   BarChart3,
   Settings,
-  User
+  User,
+  Edit,
+  Trash2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -80,7 +82,7 @@ export default function AdminDashboard() {
   const path = location.pathname.split('/').pop();
   
   // Synchronisation auto de l'onglet avec l'URL
-  const activeTab = ['stats', 'delegues', 'parametres'].includes(path) ? path : 'generale';
+  const activeTab = ['stats', 'delegues'].includes(path) ? path : 'generale';
 
   const [optimizing, setOptimizing] = useState(false);
 
@@ -154,6 +156,15 @@ export default function AdminDashboard() {
           </div>
        </div>
 
+    </div>
+  );
+
+  const renderDelegates = () => (
+    <div className="animate-fade-in space-y-10">
+       <div className="md-card">
+          <h2 className="text-3xl font-black text-md-on-background uppercase mb-2">Registre Complet du Réseau</h2>
+          <p className="text-md-on-surface-variant/60 font-bold italic mb-6">Accès direct au suivi individuel et aux performances par territoire.</p>
+       </div>
        {/* Delegates Registry Table */}
        <div className="md-card !p-0 overflow-hidden">
           <div className="p-10 border-b border-md-outline/5 flex items-center justify-between bg-md-surface-container-low/30 backdrop-blur-md">
@@ -175,7 +186,6 @@ export default function AdminDashboard() {
                    <tr>
                       <th className="px-10 py-6">Nom Complet</th>
                       <th className="px-10 py-6">Division</th>
-                      <th className="px-10 py-6">Rang DSO</th>
                       <th className="px-10 py-6">Score Global</th>
                       <th className="px-10 py-6">Sessions</th>
                       <th className="px-10 py-6">Statut</th>
@@ -198,13 +208,6 @@ export default function AdminDashboard() {
                                {d.role}
                             </span>
                          </td>
-                         <td className="px-10 py-6">
-                            <div className={`px-4 py-1.5 rounded-pill text-[10px] font-black uppercase text-center inline-block ${
-                               d.dso === 'DSO1' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : d.dso === 'DSO2' ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-rose-500 text-white shadow-lg shadow-rose-500/20'
-                            }`}>
-                               {d.dso}
-                            </div>
-                         </td>
                          <td className="px-10 py-6 text-sm font-black text-md-on-background">{d.score}%</td>
                          <td className="px-10 py-6 text-sm font-bold text-md-on-surface-variant opacity-60">{d.eval} eval.</td>
                          <td className="px-10 py-6">
@@ -213,12 +216,12 @@ export default function AdminDashboard() {
                             </div>
                          </td>
                          <td className="px-10 py-6 text-right">
-                            <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                               <button className="p-3 bg-md-primary/5 text-md-primary rounded-2xl hover:bg-md-primary hover:text-white transition-all shadow-sm">
-                                  <ChevronRight size={18} />
+                            <div className="flex items-center justify-end gap-3 transition-opacity">
+                               <button className="p-3 bg-sky-50 text-sky-600 rounded-2xl hover:bg-sky-500 hover:text-white transition-all shadow-sm">
+                                  <Edit size={16} />
                                </button>
-                               <button className="p-3 text-md-outline/40 hover:text-md-on-background">
-                                  <MoreHorizontal size={18} />
+                               <button className="p-3 bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-500 hover:text-white transition-all shadow-sm">
+                                  <Trash2 size={16} />
                                </button>
                             </div>
                          </td>
@@ -244,7 +247,7 @@ export default function AdminDashboard() {
        <div className="md-card p-10 flex flex-col gap-10">
           <div className="space-y-1">
               <h3 className="text-xl font-black text-md-on-background tracking-tight uppercase">Compétences Globales du Réseau</h3>
-              <p className="text-xs font-bold text-md-on-surface-variant opacity-60 italic">Analyse radar des 5 piliers métriques DSO</p>
+              <p className="text-xs font-bold text-md-on-surface-variant opacity-60 italic">Analyse radar des 5 piliers métriques de l'Optimiseur Stratégique de Visite</p>
           </div>
           <div className="h-[400px]">
              <ResponsiveContainer width="100%" height="100%">
@@ -261,15 +264,15 @@ export default function AdminDashboard() {
 
        <div className="md-card p-10 flex flex-col gap-10">
           <div className="space-y-1">
-              <h3 className="text-xl font-black text-md-on-background tracking-tight uppercase">Comparaison par Objet Métier</h3>
-              <p className="text-xs font-bold text-md-on-surface-variant opacity-60 italic">Scores moyens par module simulator (BO1-BO3)</p>
+              <h3 className="text-xl font-black text-md-on-background tracking-tight uppercase">Comparaison par Module Métier</h3>
+              <p className="text-xs font-bold text-md-on-surface-variant opacity-60 italic">Scores moyens par module (Training, Presentation, Produit)</p>
           </div>
           <div className="h-[400px]">
              <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={[
-                   { module: 'Simulation (BO1)', medical: 85, commercial: 70 },
-                   { module: 'Pitching (BO2)', medical: 62, commercial: 92 },
-                   { module: 'Produits (BO3)', medical: 90, commercial: 85 }
+                   { module: 'Training Simulator', medical: 85, commercial: 70 },
+                   { module: 'Presentation Simulator', medical: 62, commercial: 92 },
+                   { module: 'Product Recommender', medical: 90, commercial: 85 }
                 ]}>
                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-md-outline)" strokeOpacity={0.1} />
                    <XAxis dataKey="module" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: 'var(--color-md-on-background)' }} />
@@ -327,7 +330,7 @@ export default function AdminDashboard() {
                <h2 className="text-[11px] font-black text-md-primary uppercase tracking-[0.5em] leading-none">Console de Supervision Centrale</h2>
            </div>
            <h1 className="text-6xl font-black text-md-on-background tracking-tighter leading-[0.9] uppercase">Tableau de <br/><span className="text-md-primary italic lowercase">bord digital.</span></h1>
-           <p className="text-md-on-surface-variant/60 font-bold text-lg italic tracking-tight">Analyse temps réel de l'intelligence terrain et des scores DSO.</p>
+           <p className="text-md-on-surface-variant/60 font-bold text-lg italic tracking-tight">Analyse temps réel de l'intelligence terrain et des scores globaux.</p>
         </div>
         
         <div className="flex items-center gap-6 p-4 bg-white/60 backdrop-blur-3xl rounded-[32px] border border-white shadow-2xl">
@@ -343,29 +346,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Navigation Onglets Pilules MD3 */}
-      <div className="flex flex-wrap gap-4 relative z-10">
-         {[
-           { id: 'generale', path: 'dashboard', label: 'Vue Générale', icon: LayoutDashboard },
-           { id: 'stats', path: 'stats', label: 'Statistiques', icon: BarChart3 },
-           { id: 'delegues', path: 'delegues', label: 'Réseau Délégués', icon: User },
-           { id: 'parametres', path: 'parametres', label: 'Configurations', icon: Settings }
-         ].map((tab) => (
-            <button
-               key={tab.id}
-               onClick={() => navigate(`/admin/${tab.path}${location.search}`)}
-               className={`flex items-center gap-4 px-10 py-5 rounded-full font-black text-[12px] uppercase tracking-[0.2em] transition-all duration-500 shadow-sm active:scale-95 group relative overflow-hidden ${
-                 activeTab === tab.id 
-                    ? 'bg-md-primary text-white shadow-2xl shadow-md-primary/40 translate-y-[-4px] scale-105' 
-                    : 'bg-white/60 text-md-on-surface-variant backdrop-blur-md border border-white hover:bg-white hover:text-md-primary hover:translate-y-[-2px]'
-               }`}
-            >
-               <tab.icon size={18} className={`transition-transform duration-500 ${activeTab === tab.id ? 'rotate-12' : 'group-hover:rotate-12'}`} />
-               {tab.label}
-               {activeTab === tab.id && <div className="absolute inset-0 shimmer-anim opacity-20 pointer-events-none" />}
-            </button>
-         ))}
-      </div>
 
       {/* Rendu des Onglets avec Animation */}
       <div className="relative z-10 w-full min-h-[600px]">
@@ -379,24 +359,7 @@ export default function AdminDashboard() {
             >
                {activeTab === 'generale' && renderGenerale()}
                {activeTab === 'stats' && renderPerformances()}
-               {activeTab === 'delegues' && (
-                 <div className="animate-fade-in">
-                   {/* On peut réutiliser la table des délégués ici en mode plein écran */}
-                   <div className="md-card">
-                      <h2 className="text-3xl font-black text-md-on-background uppercase mb-8">Registre Complet du Réseau</h2>
-                      {/* La table est déjà dans renderGenerale, on pourrait la sortir ou la dupliquer ici */}
-                      {/* Pour l'instant, la Vue Générale inclut déjà la table des délégués comme demandé ('stats and overall global view and the delegates') */}
-                      <p className="text-md-on-surface-variant/60 font-bold italic">Accès direct au suivi individuel et aux performances par territoire.</p>
-                   </div>
-                 </div>
-               )}
-               {activeTab === 'parametres' && (
-                 <div className="md-card p-20 text-center animate-fade-in">
-                    <Settings size={64} className="mx-auto text-md-primary mb-6 opacity-20" />
-                    <h3 className="text-2xl font-black uppercase text-md-on-background">Configurations Système</h3>
-                    <p className="text-md-on-surface-variant font-bold opacity-60 mt-4">Module de gestion des accès et des paramètres analytiques.</p>
-                 </div>
-               )}
+               {activeTab === 'delegues' && renderDelegates()}
             </motion.div>
          </AnimatePresence>
       </div>

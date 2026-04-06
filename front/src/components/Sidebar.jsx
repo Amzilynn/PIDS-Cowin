@@ -38,7 +38,6 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
       { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Vue Générale' },
       { to: '/admin/stats', icon: BarChart3, label: 'Statistiques' },
       { to: '/admin/delegues', icon: User, label: 'Délégués' },
-      { to: '/admin/parametres', icon: Settings, label: 'Paramètres' },
     ],
       delegate: [
         { to: '/delegate/home', icon: LayoutDashboard, label: 'Accueil' },

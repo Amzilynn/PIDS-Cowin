@@ -34,7 +34,6 @@ export default function App() {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="stats" element={<AdminDashboard />} />
         <Route path="delegues" element={<AdminDashboard />} />
-        <Route path="parametres" element={<AdminDashboard />} />
       </Route>
 
       {/* Routes Délégué (Médical ou Commercial) */}
