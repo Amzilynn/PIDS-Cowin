@@ -30,7 +30,7 @@ import {
   User
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -76,6 +76,7 @@ const visits = [
 
 export default function AdminDashboard() {
   const location = useLocation();
+  const navigate = useNavigate();
   const path = location.pathname.split('/').pop();
   
   // Synchronisation auto de l'onglet avec l'URL
@@ -345,13 +346,14 @@ export default function AdminDashboard() {
       {/* Navigation Onglets Pilules MD3 */}
       <div className="flex flex-wrap gap-4 relative z-10">
          {[
-           { id: 'generale', label: 'Vue Générale', icon: LayoutDashboard },
-           { id: 'stats', label: 'Statistiques', icon: BarChart3 },
-           { id: 'delegues', label: 'Réseau Délégués', icon: User },
-           { id: 'parametres', label: 'Configurations', icon: Settings }
+           { id: 'generale', path: 'dashboard', label: 'Vue Générale', icon: LayoutDashboard },
+           { id: 'stats', path: 'stats', label: 'Statistiques', icon: BarChart3 },
+           { id: 'delegues', path: 'delegues', label: 'Réseau Délégués', icon: User },
+           { id: 'parametres', path: 'parametres', label: 'Configurations', icon: Settings }
          ].map((tab) => (
             <button
                key={tab.id}
+               onClick={() => navigate(`/admin/${tab.path}${location.search}`)}
                className={`flex items-center gap-4 px-10 py-5 rounded-full font-black text-[12px] uppercase tracking-[0.2em] transition-all duration-500 shadow-sm active:scale-95 group relative overflow-hidden ${
                  activeTab === tab.id 
                     ? 'bg-md-primary text-white shadow-2xl shadow-md-primary/40 translate-y-[-4px] scale-105' 

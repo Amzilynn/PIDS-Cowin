@@ -60,30 +60,6 @@ export default function ProductRecommendations() {
             </p>
          </div>
 
-         {/* Filtres Pilules MD3 */}
-         <div className="flex flex-wrap gap-4 p-4 bg-white/40 backdrop-blur-3xl rounded-[32px] border border-white shadow-2xl">
-            {[
-              { id: 'all', label: 'Tous', icon: LayoutGrid },
-              { id: 'cardio', label: 'Cardio', icon: Activity },
-              { id: 'diab', label: 'Diabète', icon: Zap }
-            ].map((f) => (
-              <button 
-                key={f.id}
-                onClick={() => setFilter(f.id)}
-                className={`btn-pill border-2 h-14 !px-10 text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative overflow-hidden group active:scale-95 ${
-                  filter === f.id 
-                    ? 'bg-md-primary text-white border-md-primary shadow-2xl shadow-md-primary/30' 
-                    : 'bg-white/60 text-md-on-surface-variant border-md-outline/10 hover:bg-white hover:text-md-primary'
-                }`}
-              >
-                <span className="relative z-10 flex items-center gap-3">
-                   <f.icon size={16} className={`transition-transform duration-500 ${filter === f.id ? 'rotate-12' : 'group-hover:rotate-12'}`} />
-                   {f.label}
-                </span>
-                {filter === f.id && <div className="absolute inset-0 shimmer-anim opacity-20 pointer-events-none" />}
-              </button>
-            ))}
-         </div>
       </div>
 
       {/* Recommandation Vedette (Carte Horizontale Impactante) */}
