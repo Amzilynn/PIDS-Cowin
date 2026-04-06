@@ -84,10 +84,10 @@ export default function LoginPage() {
         className="w-full max-w-xl relative p-6 md:p-8 bg-white/40 backdrop-blur-3xl rounded-[48px] border border-white/50 shadow-2xl max-h-[95vh] overflow-y-auto hide-scrollbar"
       >
         {/* Logo Section - Ajusté pour visibilité optimale */}
-        <div className="flex flex-col items-center mb-6 space-y-4">
-          <Logo className="h-24 mb-2" showText={false} />
-          <div className="text-center">
-            <h1 className="text-3xl font-black tracking-tighter text-md-on-background mb-1 leading-tight">Connectez-vous à <br/><span className="text-md-primary italic">Avalive</span></h1>
+        <div className="flex flex-col items-center mb-6 -mt-2 md:-mt-6">
+          <Logo className="h-48 md:h-64 -mb-4 md:-mb-6 drop-shadow-xl justify-center" showText={false} />
+          <div className="text-center relative z-10">
+            <h1 className="text-4xl font-black tracking-tighter text-md-on-background mb-2 leading-tight">Connectez-vous</h1>
             <p className="text-xs font-medium text-md-on-surface-variant opacity-60 tracking-tight">Intelligence terrain & formation pharmaceutique</p>
           </div>
         </div>

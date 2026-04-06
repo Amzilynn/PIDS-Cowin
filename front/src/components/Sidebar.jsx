@@ -79,8 +79,8 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
         <div className="absolute top-0 left-0 w-64 h-64 organic-glow bg-md-primary/5 -translate-x-1/2 -translate-y-1/2" />
         
         {/* Section Logo */}
-        <div className="relative z-10 mb-16 flex items-center gap-4">
-           <Logo showText={isOpen} className={`${isOpen ? 'h-10' : 'h-8 opacity-0 lg:opacity-100'} transition-all`} />
+        <div className="relative z-10 mb-4 flex items-center justify-center">
+           <Logo showText={isOpen} className={`${isOpen ? 'h-40 lg:h-48 drop-shadow-lg w-full px-4' : 'h-12 w-12 object-contain opacity-0 lg:opacity-100'} transition-all`} />
         </div>
 
         {/* Menu de Navigation */}
