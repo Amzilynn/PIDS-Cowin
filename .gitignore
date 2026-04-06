@@ -11,6 +11,9 @@ __pycache__/
 *.pyc
 *.pyo
 
+*.csv
+.venv
+
 # Environment Variables
 .env
 

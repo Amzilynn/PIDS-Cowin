@@ -3,7 +3,149 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply antialiased font-sans bg-[#F8FAFC] text-slate-900 overflow-hidden;
+  :root {
+    /* MD3 Tokens derived from Logo "Avalive" */
+    --color-md-primary: #48A9A6; /* Teal du logo */
+    --color-md-on-primary: #FFFFFF;
+    --color-md-secondary-container: #E0F2F1;
+    --color-md-on-secondary-container: #004D40;
+    --color-md-tertiary: #F29C24; /* Accent Or/Orange pour FAB */
+    --color-md-on-tertiary: #FFFFFF;
+    --color-md-surface: #FFFBFE;
+    --color-md-surface-container: #F8FAF9;
+    --color-md-surface-container-low: #F1F4F3;
+    --color-md-on-background: #1C355E; /* Indigo sombre du logo */
+    --color-md-on-surface-variant: #455A64;
+    --color-md-outline: #90A4AE;
+    
+    --radius-pill: 9999px;
+    --radius-card: 24px;
+    --radius-hero: 48px;
+    --radius-dialog: 28px;
   }
+
+  body {
+    @apply antialiased font-sans bg-md-surface text-md-on-background m-0;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  ::selection {
+    background-color: var(--color-md-primary);
+    color: var(--color-md-on-primary);
+  }
+
+  /* MD3 Transitions signatures */
+  * {
+    @apply transition-all duration-300;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-1.5 h-1.5;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-md-primary);
+    border-radius: 9999px;
+    opacity: 0.2;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    opacity: 0.4;
+  }
+}
+
+@layer components {
+  /* Formes organiques floues signature */
+  .organic-glow {
+    @apply absolute blur-[80px] opacity-20 -z-10 animate-pulse-slow pointer-events-none;
+  }
+
+  /* Bouton Style Pilule (Rounded-full) */
+  .btn-pill {
+    @apply rounded-pill px-8 h-12 font-bold active:scale-95 flex items-center justify-center gap-2 transition-transform;
+  }
+
+  .btn-primary {
+    @apply btn-pill bg-md-primary text-md-on-primary shadow-sm hover:shadow-md hover:scale-[1.02];
+  }
+
+  .btn-tonal {
+    @apply btn-pill bg-md-secondary-container text-md-on-secondary-container;
+  }
+  .btn-tonal:hover {
+    @apply opacity-90;
+  }
+
+  .btn-outlined {
+    @apply btn-pill border-2 border-md-primary text-md-primary bg-transparent;
+  }
+  .btn-outlined:hover {
+    background-color: rgba(72, 169, 166, 0.05); /* --color-md-primary avec 5% d'opacité */
+  }
+
+  .btn-fab {
+    @apply rounded-[16px] w-14 h-14 flex items-center justify-center bg-md-tertiary text-md-on-tertiary shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all;
+  }
+
+  /* Cartes MD3 */
+  .md-card {
+    @apply bg-md-surface-container rounded-[24px] p-6 border hover:scale-[1.02] hover:shadow-md transition-all duration-300;
+    border-color: rgba(0, 0, 0, 0.05);
+  }
+
+  /* MD3 Input Style */
+  .md-input {
+    @apply h-14 bg-md-surface-container-low rounded-t-[12px] border-b-2 border-md-outline px-4 
+           focus:border-md-primary focus:outline-none text-base font-medium transition-all;
+  }
+  .md-input::placeholder {
+    color: var(--color-md-on-surface-variant);
+    opacity: 0.7;
+  }
+
+  /* Avatar & Shimmer effects */
+  .avatar-ring {
+    @apply absolute inset-0 border-4 rounded-full animate-pulse-slow;
+    border-color: rgba(72, 169, 166, 0.3); /* --color-md-primary avec 30% d'opacité */
+  }
+
+  .shimmer-anim {
+    @apply relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full 
+           before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r 
+           before:from-transparent before:via-white/20 before:to-transparent;
+  }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.1); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
 }
