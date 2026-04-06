@@ -85,7 +85,7 @@ export default function Avatar3D({ type = 'doctor' }) {
       <div className="w-full space-y-8 relative z-10">
          <div className="flex flex-col items-center gap-3">
             <h3 className="text-xl font-black text-md-on-background tracking-tighter">
-               {isActive ? (type === 'doctor' ? 'Dr. Martin (Médecin)' : 'Mme Berthier (Pharmacienne)') : 'Avatar en attente'}
+               {isActive ? (type === 'doctor' ? 'Dr. Martin (Médecin)' : type === 'delegate' ? 'Sarah Khalil (Déléguée)' : 'Mme Berthier (Pharmacienne)') : 'Avatar en attente'}
             </h3>
             <p className="text-xs font-bold text-md-on-surface-variant opacity-60 text-center uppercase tracking-widest leading-relaxed">
                Analyse par vision par ordinateur <br/> Prête pour évaluation

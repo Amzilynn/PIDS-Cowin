@@ -66,63 +66,24 @@ export default function PractitionerView() {
       </div>
 
       {/* Interface de Réception Principal (3 Colonnes) */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 overflow-hidden">
         
-        {/* COL 1 : Avatar du Délégué (40%) */}
-        <div className="flex-[0.4] p-8 relative flex flex-col">
-           <div className="absolute inset-0 bg-md-primary/[0.03] -z-10" />
-           {/* On utilise Avatar3D pour simuler le délégué du point de vue du praticien */}
+        {/* COL 1 : Avatar de Formation */}
+        <div className="md-card !p-0 overflow-hidden relative flex flex-col bg-md-surface-container border-none shadow-2xl">
            <Avatar3D type="delegate" />
-           
-           <div className="mt-8 p-8 bg-white/60 backdrop-blur-md rounded-[32px] border border-md-outline/5 shadow-xl flex items-center justify-between">
-              <div>
-                 <p className="text-[10px] font-black text-md-on-background uppercase tracking-widest opacity-40 leading-none mb-2 underline underline-offset-4 decoration-md-primary">Identité Interlocuteur</p>
-                 <h3 className="text-2xl font-black text-md-on-background tracking-tighter uppercase leading-none">{delegateName.split('(')[0]}</h3>
-                 <p className="text-[11px] font-black text-md-primary uppercase mt-1 tracking-widest">{delegateName.split('(')[1].replace(')', '')}</p>
-              </div>
-              <div className="w-16 h-16 rounded-[48px] bg-md-primary/10 text-md-primary flex items-center justify-center shadow-lg border border-md-primary/10">
-                 <ShieldCheck size={32} />
-              </div>
+        </div>
+
+        {/* COL 2 : Caméra du Praticien */}
+        <div className="md-card !p-0 overflow-hidden bg-md-surface-container-low/30 relative flex flex-col shadow-xl border-none">
+           <div className="flex-1 flex flex-col p-4 w-full h-full">
+              <CameraPanel label="Flux Praticien" />
            </div>
         </div>
 
-        {/* COL 2 : Caméra du Praticien (30%) */}
-        <div className="flex-[0.3] p-8 border-x border-md-outline/10 bg-md-surface-container-low/30 relative flex flex-col">
-           <div className="flex-1">
-              <CameraPanel label="Praticien" />
-           </div>
-           
-           <div className="mt-8 p-10 bg-md-on-background text-white rounded-[36px] shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-md-primary/20 blur-2xl -z-10" />
-              <div className="flex items-center gap-4 mb-6">
-                 <Info size={18} className="text-md-primary animate-pulse" />
-                 <h4 className="text-[10px] font-black uppercase tracking-widest opacity-60">Mémo Praticien</h4>
-              </div>
-              <p className="text-sm font-bold leading-relaxed opacity-80 uppercase tracking-tighter italic">
-                 "Ce délégué a un rang DSO2 Élite. Ses recommandations sont prioritaires pour votre établissement."
-              </p>
-           </div>
+        {/* COL 3 : Panneau de Chat Interactif */}
+        <div className="md-card !p-0 overflow-hidden bg-md-surface-container/50 relative flex flex-col shadow-xl border-none w-full h-full">
+           <ChatPanel />
         </div>
-
-        {/* COL 3 : Fiche Produit & Feedback (30%) */}
-        <div className="flex-[0.3] p-8 h-full bg-md-surface-container/50 flex flex-col gap-6 overflow-hidden">
-           {/* Feedback temps réel / Chat (occupe désormais tout l'espace disponible vers le haut) */}
-           {/* Feedback temps réel / Chat */}
-           <div className="flex-1 min-h-0">
-              <ChatPanel />
-           </div>
-
-           {/* Actions Finales */}
-           <div className="grid grid-cols-2 gap-4">
-              <button className="btn-tonal !h-14 font-black uppercase text-[10px] tracking-widest !rounded-2xl border border-md-outline/10">
-                 <HelpCircle size={18} className="mr-2" /> Question
-              </button>
-              <button className="btn-tonal !h-14 font-black uppercase text-[10px] tracking-widest !rounded-2xl border border-md-outline/10">
-                 <Award size={18} className="mr-2" /> Valider
-              </button>
-           </div>
-        </div>
-
       </div>
 
       {/* Signature Background Layer */}
