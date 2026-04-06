@@ -109,11 +109,6 @@ export default function CameraPanel({ label = "Délégué" }) {
                    className="w-full h-full object-cover scale-x-[-1] transition-opacity duration-700" 
                 />
                 
-                {/* Overlay Silhouette UI - Moins opaque en mode actif */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-                   <Video size={120} strokeWidth={1} className="text-white" />
-                </div>
-
                 <div className="absolute bottom-6 left-6 flex items-center gap-2">
                    <div className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-emerald-500">
                       <Mic size={14} />

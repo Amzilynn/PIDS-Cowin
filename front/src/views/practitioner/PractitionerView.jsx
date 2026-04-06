@@ -32,7 +32,7 @@ export default function PractitionerView() {
   const productTitle = isDoctor ? 'Cardio-Zolpin v4.2' : 'Gamme Hiver Promo 2026';
 
   return (
-    <div className="relative min-h-full bg-md-surface flex flex-col font-sans">
+    <div className="relative h-screen overflow-hidden bg-md-surface flex flex-col font-sans">
       
       {/* Barre d'Outils Supérieure Contextuelle */}
       <div className="h-20 border-b border-md-outline/10 bg-white/40 backdrop-blur-3xl flex items-center justify-between px-8 relative z-50">
@@ -66,7 +66,7 @@ export default function PractitionerView() {
       </div>
 
       {/* Interface de Réception Principal (3 Colonnes) */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 min-h-0 relative z-10">
         
         {/* COL 1 : Avatar de Formation */}
         <div className="md-card !p-0 overflow-hidden relative flex flex-col bg-md-surface-container border-none shadow-2xl">
@@ -82,7 +82,7 @@ export default function PractitionerView() {
 
         {/* COL 3 : Panneau de Chat Interactif */}
         <div className="md-card !p-0 overflow-hidden bg-md-surface-container/50 relative flex flex-col shadow-xl border-none w-full h-full">
-           <ChatPanel />
+           <ChatPanel persona={isDoctor ? 'medical' : 'commercial'} />
         </div>
       </div>
 

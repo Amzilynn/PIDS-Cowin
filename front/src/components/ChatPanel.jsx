@@ -1,15 +1,76 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Mic, MicOff, User, Bot } from 'lucide-react';
+import { Send, Mic, MicOff, User, Bot, Volume2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function ChatPanel() {
-  const [messages, setMessages] = useState([]); // Démarrage VIDE
+export default function ChatPanel({ persona = 'medical' }) {
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
+  
   const scrollRef = useRef(null);
   const timerRef = useRef(null);
+  const recognitionRef = useRef(null);
+
+  // Initialisation de la session backend
+  useEffect(() => {
+    let currentSessionId = null;
+    const initSession = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:8000/session/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ persona })
+        });
+        const data = await res.json();
+        setSessionId(data.session_id);
+        currentSessionId = data.session_id;
+      } catch (err) {
+        console.error("Erreur de session:", err);
+      }
+    };
+    initSession();
+
+    return () => {
+      // Cleanup de session
+      if (currentSessionId) {
+        fetch(`http://127.0.0.1:8000/session/${currentSessionId}`, { method: 'DELETE' }).catch(console.error);
+      }
+    };
+  }, [persona]);
+
+  // Configuration Speech-to-Text
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'fr-FR';
+
+      recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+        setInputValue(transcript);
+      };
+
+      recognition.onerror = (e) => {
+        console.error("Erreur STT", e);
+        setIsRecording(false);
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+        clearInterval(timerRef.current);
+        setRecordingTime(0);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -17,46 +78,80 @@ export default function ChatPanel() {
     }
   }, [messages, isTyping]);
 
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
+  const handleSend = async () => {
+    if (!inputValue.trim() || !sessionId) return;
     
+    // Si on envoie pendant qu'on enregistre, on coupe le micro proprement.
+    if (isRecording) {
+      if (recognitionRef.current) recognitionRef.current.stop();
+      setIsRecording(false);
+      clearInterval(timerRef.current);
+      setRecordingTime(0);
+    }
+
+    const textToSend = inputValue;
     const newMessage = {
       id: Date.now(),
-      text: inputValue,
+      text: textToSend,
       sender: 'user',
       time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
     };
     
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setInputValue('');
-    
-    // Simulation réponse avatar
     setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
+    
+    try {
+      const res = await fetch('http://127.0.0.1:8000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: sessionId, message: textToSend })
+      });
+      const data = await res.json();
+      
       const botMessage = {
         id: Date.now() + 1,
-        text: "C'est une excellente question. Laissez-moi vous expliquer en quoi ce produit est révolutionnaire pour vos patients.",
+        text: data.agent_response,
         sender: 'bot',
         time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, botMessage]);
-    }, 2000);
+      
+      playTTS(data.agent_response);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const playTTS = (text) => {
+    try {
+      const audioUrl = `http://127.0.0.1:5500/tts?text=${encodeURIComponent(text)}&voice=fr-FR-DeniseNeural`;
+      const audio = new Audio(audioUrl);
+      audio.play().catch(e => console.error("TTS play error", e));
+    } catch (err) {
+      console.error("TTS request error", err);
+    }
   };
 
   const toggleRecording = () => {
     if (isRecording) {
+      if (recognitionRef.current) recognitionRef.current.stop();
       setIsRecording(false);
       clearInterval(timerRef.current);
       setRecordingTime(0);
-      // Simulation transcription
-      setInputValue("Transcription vocale en cours de traitement...");
-      setTimeout(() => setInputValue("Bonjour Docteur, je souhaitais vous présenter notre nouvelle gamme."), 1000);
     } else {
-      setIsRecording(true);
-      timerRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
-      }, 1000);
+      if (recognitionRef.current) {
+        setInputValue("");
+        recognitionRef.current.start();
+        setIsRecording(true);
+        timerRef.current = setInterval(() => {
+          setRecordingTime(prev => prev + 1);
+        }, 1000);
+      } else {
+        alert("Speech Recognition non supporté par ce navigateur.");
+      }
     }
   };
 
@@ -71,9 +166,26 @@ export default function ChatPanel() {
       {/* En-tête du Chat */}
       <div className="px-6 py-4 border-b border-md-outline/10 bg-white/50 backdrop-blur-md flex items-center justify-between">
         <h3 className="text-sm font-black text-md-on-background uppercase tracking-widest">Conversation en cours</h3>
-        <div className="flex items-center gap-2">
-           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-           <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Direct</span>
+        <div className="flex items-center gap-4">
+           {sessionId && (
+             <button 
+               onClick={async () => {
+                 try {
+                   await fetch(`http://127.0.0.1:8000/session/${sessionId}/reset`, { method: 'POST' });
+                   setMessages([]);
+                 } catch (e) {
+                   console.error("Erreur reset:", e);
+                 }
+               }}
+               className="text-[10px] font-bold text-md-primary/60 hover:text-rose-500 uppercase tracking-widest transition-colors"
+             >
+               Effacer
+             </button>
+           )}
+           <div className="flex flex-row items-center gap-2">
+             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+             <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Direct</span>
+           </div>
         </div>
       </div>
 

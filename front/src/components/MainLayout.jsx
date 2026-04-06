@@ -30,29 +30,6 @@ export default function MainLayout({ role = 'delegate', subRole = 'medical' }) {
            <Outlet />
         </motion.div>
         
-        {/* System Monitoring Footer */}
-        <footer className="relative z-10 border-t border-md3-outline/10 pt-10 pb-4 flex flex-col md:flex-row items-center justify-between gap-6">
-           <div className="flex flex-wrap items-center gap-8">
-              <div className="flex items-center gap-3">
-                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]" />
-                 <span className="text-[10px] font-black text-md3-on-surface-variant uppercase tracking-widest leading-none">Cœur Vision IA : Connecté</span>
-              </div>
-              <div className="flex items-center gap-3 border-l border-md3-outline/10 pl-8">
-                  <div className="w-2 h-2 bg-md3-primary rounded-full animate-pulse" />
-                  <span className="text-[10px] font-black text-md3-on-surface-variant uppercase tracking-widest leading-none">Synchronisation Carte v4.1 : Active</span>
-              </div>
-              <div className="flex items-center gap-3 border-l border-md3-outline/10 pl-8">
-                  <Activity size={14} className="text-md3-tertiary" />
-                  <span className="text-[10px] font-black text-md3-on-surface-variant uppercase tracking-widest leading-none">Diagnostic temps réel : OPTIMAL</span>
-              </div>
-           </div>
-           
-           <div className="flex items-center gap-6 text-md3-outline/40">
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-center border ring-1 ring-md3-outline/10 px-4 py-2 rounded-pill">
-                MedDelegate Pro — Propriété Intellectuelle Avalive 2026
-              </span>
-           </div>
-        </footer>
       </main>
 
       <style jsx>{`

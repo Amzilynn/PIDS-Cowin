@@ -20,7 +20,7 @@ export default function Avatar3D({ type = 'doctor' }) {
   };
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-between relative overflow-hidden transition-all group p-10">
+    <div className="h-full w-full flex flex-col items-center justify-between relative overflow-hidden transition-all group p-6">
       
       {/* Background Glows Signature */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-md-primary/10 rounded-full blur-[60px] animate-pulse-slow" />
@@ -35,8 +35,8 @@ export default function Avatar3D({ type = 'doctor' }) {
       </div>
 
       {/* Zone Avatar Principal */}
-      <div className="relative w-full flex-1 flex items-center justify-center py-10 cursor-pointer">
-         <div className="relative w-full max-w-[380px] aspect-square flex items-center justify-center">
+      <div className="relative w-full flex flex-col items-center justify-center py-2 cursor-pointer">
+         <div className="relative w-full max-w-[200px] h-[200px] flex items-center justify-center">
             {/* Anneau Dégradé Animé Pulsant */}
             <div className="absolute inset-0 border-[3px] border-dashed border-md-primary/20 rounded-full animate-[spin_20s_linear_infinite]" />
             <div className="absolute inset-4 border-[3px] border-md-primary/10 rounded-full animate-[spin_10s_linear_infinite_reverse]" />
@@ -82,7 +82,7 @@ export default function Avatar3D({ type = 'doctor' }) {
       </div>
 
       {/* Métriques / IA Status */}
-      <div className="w-full space-y-8 relative z-10">
+      <div className="w-full space-y-5 relative z-10">
          <div className="flex flex-col items-center gap-3">
             <h3 className="text-xl font-black text-md-on-background tracking-tighter">
                {isActive ? (type === 'doctor' ? 'Dr. Martin (Médecin)' : type === 'delegate' ? 'Sarah Khalil (Déléguée)' : 'Mme Berthier (Pharmacienne)') : 'Avatar en attente'}
@@ -92,20 +92,20 @@ export default function Avatar3D({ type = 'doctor' }) {
             </p>
          </div>
 
-         <div className="flex justify-center gap-5 w-full">
+         <div className="flex justify-center gap-4 w-full">
             <button 
               onClick={startSession}
               disabled={isActive}
-              className={`btn-pill flex-1 !h-16 font-black transition-all shadow-xl ${isActive ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'btn-primary'}`}
+              className={`btn-pill flex-1 !h-10 text-xs font-black transition-all shadow-md ${isActive ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'btn-primary'}`}
             >
-               <Play size={22} fill="currentColor" className="mr-2" /> {isActive ? 'Connecté' : 'Démarrer'}
+               <Play size={16} fill="currentColor" className="mr-2" /> {isActive ? 'Connecté' : 'Démarrer'}
             </button>
             <button 
               onClick={endSession}
               disabled={!isActive}
-              className="btn-pill flex-[0.7] !h-16 border-2 border-md-outline/10 text-md-on-surface-variant font-black hover:bg-rose-50 hover:text-rose-600 active:scale-95 disabled:opacity-30 disabled:grayscale transition-all bg-white"
+              className="btn-pill flex-[0.7] !h-10 text-xs border-2 border-md-outline/10 text-md-on-surface-variant font-black hover:bg-rose-50 hover:text-rose-600 active:scale-95 disabled:opacity-30 disabled:grayscale transition-all bg-white"
             >
-               <Square size={18} fill="currentColor" /> Terminer
+               <Square size={14} fill="currentColor" className="mr-2" /> Terminer
             </button>
          </div>
       </div>
