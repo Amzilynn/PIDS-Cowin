@@ -123,7 +123,7 @@ def main():
     print("[INFO] Initialising modules...")
 
     body_analyzer  = BodyLanguageAnalyzer()
-    face_analyzer  = FaceEmotionAnalyzer(backend="auto", skip_frames=3)
+    face_analyzer  = FaceEmotionAnalyzer(backend="efficientnet", skip_frames=3)
     tone_analyzer  = ToneAnalyzer()
     fusion_scorer  = FusionScorer()
     session_logger = SessionLogger(output_dir=str(SESSIONS_DIR))

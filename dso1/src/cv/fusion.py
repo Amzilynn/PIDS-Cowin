@@ -41,18 +41,9 @@ class FusionScorer:
         tone           → 35%
     """
 
-    def __init__(
-        self,
-        body_weight: float = 0.30,
-        face_weight: float = 0.35,
-        tone_weight: float = 0.35,
-    ):
-        assert abs(body_weight + face_weight + tone_weight - 1.0) < 1e-5, \
-            "Weights must sum to 1.0"
-
-        self._bw = body_weight
-        self._fw = face_weight
-        self._tw = tone_weight
+    def __init__(self):
+        # Static weights are removed in favor of dynamic cross-modal attention
+        pass
 
     def fuse(
         self,
@@ -72,14 +63,33 @@ class FusionScorer:
         tone_score    = tone.overall_score    if tone else 0.5
         tone_stress   = (1.0 - tone_score)    if tone else 0.0
 
+        # ── Dynamic Cross-Modal Attention ───────────────────
+        import math
+        body_conf = 0.8 if body else 0.1
+        face_conf = face.confidence_score if face and face.face_detected else 0.1
+        # Tone confidence uses the distilHuBERT confidence score
+        tone_conf = getattr(tone, "speech_emotion_conf", 0.0) if tone else 0.1
+        if tone_conf <= 0.0:
+             tone_conf = 0.5 if tone and tone.energy > 0.01 else 0.1
+
+        # Temperature-scaled Softmax to assign weights dynamically
+        # Sharpen the distribution so high quality signals dominate
+        temp = 3.0 
+        exp_confs = [math.exp(body_conf * temp), math.exp(face_conf * temp), math.exp(tone_conf * temp)]
+        sum_exp = sum(exp_confs)
+        bw, fw, tw = [e / sum_exp for e in exp_confs]
+
         # ── Derived composite scores ────────────────────────
+        # Weight the stress score dynamically based on face/tone attention
+        stress_denom = fw + tw if (fw + tw) > 0 else 1.0
         stress_score = round(
-            0.5 * face_stress + 0.5 * tone_stress, 3
+            ((fw / stress_denom) * face_stress) + ((tw / stress_denom) * tone_stress), 3
         )
+
         confidence_score = round(
-            self._bw * body_score +
-            self._fw * face_conf +
-            self._tw * tone_score,
+            bw * body_score +
+            fw * face_conf +
+            tw * tone_score,
             3,
         )
         engagement_score = round(

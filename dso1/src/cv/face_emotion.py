@@ -35,7 +35,7 @@ except ImportError:
     _EFFICIENTNET_AVAILABLE = False
 
 
-EMOTIONS = ["angry", "disgust", "fear", "happy", "sad", "surprise", "neutral"]
+EMOTIONS = ["angry", "contempt", "disgust", "fear", "happy", "neutral", "sad", "surprise"]
 
 
 @dataclass
@@ -151,7 +151,7 @@ class FaceEmotionAnalyzer:
             else:
                 scores = result
                 dominant = max(scores, key=scores.get)
-                stress = scores.get("fear", 0) + scores.get("angry", 0) + scores.get("disgust", 0)
+                stress = scores.get("fear", 0) + scores.get("angry", 0) + scores.get("disgust", 0) + scores.get("contempt", 0)
                 confidence = scores.get("happy", 0) + scores.get("neutral", 0)
 
                 self._last_result = EmotionResult(

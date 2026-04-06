@@ -31,6 +31,10 @@ class ToneResult:
     energy: float               # RMS energy (loudness proxy)
     speaking_rate: float        # Zero-crossing rate (speech pace proxy)
     pause_ratio: float          # Fraction of time silent (0.0–1.0)
+    jitter: float               # Cycle-cycle pitch variation
+    shimmer: float              # Cycle-cycle energy variation
+    speech_emotion_label: str   # HuBERT predicted emotion
+    speech_emotion_conf: float  # HuBERT prediction confidence
     tone_label: str             # "confident" | "hesitant" | "monotone" | "energetic" | "stressed"
     overall_score: float        # 0.0–1.0 composite score
 
@@ -74,6 +78,21 @@ class ToneAnalyzer:
         self._buffer: deque[np.ndarray] = deque(maxlen=self._buffer_size())
         self._result_lock = threading.Lock()
         self._latest_result: ToneResult = self._default_result()
+
+        # ── Load Audio Transformer ──────────────────────────────────
+        try:
+            from transformers import Wav2Vec2FeatureExtractor, HubertForSequenceClassification
+            import torch
+            print("[ToneAnalyzer] Loading speech emotion model (distilHuBERT)...")
+            self._device = "cuda" if torch.cuda.is_available() else "cpu"
+            self._feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained("superb/hubert-base-superb-er")
+            self._model = HubertForSequenceClassification.from_pretrained("superb/hubert-base-superb-er").to(self._device)
+            self._model.eval()
+            self._torch = torch
+            print("[ToneAnalyzer] Speech emotion model loaded.")
+        except Exception as e:
+            print(f"[WARN] Failed to load distilHuBERT. Speech emotion disabled. {e}")
+            self._model = None
 
     def start(self):
         """Open microphone stream and start background analysis thread."""
@@ -134,7 +153,7 @@ class ToneAnalyzer:
     def _analyze(self, audio: np.ndarray) -> ToneResult:
         sr = self.SAMPLE_RATE
 
-        # ── Pitch (F0) ───────────────────────────────────────
+        # ── Pitch (F0) & Jitter ──────────────────────────────
         # Using yin instead of pyin for a massive ~15x speedup
         f0 = librosa.yin(
             audio,
@@ -146,9 +165,20 @@ class ToneAnalyzer:
         pitch_mean     = float(np.mean(f0_valid))     if len(f0_valid) > 0 else 0.0
         pitch_variance = float(np.var(f0_valid))      if len(f0_valid) > 0 else 0.0
 
-        # ── Energy (RMS) ─────────────────────────────────────
+        if len(f0_valid) > 1:
+            jitter = float(np.mean(np.abs(np.diff(f0_valid))) / (pitch_mean + 1e-6))
+        else:
+            jitter = 0.0
+
+        # ── Energy (RMS) & Shimmer ───────────────────────────
         rms    = librosa.feature.rms(y=audio)[0]
         energy = float(np.mean(rms))
+
+        rms_valid = rms[rms > 0.01]
+        if len(rms_valid) > 1:
+            shimmer = float(np.mean(np.abs(np.diff(rms_valid))) / (np.mean(rms_valid) + 1e-6))
+        else:
+            shimmer = 0.0
 
         # ── Speaking rate proxy (ZCR) ─────────────────────────
         zcr          = librosa.feature.zero_crossing_rate(audio)[0]
@@ -158,14 +188,33 @@ class ToneAnalyzer:
         silence_mask = rms < 0.01           # frames below threshold = silence
         pause_ratio  = float(np.mean(silence_mask))
 
+        # ── Speech Emotion (distilHuBERT) ────────────────────
+        speech_emotion_label = "neutral"
+        speech_emotion_conf = 0.0
+
+        if self._model and getattr(self, "_torch", None):
+            try:
+                inputs = self._feature_extractor(audio, sampling_rate=16000, return_tensors="pt", padding=True)
+                inputs = {k: v.to(self._device) for k, v in inputs.items()}
+                with self._torch.no_grad():
+                    logits = self._model(**inputs).logits
+                probs = self._torch.nn.functional.softmax(logits, dim=-1)
+                pred_idx = self._torch.argmax(probs, dim=-1).item()
+                speech_emotion_conf = probs[0][pred_idx].item()
+                speech_emotion_label = self._model.config.id2label[pred_idx]
+            except Exception as e:
+                pass
+
+
         # ── Tone classification ──────────────────────────────
         tone_label = self._classify_tone(
-            pitch_mean, pitch_variance, energy, speaking_rate, pause_ratio
+            pitch_mean, pitch_variance, energy, speaking_rate, pause_ratio,
+            jitter, shimmer, speech_emotion_label
         )
 
         # ── Composite score ──────────────────────────────────
         overall = self._compute_score(
-            pitch_variance, energy, speaking_rate, pause_ratio
+            pitch_variance, energy, speaking_rate, pause_ratio, jitter, shimmer
         )
 
         return ToneResult(
@@ -174,6 +223,10 @@ class ToneAnalyzer:
             energy=round(energy, 4),
             speaking_rate=round(speaking_rate, 4),
             pause_ratio=round(pause_ratio, 3),
+            jitter=round(jitter, 4),
+            shimmer=round(shimmer, 4),
+            speech_emotion_label=speech_emotion_label,
+            speech_emotion_conf=round(speech_emotion_conf, 3),
             tone_label=tone_label,
             overall_score=round(overall, 3),
         )
@@ -185,11 +238,25 @@ class ToneAnalyzer:
         energy: float,
         speaking_rate: float,
         pause_ratio: float,
+        jitter: float,
+        shimmer: float,
+        speech_emotion_label: str
     ) -> str:
         if pause_ratio > 0.6:
             return "hesitant"
         if energy < 0.01:
             return "hesitant"
+        
+        # Integrate HuBERT predictions
+        if speech_emotion_label == "ang":
+            return "stressed"
+        if speech_emotion_label == "sad":
+            return "monotone"
+
+        # Shaky voice indicates stress/nervousness
+        if jitter > 0.05 or shimmer > 0.1:
+            return "stressed"
+
         if pitch_variance < 500 and energy < 0.03:
             return "monotone"
         if speaking_rate > 0.2 and energy > 0.05:
@@ -204,21 +271,27 @@ class ToneAnalyzer:
         energy: float,
         speaking_rate: float,
         pause_ratio: float,
+        jitter: float,
+        shimmer: float,
     ) -> float:
         """
         Higher score = better vocal performance.
-        Penalizes monotone, silence, and overly fast pacing.
+        Penalizes monotone, silence, shaky voice, and overly fast pacing.
         """
         variety_score = np.clip(pitch_variance / 5000.0, 0.0, 1.0)
         energy_score  = np.clip(energy / 0.05, 0.0, 1.0)
         pace_score    = 1.0 - np.clip(abs(speaking_rate - 0.12) / 0.12, 0.0, 1.0)
         fluency_score = 1.0 - pause_ratio
+        
+        # Penalize high jitter (pitch tremors) and shimmer (amplitude tremors) = nervousness
+        stability_score = 1.0 - np.clip((jitter / 0.1) + (shimmer / 0.2), 0.0, 1.0)
 
         return float(
-            0.25 * variety_score +
-            0.25 * energy_score +
-            0.25 * pace_score +
-            0.25 * fluency_score
+            0.20 * variety_score +
+            0.20 * energy_score +
+            0.20 * pace_score +
+            0.20 * fluency_score +
+            0.20 * stability_score
         )
 
     @staticmethod
@@ -229,6 +302,10 @@ class ToneAnalyzer:
             energy=0.0,
             speaking_rate=0.0,
             pause_ratio=0.0,
+            jitter=0.0,
+            shimmer=0.0,
+            speech_emotion_label="neutral",
+            speech_emotion_conf=0.0,
             tone_label="unknown",
             overall_score=0.0,
         )

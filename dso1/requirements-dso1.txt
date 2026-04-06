@@ -20,7 +20,9 @@ torch==2.6.0
 torchvision==0.21.0
 # timm 0.9.16 — EfficientNet-B2 emotion backend (compatible with torch 2.6.0)
 timm==0.9.16
+hsemotion==0.3.0
 huggingface-hub>=0.21.0
+transformers==4.39.3
 # Use onnxruntime (CPU) or onnxruntime-gpu if CUDA is available
 onnxruntime==1.17.3
 
