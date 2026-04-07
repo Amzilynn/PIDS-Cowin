@@ -19,3 +19,7 @@ pip_error.log
 audio_err.txt
 audio_err2.txt
 buf.json
+
+# Vector Database and Generated Files
+dso1/data/chroma_db/
+dso1/data/rag/*.json

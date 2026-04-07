@@ -59,6 +59,8 @@ class SessionLogger:
         self._csv_path  = self._dir / f"session_{session_id}.csv"
         self._json_path = self._dir / f"session_{session_id}_summary.json"
 
+        self.conversation_history = []  # List of {"role": x, "text": y, "timestamp": z}
+
         self._file   = self._csv_path.open("w", newline="", encoding="utf-8")
         self._writer = csv.DictWriter(self._file, fieldnames=self.CSV_FIELDS)
         self._writer.writeheader()
@@ -72,6 +74,14 @@ class SessionLogger:
         row = self._flatten(snap)
         self._writer.writerow(row)
         self._rows.append(row)
+
+    def log_conversation(self, role: str, text: str) -> None:
+        """Record an interaction in the transcript."""
+        self.conversation_history.append({
+            "role": role,
+            "text": text,
+            "timestamp_ms": self._rows[-1]["timestamp_ms"] if self._rows else 0
+        })
 
     def close(self) -> dict:
         """
@@ -175,6 +185,7 @@ class SessionLogger:
             "dominant_tone":      most_common("tone_label"),
             "eye_contact_rate":   eye_contact_rate,
             "grade": self._grade(avg("performance_score")),
+            "conversation_history": self.conversation_history,
         }
 
     @staticmethod

@@ -13,6 +13,7 @@ Press Q to quit. Session data is auto-saved via SessionLogger.
 """
 
 import time
+import json
 import cv2
 import numpy as np
 from pathlib import Path
@@ -25,6 +26,8 @@ from dso1.src.cv import (
     SessionSnapshot,
     SessionLogger,
 )
+from dso1.src.nlp.multimodal_orchestrator import MultimodalOrchestrator
+from dso1.src.evaluation.content_evaluator import ContentEvaluator
 
 # ── Config ────────────────────────────────────────────────────────────────
 CAMERA_INDEX   = 0
@@ -106,6 +109,18 @@ def draw_hud(frame: np.ndarray, snap: SessionSnapshot) -> np.ndarray:
     for ln in lines[:4]:
         put(ln, (200, 230, 200), 0.48)
 
+    # ── Orchestrator Status ────────────────────────────────
+    y = h - 60
+    status_colors = {
+        "IDLE": (180, 180, 180),
+        "LISTENING": (100, 255, 100),
+        "THINKING": (100, 200, 255),
+        "SPEAKING": (255, 150, 100)
+    }
+    status = getattr(snap, "nlp_state", "IDLE")
+    cv2.putText(frame, f"STATUS: {status}", (20, h - 30),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.8, status_colors.get(status, (255, 255, 255)), 2)
+
     return frame
 
 
@@ -127,6 +142,7 @@ def main():
     tone_analyzer  = ToneAnalyzer()
     fusion_scorer  = FusionScorer()
     session_logger = SessionLogger(output_dir=str(SESSIONS_DIR))
+    orchestrator   = MultimodalOrchestrator()
 
     cap = cv2.VideoCapture(CAMERA_INDEX)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH,  FRAME_WIDTH)
@@ -166,6 +182,27 @@ def main():
             # ── Emotion overlay ─────────────────────────────────────
             face_analyzer.draw_overlay(frame, face_result)
 
+            # ── NLP Orchestration ───────────────────────────────────
+            # Set state for HUD
+            snap.nlp_state = orchestrator.state
+
+            # If Idle, start listening for a few seconds
+            if orchestrator.state == "IDLE":
+                if not orchestrator.transcript_queue.empty():
+                    # Handle existing transcription
+                    text, lang = orchestrator.transcript_queue.get()
+                    print(f"[NLP] Delegate: {text}")
+                    session_logger.log_conversation("Delegate", text)
+                    response = orchestrator.request_response(text)
+                    print(f"[NLP] Avatar: {response}")
+                    orchestrator.speak_response(response, lang)
+                    session_logger.log_conversation("Avatar", response)
+                else:
+                    # In a real app, triggers would be based on voice activity detection (VAD)
+                    # For now, we'll listen when Space is pressed
+                    if cv2.waitKey(1) & 0xFF == ord(" "):
+                        orchestrator.start_listening()
+
             # ── HUD ─────────────────────────────────────────────────
             frame = draw_hud(frame, snap)
 
@@ -185,7 +222,22 @@ def main():
         cap.release()
         cv2.destroyAllWindows()
         summary = session_logger.close()
-        print(f"\n[INFO] Session Grade: {summary.get('grade', 'N/A')}")
+        print(f"\n[INFO] Behavioral Grade: {summary.get('grade', 'N/A')}")
+        
+        # ── Two-Part Evaluation: Content ──
+        print("[INFO] Evaluating Sales Content...")
+        content_evaluator = ContentEvaluator()
+        content_summary = content_evaluator.evaluate(summary.get("conversation_history", []))
+        print(f"[INFO] Content Grade:    {content_summary.get('grade', 'N/A')}")
+        
+        # Save both to a final report
+        final_report_path = session_logger.json_path.parent / (session_logger.json_path.stem + "_FINAL.json")
+        with open(final_report_path, "w") as f:
+            json.dump({
+                "behavioral": summary,
+                "content": content_summary
+            }, f, indent=2)
+        print(f"\n[SUCCESS] Final Two-Part Report: {final_report_path}")
 
 
 if __name__ == "__main__":
