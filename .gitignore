@@ -2,10 +2,17 @@
 .ipynb_checkpoints/
 *.ipynb
 
+# dso2 local virtual environment
+dso2/.venv/
+*.csv
+.venv
 # Python Cache
 __pycache__/
 *.pyc
 *.pyo
+
+*.csv
+.venv
 
 # Environment Variables
 .env
