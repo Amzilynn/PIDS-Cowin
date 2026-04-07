@@ -1,0 +1,26 @@
+git add .# OpenCV (manipulation et analyse d'image/vidéo)
+opencv-python-headless>=4.8.0
+opencv-contrib-python>=4.8.0
+
+# Vision et tracking facial (couche 1)
+mediapipe>=0.10.0
+retina-face>=0.0.13
+
+# Modèles Deep Learning (couche 2 et 3)
+torch>=2.0.0
+torchaudio>=2.0.0
+transformers>=4.30.0
+timm>=0.9.0
+
+# Traitement audio (couche 3)
+librosa>=0.10.0
+pyaudio>=0.2.13
+soundfile>=0.12.1
+
+# Data structures et numpy
+numpy>=1.22.0
+pandas>=2.0.0
+
+# Génération rapports PDF (couche 5)
+reportlab>=4.0.0
+matplotlib>=3.7.0

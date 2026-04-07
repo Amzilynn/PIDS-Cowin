@@ -5,6 +5,7 @@ __pycache__/
 
 # Virtualenv
 venv/
+venv_mp/
 .env
 .env.*
 
@@ -54,3 +55,8 @@ Thumbs.db
 *.key
 credentials.json
 config.ini
+*.csv
+
+# Rapports de Test et Evaluation
+evaluation/report/*.html
+evaluation/report/*.csv

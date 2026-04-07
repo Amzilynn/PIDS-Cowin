@@ -180,7 +180,12 @@ def main():
                         "CONTEXTE PRODUIT (Use this context ONLY if the delegate is clearly talking about this product. Otherwise ignore it.) :\n" + context_text
                     )
                 })
- 
+
+        # 🔹 AJOUTER LE MESSAGE SYSTÈME POUR LA LANGUE ICI 🔹
+    messages_to_send.append({
+        "role": "system",
+        "content": f"Always reply in the same language as the delegate ({lang})."
+    })
         # Ajouter le message de l'utilisateur
         messages_to_send.append({"role": "user", "content": user_input})
  
