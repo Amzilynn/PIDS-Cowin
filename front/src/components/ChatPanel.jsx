@@ -15,6 +15,7 @@ export default function ChatPanel({ persona = 'medical' }) {
   const [isMuted, setIsMuted] = useState(false);
   const [persistentHistory, setPersistentHistory] = useState([]);
   const [viewingSessionId, setViewingSessionId] = useState(null);
+  const [sessionError, setSessionError] = useState(false);
   
   const scrollRef = useRef(null);
   const timerRef = useRef(null);
@@ -54,16 +55,29 @@ export default function ChatPanel({ persona = 'medical' }) {
     let currentSessionId = null;
     const initSession = async () => {
       try {
+        console.log("Démarrage de la session avec le persona:", persona);
         const res = await fetch('http://127.0.0.1:8000/session/start', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ persona })
         });
+        
+        if (!res.ok) {
+          const errorPayload = await res.json().catch(() => ({}));
+          throw new Error(`HTTP ${res.status}: ${JSON.stringify(errorPayload)}`);
+        }
+
         const data = await res.json();
-        setSessionId(data.session_id);
-        currentSessionId = data.session_id;
+        if (data && data.session_id) {
+          setSessionId(data.session_id);
+          currentSessionId = data.session_id;
+          console.log("Session initialisée avec succès:", data.session_id);
+        } else {
+          throw new Error("ID de session manquant dans la réponse du serveur.");
+        }
       } catch (err) {
-        console.error("Erreur de session:", err);
+        console.error("Erreur critique de session:", err);
+        setSessionError(true);
       }
     };
     initSession();
@@ -398,11 +412,20 @@ export default function ChatPanel({ persona = 'medical' }) {
 
                 <button 
                     onClick={handleSend}
-                    disabled={!inputValue.trim() || !sessionId}
-                    className="h-10 px-6 rounded-full bg-md-primary text-white shadow-md active:scale-95 transition-all disabled:opacity-20 disabled:grayscale flex items-center gap-2 group/btn"
+                    disabled={!inputValue.trim() || (!sessionId && !sessionError)}
+                    className={`h-10 px-6 rounded-full shadow-md active:scale-95 transition-all flex items-center gap-2 group/btn ${
+                      !sessionId && !sessionError
+                        ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                        : sessionError
+                        ? 'bg-rose-500 text-white cursor-pointer hover:bg-rose-600'
+                        : 'bg-md-primary text-white hover:bg-md-primary-dark cursor-pointer'
+                    }`}
+                    title={!sessionId && !sessionError ? "Connexion au serveur..." : sessionError ? "Erreur de connexion - Cliquez pour réessayer (F5)" : "Envoyer"}
                 >
-                    <span className="text-[10px] font-black uppercase tracking-widest pl-1">Envoyer</span>
-                    <Send size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                    <span className="text-[10px] font-black uppercase tracking-widest pl-1">
+                      {!sessionId && !sessionError ? 'Connexion...' : 'Envoyer'}
+                    </span>
+                    <Send size={14} className={`${!sessionId && !sessionError ? 'animate-pulse' : 'group-hover:translate-x-0.5'} transition-transform`} />
                 </button>
              </div>
           </div>

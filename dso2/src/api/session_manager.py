@@ -39,13 +39,15 @@ class SessionManager:
         """
         sid = session_id or str(uuid.uuid4())
 
+        # Create agent BEFORE lock to avoid holding it during slow initialization
+        agent = VitalAgent(session_id=sid, persona=persona)
+
         with self._lock:
             if sid in self._sessions:
                 raise ValueError(
                     f"Session '{sid}' already exists. "
                     "Use a different session_id."
                 )
-            agent = VitalAgent(session_id=sid, persona=persona)
             self._sessions[sid] = {
                 "agent": agent,
                 "persona": persona,
