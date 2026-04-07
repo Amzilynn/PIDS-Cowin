@@ -19,3 +19,6 @@ pip_error.log
 audio_err.txt
 audio_err2.txt
 buf.json
+
+# Ignore local auto-generated data
+dso1/data/
