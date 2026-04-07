@@ -1,0 +1,18 @@
+{
+  "session_duration_s": 42.6,
+  "total_frames": 510,
+  "averages": {
+    "performance": 0.677,
+    "confidence": 0.83,
+    "stress": 0.12,
+    "engagement": 0.263,
+    "posture": 1.0,
+    "openness": 0.817,
+    "fidget": 0.734,
+    "pause_ratio": 0.748
+  },
+  "dominant_emotion": "neutral",
+  "dominant_tone": "hesitant",
+  "eye_contact_rate": 1.0,
+  "grade": "C \u2014 Satisfactory"
+}
