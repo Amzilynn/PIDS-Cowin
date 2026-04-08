@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { Send, Mic, MicOff, Bot, FileText, Copy, Download, X, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function ChatPanel({ persona = 'medical' }) {
+export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolumeSync }) {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isRecording, setIsRecording] = useState(false);
@@ -20,6 +20,41 @@ export default function ChatPanel({ persona = 'medical' }) {
   const scrollRef = useRef(null);
   const timerRef = useRef(null);
   const recognitionRef = useRef(null);
+  
+  // Audio state refs for Lip-Sync
+  const audioRef = useRef(null);
+  const audioCtxRef = useRef(null);
+  const analyserRef = useRef(null);
+  const sourceRef = useRef(null);
+
+  // Initialize Audio element on mount
+  useEffect(() => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+      audioRef.current.crossOrigin = "anonymous";
+      
+      audioRef.current.addEventListener('play', () => {
+        if (onSpeakingState) onSpeakingState(true);
+        if (onVolumeSync && analyserRef.current) {
+           const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+           const syncLoop = () => {
+             if (audioRef.current.paused || audioRef.current.ended) return;
+             analyserRef.current.getByteFrequencyData(dataArray);
+             let sum = 0;
+             for (let i = 2; i < 20; i++) sum += dataArray[i];
+             onVolumeSync(Math.min((sum / 18) / 120, 1.0));
+             requestAnimationFrame(syncLoop);
+           };
+           syncLoop();
+        }
+      });
+
+      audioRef.current.onended = () => {
+        if (onSpeakingState) onSpeakingState(false);
+        if (onVolumeSync) onVolumeSync(0);
+      };
+    }
+  }, [onSpeakingState, onVolumeSync]);
 
   // Synchronisation de l'historique persistent
   useEffect(() => {
@@ -83,9 +118,11 @@ export default function ChatPanel({ persona = 'medical' }) {
     initSession();
 
     return () => {
-      // Cleanup de session
       if (currentSessionId) {
         fetch(`http://127.0.0.1:8000/session/${currentSessionId}`, { method: 'DELETE' }).catch(console.error);
+      }
+      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+        audioCtxRef.current.close().catch(() => {});
       }
     };
   }, [persona]);
@@ -127,7 +164,29 @@ export default function ChatPanel({ persona = 'medical' }) {
     }
   }, [messages, isTyping]);
 
+  const ensureAudioContext = () => {
+    try {
+      if (!audioCtxRef.current) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtxRef.current = new AudioContext();
+        analyserRef.current = audioCtxRef.current.createAnalyser();
+        analyserRef.current.fftSize = 256;
+        sourceRef.current = audioCtxRef.current.createMediaElementSource(audioRef.current);
+        sourceRef.current.connect(analyserRef.current);
+        analyserRef.current.connect(audioCtxRef.current.destination);
+      }
+      if (audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume();
+      }
+    } catch(e) {
+      console.warn("Failed to initialize AudioContext.", e);
+    }
+  };
+
   const handleSend = async () => {
+    // Synchronously resume/init context on user gesture!
+    ensureAudioContext();
+
     if (!inputValue.trim() || !sessionId) return;
     
     // Si on envoie pendant qu'on enregistre, on coupe le micro proprement.
@@ -175,11 +234,11 @@ export default function ChatPanel({ persona = 'medical' }) {
   };
 
   const playTTS = (text) => {
-    if (isMuted) return;
+    if (isMuted || !audioRef.current) return;
     try {
       const audioUrl = `http://127.0.0.1:5500/tts?text=${encodeURIComponent(text)}&voice=fr-FR-DeniseNeural`;
-      const audio = new Audio(audioUrl);
-      audio.play().catch(e => console.error("TTS play error", e));
+      audioRef.current.src = audioUrl;
+      audioRef.current.play().catch(e => console.error("TTS play error", e));
     } catch (err) {
       console.error("TTS request error", err);
     }
