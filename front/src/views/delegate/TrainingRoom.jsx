@@ -10,7 +10,6 @@ import {
   Activity,
   Zap
 } from 'lucide-react';
-import Avatar3D from '../../components/Avatar3D';
 import CameraPanel from '../../components/CameraPanel';
 import ChatPanel from '../../components/ChatPanel';
 
@@ -23,6 +22,49 @@ export default function TrainingRoom() {
   
   const [sessionTime, setSessionTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const [delegues, setDelegues] = useState([]);
+  const [selectedDelegue, setSelectedDelegue] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:8001/api/training/delegues")
+      .then(res => res.json())
+      .then(data => {
+        setDelegues(data);
+        if (data.length > 0) setSelectedDelegue(data[0].id);
+      })
+      .catch(console.error);
+  }, []);
+
+  const toggleSession = async () => {
+    setIsLoading(true);
+    let sessionResult = null;
+    try {
+      if (!isActive) {
+        const response = await fetch("http://localhost:8001/api/training/start", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ delegue_id: Number(selectedDelegue) })
+        });
+        if (response.ok) setIsActive(true);
+        else console.error("Failed to start session", await response.text());
+      } else {
+        const response = await fetch("http://localhost:8001/api/training/stop", {
+          method: "POST"
+        });
+        if (response.ok) {
+          sessionResult = await response.json();
+          setIsActive(false);
+        }
+        else console.error("Failed to stop session", await response.text());
+      }
+    } catch (error) {
+      console.error("API error", error);
+    }
+    setIsLoading(false);
+    return sessionResult;
+  };
 
   useEffect(() => {
     let interval;
@@ -72,31 +114,52 @@ export default function TrainingRoom() {
               </div>
            </div>
            
-           <button 
-             onClick={() => navigate('/delegate/results')}
-             className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20"
-           >
-              Évaluer la Session
-           </button>
+           {/* Délégué & Start */}
+           {!isActive && (
+              <select 
+                value={selectedDelegue} 
+                onChange={(e) => setSelectedDelegue(e.target.value)}
+                className="h-12 px-4 rounded-xl border-none bg-md-surface outline-none text-sm font-bold mt-1 shadow-inner text-md-on-surface"
+              >
+                {delegues.map(d => (
+                  <option key={d.id} value={d.id}>{d.nom} - Niveau {d.level}</option>
+                ))}
+              </select>
+           )}
+
+           {!isActive ? (
+             <button 
+               disabled={isLoading}
+               onClick={toggleSession}
+               className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20 bg-green-600 hover:bg-green-700 disabled:opacity-50"
+             >
+                {isLoading ? "Démarrage..." : "Démarrer la Session IA"}
+             </button>
+           ) : (
+             <button 
+               onClick={async () => {
+                  const data = await toggleSession();
+                  navigate('/delegate/results', { state: { resultData: data } });
+               }}
+               className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20 bg-red-600 hover:bg-red-700 flex items-center gap-2"
+             >
+                {isLoading ? "Veuillez patienter..." : "Arrêter et Évaluer"}
+             </button>
+           )}
         </div>
       </div>
 
-      {/* Théâtre de Simulation Principal (3 Colonnes Alignées) */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 overflow-hidden">
+      {/* Théâtre de Simulation Principal (2 Colonnes Alignées) */}
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 p-8 overflow-hidden">
         
-        {/* COL 1 : Avatar de Formation */}
-        <div className="md-card !p-0 overflow-hidden relative flex flex-col bg-md-surface-container border-none shadow-2xl">
-           <Avatar3D type={isMedical ? 'doctor' : 'pharmacist'} />
-        </div>
-
-        {/* COL 2 : Caméra du Délégué */}
+        {/* COL 1 : Caméra du Délégué */}
         <div className="md-card !p-0 overflow-hidden bg-md-surface-container-low/30 relative flex flex-col shadow-xl border-none">
            <div className="flex-1 flex flex-col p-4 w-full h-full">
-              <CameraPanel label="Flux Délégué" />
+              <CameraPanel label="Flux Délégué" isActive={isActive} onToggle={toggleSession} hideControls={true} />
            </div>
         </div>
 
-        {/* COL 3 : Panneau de Chat Interactif */}
+        {/* COL 2 : Panneau de Chat Interactif */}
         <div className="md-card !p-0 overflow-hidden bg-md-surface-container/50 relative flex flex-col shadow-xl border-none w-full h-full">
            <ChatPanel />
         </div>

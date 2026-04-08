@@ -61,7 +61,7 @@ class FaceEmotionAnalyzer:
     def __init__(
         self,
         backend: str = "auto",
-        skip_frames: int = 3,
+        skip_frames: int = 15,
         efficientnet_checkpoint: str | None = None,
         efficientnet_device: str = "auto",
     ):

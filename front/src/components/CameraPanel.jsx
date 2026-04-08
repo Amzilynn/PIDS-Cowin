@@ -2,43 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Camera, CameraOff, Video, Mic, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function CameraPanel({ label = "Délégué" }) {
-  const [isActive, setIsActive] = useState(false);
-  const videoRef = useRef(null);
+export default function CameraPanel({ label = "Délégué", isActive, onToggle, hideControls = false }) {
   const streamRef = useRef(null);
   const [micLevel, setMicLevel] = useState([0, 0, 0, 0, 0, 0]);
 
-  // Gestion du flux Caméra Réel
+  // Plus de `getUserMedia` ici, on dépend de l'API backend pour la caméra.
+  // Lors de l'activation, DSO1 lance `cv2.VideoCapture` et stream le résultat via MJPEG.
   useEffect(() => {
-    async function startCamera() {
-      if (isActive) {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { width: 1280, height: 720, facingMode: 'user' },
-            audio: false 
-          });
-          streamRef.current = stream;
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        } catch (err) {
-          console.error("Erreur caméra:", err);
-          setIsActive(false);
-          alert("Impossible d'accéder à la caméra. Vérifiez les permissions.");
-        }
-      } else {
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach(track => track.stop());
-          streamRef.current = null;
-        }
-      }
+    if (!isActive) {
+      setMicLevel([0, 0, 0, 0, 0, 0]);
     }
-    startCamera();
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
-      }
-    };
   }, [isActive]);
 
   // Simulation de l'animation du micro quand actif
@@ -100,13 +73,11 @@ export default function CameraPanel({ label = "Délégué" }) {
                 animate={{ opacity: 1 }}
                 className="w-full h-full relative"
              >
-                {/* Flux vidéo réel */}
-                <video 
-                   ref={videoRef}
-                   autoPlay 
-                   playsInline 
-                   muted 
-                   className="w-full h-full object-cover scale-x-[-1] transition-opacity duration-700" 
+                {/* Flux vidéo du backend DSO1 (MJPEG Feed) */}
+                <img 
+                   src={isActive ? "http://localhost:8001/api/training/video_feed" : ""} 
+                   alt="Flux DSO1"
+                   className="w-full aspect-video md:h-[400px] object-cover rounded-xl scale-x-[-1] transition-opacity duration-700 bg-black" 
                 />
                 
                 <div className="absolute bottom-6 left-6 flex items-center gap-2">
@@ -130,26 +101,28 @@ export default function CameraPanel({ label = "Délégué" }) {
       </div>
 
       {/* Contrôles Inférieurs */}
-      <div className="mt-8 flex justify-center relative z-10">
-         <button 
-           onClick={() => setIsActive(!isActive)}
-           className={`btn-pill px-10 transition-all ${
-             isActive 
-               ? 'bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100' 
-               : 'btn-primary'
-           }`}
-         >
-            {isActive ? (
-               <>
-                  <CameraOff size={18} /> Désactiver
-               </>
-            ) : (
-               <>
-                  <Camera size={18} /> Activer la caméra
-               </>
-            )}
-         </button>
-      </div>
+      {!hideControls && (
+        <div className="mt-8 flex justify-center relative z-10">
+           <button 
+             onClick={onToggle}
+             className={`btn-pill px-10 transition-all ${
+               isActive 
+                 ? 'bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100' 
+                 : 'btn-primary'
+             }`}
+           >
+              {isActive ? (
+                 <>
+                    <CameraOff size={18} /> Désactiver
+                 </>
+              ) : (
+                 <>
+                    <Camera size={18} /> Activer la caméra
+                 </>
+              )}
+           </button>
+        </div>
+      )}
 
       {/* Decorative corners */}
       {/* Removing decorative corners */}

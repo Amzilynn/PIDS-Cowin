@@ -65,7 +65,7 @@ FRAME_WIDTH     = 1280
 FRAME_HEIGHT    = 720
 
 # Chemins relatifs à la racine de dso1 (parent de src)
-ROOT_DIR        = Path(__file__).parent.parent
+ROOT_DIR        = Path(__file__).resolve().parent.parent
 SESSIONS_DIR    = ROOT_DIR / "sessions"
 DATA_DIR        = ROOT_DIR / "Data"
 
@@ -92,8 +92,7 @@ PRODUCT_KEYWORDS = [
 def load_delegues() -> list[dict]:
     path = DATA_DIR / "delegues.csv"
     if not path.exists():
-        print(f"[Erreur] {path} introuvable.")
-        sys.exit(1)
+        raise FileNotFoundError(f"[Erreur] {path} introuvable.")
     with open(path, newline="", encoding="utf-8") as f:
         return [
             {
@@ -266,6 +265,9 @@ class EvaluationThread(threading.Thread):
         self.tone_analyzer  = ToneAnalyzer()
         self.fusion_scorer  = FusionScorer()
         self.session_logger = SessionLogger(output_dir=str(SESSIONS_DIR))
+        self.use_api        = False
+        self.api_mode_hud_off = False
+        self.current_frame  = None
 
     # ── API publique ─────────────────────────────────────────────────────────
 
@@ -301,9 +303,13 @@ class EvaluationThread(threading.Thread):
     # ── Boucle principale ────────────────────────────────────────────────────
 
     def run(self):
-        cap = cv2.VideoCapture(CAMERA_INDEX)
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH,  FRAME_WIDTH)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
+        # Utilise MSMF sur Windows car DSHOW est extremement lent pour l'ouverture
+        cap = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_MSMF)
+        if not cap.isOpened():
+            cap = cv2.VideoCapture(CAMERA_INDEX)
+            
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH,  640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
         if not cap.isOpened():
             print("[EvalThread] ❌ Impossible d'ouvrir la caméra.")
@@ -333,27 +339,31 @@ class EvaluationThread(threading.Thread):
                     ts_ms, body_result, face_result, tone_result
                 )
 
-                # ── Overlays visuels (toujours affichés) ─────────────────────
-                self.body_analyzer.draw_landmarks(frame)
-                self.face_analyzer.draw_overlay(frame, face_result)
+                # ── Overlays visuels ─────────────────────
+                if not self.api_mode_hud_off:
+                    self.body_analyzer.draw_landmarks(frame)
+                    self.face_analyzer.draw_overlay(frame, face_result)
 
                 avatar_speaking = self._avatar_speaking.is_set()
-                frame = draw_hud(
-                    frame, snap,
-                    self.delegue_nom, self._conv_turn,
-                    avatar_speaking,
-                )
+                if not self.api_mode_hud_off:
+                    frame = draw_hud(
+                        frame, snap,
+                        self.delegue_nom, self._conv_turn,
+                        avatar_speaking,
+                    )
+                
+                self.current_frame = frame.copy()
 
-                cv2.imshow("Co-Win | Évaluation délégué", frame)
+                if not self.use_api:
+                    cv2.imshow("Co-Win | Évaluation délégué", frame)
+                    # Touche Q pour fermer
+                    if cv2.waitKey(1) & 0xFF == ord("q"):
+                        self._stop_event.set()
+                        break
 
                 # ── Loguer UNIQUEMENT quand c'est le délégué qui parle ───────
                 if not avatar_speaking:
                     self.session_logger.log(snap)
-
-                # Touche Q pour fermer
-                if cv2.waitKey(1) & 0xFF == ord("q"):
-                    self._stop_event.set()
-                    break
 
         finally:
             print("[EvalThread] Arrêt du pipeline CV...")
@@ -394,6 +404,7 @@ def conversation_loop(
     eval_thread: EvaluationThread,
     client: Groq,
     retriever: Retriever,
+    on_message_callback: callable = None
 ) -> list[dict]:
     """
     Boucle principale STT → Groq → TTS.
@@ -447,6 +458,8 @@ def conversation_loop(
             continue
 
         print(f"🗣️  Délégué : {user_input}")
+        if on_message_callback:
+            on_message_callback("user", user_input)
 
         # ── Mot-clé de fin ───────────────────────────────────────────────────
         if any(kw in user_input.lower() for kw in STOP_KEYWORDS):
@@ -482,6 +495,8 @@ def conversation_loop(
             continue
 
         print(f"🤖 Avatar : {avatar_reply}")
+        if on_message_callback:
+            on_message_callback("assistant", avatar_reply)
         print("─" * 50)
 
         # ── PHASE 2 : Avatar parle → geler le logging ────────────────────────

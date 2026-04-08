@@ -19,22 +19,27 @@ import {
   Target
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-
-const radialData = [
-  { name: 'Score Global', value: 87, fill: 'var(--color-md-primary)' }
-];
-
-const competenceData = [
-  { subject: 'Produit', A: 90, fullMark: 100 },
-  { subject: 'Communication', A: 98, fullMark: 100 },
-  { subject: 'Argumentation', A: 86, fullMark: 100 },
-  { subject: 'Présentation', A: 92, fullMark: 100 },
-  { subject: 'Objections', A: 75, fullMark: 100 },
-];
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function EvaluationResults() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const resultData = location.state?.resultData || {};
+  const averages = resultData?.results?.averages || {};
+  const globalScore = Math.round(averages?.performance || 87);
+  const reportFileName = resultData?.report_pdf;
+
+  const radialData = [
+    { name: 'Score Global', value: globalScore, fill: 'var(--color-md-primary)' }
+  ];
+
+  const competenceData = [
+    { subject: 'Sourire', A: Math.round(averages?.smile || 70), fullMark: 100 },
+    { subject: 'Attention', A: Math.round(averages?.attention || 80), fullMark: 100 },
+    { subject: 'Confiance', A: Math.round(averages?.confidence || 80), fullMark: 100 },
+    { subject: 'Ouverture', A: Math.round(100 - (averages?.arms_crossed || 0)), fullMark: 100 },
+    { subject: 'Performance', A: globalScore, fullMark: 100 },
+  ];
 
   return (
     <div className="space-y-12 animate-fade-in pb-20 relative z-10">
@@ -95,9 +100,9 @@ export default function EvaluationResults() {
                  transition={{ type: 'spring', stiffness: 100, damping: 10 }}
                  className="text-7xl font-black text-md-on-background tracking-tighter"
                >
-                 87<span className="text-3xl text-md-primary font-bold">/100</span>
+                 {globalScore}<span className="text-3xl text-md-primary font-bold">/100</span>
                </motion.span>
-               <span className="text-[11px] font-black text-md-primary uppercase tracking-[0.4em] mt-3 opacity-60">Score Médical</span>
+               <span className="text-[11px] font-black text-md-primary uppercase tracking-[0.4em] mt-3 opacity-60">Score Évalué</span>
             </div>
          </div>
       </div>
@@ -107,11 +112,11 @@ export default function EvaluationResults() {
          {/* Detailed Metrics - Pill-style progress bars */}
          <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-5 gap-8">
             {[
-               { label: 'Produit', value: 90, icon: BrainCircuit, color: 'bg-emerald-500' },
-               { label: 'Communication', value: 92, icon: MessageSquare, color: 'bg-md-primary' },
-               { label: 'Argumentation', value: 86, icon: TrendingUp, color: 'bg-indigo-500' },
-               { label: 'Présentation', value: 92, icon: UserCheck, color: 'bg-md-on-background' },
-               { label: 'Objections', value: 75, icon: AlertCircle, color: 'bg-rose-500' },
+               { label: 'Sourire', value: Math.round(averages?.smile || 70), icon: BrainCircuit, color: 'bg-emerald-500' },
+               { label: 'Attention', value: Math.round(averages?.attention || 80), icon: MessageSquare, color: 'bg-md-primary' },
+               { label: 'Confiance', value: Math.round(averages?.confidence || 80), icon: TrendingUp, color: 'bg-indigo-500' },
+               { label: 'Posture', value: Math.round(100 - (averages?.arms_crossed || 0)), icon: UserCheck, color: 'bg-md-on-background' },
+               { label: 'Vitesse', value: Math.round(averages?.speaking_rate || 75), icon: AlertCircle, color: 'bg-rose-500' },
             ].map((metric, i) => (
                <motion.div 
                  key={i} 
@@ -199,10 +204,20 @@ export default function EvaluationResults() {
                   ))}
                </div>
                
-               <div className="mt-auto pt-10 relative z-10">
+               <div className="mt-auto pt-10 relative z-10 flex flex-col gap-4">
+                  {reportFileName && (
+                     <a 
+                       href={`http://localhost:8001/reports/${reportFileName}`}
+                       target="_blank"
+                       rel="noreferrer"
+                       className="w-full h-14 bg-white/10 text-white border border-white/20 rounded-pill text-[12px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-white/20 hover:scale-105 transition-all shadow-xl"
+                     >
+                       Télécharger Rapport PDF
+                     </a>
+                  )}
                   <button 
                     onClick={() => navigate('/delegate/home')}
-                    className="w-full h-20 bg-md-primary text-white rounded-pill text-[12px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-6 shadow-2xl shadow-md-primary/40 group hover:scale-105 active:scale-95 transition-all relative overflow-hidden"
+                    className="w-full h-16 bg-md-primary text-white rounded-pill text-[12px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-6 shadow-2xl shadow-md-primary/40 group hover:scale-105 active:scale-95 transition-all relative overflow-hidden"
                   >
                      <span className="relative z-10">Nouvelle Session</span>
                      <ArrowRight size={24} className="relative z-10 group-hover:translate-x-3 transition-transform duration-500" />
