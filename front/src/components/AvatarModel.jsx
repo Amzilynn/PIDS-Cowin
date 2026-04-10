@@ -1,5 +1,5 @@
 import React, { useRef, Suspense, useEffect } from 'react';
-import { useGLTF, useTexture, Environment } from '@react-three/drei';
+import { useGLTF, useTexture } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -10,7 +10,6 @@ function ActualMetaHuman({ isSpeaking, speechPulse = 0, ...props }) {
   
   const { scene } = useGLTF('/assets/avatar/ava.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
   
-  // Load external textures
   const baseColor = useTexture('/assets/avatar/ava_Basecolor.png');
   const normalMap = useTexture('/assets/avatar/ava_Normal.png');
 
@@ -40,7 +39,6 @@ function ActualMetaHuman({ isSpeaking, speechPulse = 0, ...props }) {
   });
 
   useEffect(() => {
-    // Configure textures
     baseColor.flipY = false;
     baseColor.colorSpace = THREE.SRGBColorSpace;
     baseColor.needsUpdate = true;
@@ -49,45 +47,39 @@ function ActualMetaHuman({ isSpeaking, speechPulse = 0, ...props }) {
     normalMap.needsUpdate = true;
     
     scene.traverse(node => {
-      if (node.isMesh && node.material) {
+      if (node.isMesh) {
+        console.log('Mesh found:', node.name);
         node.castShadow = true;
         node.receiveShadow = true;
         
-        // The GLB material names are often empty strings.
-        // We only apply the external skin textures to the body and face meshes that lack natives maps.
-        const hasNativeMap = !!node.material.map;
-        const isBody = node.name === 'Body001';
-        const isFace = node.name.startsWith('Face');
+        const nodeName = node.name.toLowerCase();
         
-        if (!hasNativeMap && (isBody || isFace)) {
-          if (isBody) {
-             // Create a "bodysuit" by overriding the naked body mesh with a solid color.
-             // This also fixes the red UV artifacts that happened when applying the face texture to the body!
-             node.material = new THREE.MeshStandardMaterial({
-                 color: new THREE.Color('#0f2b3c'), // Dark clinical blue
-                 roughness: 0.7,
-                 metalness: 0.1,
-                 envMapIntensity: 0.5
-             });
-          } else {
-             // Face gets the realistic skin textures
-             node.material = node.material.clone();
-             node.material.map = baseColor;
-             node.material.normalMap = normalMap;
-             node.material.normalScale = new THREE.Vector2(1, 1);
-             node.material.color = new THREE.Color(0xffffff); 
-             node.material.roughness = 0.55;
-             node.material.metalness = 0.0;
-             node.material.envMapIntensity = 1.0;
-          }
-          node.material.needsUpdate = true;
-        }  
-        // If it has a native map (like the Eyes), we literally do NOT touch it. 
-        // We let the native glTF loader and the GLB's internal settings handle it!
+        if (nodeName === 'body001' || nodeName.includes('body')) {
+          node.material = new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#0f2b3c'),
+            roughness: 0.7,
+            metalness: 0.1
+          });
+        }
+        else if (nodeName.startsWith('face') || nodeName.includes('face_') || nodeName.includes('skin') || nodeName.includes('head')) {
+          node.material = node.material.clone();
+          node.material.map = baseColor;
+          node.material.normalMap = normalMap;
+          node.material.color = new THREE.Color(0xffffff);
+          node.material.roughness = 0.55;
+          node.material.metalness = 0.0;
+        }
+        else if (node.material) {
+          node.material = new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#0f2b3c'),
+            roughness: 0.7,
+            metalness: 0.1
+          });
+        }
+        if (node.material) node.material.needsUpdate = true;
       }
     });
 
-    // Center face/upper body at origin so OrbitControls frames it correctly
     const box = new THREE.Box3().setFromObject(scene);
     const center = new THREE.Vector3();
     const size = new THREE.Vector3();
@@ -95,11 +87,9 @@ function ActualMetaHuman({ isSpeaking, speechPulse = 0, ...props }) {
     box.getSize(size);
 
     if (positionGroup.current) {
-      // 82% from bottom of model is approximately the face/chest area
       const faceY = box.min.y + size.y * 0.82;
       positionGroup.current.position.set(-center.x, -faceY, -center.z);
     }
-    
   }, [scene, baseColor, normalMap]);
 
   return (
@@ -137,7 +127,8 @@ export default function AvatarModel(props) {
        <directionalLight position={[3, 4, 5]} intensity={1.2} castShadow color="#fff5ee" />
        <directionalLight position={[-4, 3, 3]} intensity={0.5} color="#e8f0ff" />
        <directionalLight position={[0, 4, -4]} intensity={0.4} color="#ffffff" />
-       <Environment preset="studio" />
+       <spotLight position={[0, 10, 0]} angle={0.3} penumbra={1} intensity={0.5} castShadow />
+       <pointLight position={[-5, 5, 5]} intensity={0.3} color="#e8f0ff" />
        <ActualMetaHuman {...props} />
     </Suspense>
   );
