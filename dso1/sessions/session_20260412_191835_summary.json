@@ -1,0 +1,18 @@
+{
+  "session_duration_s": 7.0,
+  "total_frames": 126,
+  "averages": {
+    "performance": 0.458,
+    "confidence": 0.397,
+    "stress": 0.532,
+    "engagement": 0.518,
+    "posture": 0.712,
+    "openness": 0.557,
+    "fidget": 0.887,
+    "pause_ratio": 0.429
+  },
+  "dominant_emotion": "neutral",
+  "dominant_tone": "unknown",
+  "eye_contact_rate": 0.413,
+  "grade": "D \u2014 Needs Improvement"
+}
