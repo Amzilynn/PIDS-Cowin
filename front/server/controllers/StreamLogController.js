@@ -1,0 +1,10 @@
+import { StreamLogModel } from '../models/StreamLogModel.js';
+
+export const getStreamLogs = async (req, res) => {
+  try {
+    const data = await StreamLogModel.getAll();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

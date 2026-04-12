@@ -1,14 +1,72 @@
-# Jupyter Checkpoints
+# Jupyter / Notebooks
 .ipynb_checkpoints/
-*.ipynb
 
 # Python Cache
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 *.pyo
+
+# Virtual Environments
+.venv/
+.venv
+venv/
+venv_dso1/
+venv_mp/
+dso2/.venv/
 
 # Environment Variables
 .env
-venv/
-# Models
+.env.*
+
+# IDE / Editors
+.vscode/
+.idea/
+*.suo
+*.user
+*.swp
+*.bak
+*.tmp
+
+# Data / Database / Cache
+*.csv
+*.json
+*.pkl
+*.db
+*.sqlite
+*.cache
+*.log
+
+chroma_db/
+vectordb/
+Data/*.json
+Data/*.pkl
+Data/*.db
+Data/*.sqlite
+
+# Models / AI
 models/
+*.pt
+*.bin
+**/cache/
+~/.cache/huggingface/
+
+# Audio Temp Files
+*.wav
+*.mp3
+*.ogg
+*.flac
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Secrets / Keys
+*.pem
+*.key
+credentials.json
+config.ini
+
+# Reports / Evaluation
+evaluation/report/*.html
+evaluation/report/*.csv

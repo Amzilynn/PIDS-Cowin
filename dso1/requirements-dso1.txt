@@ -1,0 +1,72 @@
+# ── Agent Core & APIs ────────────────────────────────────────
+requests
+python-dotenv
+groq
+fastapi
+uvicorn
+python-multipart
+
+# ── Agent Voice & Audio (TTS / STT) ──────────────────────────
+edge-tts
+pygame
+openai-whisper
+sounddevice
+
+# ── RAG (Retrieval-Augmented Generation) ─────────────────────
+sentence-transformers
+chromadb
+
+# ── Computer Vision & Pose (CV Module) ───────────────────────
+# mediapipe 0.10.14 is required for Python 3.12 compatibility on Windows
+opencv-python==4.9.0.80
+mediapipe==0.10.14
+
+# ── Facial Emotion Recognition ───────────────────────────────
+# deepface 0.0.93 works with TF 2.21 + tf-keras shim
+deepface==0.0.93
+fer==22.5.1
+
+# ── Audio / Tone Analysis ────────────────────────────────────
+# PyAudio 0.2.14 is the last version compatible with cffi <2.0 on Windows
+PyAudio==0.2.14
+librosa==0.10.1
+speechbrain==1.0.2
+
+# ── Deep Learning ────────────────────────────────────────────
+# torch 2.6.0 + torchvision 0.21.0 are a matched stable pair for Python 3.10
+torch==2.6.0
+torchvision==0.21.0
+torchaudio==2.6.0
+# timm 0.9.16 — EfficientNet-B2 emotion backend (compatible with torch 2.6.0)
+timm==0.9.16
+hsemotion==0.3.0
+huggingface-hub>=0.21.0
+transformers==4.39.3
+# Use onnxruntime (CPU) or onnxruntime-gpu if CUDA is available
+onnxruntime==1.17.3
+
+# ── Data & Utilities ─────────────────────────────────────────
+# numpy MUST stay on 1.x — mediapipe, librosa, numba all break on numpy 2.x
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.13.1
+
+# ── Sub-dependency pins (prevent pip backtracking) ───────────
+# cffi 2.0 is incompatible with PyAudio and several audio libs
+cffi==1.17.1
+# protobuf: mediapipe 0.10.14 needs >=4.25.3
+protobuf==4.25.3
+# soundfile and soxr for librosa
+soundfile==0.12.1
+soxr==0.3.7
+six==1.16.0
+setuptools==69.5.1
+
+# ── Dashboard ────────────────────────────────────────────────
+streamlit==1.33.0
+plotly==5.22.0
+
+# For Python 3.12, TF >= 2.16 is required. Using 2.16.1.
+# Added tf-keras for compatibility with libraries using Keras 2 patterns (like deepface).
+tensorflow==2.16.1
+tf-keras
