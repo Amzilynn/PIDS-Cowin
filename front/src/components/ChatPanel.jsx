@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Send, Mic, MicOff, Bot, FileText, Copy, Download, X, Volume2, VolumeX } from 'lucide-react';
+import { Send, Mic, MicOff, Bot, FileText, Copy, Download, X, Volume2, VolumeX, MessageSquare, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolumeSync }) {
@@ -541,16 +541,23 @@ export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolu
                            key={s.id}
                            onClick={() => setViewingSessionId(s.id)}
                            className={`w-full text-left p-5 rounded-2xl transition-all duration-300 border ${
-                              (viewingSessionId || sessionId) === s.id 
+                              viewingSessionId === s.id
                                  ? 'bg-md-primary text-white shadow-xl border-md-primary scale-[1.02] z-10' 
+                                 : sessionId === s.id
+                                 ? 'bg-md-primary/10 text-md-primary border-md-primary/30'
                                  : 'bg-white text-md-on-background border-md-outline/5 hover:border-md-primary/30'
                            }`}
                         >
                            <div className="flex justify-between items-start mb-2">
-                              <span className={`text-[10px] font-black uppercase tracking-widest ${ (viewingSessionId || sessionId) === s.id ? 'text-white' : 'text-md-primary'}`}>
+                              <span className={`text-[10px] font-black uppercase tracking-widest ${ viewingSessionId === s.id ? 'text-white' : 'text-md-primary'}`}>
                                  {s.persona === 'medical' ? 'Dossier Médical' : 'Suivi Commercial'}
                               </span>
-                              <span className="text-[9px] opacity-60 font-bold">{s.time}</span>
+                              <div className="flex items-center gap-1.5">
+                                 {sessionId === s.id && (
+                                    <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-brand-teal/20 text-brand-teal">En cours</span>
+                                 )}
+                                 <span className="text-[9px] opacity-60 font-bold">{s.time}</span>
+                              </div>
                            </div>
                            <p className="text-[12px] font-bold truncate leading-tight mb-3">{s.messages[s.messages.length - 1]?.text || 'Session vide'}</p>
                            <div className="flex items-center justify-between pt-3 border-t border-current/10">
@@ -592,6 +599,28 @@ export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolu
 
                {/* Modal Footer Actions */}
                <div className="p-8 bg-md-surface-container-low border-t border-md-outline/10 flex gap-4 backdrop-blur-md">
+
+                 {/* ── CONTINUE SESSION BUTTON ── */}
+                 {viewingSessionId && viewingSessionId !== sessionId && (
+                   <button
+                     onClick={() => {
+                       const s = persistentHistory.find(h => h.id === viewingSessionId);
+                       if (!s) return;
+                       // Load the past session's messages into the active chat
+                       setMessages(s.messages);
+                       // Keep the current live session_id so the backend context is correct,
+                       // but display + continue from these messages.
+                       setShowHistory(false);
+                       setViewingSessionId(null);
+                     }}
+                     className="flex-1 h-14 rounded-full text-[11px] font-black uppercase tracking-wider flex items-center justify-center gap-3 px-6 shadow-xl active:scale-95 transition-all duration-300 hover:brightness-110" style={{ backgroundColor: '#0D9488', color: '#ffffff' }}
+                   >
+                     <MessageSquare size={16} />
+                     Reprendre cette discussion
+                     <ArrowRight size={14} />
+                   </button>
+                 )}
+
                  <button 
                    onClick={() => {
                      const s = persistentHistory.find(h => h.id === (viewingSessionId || sessionId));

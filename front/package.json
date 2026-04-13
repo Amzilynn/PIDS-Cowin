@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
     "framer-motion": "^11.0.8",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.358.0",
@@ -18,9 +20,7 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^7.13.2",
     "recharts": "^3.8.1",
-    "three": "^0.170.0",
-    "@react-three/fiber": "^8.17.0",
-    "@react-three/drei": "^9.114.0"
+    "three": "^0.170.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
