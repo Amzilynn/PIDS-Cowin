@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Send, Mic, MicOff, Bot, FileText, Copy, Download, X, Volume2, VolumeX, MessageSquare, ArrowRight } from 'lucide-react';
+import { Send, Mic, MicOff, Bot, FileText, Copy, Download, X, Volume2, VolumeX, MessageSquare, ArrowRight, PlusCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolumeSync }) {
@@ -308,6 +308,32 @@ export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolu
         </div>
 
         <div className="flex items-center gap-3">
+           {/* Nouvelle Conversation */}
+           <button
+              onClick={async () => {
+                try {
+                  if (sessionId) {
+                    await fetch(`http://127.0.0.1:8000/session/${sessionId}`, { method: 'DELETE' }).catch(() => {});
+                  }
+                  setMessages([]);
+                  setSessionId(null);
+                  setSessionError(false);
+                  const res = await fetch('http://127.0.0.1:8000/session/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ persona })
+                  });
+                  const data = await res.json();
+                  if (data?.session_id) setSessionId(data.session_id);
+                } catch (e) { console.error('Erreur nouvelle conversation:', e); }
+              }}
+              title="Nouvelle conversation"
+              className="flex items-center gap-2 px-3 py-2 rounded-full bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-100 hover:border-emerald-300 transition-all duration-300 shadow-sm group"
+           >
+              <PlusCircle size={14} className="group-hover:scale-110 transition-transform" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Nouveau</span>
+           </button>
+
            {/* Historique Button */}
            <button
               onClick={() => setShowHistory(true)}
@@ -380,7 +406,7 @@ export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolu
             className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
           >
             <div className={`flex items-center gap-2 mb-2 px-1 text-[10px] font-black uppercase tracking-tighter opacity-40 ${msg.sender === 'user' ? 'text-md-primary' : 'text-slate-500'}`}>
-              <span>{msg.sender === 'user' ? 'Délégué' : 'Agent VITAL'}</span>
+              <span>{msg.sender === 'user' ? (persona === 'medical' ? 'Médecin' : 'Pharmacien') : 'Agent VITAL'}</span>
               <span className="w-1 h-1 rounded-full bg-current opacity-20" />
               <span>{msg.time}</span>
             </div>
