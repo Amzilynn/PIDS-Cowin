@@ -22,41 +22,33 @@ function applyCustomMaterials(scene) {
         const materials = Array.isArray(node.material) ? node.material : [node.material];
         
         materials.forEach(mat => {
-          let targetColor = 0xb4a9a0; 
+          // Attempt to restore original PBR textures, if they exist
+          if (mat.color) {
+            mat.color.setHex(0xffffff); // Use original texture color without tinting
+          }
+          
+          mat.vertexColors = false;   // Disable vertex colors
           
           const isSkin = name.includes('head') || name.includes('face') || name.includes('skin') || 
-                         name.includes('body') || name.includes('arm') || name.includes('leg') ||
-                         name.includes('hand') || name.includes('m_med') || name.includes('lod');
+                         name.includes('body');
 
-          const isHair = name.includes('hair') || name.includes('brow') || name.includes('lash') || 
-                         name.includes('mustache') || name.includes('beard');
-
-          const isEye = name.includes('eye') || name.includes('cornea') || name.includes('iris');
-
-          if (isSkin) {
-            targetColor = 0xac9675; // Warm Olive tone
-          } else if (isHair) {
-            targetColor = 0x1a110a; // Dark brunette
-          } else if (isEye) {
-            targetColor = 0x4b3a2a; // Hazel/Dark Amber eyes
-          } else if (name.includes('cloth') || name.includes('top') || name.includes('suit') || name.includes('shirt')) {
-            targetColor = 0x272b36; // Professional midnight blue
+          if (isSkin && !mat.map) {
+             if (mat.color) mat.color.setHex(0xac9675); // Warm Olive tone
+             mat.roughness = 0.7;
+          } else if (name.includes('hair') && !mat.map) {
+             if (mat.color) mat.color.setHex(0x1a110a);
+          } else if (name.includes('eye') && !mat.map) {
+             if (mat.color) mat.color.setHex(0x4b3a2a);
+          } else if (name.includes('cloth') && !mat.map) {
+             if (mat.color) mat.color.setHex(0x272b36);
           }
-
-          if (mat.color) {
-            mat.color.setHex(targetColor);
-            mat.map = null;
-            mat.normalMap = null;
-            mat.vertexColors = false; 
-            mat.roughness = isSkin ? 0.7 : 0.8;
-            mat.metalness = 0.0;
-            mat.needsUpdate = true;
-          }
+          
+          mat.needsUpdate = true;
         });
       }
     }
   });
-  console.log('[AvatarModel] Color correction applied');
+  console.log('[AvatarModel] Restoring high-res textures if available');
 }
 
 function MetaHumanAvatar({ isSpeaking, speechPulse = 0, ...props }) {
@@ -75,12 +67,13 @@ function MetaHumanAvatar({ isSpeaking, speechPulse = 0, ...props }) {
     box.getSize(size);
     box.getCenter(center);
     
-    const targetHeight = 1.4;
+    // Zoom in heavily on the upper body/face
+    const targetHeight = 2.2; 
     const scale = targetHeight / size.y;
     gltfScene.scale.setScalar(scale);
     
     gltfScene.position.x = -center.x * scale;
-    gltfScene.position.y = (-center.y * scale) - 0.1; 
+    gltfScene.position.y = (-center.y * scale) - 0.55; // Pull down to center on face/chest
     gltfScene.position.z = -center.z * scale;
     
     applyCustomMaterials(gltfScene);
