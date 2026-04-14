@@ -19,13 +19,14 @@ import sys
 DSO4_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, DSO4_ROOT)
 
-from dso4.models.optimizer import optimize_route, calculate_total_distance, calculate_total_travel_time, haversine
+from dso4.models.optimizer import optimize_route, optimize_route_realtime, calculate_total_distance, calculate_total_travel_time, haversine
 from dso4.models.predictor import load_model, predict_visit_type, train_model
 from dso4.models.scheduler import build_schedule
+from dso4.models.realtime import get_weather
 from dso4.api.schemas import (
     TourneeResponse, ScheduleBlock, StatsResponse,
     MedecinResponse, DelegueResponse, VisiteStatusUpdate,
-    OptimizeRequest,
+    OptimizeRequest, WeatherResponse,
 )
 
 router = APIRouter(prefix="/api/tournee", tags=["DSO4 - Visit Strategy"])
@@ -109,10 +110,10 @@ def _ensure_predictor():
 @router.get(
     "/{delegue_id}/today",
     response_model=TourneeResponse,
-    summary="Get today's optimized schedule",
+    summary="Get today's optimized schedule (real-time OSRM + weather)",
 )
 async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, le=20)):
-    """Return today's optimized visit schedule for a delegate."""
+    """Return today's optimized visit schedule using real road data and live weather."""
     delegate = _get_delegate(delegue_id)
     if not delegate:
         raise HTTPException(status_code=404, detail=f"Delegue {delegue_id} not found")
@@ -153,10 +154,10 @@ async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, l
             **pred
         })
 
-    # Optimize route
-    optimized = optimize_route(d_lat, d_lng, selected)
+    # ── Real-time optimization (OSRM + weather) ──
+    optimized, weather_info = await optimize_route_realtime(d_lat, d_lng, selected)
 
-    # Build schedule
+    # Build schedule from optimized route
     schedule = build_schedule(
         optimized_visits=optimized,
         delegate_name=d_name,
@@ -183,8 +184,21 @@ async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, l
             longitude=b.get("longitude"),
             distance_km=b.get("distance_km"),
             travel_distance_km=b.get("travel_distance_km"),
+            travel_time_min=b.get("travel_time_min"),
+            travel_source=b.get("travel_source"),
+            weather_override=b.get("weather_override", False),
             statut="planifiee",
         ))
+
+    # Build weather response
+    weather_resp = WeatherResponse(
+        rain_mm=weather_info.get("rain_mm", 0),
+        wind_kmh=weather_info.get("wind_kmh", 0),
+        weather_code=weather_info.get("weather_code", 0),
+        condition=weather_info.get("condition", "unknown"),
+        visit_recommendation=weather_info.get("visit_recommendation", "physique"),
+        description=weather_info.get("description", ""),
+    )
 
     return TourneeResponse(
         date=schedule["date"],
@@ -199,22 +213,43 @@ async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, l
         total_distance_km=total_dist,
         blocks=blocks,
         predictions=predictions,
+        weather=weather_resp,
     )
 
 
 @router.get(
     "/{delegue_id}/optimize",
     response_model=TourneeResponse,
-    summary="Re-run the optimizer with fresh data",
+    summary="Re-run the real-time optimizer with fresh data",
 )
 async def optimize_schedule(
     delegue_id: int,
     max_visits: int = Query(8, ge=1, le=20),
     radius_km: float = Query(20.0, ge=1.0, le=100.0),
 ):
-    """Re-run the route optimizer for the delegate."""
-    # Reuse today endpoint — same logic, fresh computation
+    """Re-run the route optimizer with live OSRM + weather data."""
     return await get_today_schedule(delegue_id, max_visits)
+
+
+@router.get(
+    "/weather",
+    response_model=WeatherResponse,
+    summary="Get live weather at coordinates",
+)
+async def get_live_weather(
+    lat: float = Query(..., description="Latitude"),
+    lng: float = Query(..., description="Longitude"),
+):
+    """Return current weather conditions from Open-Meteo (free, no key)."""
+    weather = await get_weather(lat, lng)
+    return WeatherResponse(
+        rain_mm=weather.get("rain_mm", 0),
+        wind_kmh=weather.get("wind_kmh", 0),
+        weather_code=weather.get("weather_code", 0),
+        condition=weather.get("condition", "unknown"),
+        visit_recommendation=weather.get("visit_recommendation", "physique"),
+        description=weather.get("description", ""),
+    )
 
 
 @router.post(
@@ -311,8 +346,8 @@ async def get_delegate_stats(delegue_id: int):
 
     visits = _get_delegate_visits(delegue_id)
 
-    effectuees = [v for v in visits if v.get("statut") == "effectuee" or v.get("statut") == "effectu\u00e9e"]
-    annulees = [v for v in visits if v.get("statut") == "annulee" or v.get("statut") == "annul\u00e9e"]
+    effectuees = [v for v in visits if v.get("statut") == "effectuee" or v.get("statut") == "effectuée"]
+    annulees = [v for v in visits if v.get("statut") == "annulee" or v.get("statut") == "annulée"]
     physiques = [v for v in effectuees if v.get("type_visite") == "physique"]
     en_ligne = [v for v in effectuees if v.get("type_visite") == "en_ligne"]
 
@@ -353,6 +388,10 @@ async def dso4_health():
     return {
         "module": "dso4",
         "status": "ok" if (has_delegues and has_medecins) else "degraded",
+        "realtime_services": {
+            "osrm": "router.project-osrm.org (free, no key)",
+            "weather": "api.open-meteo.com (free, no key)",
+        },
         "datasets": {
             "delegues": has_delegues,
             "visites": has_visites,

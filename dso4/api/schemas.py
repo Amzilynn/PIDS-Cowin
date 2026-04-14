@@ -56,6 +56,16 @@ class DelegueResponse(BaseModel):
     disponibilite: str
 
 
+class WeatherResponse(BaseModel):
+    """Current weather conditions at a location."""
+    rain_mm: float = 0.0
+    wind_kmh: float = 0.0
+    weather_code: int = 0
+    condition: str = "unknown"  # good, moderate, bad, unknown
+    visit_recommendation: str = "physique"  # physique, physique_possible, en_ligne
+    description: str = ""
+
+
 class ScheduleBlock(BaseModel):
     """A single time block in the schedule."""
     type: str  # "visite", "trajet", "pause", "overflow"
@@ -72,6 +82,9 @@ class ScheduleBlock(BaseModel):
     longitude: Optional[float] = None
     distance_km: Optional[float] = None
     travel_distance_km: Optional[float] = None
+    travel_time_min: Optional[float] = None
+    travel_source: Optional[str] = None  # "osrm" or "haversine_fallback"
+    weather_override: bool = False
     statut: str = "planifiee"
 
 
@@ -89,6 +102,7 @@ class TourneeResponse(BaseModel):
     total_distance_km: float = 0.0
     blocks: List[ScheduleBlock]
     predictions: Optional[List[dict]] = None
+    weather: Optional[WeatherResponse] = None
 
 
 class StatsResponse(BaseModel):
