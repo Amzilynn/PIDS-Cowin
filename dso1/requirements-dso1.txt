@@ -1,7 +1,8 @@
 # ── Agent Core & APIs ────────────────────────────────────────
 requests
 python-dotenv
-groq
+openai
+# groq
 
 # ── Agent Voice & Audio (TTS / STT) ──────────────────────────
 edge-tts

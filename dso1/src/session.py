@@ -32,10 +32,15 @@ from pathlib import Path
 import cv2
 import numpy as np
 from dotenv import load_dotenv
-from groq import Groq
+from openai import OpenAI
 
 # ── Projet local ──────────────────────────────────────────────────────────────
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, PROJECT_ROOT)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from shared.database import SessionLocal
+from shared.models import Delegate
 
 from avatar.prompts import SYSTEM_PROMPT
 from avatar.stt     import record_audio, model as whisper_model
@@ -59,7 +64,8 @@ load_dotenv()
 # CONFIG
 # ═══════════════════════════════════════════════════════════════════════════════
 
-GROQ_MODEL      = "llama-3.3-70b-versatile"
+AVATAR_MODEL     = "hosted_vllm/Llama-3.1-70B-Instruct"
+TOKEN_FACTORY_URL = "https://tokenfactory.esprit.tn/api"
 CAMERA_INDEX    = 0
 FRAME_WIDTH     = 1280
 FRAME_HEIGHT    = 720
@@ -90,43 +96,42 @@ PRODUCT_KEYWORDS = [
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def load_delegues() -> list[dict]:
-    path = DATA_DIR / "delegues.csv"
-    if not path.exists():
-        raise FileNotFoundError(f"[Erreur] {path} introuvable.")
-    with open(path, newline="", encoding="utf-8") as f:
+    db = SessionLocal()
+    try:
+        delegues = db.query(Delegate).all()
         return [
             {
-                "id":    int(row["Id"]),
-                "nom":   row["Nom"],
-                "level": row["Level"],
-                "score": int(row["Score"]),
+                "id":    d.id,
+                "nom":   f"{d.first_name} {d.last_name}",
+                "level": d.current_level,
+                "score": int(d.global_score),
+                "role":  d.role
             }
-            for row in csv.DictReader(f)
+            for d in delegues
         ]
+    finally:
+        db.close()
 
 
 def update_delegue_score(delegue: dict, new_score: float, new_level: str) -> None:
-    """Met à jour score + niveau dans delegues.csv."""
-    path     = DATA_DIR / "delegues.csv"
-    delegues = load_delegues()
-    for d in delegues:
-        if d["id"] == delegue["id"]:
-            d["score"] = int(new_score * 100)
-            d["level"] = new_level
-            break
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["Id", "Nom", "Level", "Score"])
-        writer.writeheader()
-        for d in delegues:
-            writer.writerow({"Id": d["id"], "Nom": d["nom"],
-                             "Level": d["level"], "Score": d["score"]})
-    print(f"[CSV] {delegue['nom']} → score={int(new_score*100)}/100  level={new_level}")
+    """Met à jour score + niveau dans la base de données."""
+    db = SessionLocal()
+    try:
+        d = db.query(Delegate).filter(Delegate.id == delegue["id"]).first()
+        if d:
+            d.global_score = new_score * 100
+            d.current_level = new_level
+            db.commit()
+            print(f"[SQL] {d.first_name} -> score={int(d.global_score)}/100  level={new_level}")
+    finally:
+        db.close()
 
 
 def _score_to_level(score: float) -> str:
-    if score >= 0.75: return "Expert"
-    if score >= 0.50: return "Intermediate"
-    return "Beginner"
+    if score >= 0.85: return "Expert"
+    if score >= 0.65: return "Confirmé"
+    if score >= 0.40: return "Junior"
+    return "Débutant"
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -381,17 +386,17 @@ class EvaluationThread(threading.Thread):
 # HELPERS — Groq
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def ask_avatar(client: Groq, messages: list) -> str | None:
+def ask_avatar(client: OpenAI, messages: list) -> str | None:
     try:
         response = client.chat.completions.create(
-            model=GROQ_MODEL,
+            model=AVATAR_MODEL,
             messages=messages,
-            max_tokens=120,
-            temperature=0.5,
+            max_tokens=150,
+            temperature=0.7,
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        print(f"[Groq Error] {e}")
+        print(f"[LLM Error] {e}")
         return None
 
 
@@ -402,7 +407,7 @@ def ask_avatar(client: Groq, messages: list) -> str | None:
 def conversation_loop(
     delegue: dict,
     eval_thread: EvaluationThread,
-    client: Groq,
+    client: OpenAI,
     retriever: Retriever,
     on_message_callback: callable = None
 ) -> list[dict]:
@@ -412,7 +417,11 @@ def conversation_loop(
     afin de geler le logging pendant ce temps.
     """
     level    = delegue["level"]
-    messages = [{"role": "system", "content": SYSTEM_PROMPT.format(level=level)}]
+    role     = "doctor" if delegue["role"] == "Medical" else "pharmacist"
+    
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT.format(level=level, role=role)}
+    ]
     turn          = 0
     session_start = time.time()
     max_seconds   = MAX_SESSION_MIN * 60
@@ -488,7 +497,7 @@ def conversation_loop(
 
         messages_to_send.append({"role": "user", "content": user_input})
 
-        # ── Appel Groq ───────────────────────────────────────────────────────
+        # ── Appel LLM (TokenFactory) ─────────────────────────────────────────
         avatar_reply = ask_avatar(client, messages_to_send)
         if avatar_reply is None:
             print("[Conv] Pas de réponse Groq.")
@@ -565,12 +574,12 @@ def main():
 
     print(f"\n✅  {delegue['nom']} sélectionné — niveau {delegue['level']}\n")
 
-    # ── 2. Init Groq + RAG ───────────────────────────────────────────────────
-    groq_key = os.getenv("GROQ_API_KEY")
-    if not groq_key:
-        print("[Erreur] GROQ_API_KEY manquant dans .env")
+    # ── 2. Init LLM (TokenFactory) + RAG ────────────────────────────────────
+    api_key = os.getenv("TOKENFACTORY_API_KEY")
+    if not api_key:
+        print("[Erreur] TOKENFACTORY_API_KEY manquant dans .env")
         return
-    client = Groq(api_key=groq_key)
+    client = OpenAI(api_key=api_key, base_url=TOKEN_FACTORY_URL)
 
     print("[Init] Chargement du RAG...")
     store     = load_or_build_rag()
