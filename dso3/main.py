@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import delegate_routes, product_routes, recommender_routes
+from dso3.routes import delegate_routes, product_routes, recommender_routes
 
 app = FastAPI()
 

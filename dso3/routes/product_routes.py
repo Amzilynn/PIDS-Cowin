@@ -1,8 +1,12 @@
-from database import SessionLocal
-from models.delegate import Delegate
-from models.product import Product
-from models.recommendation import Recommendation
-from services.recommender import recommend_delegates
+from fastapi import APIRouter
+from dso3.database import SessionLocal
+from dso3.models.delegate import Delegate
+from dso3.models.product import Product
+from dso3.models.recommendation import Recommendation
+from dso3.services.recommender import recommend_delegates
+from dso3.schemas.product_schema import ProductCreate
+
+router = APIRouter(prefix="/products")
 
 @router.post("/product")
 def create_product(product_data: ProductCreate):

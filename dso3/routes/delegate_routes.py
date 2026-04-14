@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from database import SessionLocal
-from models.delegate import Delegate
-from schemas.delegate_schema import DelegateCreate
+from dso3.database import SessionLocal
+from dso3.models.delegate import Delegate
+from dso3.schemas.delegate_schema import DelegateCreate
 
 router = APIRouter(prefix="/delegates")
 

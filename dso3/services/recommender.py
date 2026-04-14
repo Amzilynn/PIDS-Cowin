@@ -1,10 +1,10 @@
 import json
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from backend.services.embedding import get_embedding, cosine
+from dso3.services.embedding import get_embedding, cosine
 
 def recommend_delegates(product, delegates):
-    product_text = f"{product.expertise} {product.interests}"
+    product_text = f"{product.category} {product.description}"
     product_vec = get_embedding(product_text)
 
     results = []

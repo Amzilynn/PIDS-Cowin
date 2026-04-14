@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from database import SessionLocal
-from models.delegate import Delegate
-from models.product import Product
-from services.recommender import recommend_delegates as recommend_service
+from dso3.database import SessionLocal
+from dso3.models.delegate import Delegate
+from dso3.models.product import Product
+from dso3.services.recommender import recommend_delegates as recommend_service
 
 router = APIRouter(prefix="/recommend")
 

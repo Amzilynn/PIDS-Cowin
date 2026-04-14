@@ -1,5 +1,5 @@
-from database import engine
-from models import delegate, product, recommendation
+from dso3.database import engine
+from dso3.models import delegate, product, recommendation
 
 delegate.Base.metadata.create_all(bind=engine)
 product.Base.metadata.create_all(bind=engine)
