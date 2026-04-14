@@ -85,6 +85,7 @@ class ScheduleBlock(BaseModel):
     travel_time_min: Optional[float] = None
     travel_source: Optional[str] = None  # "osrm" or "haversine_fallback"
     weather_override: bool = False
+    weather_reason: Optional[str] = None
     statut: str = "planifiee"
 
 

@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 import csv
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Query, status
 
@@ -20,7 +20,6 @@ DSO4_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, DSO4_ROOT)
 
 from dso4.models.optimizer import optimize_route, optimize_route_realtime, calculate_total_distance, calculate_total_travel_time, haversine
-from dso4.models.predictor import load_model, predict_visit_type, train_model
 from dso4.models.scheduler import build_schedule
 from dso4.models.realtime import get_weather
 from dso4.api.schemas import (
@@ -91,17 +90,30 @@ def _get_delegate_visits(delegue_id: int):
     return [r for r in rows if int(r.get("delegue_id", 0)) == delegue_id]
 
 
-# ─── Predictor singleton ────────────────────────────────────────
-_predictor_model = None
-_predictor_encoder = None
+def _filter_recent_visits(doctors, delegue_id: int, days: int = 14):
+    """Filter out doctors that were visited recently."""
+    visits = _get_delegate_visits(delegue_id)
+    cutoff = datetime.now() - timedelta(days=days)
+    
+    # IDs visited recently
+    recent_ids = set()
+    for v in visits:
+        try:
+            visit_date = datetime.strptime(v["date"], "%Y-%m-%d")
+            # Usually we check if it's effectuee, but let's just stick to the basic check
+            if visit_date >= cutoff and v.get("statut") in ("effectuee", "effectuée"):
+                recent_ids.add(int(v["medecin_id"]))
+        except (ValueError, KeyError):
+            continue
+    
+    # Return only doctors not visited recently
+    filtered = [d for d in doctors if int(d.get("id")) not in recent_ids]
+    
+    # Safety: if filter removes everything, return original list
+    return filtered if len(filtered) >= 8 else doctors
 
 
-def _ensure_predictor():
-    """Lazy-load the predictor model."""
-    global _predictor_model, _predictor_encoder
-    if _predictor_model is None:
-        _predictor_model, _predictor_encoder = load_model()
-    return _predictor_model, _predictor_encoder
+
 
 
 # ─── Endpoints ───────────────────────────────────────────────────
@@ -129,30 +141,14 @@ async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, l
         raise HTTPException(status_code=404, detail="No doctors found near delegate zone")
 
     # Pick a subset for today's visits
-    selected = nearby_docs[:max_visits]
+    selected = nearby_docs[:max_visits*3]
+    selected = _filter_recent_visits(selected, delegue_id, days=14)
+    selected = selected[:max_visits]
 
-    # Load predictor
-    model, encoder = _ensure_predictor()
-
-    # Add predictions and visit info
-    predictions = []
+    # Add visit info
     for doc in selected:
-        dist = doc.get("distance_km", 5.0)
-        spec = doc.get("specialite", "Medecine generale")
-        pred = predict_visit_type(
-            distance_km=dist,
-            score_visite=7.0,
-            specialite=spec,
-            model=model,
-            encoder=encoder,
-        )
-        doc["type_visite"] = pred["type_visite"]
-        doc["duree_min"] = 30 if pred["type_visite"] == "physique" else 15
-        predictions.append({
-            "medecin_id": int(doc.get("id", 0)),
-            "medecin_nom": f"{doc.get('nom', '')} {doc.get('prenom', '')}",
-            **pred
-        })
+        doc["type_visite"] = "physique"
+        doc["duree_min"] = 8
 
     # ── Real-time optimization (OSRM + weather) ──
     optimized, weather_info = await optimize_route_realtime(d_lat, d_lng, selected)
@@ -187,6 +183,7 @@ async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, l
             travel_time_min=b.get("travel_time_min"),
             travel_source=b.get("travel_source"),
             weather_override=b.get("weather_override", False),
+            weather_reason=b.get("weather_reason"),
             statut="planifiee",
         ))
 
@@ -212,7 +209,7 @@ async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, l
         efficiency_pct=schedule["efficiency_pct"],
         total_distance_km=total_dist,
         blocks=blocks,
-        predictions=predictions,
+        predictions=[],
         weather=weather_resp,
     )
 
@@ -382,9 +379,6 @@ async def dso4_health():
     has_visites = os.path.exists(VISITES_PATH)
     has_medecins = os.path.exists(MEDECINS_PATH)
 
-    model, encoder = _ensure_predictor()
-    has_model = model is not None
-
     return {
         "module": "dso4",
         "status": "ok" if (has_delegues and has_medecins) else "degraded",
@@ -397,6 +391,5 @@ async def dso4_health():
             "visites": has_visites,
             "medecins": has_medecins,
         },
-        "predictor_model": "loaded" if has_model else "rule_based_fallback",
         "timestamp": datetime.utcnow().isoformat(),
     }

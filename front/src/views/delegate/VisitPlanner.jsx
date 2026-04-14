@@ -232,15 +232,17 @@ export default function VisitPlanner() {
     );
   };
 
+
+
   // ─── Visit Type Badge ───────────────────────────────────────
-  const VisitTypeBadge = ({ type, weatherOverride }) => (
+  const VisitTypeBadge = ({ type, weatherOverride, weatherReason }) => (
     <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider ${
       type === 'physique' ? 'text-violet-600' : 'text-sky-600'
     }`}>
       {type === 'physique' ? <Phone size={10} /> : <Monitor size={10} />}
       {type === 'physique' ? 'Physique' : 'En ligne'}
       {weatherOverride && (
-        <span className="flex items-center gap-0.5 text-amber-500 ml-1" title="Modifié par la météo">
+        <span className="flex items-center gap-0.5 text-amber-500 ml-1" title={weatherReason || "Modifié par la météo"}>
           <CloudRain size={9} />
         </span>
       )}
@@ -284,12 +286,6 @@ export default function VisitPlanner() {
             <Wind size={11} /> {weather.wind_kmh} km/h
           </span>
         </div>
-        {weather.condition === 'bad' && (
-          <div className="flex items-center gap-2 text-[9px] font-black text-rose-600 bg-rose-500/10 px-3 py-2 rounded-xl">
-            <AlertTriangle size={12} />
-            Visites basculees en ligne
-          </div>
-        )}
       </motion.div>
     );
   };
@@ -336,18 +332,7 @@ export default function VisitPlanner() {
       {/* Background Glows */}
       <div className="fixed top-20 right-10 w-[500px] h-[500px] organic-glow bg-md-primary/10 rounded-full pointer-events-none -z-10" />
 
-      {/* Weather Alert Banner — shown when weather is bad */}
-      {weather && weather.condition === 'bad' && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-[2000] px-8 py-4 bg-rose-500 text-white rounded-[20px] font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl flex items-center gap-4 border-2 border-white/20 backdrop-blur-md"
-        >
-          <CloudLightning size={20} fill="currentColor" />
-          Meteo defavorable — visites basculees en ligne automatiquement
-          <CloudLightning size={20} fill="currentColor" />
-        </motion.div>
-      )}
+
 
       {/* LEFT: Interactive Map (60%) */}
       <div className="lg:flex-[0.65] min-h-[700px] flex flex-col bg-white rounded-[48px] p-6 relative overflow-hidden group shadow-2xl border border-md-outline/10">
@@ -390,7 +375,7 @@ export default function VisitPlanner() {
                 <div className="p-6 font-sans space-y-4 min-w-[220px]">
                    <div className="flex items-center justify-between">
                       <StatusBadge statut={v.statut || 'planifiee'} />
-                      <VisitTypeBadge type={v.visit_type} weatherOverride={v.weather_override} />
+                      <VisitTypeBadge type={v.visit_type} weatherOverride={v.weather_override} weatherReason={v.weather_reason} />
                    </div>
                    <h4 className="text-lg font-black text-md-on-background tracking-tighter leading-none uppercase">{v.medecin_nom}</h4>
                    <p className="text-xs font-bold text-md-on-surface-variant opacity-60 uppercase tracking-widest">{v.specialite}</p>
@@ -406,12 +391,6 @@ export default function VisitPlanner() {
                        {v.travel_source === 'osrm' && (
                          <span className="text-emerald-500 font-black">(OSRM)</span>
                        )}
-                     </div>
-                   )}
-                   {v.weather_override && (
-                     <div className="flex items-center gap-2 text-[9px] font-black text-amber-600 bg-amber-500/10 px-3 py-2 rounded-xl">
-                       <AlertTriangle size={11} />
-                       Basculee en ligne (meteo)
                      </div>
                    )}
                    <div className="flex gap-2 pt-2 border-t border-md-outline/10">
@@ -582,7 +561,7 @@ export default function VisitPlanner() {
                            <StatusBadge statut={v.statut || 'planifiee'} />
                         </div>
                         <div className="flex items-center gap-4">
-                          <VisitTypeBadge type={v.visit_type} weatherOverride={v.weather_override} />
+                          <VisitTypeBadge type={v.visit_type} weatherOverride={v.weather_override} weatherReason={v.weather_reason} />
                           {v.travel_distance_km > 0 && (
                             <span className="text-[9px] font-bold text-md-on-surface-variant opacity-40 flex items-center gap-1">
                               <Navigation2 size={9} />
@@ -596,9 +575,9 @@ export default function VisitPlanner() {
                         </div>
                         {/* Weather override warning */}
                         {v.weather_override && (
-                          <div className="flex items-center gap-1.5 text-[9px] font-black text-amber-600 bg-amber-500/10 px-2.5 py-1.5 rounded-lg">
+                          <div className="flex items-center gap-1.5 text-[9px] font-black text-amber-600 bg-amber-500/10 px-2.5 py-1.5 rounded-lg w-fit">
                             <CloudRain size={10} />
-                            Basculee en ligne (meteo defavorable)
+                            {v.weather_reason || 'Basculee en ligne (meteo)'}
                           </div>
                         )}
                         {/* Quick action buttons on hover */}
@@ -622,13 +601,7 @@ export default function VisitPlanner() {
             </div>
 
             {/* Stats Panel */}
-            <div className="p-8 border-t border-md-outline/10 bg-md-surface-container-low/50 grid grid-cols-2 gap-4 relative z-10">
-               <div className="p-5 bg-md-primary/5 rounded-[24px] border border-md-primary/10 flex flex-col gap-1 transition-transform hover:scale-105">
-                   <p className="text-[8px] font-black uppercase text-md-primary tracking-[0.3em]">Efficacite IA</p>
-                   <p className="text-2xl font-black text-md-on-background tracking-tighter">
-                     {schedule?.efficiency_pct || 0}%
-                   </p>
-               </div>
+            <div className="p-8 border-t border-md-outline/10 bg-md-surface-container-low/50 grid grid-cols-3 gap-4 relative z-10">
                <div className="p-5 bg-amber-500/5 rounded-[24px] border border-amber-500/10 flex flex-col gap-1 transition-transform hover:scale-105">
                    <p className="text-[8px] font-black uppercase text-amber-600 tracking-[0.3em]">Distance Totale</p>
                    <p className="text-2xl font-black text-md-on-background tracking-tighter">
@@ -649,7 +622,7 @@ export default function VisitPlanner() {
                      {stats ? `${stats.taux_realisation}%` : `${schedule?.visits_scheduled || 0}`}
                    </p>
                </div>
-               <div className="col-span-2">
+               <div className="col-span-3">
                   <button 
                     onClick={handleOptimize}
                     disabled={optimizing}
