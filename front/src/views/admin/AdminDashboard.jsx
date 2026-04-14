@@ -76,6 +76,8 @@ const visits = [
   { id: 3, praticien: "Clinique Atlas", spé: "Généraliste", heure: "14:15", pos: [48.8700, 2.3600], prio: "Basse" },
 ];
 
+const DSO3_API_URL = import.meta.env.VITE_DSO3_API_URL || 'http://127.0.0.1:8000';
+
 export default function AdminDashboard() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -85,6 +87,78 @@ export default function AdminDashboard() {
   const activeTab = ['stats', 'delegues'].includes(path) ? path : 'generale';
 
   const [optimizing, setOptimizing] = useState(false);
+   const [delegateForm, setDelegateForm] = useState({ name: '', expertise: '', interests: '' });
+   const [productForm, setProductForm] = useState({ name: '', category: '', description: '' });
+   const [adminLoading, setAdminLoading] = useState({ delegate: false, product: false });
+   const [adminError, setAdminError] = useState('');
+   const [adminSuccess, setAdminSuccess] = useState('');
+   const [productRecommendations, setProductRecommendations] = useState([]);
+
+   const handleDelegateInput = (event) => {
+      const { name, value } = event.target;
+      setDelegateForm((previous) => ({ ...previous, [name]: value }));
+   };
+
+   const handleProductInput = (event) => {
+      const { name, value } = event.target;
+      setProductForm((previous) => ({ ...previous, [name]: value }));
+   };
+
+   const submitDelegate = async (event) => {
+      event.preventDefault();
+      setAdminError('');
+      setAdminSuccess('');
+      setAdminLoading((previous) => ({ ...previous, delegate: true }));
+
+      try {
+         const response = await fetch(`${DSO3_API_URL}/delegates/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(delegateForm),
+         });
+
+         if (!response.ok) {
+            const payload = await response.json().catch(() => ({}));
+            throw new Error(payload?.detail || 'Erreur création délégué.');
+         }
+
+         setAdminSuccess('Délégué créé avec succès.');
+         setDelegateForm({ name: '', expertise: '', interests: '' });
+      } catch (error) {
+         setAdminError(error.message || 'Erreur inconnue.');
+      } finally {
+         setAdminLoading((previous) => ({ ...previous, delegate: false }));
+      }
+   };
+
+   const submitProduct = async (event) => {
+      event.preventDefault();
+      setAdminError('');
+      setAdminSuccess('');
+      setAdminLoading((previous) => ({ ...previous, product: true }));
+
+      try {
+         const response = await fetch(`${DSO3_API_URL}/products/product`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productForm),
+         });
+
+         if (!response.ok) {
+            const payload = await response.json().catch(() => ({}));
+            throw new Error(payload?.detail || 'Erreur création produit.');
+         }
+
+         const payload = await response.json();
+         setProductRecommendations(payload.recommendations || []);
+         setAdminSuccess('Produit créé et matching généré.');
+         setProductForm({ name: '', category: '', description: '' });
+      } catch (error) {
+         setAdminError(error.message || 'Erreur inconnue.');
+      } finally {
+         setAdminLoading((previous) => ({ ...previous, product: false }));
+      }
+   };
 
   const renderGenerale = () => (
     <div className="space-y-10 animate-fade-in">
@@ -161,6 +235,99 @@ export default function AdminDashboard() {
 
   const renderDelegates = () => (
     <div className="animate-fade-in space-y-10">
+       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <form onSubmit={submitDelegate} className="md-card space-y-4">
+             <h3 className="text-xl font-black text-md-on-background uppercase">Ajouter un délégué</h3>
+             <input
+               name="name"
+               value={delegateForm.name}
+               onChange={handleDelegateInput}
+               required
+               placeholder="Nom du délégué"
+               className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
+             />
+             <input
+               name="expertise"
+               value={delegateForm.expertise}
+               onChange={handleDelegateInput}
+               required
+               placeholder="Expertise (ex: cardiologie, diabète)"
+               className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
+             />
+             <input
+               name="interests"
+               value={delegateForm.interests}
+               onChange={handleDelegateInput}
+               required
+               placeholder="Intérêts (ex: prévention, innovation)"
+               className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
+             />
+             <button disabled={adminLoading.delegate} className="btn-primary !h-11 !text-[10px] uppercase tracking-widest">
+               {adminLoading.delegate ? 'Création...' : 'Créer Délégué'}
+             </button>
+          </form>
+
+          <form onSubmit={submitProduct} className="md-card space-y-4">
+             <h3 className="text-xl font-black text-md-on-background uppercase">Ajouter un produit</h3>
+             <input
+               name="name"
+               value={productForm.name}
+               onChange={handleProductInput}
+               required
+               placeholder="Nom produit"
+               className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
+             />
+             <input
+               name="category"
+               value={productForm.category}
+               onChange={handleProductInput}
+               required
+               placeholder="Catégorie"
+               className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
+             />
+             <textarea
+               name="description"
+               value={productForm.description}
+               onChange={handleProductInput}
+               required
+               rows={3}
+               placeholder="Description produit"
+               className="w-full bg-white rounded-xl border border-md-outline/20 px-4 py-3 text-sm font-semibold resize-none"
+             />
+             <button disabled={adminLoading.product} className="btn-primary !h-11 !text-[10px] uppercase tracking-widest">
+               {adminLoading.product ? 'Matching...' : 'Créer Produit + Matching'}
+             </button>
+          </form>
+       </div>
+
+       {adminError ? (
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 font-bold">
+             {adminError}
+          </div>
+       ) : null}
+
+       {adminSuccess ? (
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 font-bold">
+             {adminSuccess}
+          </div>
+       ) : null}
+
+       {productRecommendations.length > 0 ? (
+          <div className="md-card">
+             <h3 className="text-lg font-black uppercase text-md-on-background mb-4">Résultat matching produit</h3>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {productRecommendations.map((recommendation, index) => (
+                   <div key={`${recommendation.delegate_id}-${index}`} className="p-4 bg-white rounded-2xl border border-md-outline/10">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-md-primary">Rang {index + 1}</p>
+                      <p className="text-lg font-black text-md-on-background">{recommendation.delegate_name}</p>
+                      <p className="text-xs font-bold text-md-on-surface-variant">ID: {recommendation.delegate_id}</p>
+                      <p className="text-2xl font-black text-md-on-background mt-2">{(recommendation.score * 100).toFixed(1)}%</p>
+                   </div>
+                ))}
+             </div>
+          </div>
+       ) : null}
+
        <div className="md-card">
           <h2 className="text-3xl font-black text-md-on-background uppercase mb-2">Registre Complet du Réseau</h2>
           <p className="text-md-on-surface-variant/60 font-bold italic mb-6">Accès direct au suivi individuel et aux performances par territoire.</p>

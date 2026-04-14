@@ -70,3 +70,4 @@ config.ini
 # Reports / Evaluation
 evaluation/report/*.html
 evaluation/report/*.csv
+node_modules/

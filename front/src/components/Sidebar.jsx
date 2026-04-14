@@ -72,14 +72,14 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      <aside className={`fixed inset-y-0 left-0 z-50 bg-md-surface-container border-r border-md-outline/10 h-screen transition-all duration-500 ease-[cubic-bezier(0.2,0,0,1)] ${isOpen ? 'w-80 translate-x-0' : 'w-0 -translate-x-full lg:w-20 lg:translate-x-0 overflow-hidden'} flex flex-col p-8 overflow-y-auto`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 bg-md-surface-container border-r border-md-outline/10 h-screen w-80 transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col p-8 overflow-y-auto`}>
         
         {/* Glow Décoratif */}
         <div className="absolute top-0 left-0 w-64 h-64 organic-glow bg-md-primary/5 -translate-x-1/2 -translate-y-1/2" />
         
         {/* Section Logo */}
-        <div className="relative z-10 mb-4 flex items-center justify-center">
-           <Logo showText={isOpen} className={`${isOpen ? 'h-40 lg:h-48 drop-shadow-lg w-full px-4' : 'h-12 w-12 object-contain opacity-0 lg:opacity-100'} transition-all`} />
+          <div className="relative z-10 mb-4 flex items-center justify-center">
+            <Logo showText={true} className="h-40 lg:h-48 drop-shadow-lg w-full px-4 transition-all" />
         </div>
 
         {/* Menu de Navigation */}
@@ -93,14 +93,14 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
                        isActive 
                           ? 'bg-md-primary text-white shadow-lg shadow-md-primary/25 translate-x-1' 
                           : 'text-md-on-surface-variant hover:bg-md-primary/10 hover:text-md-primary hover:translate-x-1'
-                    } ${!isOpen && 'lg:justify-center lg:px-0 lg:w-12 lg:h-12'}`
+                      }`
                  }
               >
                  {({ isActive }) => (
                     <>
                        <div className="flex items-center gap-4">
                           <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} className="transition-transform duration-500 group-hover:scale-110" />
-                          <span className={`text-[13px] uppercase tracking-widest leading-none ${!isOpen && 'hidden'}`}>{item.label}</span>
+                            <span className="text-[13px] uppercase tracking-widest leading-none">{item.label}</span>
                        </div>
                        {isOpen && <ChevronRight size={14} className={`opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${isActive ? 'opacity-100' : ''}`} />}
                     </>
@@ -125,13 +125,13 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
              </div>
            )}
 
-           <div className={`flex items-center gap-3 ${!isOpen && 'lg:flex-col lg:items-center'}`}>
+            <div className="flex items-center gap-3">
               <button 
                 onClick={() => navigate('/')}
-                className={`flex-1 btn-pill bg-white/50 border border-md-outline/10 text-rose-500 hover:bg-rose-50 hover:border-rose-200 shadow-sm ${!isOpen && 'lg:w-12 lg:h-12 !p-0 !rounded-2xl'}`}
+               className="flex-1 btn-pill bg-white/50 border border-md-outline/10 text-rose-500 hover:bg-rose-50 hover:border-rose-200 shadow-sm"
               >
                  <LogOut size={20} className="transition-transform group-hover:rotate-12" /> 
-                 <span className={`${!isOpen && 'hidden'} text-[11px] font-black uppercase tracking-widest`}>Déconnexion</span>
+                <span className="text-[11px] font-black uppercase tracking-widest">Déconnexion</span>
               </button>
            </div>
         </div>
