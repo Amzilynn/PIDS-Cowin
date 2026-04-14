@@ -243,7 +243,7 @@ export default function VisitPlanner() {
          </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .md-popup .leaflet-popup-content-wrapper {
            border-radius: 36px;
            padding: 0;

@@ -65,37 +65,34 @@ export default function Avatar3D({ type = 'doctor', isSpeaking = false, speechPu
       </div>
 
       {/* Main 3D Canvas Area */}
-      <div className="relative w-full flex-1 flex flex-col items-center justify-center cursor-pointer min-h-[350px]">
+      <div className="relative w-full cursor-pointer" style={{ height: '450px' }}>
          <Suspense fallback={
-           <div className="flex flex-col items-center gap-4">
+           <div className="flex flex-col items-center justify-center h-full gap-4">
               <div className="w-20 h-20 border-[6px] border-white/5 border-t-white/40 rounded-full animate-spin" />
               <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">Loading Neural Mesh...</p>
            </div>
          }>
-           <Canvas 
-             camera={{ position: [0, 0, 1.8], fov: 30 }}
-             dpr={[1, 2]}
-             shadows
-           >
-             {/* The MetaHuman Avatar — upper body framing */}
-             <AvatarModel 
+            <Canvas 
+              style={{ width: '100%', height: '100%', background: '#1a1a2e' }}
+camera={{ position: [0, 1.2, 1.5], fov: 35 }}
+              dpr={[1, 2]}
+              shadows
+            >
+              <AvatarModel
                isSpeaking={isSpeaking || (isActive && status === 'En ligne')} 
                speechPulse={speechPulse}
              />
 
-             <OrbitControls 
-               enableZoom={false} 
-               enablePan={false} 
-               makeDefault
-               minPolarAngle={Math.PI / 3}
-               maxPolarAngle={Math.PI / 2.2}
-               minAzimuthAngle={-Math.PI / 6}
-               maxAzimuthAngle={Math.PI / 6}
-             />
-           </Canvas>
-         </Suspense>
+              <OrbitControls 
+                enableZoom={true} 
+                enablePan={false} 
+                makeDefault
+                target={[0, 1.2, 0]}
+              />
+            </Canvas>
+          </Suspense>
 
-       </div>
+        </div>
 
       {/* Metrics / Info Panel */}
       <div className="w-full space-y-6 relative z-10 px-4">
