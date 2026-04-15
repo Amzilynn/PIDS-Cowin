@@ -87,7 +87,7 @@ export default function AdminDashboard() {
   const activeTab = ['stats', 'delegues'].includes(path) ? path : 'generale';
 
   const [optimizing, setOptimizing] = useState(false);
-   const [delegateForm, setDelegateForm] = useState({ name: '', expertise: '', interests: '' });
+   const [delegateForm, setDelegateForm] = useState({ name: '', expertise: '', interests: '', user_email: '', user_password: '' });
    const [productForm, setProductForm] = useState({ name: '', category: '', description: '' });
    const [adminLoading, setAdminLoading] = useState({ delegate: false, product: false });
    const [adminError, setAdminError] = useState('');
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
          }
 
          setAdminSuccess('Délégué créé avec succès.');
-         setDelegateForm({ name: '', expertise: '', interests: '' });
+         setDelegateForm({ name: '', expertise: '', interests: '', user_email: '', user_password: '' });
       } catch (error) {
          setAdminError(error.message || 'Erreur inconnue.');
       } finally {
@@ -262,6 +262,24 @@ export default function AdminDashboard() {
                placeholder="Intérêts (ex: prévention, innovation)"
                className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
              />
+                   <input
+                      name="user_email"
+                      type="email"
+                      value={delegateForm.user_email}
+                      onChange={handleDelegateInput}
+                      required
+                      placeholder="E-mail du compte utilisateur"
+                      className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
+                   />
+                   <input
+                      name="user_password"
+                      type="password"
+                      value={delegateForm.user_password}
+                      onChange={handleDelegateInput}
+                      required
+                      placeholder="Mot de passe du compte"
+                      className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
+                   />
              <button disabled={adminLoading.delegate} className="btn-primary !h-11 !text-[10px] uppercase tracking-widest">
                {adminLoading.delegate ? 'Création...' : 'Créer Délégué'}
              </button>

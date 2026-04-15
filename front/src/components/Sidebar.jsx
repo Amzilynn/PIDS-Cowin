@@ -29,9 +29,7 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
   const isMedicalDelegate = isDelegate && subRole === 'medical';
   const isCommercialDelegate = isDelegate && subRole === 'commercial';
   
-  const isPractitioner = role === 'practitioner';
-  const isDoctor = isPractitioner && (subRole === 'doctor' || subRole === 'medical');
-  const isPharmacist = isPractitioner && (subRole === 'pharmacist' || subRole === 'commercial');
+  const isMedecin = role === 'medecin' || role === 'practitioner';
 
   const menuItems = {
     admin: [
@@ -46,8 +44,8 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
         { to: '/delegate/planner', icon: MapIcon, label: 'Ma Tournée' },
         { to: '/delegate/profil', icon: User, label: 'Mon Profil' },
       ],
-      practitioner: [
-        { to: '/practitioner/presentations', icon: PlusSquare, label: 'Salle de Présentation' },
+      medecin: [
+        { to: '/medecin/presentations', icon: PlusSquare, label: 'Salle de Présentation' },
       ]
   };
 
@@ -57,8 +55,7 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
     if (role === 'admin') return 'Administrateur';
     if (isMedicalDelegate) return 'Délégué Médical';
     if (isCommercialDelegate) return 'Délégué Commercial';
-    if (isDoctor) return 'Médecin';
-    if (isPharmacist) return 'Pharmacien';
+    if (isMedecin) return 'Médecin';
     return 'Utilisateur';
   };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { 
   BrainCircuit, 
   PlusSquare, 
@@ -31,6 +31,17 @@ export default function DelegateHome({ subRole = 'medical' }) {
   const isMedical = subRole === 'medical';
   const roleTitle = isMedical ? 'Délégué Médical' : 'Délégué Commercial';
   const presentedTo = isMedical ? 'médecin' : 'pharmacien';
+
+   const authPayload = useMemo(() => {
+      try {
+         return JSON.parse(localStorage.getItem('cw_auth') || '{}');
+      } catch {
+         return {};
+      }
+   }, []);
+   const newRecommendations = Array.isArray(authPayload?.new_recommendations)
+      ? authPayload.new_recommendations
+      : [];
 
   const navigateTo = (path) => {
     navigate(`${path}?role=delegate&sub=${subRole}`);
@@ -82,6 +93,23 @@ export default function DelegateHome({ subRole = 'medical' }) {
            </p>
         </div>
       </div>
+
+         {newRecommendations.length > 0 ? (
+            <div className="rounded-3xl border border-amber-300 bg-amber-50 px-6 py-5 shadow-sm relative z-10">
+               <p className="text-[11px] font-black uppercase tracking-widest text-amber-700 mb-2">Nouveaux produits recommandés</p>
+               <p className="text-sm font-bold text-amber-800 mb-3">
+                  {newRecommendations.length} nouvelle(s) recommandation(s) pour votre profil.
+               </p>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {newRecommendations.map((item, index) => (
+                     <div key={`${item.recommendation_id}-${index}`} className="rounded-2xl bg-white border border-amber-200 px-4 py-3">
+                        <p className="text-xs font-black text-md-on-background uppercase">{item.product_name}</p>
+                        <p className="text-[10px] font-bold text-md-on-surface-variant mt-1">Score: {(item.score * 100).toFixed(1)}%</p>
+                     </div>
+                  ))}
+               </div>
+            </div>
+         ) : null}
 
       {/* Main Action Grid (4 Cards - BO1 to BO4) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">

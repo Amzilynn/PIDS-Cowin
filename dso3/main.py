@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dso3.routes import delegate_routes, product_routes, recommender_routes
+from dso3.routes import auth_routes, delegate_routes, product_routes, recommender_routes
 
 app = FastAPI()
 
@@ -15,6 +15,7 @@ app.add_middleware(
 app.include_router(delegate_routes.router)
 app.include_router(product_routes.router)
 app.include_router(recommender_routes.router)
+app.include_router(auth_routes.router)
 
 @app.get("/")
 def home():

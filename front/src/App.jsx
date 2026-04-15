@@ -19,7 +19,6 @@ function useQuery() {
 export default function App() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const roleParam = query.get('role') || 'delegate';
   const subRoleParam = query.get('sub') || 'medical';
   const searchStr = location.search;
 
@@ -49,12 +48,17 @@ export default function App() {
       </Route>
 
       {/* Routes Praticien (Médecin ou Pharmacien) */}
-      <Route path="/practitioner" element={<MainLayout role="practitioner" subRole={subRoleParam} />}>
+      <Route path="/medecin" element={<MainLayout role="medecin" subRole={subRoleParam} />}>
         <Route index element={<Navigate to={`presentations${searchStr}`} replace />} />
-        <Route path="home" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
-        <Route path="presentations" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
+        <Route path="home" element={<PractitionerView roleType="doctor" />} />
+        <Route path="presentations" element={<PractitionerView roleType="doctor" />} />
         <Route path="agenda" element={<VisitPlanner />} /> {/* Réutilisation du Planner compatible */}
-        <Route path="profil" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
+        <Route path="profil" element={<PractitionerView roleType="doctor" />} />
+      </Route>
+
+      {/* Alias legacy */}
+      <Route path="/practitioner" element={<Navigate to={`/medecin/presentations${searchStr}`} replace />}>
+        <Route path="*" element={<Navigate to={`/medecin/presentations${searchStr}`} replace />} />
       </Route>
 
       {/* Redirection par défaut */}

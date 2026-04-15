@@ -34,41 +34,127 @@ const roles = [
     color: 'bg-md-secondary-container text-md-on-secondary-container',
   },
   {
-    id: 'practitioner',
-    label: 'Praticien de Santé',
+    id: 'medecin',
+    label: 'Médecin',
     desc: 'Espace de réception & évaluation',
     icon: Stethoscope,
     color: 'bg-sky-100 text-sky-700',
   }
 ];
 
+const DSO3_API_URL = import.meta.env.VITE_DSO3_API_URL || 'http://127.0.0.1:8000';
+
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [authMode, setAuthMode] = useState('login');
   const [selectedRole, setSelectedRole] = useState(null);
   const [subRole, setSubRole] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [delegateName, setDelegateName] = useState('');
+  const [delegateExpertise, setDelegateExpertise] = useState('');
+  const [delegateInterests, setDelegateInterests] = useState('');
 
-  const handleLogin = (e) => {
+  const selectedRoleId = selectedRole?.id || 'delegate';
+
+  const resetMessages = () => {
+    setError('');
+    setSuccess('');
+  };
+
+  const handleSignUp = async (e) => {
     e.preventDefault();
+    resetMessages();
+
+    if (!selectedRole) {
+      setError('Choisissez un profil avant de continuer');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Les mots de passe ne correspondent pas');
+      return;
+    }
+
+    const payload = {
+      email,
+      password,
+      role: selectedRoleId,
+    };
+
+    if (selectedRoleId === 'delegate' && delegateName.trim()) {
+      payload.delegate_name = delegateName.trim();
+    }
+
+    if (selectedRoleId === 'delegate') {
+      payload.expertise = (delegateExpertise || (subRole === 'commercial' ? 'commercial' : 'medical')).trim();
+      payload.interests = (delegateInterests || 'field activities').trim();
+    }
+
     setLoading(true);
-    
-    setTimeout(() => {
+    try {
+      const response = await fetch(`${DSO3_API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const apiPayload = await response.json().catch(() => ({}));
+        throw new Error(apiPayload?.detail || 'Échec de création de compte');
+      }
+
+      setSuccess('Compte créé avec succès. Connectez-vous maintenant.');
+      setAuthMode('login');
+      setPassword('');
+      setConfirmPassword('');
+      setDelegateName('');
+      setDelegateExpertise('');
+      setDelegateInterests('');
+    } catch (signUpError) {
+      setError(signUpError.message || 'Erreur lors de la création du compte');
+    } finally {
       setLoading(false);
-      let roleId = selectedRole?.id || 'delegate';
-      let sub = subRole || 'medical';
+    }
+  };
 
-      // Détection automatique par email pour faciliter les tests
-      if (email.includes('admin')) { roleId = 'admin'; sub = 'none'; }
-      else if (email.includes('medical')) { roleId = 'delegate'; sub = 'medical'; }
-      else if (email.includes('commercial')) { roleId = 'delegate'; sub = 'commercial'; }
-      else if (email.includes('doctor')) { roleId = 'practitioner'; sub = 'doctor'; }
-      else if (email.includes('pharmacist')) { roleId = 'practitioner'; sub = 'pharmacist'; }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    resetMessages();
+    setLoading(true);
 
-      navigate(`/${roleId}?role=${roleId}&sub=${sub}`);
-    }, 1500);
+    try {
+      const response = await fetch(`${DSO3_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          role: selectedRoleId,
+        }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload?.detail || 'Échec de connexion');
+      }
+
+      const payload = await response.json();
+      localStorage.setItem('cw_auth', JSON.stringify(payload));
+
+      const sub = selectedRoleId === 'delegate' ? (subRole || 'medical') : 'none';
+
+      setLoading(false);
+      navigate(`/${selectedRoleId}?role=${selectedRoleId}&sub=${sub}`);
+    } catch (loginError) {
+      setLoading(false);
+      setError(loginError.message || 'Erreur de connexion');
+    }
   };
 
   return (
@@ -87,12 +173,37 @@ export default function LoginPage() {
         <div className="flex flex-col items-center mb-6 -mt-2 md:-mt-6">
           <Logo className="h-48 md:h-64 -mb-4 md:-mb-6 drop-shadow-xl justify-center" showText={false} />
           <div className="text-center relative z-10">
-            <h1 className="text-4xl font-black tracking-tighter text-md-on-background mb-2 leading-tight">Connectez-vous</h1>
+            <h1 className="text-4xl font-black tracking-tighter text-md-on-background mb-2 leading-tight">
+              {authMode === 'login' ? 'Connectez-vous' : 'Créer un compte'}
+            </h1>
             <p className="text-xs font-medium text-md-on-surface-variant opacity-60 tracking-tight">Intelligence terrain & formation pharmaceutique</p>
           </div>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-white/60 border border-md-outline/10 mb-4">
+          <button
+            type="button"
+            onClick={() => {
+              setAuthMode('login');
+              resetMessages();
+            }}
+            className={`h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition ${authMode === 'login' ? 'bg-md-primary text-white' : 'text-md-on-surface-variant'}`}
+          >
+            Connexion
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAuthMode('signup');
+              resetMessages();
+            }}
+            className={`h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition ${authMode === 'signup' ? 'bg-md-primary text-white' : 'text-md-on-surface-variant'}`}
+          >
+            Inscription
+          </button>
+        </div>
+
+        <form onSubmit={authMode === 'login' ? handleLogin : handleSignUp} className="space-y-4">
           
           {/* Sélection du Rôle */}
           <div className="space-y-3">
@@ -124,7 +235,7 @@ export default function LoginPage() {
 
           {/* Sous-rôles Cascade */}
           <AnimatePresence mode="wait">
-            {selectedRole && selectedRole.id !== 'admin' && (
+            {selectedRole && selectedRole.id === 'delegate' && (
               <motion.div 
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -132,44 +243,25 @@ export default function LoginPage() {
                 className="space-y-3"
               >
                  <label className="text-[9px] font-black uppercase tracking-[0.3em] text-md-primary pl-1">
-                   {selectedRole.id === 'delegate' ? 'Secteur d’activité' : 'Spécialisation'}
+                   Secteur d’activité
                  </label>
                  <div className="flex gap-3">
-                    {selectedRole.id === 'delegate' ? (
                       <>
-                        <button 
-                           type="button"
-                           onClick={() => setSubRole('medical')}
-                           className={`flex-1 h-10 rounded-pill border-2 transition-all font-black text-[9px] uppercase tracking-widest ${subRole === 'medical' ? 'bg-md-primary text-white border-md-primary shadow-md' : 'bg-white text-md-on-surface-variant border-md-outline/10'}`}
-                        >
-                           <HeartPulse size={12} className="mr-1 inline" /> Médical
-                        </button>
-                        <button 
-                           type="button"
-                           onClick={() => setSubRole('commercial')}
-                           className={`flex-1 h-10 rounded-pill border-2 transition-all font-black text-[9px] uppercase tracking-widest ${subRole === 'commercial' ? 'bg-md-primary text-white border-md-primary shadow-md' : 'bg-white text-md-on-surface-variant border-md-outline/10'}`}
-                        >
-                           <Store size={12} className="mr-1 inline" /> Commercial
-                        </button>
+                       <button 
+                         type="button"
+                         onClick={() => setSubRole('medical')}
+                         className={`flex-1 h-10 rounded-pill border-2 transition-all font-black text-[9px] uppercase tracking-widest ${subRole === 'medical' ? 'bg-md-primary text-white border-md-primary shadow-md' : 'bg-white text-md-on-surface-variant border-md-outline/10'}`}
+                       >
+                         <HeartPulse size={12} className="mr-1 inline" /> Médical
+                       </button>
+                       <button 
+                         type="button"
+                         onClick={() => setSubRole('commercial')}
+                         className={`flex-1 h-10 rounded-pill border-2 transition-all font-black text-[9px] uppercase tracking-widest ${subRole === 'commercial' ? 'bg-md-primary text-white border-md-primary shadow-md' : 'bg-white text-md-on-surface-variant border-md-outline/10'}`}
+                       >
+                         <Store size={12} className="mr-1 inline" /> Commercial
+                       </button>
                       </>
-                    ) : (
-                      <>
-                        <button 
-                           type="button"
-                           onClick={() => setSubRole('doctor')}
-                           className={`flex-1 h-10 rounded-pill border-2 transition-all font-black text-[9px] uppercase tracking-widest ${subRole === 'doctor' ? 'bg-md-primary text-white border-md-primary shadow-md' : 'bg-white text-md-on-surface-variant border-md-outline/10'}`}
-                        >
-                           <Stethoscope size={12} className="mr-1 inline" /> Médecin
-                        </button>
-                        <button 
-                           type="button"
-                           onClick={() => setSubRole('pharmacist')}
-                           className={`flex-1 h-10 rounded-pill border-2 transition-all font-black text-[9px] uppercase tracking-widest ${subRole === 'pharmacist' ? 'bg-md-primary text-white border-md-primary shadow-md' : 'bg-white text-md-on-surface-variant border-md-outline/10'}`}
-                        >
-                           <Store size={12} className="mr-1 inline" /> Pharmacien
-                        </button>
-                      </>
-                    )}
                  </div>
               </motion.div>
             )}
@@ -214,6 +306,67 @@ export default function LoginPage() {
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
+
+            {authMode === 'signup' && (
+              <>
+                <div className="relative group">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-md-outline/50 group-focus-within:text-md-primary transition-colors">
+                    <Lock size={16} />
+                  </div>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Confirmer le mot de passe"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full h-12 bg-md-surface-container-low rounded-xl border-b-2 border-md-outline px-4 pl-12 focus:border-md-primary focus:outline-none placeholder:text-md-on-surface-variant/50 text-sm font-medium transition-all"
+                    required
+                  />
+                </div>
+
+                {selectedRoleId === 'delegate' && (
+                  <>
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-md-outline/50 group-focus-within:text-md-primary transition-colors">
+                        <User size={16} />
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Nom du délégué (optionnel)"
+                        value={delegateName}
+                        onChange={(e) => setDelegateName(e.target.value)}
+                        className="w-full h-12 bg-md-surface-container-low rounded-xl border-b-2 border-md-outline px-4 pl-12 focus:border-md-primary focus:outline-none placeholder:text-md-on-surface-variant/50 text-sm font-medium transition-all"
+                      />
+                    </div>
+
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-md-outline/50 group-focus-within:text-md-primary transition-colors">
+                        <PlusSquare size={16} />
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Expertise (ex: diabétologie)"
+                        value={delegateExpertise}
+                        onChange={(e) => setDelegateExpertise(e.target.value)}
+                        className="w-full h-12 bg-md-surface-container-low rounded-xl border-b-2 border-md-outline px-4 pl-12 focus:border-md-primary focus:outline-none placeholder:text-md-on-surface-variant/50 text-sm font-medium transition-all"
+                      />
+                    </div>
+
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-md-outline/50 group-focus-within:text-md-primary transition-colors">
+                        <Store size={16} />
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Interests (ex: cardiologie, congrès)"
+                        value={delegateInterests}
+                        onChange={(e) => setDelegateInterests(e.target.value)}
+                        className="w-full h-12 bg-md-surface-container-low rounded-xl border-b-2 border-md-outline px-4 pl-12 focus:border-md-primary focus:outline-none placeholder:text-md-on-surface-variant/50 text-sm font-medium transition-all"
+                      />
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </div>
 
           {/* Action Connexion */}
@@ -225,12 +378,27 @@ export default function LoginPage() {
             {loading ? (
               <Activity className="animate-spin" size={20} />
             ) : (
-              <>Se connecter <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" /></>
+              <>
+                {authMode === 'login' ? 'Se connecter' : 'Créer le compte'}
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </>
             )}
             
             {!loading && <div className="absolute inset-0 shimmer-anim opacity-10 pointer-events-none" />}
           </button>
         </form>
+
+        {error ? (
+          <div className="mt-4 p-3 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 text-xs font-black uppercase tracking-wide">
+            {error}
+          </div>
+        ) : null}
+
+        {success ? (
+          <div className="mt-4 p-3 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 text-xs font-black uppercase tracking-wide">
+            {success}
+          </div>
+        ) : null}
 
         <div className="mt-8 p-4 bg-md-primary/5 rounded-2xl border border-md-primary/10">
            <p className="text-[9px] font-black text-md-primary uppercase tracking-widest mb-2 border-b border-md-primary/10 pb-2">Accès Test Rapide</p>
@@ -239,7 +407,6 @@ export default function LoginPage() {
               <div>Médical: medical@meddelegate.pro / medical123</div>
               <div>Commercial: commercial@meddelegate.pro / comm123</div>
               <div>Médecin: doctor@meddelegate.pro / doc123</div>
-              <div>Pharmacien: pharmacist@meddelegate.pro / pharma123</div>
            </div>
         </div>
 
