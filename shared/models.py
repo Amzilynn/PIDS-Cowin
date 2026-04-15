@@ -19,7 +19,11 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     gamme_id = Column(Integer, ForeignKey("gammes.id"), nullable=False, index=True)
     name = Column(String(150), nullable=False)
-    description = Column(Text)
+    description = Column(Text)  # Pour un résumé global court
+    indications = Column(Text)  # Les indications médicales
+    compositions = Column(Text) # Les principes actifs
+    usage_advice = Column(Text) # Les conseils d'utilisation (posologie)
+    
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 

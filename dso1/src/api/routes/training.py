@@ -7,17 +7,26 @@ import json
 import asyncio
 
 from session_manager import manager
-from session import load_delegues
+from session import load_delegues, load_products
 
 router = APIRouter()
 
 class StartRequest(BaseModel):
     delegue_id: int
+    product_id: int = None  # Make it optional for backwards compatibility during testing
+
+class SpeechControlRequest(BaseModel):
+    action: str  # "start" or "stop"
 
 @router.get("/delegues")
 def get_delegues():
     delegues = load_delegues()
     return delegues
+
+@router.get("/products")
+def get_products():
+    products = load_products()
+    return products
 
 @router.post("/start")
 def start_training(req: StartRequest):
@@ -28,6 +37,19 @@ def start_training(req: StartRequest):
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/speech_control")
+def speech_control(req: SpeechControlRequest):
+    from avatar.stt import recording_start_event, recording_stop_event
+    if req.action == "start":
+        recording_stop_event.clear()
+        recording_start_event.set()
+        return {"status": "recording started"}
+    elif req.action == "stop":
+        recording_stop_event.set()
+        return {"status": "recording stopped"}
+    else:
+        raise HTTPException(status_code=400, detail="Action invalide")
 
 @router.post("/stop")
 def stop_training():

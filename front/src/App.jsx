@@ -5,6 +5,7 @@ import LoginPage from './views/auth/LoginPage';
 import AdminDashboard from './views/admin/AdminDashboard';
 import DelegateHome from './views/delegate/DelegateHome';
 import TrainingRoom from './views/delegate/TrainingRoom';
+import ProductSelection from './views/delegate/ProductSelection';
 import PresentationRoom from './views/delegate/PresentationRoom';
 import VisitPlanner from './views/delegate/VisitPlanner';
 import EvaluationResults from './views/delegate/EvaluationResults';
@@ -40,7 +41,8 @@ export default function App() {
       <Route path="/delegate" element={<MainLayout role="delegate" subRole={subRoleParam} />}>
         <Route index element={<Navigate to={`home${searchStr}`} replace />} />
         <Route path="home" element={<DelegateHome subRole={subRoleParam} />} />
-        <Route path="training" element={<TrainingRoom type={subRoleParam} />} />
+        <Route path="training" element={<ProductSelection />} />
+        <Route path="training/session" element={<TrainingRoom type={subRoleParam} />} />
         <Route path="presentation" element={<PresentationRoom subRole={subRoleParam} />} />
         <Route path="produits" element={<ProductRecommendations subRole={subRoleParam} />} />
         <Route path="planner" element={<VisitPlanner />} />

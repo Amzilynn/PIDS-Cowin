@@ -40,7 +40,7 @@ sys.path.insert(0, PROJECT_ROOT)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from shared.database import SessionLocal
-from shared.models import Delegate
+from shared.models import Delegate, Product
 
 from avatar.prompts import SYSTEM_PROMPT
 from avatar.stt     import record_audio, model as whisper_model
@@ -92,7 +92,7 @@ PRODUCT_KEYWORDS = [
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# HELPERS — Délégués CSV
+# HELPERS — Database
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def load_delegues() -> list[dict]:
@@ -112,6 +112,39 @@ def load_delegues() -> list[dict]:
     finally:
         db.close()
 
+
+def load_products() -> list[dict]:
+    db = SessionLocal()
+    try:
+        products = db.query(Product).all()
+        return [
+            {
+                "id":   p.id,
+                "name": p.name,
+            }
+            for p in products
+        ]
+    finally:
+        db.close()
+
+
+def load_single_product(product_id: int) -> dict | None:
+    if not product_id: return None
+    db = SessionLocal()
+    try:
+        p = db.query(Product).filter(Product.id == product_id).first()
+        if p:
+            return {
+                "id": p.id,
+                "name": p.name,
+                "description": p.description,
+                "indications": p.indications,
+                "compositions": p.compositions,
+                "usage_advice": p.usage_advice
+            }
+        return None
+    finally:
+        db.close()
 
 def update_delegue_score(delegue: dict, new_score: float, new_level: str) -> None:
     """Met à jour score + niveau dans la base de données."""
@@ -315,6 +348,7 @@ class EvaluationThread(threading.Thread):
             
         cap.set(cv2.CAP_PROP_FRAME_WIDTH,  640)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
         if not cap.isOpened():
             print("[EvalThread] ❌ Impossible d'ouvrir la caméra.")
@@ -409,6 +443,7 @@ def conversation_loop(
     eval_thread: EvaluationThread,
     client: OpenAI,
     retriever: Retriever,
+    product: dict = None,
     on_message_callback: callable = None
 ) -> list[dict]:
     """
@@ -419,8 +454,20 @@ def conversation_loop(
     level    = delegue["level"]
     role     = "doctor" if delegue["role"] == "Medical" else "pharmacist"
     
+    system_prompt = SYSTEM_PROMPT.format(level=level, role=role)
+    
+    # ── INJECTION DB PRODUIT ──
+    if product:
+        system_prompt += f"\n\nYOU MUST BASE YOUR ROLEPLAY AND OBJECTIONS ON THE FOLLOWING PRODUCT:\n"
+        system_prompt += f"- Name: {product.get('name', 'Unknown')}\n"
+        system_prompt += f"- Description: {product.get('description') or 'Not specified'}\n"
+        system_prompt += f"- Indications: {product.get('indications') or 'Not specified'}\n"
+        system_prompt += f"- Active Ingredients / Compositions: {product.get('compositions') or 'Not specified'}\n"
+        system_prompt += f"- Usage Advice / Posology: {product.get('usage_advice') or 'Not specified'}\n"
+        system_prompt += "Formulate your questions and objections specifically based on this official product data sheet.\n"
+    
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT.format(level=level, role=role)}
+        {"role": "system", "content": system_prompt}
     ]
     turn          = 0
     session_start = time.time()

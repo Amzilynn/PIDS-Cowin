@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, User } from 'lucide-react';
+import { Bot, User, Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function ChatPanel() {
+export default function ChatPanel({ isActive = false }) {
   const [messages, setMessages] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -40,6 +41,20 @@ export default function ChatPanel() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const toggleRecording = async () => {
+    const newStatus = !isRecording;
+    setIsRecording(newStatus);
+    try {
+      await fetch('http://localhost:8001/api/training/speech_control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: newStatus ? 'start' : 'stop' })
+      });
+    } catch (err) {
+      console.error("Backend API non joignable (PTT).", err);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full bg-white rounded-[32px] border border-md-outline/10 overflow-hidden shadow-[0_8px_32px_-4px_rgba(0,0,0,0.05)] relative font-sans">
@@ -102,7 +117,7 @@ export default function ChatPanel() {
           })}
         </AnimatePresence>
 
-        {messages.length === 0 && (
+        {messages.length === 0 && !isActive && (
           <div className="flex-1 flex flex-col items-center justify-center text-center opacity-40 mt-10">
             <Bot size={48} className="mb-4 text-md-outline" />
             <p className="text-sm font-bold uppercase tracking-widest">En attente de conversation</p>
@@ -110,6 +125,19 @@ export default function ChatPanel() {
           </div>
         )}
       </div>
+
+      {/* Push to Talk Controls */}
+      {isActive && (
+        <div className="p-6 border-t border-md-outline/10 bg-white shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center gap-3">
+          <button 
+            onClick={toggleRecording} 
+            className={`w-full max-w-sm h-14 px-6 rounded-full flex items-center justify-center gap-3 transition-all font-black text-sm uppercase tracking-wider shadow-xl ${isRecording ? 'bg-rose-600 text-white animate-pulse shadow-rose-900/30' : 'bg-md-primary font-bold text-white hover:bg-green-600 hover:shadow-green-900/30 shadow-md-primary/30'}`}
+          >
+            {isRecording ? <Mic size={20} /> : <MicOff size={20} />}
+            {isRecording ? "Enregistrement... Cliquer pour Finir" : "Appuyez pour Parler"}
+          </button>
+        </div>
+      )}
 
     </div>
   );

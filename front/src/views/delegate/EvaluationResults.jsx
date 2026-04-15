@@ -26,7 +26,11 @@ export default function EvaluationResults() {
   const location = useLocation();
   const resultData = location.state?.resultData || {};
   const averages = resultData?.results?.averages || {};
-  const globalScore = Math.round(averages?.performance || 87);
+  
+  // Le backend renvoie des scores entre 0.0 et 1.0 (ex: 0.85). On doit multiplier par 100.
+  const parseScore = (val, mock) => val !== undefined ? Math.round(val * 100) : mock;
+  
+  const globalScore = parseScore(averages?.performance, 87);
   const reportFileName = resultData?.report_pdf;
 
   const radialData = [
@@ -34,10 +38,10 @@ export default function EvaluationResults() {
   ];
 
   const competenceData = [
-    { subject: 'Sourire', A: Math.round(averages?.smile || 70), fullMark: 100 },
-    { subject: 'Attention', A: Math.round(averages?.attention || 80), fullMark: 100 },
-    { subject: 'Confiance', A: Math.round(averages?.confidence || 80), fullMark: 100 },
-    { subject: 'Ouverture', A: Math.round(100 - (averages?.arms_crossed || 0)), fullMark: 100 },
+    { subject: 'Attention', A: parseScore(averages?.engagement, 80), fullMark: 100 },
+    { subject: 'Confiance', A: parseScore(averages?.confidence, 80), fullMark: 100 },
+    { subject: 'Ouverture', A: parseScore(averages?.openness, 75), fullMark: 100 },
+    { subject: 'Sérénité', A: parseScore(1.0 - (averages?.stress || 0), 85), fullMark: 100 },
     { subject: 'Performance', A: globalScore, fullMark: 100 },
   ];
 
@@ -110,13 +114,12 @@ export default function EvaluationResults() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
          
          {/* Detailed Metrics - Pill-style progress bars */}
-         <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-5 gap-8">
+         <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
-               { label: 'Sourire', value: Math.round(averages?.smile || 70), icon: BrainCircuit, color: 'bg-emerald-500' },
-               { label: 'Attention', value: Math.round(averages?.attention || 80), icon: MessageSquare, color: 'bg-md-primary' },
-               { label: 'Confiance', value: Math.round(averages?.confidence || 80), icon: TrendingUp, color: 'bg-indigo-500' },
-               { label: 'Posture', value: Math.round(100 - (averages?.arms_crossed || 0)), icon: UserCheck, color: 'bg-md-on-background' },
-               { label: 'Vitesse', value: Math.round(averages?.speaking_rate || 75), icon: AlertCircle, color: 'bg-rose-500' },
+               { label: 'Attention', value: parseScore(averages?.engagement, 80), icon: MessageSquare, color: 'bg-md-primary' },
+               { label: 'Confiance', value: parseScore(averages?.confidence, 80), icon: TrendingUp, color: 'bg-indigo-500' },
+               { label: 'Posture', value: parseScore(averages?.posture, 85), icon: UserCheck, color: 'bg-md-on-background' },
+               { label: 'Fluidité', value: parseScore(1.0 - (averages?.pause_ratio || 0.25), 75), icon: AlertCircle, color: 'bg-rose-500' },
             ].map((metric, i) => (
                <motion.div 
                  key={i} 

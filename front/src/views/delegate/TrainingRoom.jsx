@@ -24,18 +24,16 @@ export default function TrainingRoom() {
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   
-  const [delegues, setDelegues] = useState([]);
-  const [selectedDelegue, setSelectedDelegue] = useState("");
+  // Extraire les ID depuis the routing state
+  const delegueId = location.state?.delegueId;
+  const productId = location.state?.productId;
 
   useEffect(() => {
-    fetch("http://localhost:8001/api/training/delegues")
-      .then(res => res.json())
-      .then(data => {
-        setDelegues(data);
-        if (data.length > 0) setSelectedDelegue(data[0].id);
-      })
-      .catch(console.error);
-  }, []);
+    // Rediriger vers la sélection si la page est chargée sans les props
+    if (!delegueId || !productId) {
+      navigate('/delegate/training');
+    }
+  }, [delegueId, productId, navigate]);
 
   const toggleSession = async () => {
     setIsLoading(true);
@@ -45,7 +43,10 @@ export default function TrainingRoom() {
         const response = await fetch("http://localhost:8001/api/training/start", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ delegue_id: Number(selectedDelegue) })
+          body: JSON.stringify({ 
+            delegue_id: Number(delegueId),
+            product_id: Number(productId)
+          })
         });
         if (response.ok) setIsActive(true);
         else console.error("Failed to start session", await response.text());
@@ -81,13 +82,13 @@ export default function TrainingRoom() {
   };
 
   return (
-    <div className="relative min-h-full bg-md-surface flex flex-col font-sans">
+    <div className="relative h-screen bg-md-surface flex flex-col font-sans overflow-hidden">
       
       {/* Barre d'Outils Supérieure Contextuelle */}
       <div className="h-20 border-b border-md-outline/10 bg-white/40 backdrop-blur-3xl flex items-center justify-between px-8 relative z-50">
         <div className="flex items-center gap-6">
            <button 
-             onClick={() => navigate(-1)}
+             onClick={() => navigate('/delegate/training')}
              className="w-10 h-10 rounded-xl bg-white shadow-xl flex items-center justify-center text-md-primary hover:scale-110 active:scale-90 transition-all border border-md-outline/5"
            >
               <ChevronLeft size={20} />
@@ -113,19 +114,6 @@ export default function TrainingRoom() {
                  {formatTime(sessionTime)}
               </div>
            </div>
-           
-           {/* Délégué & Start */}
-           {!isActive && (
-              <select 
-                value={selectedDelegue} 
-                onChange={(e) => setSelectedDelegue(e.target.value)}
-                className="h-12 px-4 rounded-xl border-none bg-md-surface outline-none text-sm font-bold mt-1 shadow-inner text-md-on-surface"
-              >
-                {delegues.map(d => (
-                  <option key={d.id} value={d.id}>{d.nom} - Niveau {d.level}</option>
-                ))}
-              </select>
-           )}
 
            {!isActive ? (
              <button 
@@ -143,7 +131,7 @@ export default function TrainingRoom() {
                }}
                className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20 bg-red-600 hover:bg-red-700 flex items-center gap-2"
              >
-                {isLoading ? "Veuillez patienter..." : "Arrêter et Évaluer"}
+                {isLoading ? "Patientez..." : "Arrêter et Évaluer"}
              </button>
            )}
         </div>
@@ -161,7 +149,7 @@ export default function TrainingRoom() {
 
         {/* COL 2 : Panneau de Chat Interactif */}
         <div className="md-card !p-0 overflow-hidden bg-md-surface-container/50 relative flex flex-col shadow-xl border-none w-full h-full">
-           <ChatPanel />
+           <ChatPanel isActive={isActive} />
         </div>
 
       </div>
