@@ -50,6 +50,8 @@ dso2/.venv/
 *.sqlite
 *.cache
 *.log
+*.pptx
+*.pdf
 
 chroma_db/
 vectordb/
