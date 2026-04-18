@@ -102,12 +102,17 @@ export default function VisitPlanner() {
   // Default delegate ID (hardcoded for now)
   const delegueId = 1;
 
+  // Read subRole from query to determine the delegate type
+  const searchParams = new URLSearchParams(window.location.search);
+  const subRole = searchParams.get('sub') || 'medical';
+  const targetType = subRole === 'commercial' ? 'pharmacies' : 'medecins';
+
   // ─── Fetch Today's Schedule ─────────────────────────────────
   const fetchSchedule = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`${API_BASE}/${delegueId}/today?max_visits=8`);
+      const res = await fetch(`${API_BASE}/${delegueId}/today?max_visits=8&target=${targetType}`);
       if (!res.ok) throw new Error(`API error: ${res.status}`);
       const data = await res.json();
       setSchedule(data);
@@ -155,7 +160,7 @@ export default function VisitPlanner() {
   const handleOptimize = async () => {
     setOptimizing(true);
     try {
-      const res = await fetch(`${API_BASE}/${delegueId}/optimize?max_visits=8`);
+      const res = await fetch(`${API_BASE}/${delegueId}/optimize?max_visits=8&target=${targetType}`);
       if (!res.ok) throw new Error(`Optimize error: ${res.status}`);
       const data = await res.json();
       setSchedule(data);

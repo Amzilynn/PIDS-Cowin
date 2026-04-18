@@ -38,6 +38,7 @@ DSO2_DATA = os.path.join(PROJECT_ROOT, "dso2", "data", "raw")
 DELEGUES_PATH = os.path.join(DSO4_DATA, "delegues.csv")
 VISITES_PATH = os.path.join(DSO4_DATA, "visites.csv")
 MEDECINS_PATH = os.path.join(DSO2_DATA, "medecins.csv")
+PHARMACIES_PATH = os.path.join(DSO2_DATA, "pharmacies.csv")
 
 
 # ─── CSV Helpers ─────────────────────────────────────────────────
@@ -63,23 +64,42 @@ def _get_delegate(delegue_id: int):
     return None
 
 
-def _get_nearby_doctors(lat: float, lng: float, radius_km: float, limit: int = 20):
-    """Get doctors within radius of a point."""
-    rows = _load_csv(MEDECINS_PATH)
+def _get_nearby_clients(lat: float, lng: float, radius_km: float, client_type: str = "medecins", limit: int = 20):
+    """Get doctors or pharmacies within radius of a point."""
+    path = PHARMACIES_PATH if client_type == "pharmacies" else MEDECINS_PATH
+    rows = _load_csv(path)
     nearby = []
+    
+    # Random displacement generator for synthetic coordinates (pharmacies lack lat/lng)
+    def random_offset():
+        return (random.random() - 0.5) * 0.1  # Approx +/- 5km
+        
     for r in rows:
         try:
+            if client_type == "pharmacies":
+                if "latitude" not in r or not r["latitude"]:
+                    # Seed random to ensure consistency per pharmacy ID
+                    random.seed(int(r.get("id", 0))) 
+                    r["latitude"] = str(lat + random_offset())
+                    r["longitude"] = str(lng + random_offset())
+                r["specialite"] = "Pharmacie"
+                if "prenom" not in r:
+                    r["prenom"] = ""
+                    
             m_lat = float(r["latitude"])
             m_lng = float(r["longitude"])
+            
             # Sanity check for Tunisian coords
             if not (30 < m_lat < 38 and 7 < m_lng < 12):
                 continue
+                
             dist = haversine(lat, lng, m_lat, m_lng)
             if dist <= radius_km:
                 r["distance_km"] = round(dist, 2)
                 nearby.append(r)
         except (ValueError, KeyError):
             continue
+            
     nearby.sort(key=lambda x: x["distance_km"])
     return nearby[:limit]
 
@@ -124,7 +144,11 @@ def _filter_recent_visits(doctors, delegue_id: int, days: int = 14):
     response_model=TourneeResponse,
     summary="Get today's optimized schedule (real-time OSRM + weather)",
 )
-async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, le=20)):
+async def get_today_schedule(
+    delegue_id: int, 
+    max_visits: int = Query(8, ge=1, le=20),
+    target: str = Query("medecins")
+):
     """Return today's optimized visit schedule using real road data and live weather."""
     delegate = _get_delegate(delegue_id)
     if not delegate:
@@ -134,11 +158,11 @@ async def get_today_schedule(delegue_id: int, max_visits: int = Query(8, ge=1, l
     d_lng = float(delegate["longitude"])
     d_name = f"{delegate['prenom']} {delegate['nom']}"
 
-    # Find nearby doctors to visit
-    nearby_docs = _get_nearby_doctors(d_lat, d_lng, radius_km=20, limit=max_visits * 2)
+    # Find nearby clients to visit
+    nearby_docs = _get_nearby_clients(d_lat, d_lng, radius_km=20, client_type=target, limit=max_visits * 2)
 
     if not nearby_docs:
-        raise HTTPException(status_code=404, detail="No doctors found near delegate zone")
+        raise HTTPException(status_code=404, detail="No clients found near delegate zone")
 
     # Pick a subset for today's visits
     selected = nearby_docs[:max_visits*3]
@@ -223,9 +247,10 @@ async def optimize_schedule(
     delegue_id: int,
     max_visits: int = Query(8, ge=1, le=20),
     radius_km: float = Query(20.0, ge=1.0, le=100.0),
+    target: str = Query("medecins"),
 ):
     """Re-run the route optimizer with live OSRM + weather data."""
-    return await get_today_schedule(delegue_id, max_visits)
+    return await get_today_schedule(delegue_id, max_visits, target)
 
 
 @router.get(
