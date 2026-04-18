@@ -344,7 +344,7 @@ export default function VisitPlanner() {
           <MapContainer
             center={mapCenter}
             zoom={13}
-            className="absolute inset-0 w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
+            className="absolute inset-0 w-full h-full"
             zoomControl={false}
           >
             <TileLayer
