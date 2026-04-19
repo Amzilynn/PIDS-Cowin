@@ -34,7 +34,8 @@ export default function ProductRecommendations() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const subRole = query.get('sub') || 'medical';
-  const delegateId = query.get('id') || 1;
+  const authData = JSON.parse(localStorage.getItem('cw_auth') || '{}');
+  const delegateId = query.get('id') || authData.delegate_id || 1;
   const [filter, setFilter] = useState('all');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,9 +51,9 @@ export default function ProductRecommendations() {
             name: item.product_name,
             range: item.category,
             score: Math.round(item.score * 100),
-            reason: "Recommandation système DSO3",
+            reason: item.description || "Aucune description disponible pour ce produit.",
             color: getColorByScore(Math.round(item.score * 100)),
-            desc: "Recommandé dynamiquement basé sur le profil."
+            desc: item.description || "Aucune description disponible pour ce produit."
           }));
           setProducts(mapped);
         }
@@ -87,7 +88,7 @@ export default function ProductRecommendations() {
             </div>
             <h1 className="text-6xl font-black text-md-on-background tracking-tighter leading-[0.9] uppercase">Gamme <br/><span className="text-md-primary italic lowercase">recommandée.</span></h1>
             <p className="text-md-on-surface-variant font-bold text-xl leading-relaxed max-w-xl mt-4 opacity-70 italic tracking-tight">
-               Algorithmes prédictifs basés sur vos performances en tant que <span className="text-md-on-background font-black not-italic px-4 py-1.5 bg-white rounded-full shadow-sm">délégué {subRole}</span>.
+               Algorithmes prédictifs basés sur vos performances.
             </p>
          </div>
 

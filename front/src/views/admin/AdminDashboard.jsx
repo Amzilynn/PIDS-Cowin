@@ -87,7 +87,7 @@ export default function AdminDashboard() {
   const activeTab = ['stats', 'delegues'].includes(path) ? path : 'generale';
 
   const [optimizing, setOptimizing] = useState(false);
-   const [delegateForm, setDelegateForm] = useState({ name: '', expertise: '', interests: '', user_email: '', user_password: '' });
+   const [delegateForm, setDelegateForm] = useState({ name: '', expertise: '', interests: '', specification: '', user_email: '', user_password: '' });
    const [productForm, setProductForm] = useState({ name: '', category: '', description: '' });
    const [adminLoading, setAdminLoading] = useState({ delegate: false, product: false });
    const [adminError, setAdminError] = useState('');
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
          }
 
          setAdminSuccess('Délégué créé avec succès.');
-         setDelegateForm({ name: '', expertise: '', interests: '', user_email: '', user_password: '' });
+         setDelegateForm({ name: '', expertise: '', interests: '', specification: '', user_email: '', user_password: '' });
       } catch (error) {
          setAdminError(error.message || 'Erreur inconnue.');
       } finally {
@@ -262,6 +262,17 @@ export default function AdminDashboard() {
                placeholder="Intérêts (ex: prévention, innovation)"
                className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold"
              />
+             <select
+               name="specification"
+               value={delegateForm.specification}
+               onChange={handleDelegateInput}
+               required
+               className="w-full h-12 bg-white rounded-xl border border-md-outline/20 px-4 text-sm font-semibold text-md-on-surface-variant focus:text-md-on-background appearance-none"
+             >
+               <option value="" disabled>Spécialité (Médical/Commercial)</option>
+               <option value="Médical">Médical</option>
+               <option value="Commercial">Commercial</option>
+             </select>
                    <input
                       name="user_email"
                       type="email"

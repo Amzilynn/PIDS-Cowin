@@ -148,9 +148,10 @@ export default function LoginPage() {
       localStorage.setItem('cw_auth', JSON.stringify(payload));
 
       const sub = selectedRoleId === 'delegate' ? (subRole || 'medical') : 'none';
+      const delegateIdParam = payload.delegate_id ? `&id=${payload.delegate_id}` : '';
 
       setLoading(false);
-      navigate(`/${selectedRoleId}?role=${selectedRoleId}&sub=${sub}`);
+      navigate(`/${selectedRoleId}?role=${selectedRoleId}&sub=${sub}${delegateIdParam}`);
     } catch (loginError) {
       setLoading(false);
       setError(loginError.message || 'Erreur de connexion');

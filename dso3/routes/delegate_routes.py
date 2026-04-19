@@ -29,6 +29,7 @@ def create_delegate(data: DelegateCreate):
         "name": data.name,
         "expertise": data.expertise,
         "interests": data.interests,
+        "specification": data.specification,
     }
     user = User(
         email=data.user_email,
@@ -82,6 +83,7 @@ def get_new_recommended_products(delegate_id: int, limit: int = 5):
                 "product_id": product.id,
                 "product_name": product.name,
                 "category": product.category,
+                "description": product.description,
                 "score": float(recommendation.score),
             }
             for recommendation, product in rows
