@@ -71,3 +71,5 @@ config.ini
 evaluation/report/*.html
 evaluation/report/*.csv
 node_modules/
+dso3/dso3.db-shm
+dso3/dso3.db-wal
