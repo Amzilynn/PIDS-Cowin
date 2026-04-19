@@ -2,13 +2,33 @@
 .ipynb_checkpoints/
 *.ipynb
 
-# Python Cache
-__pycache__/
+# dso2 local virtual environment
+dso2/.venv/
+
+dso_avatar/venv/
+dso_avatar/**/venv/
+**/__pycache__/
+*.pyc
 *.pyc
 *.pyo
+
+*.csv
+.venv
 
 # Environment Variables
 .env
 
-# Models
+# Models and Weights
 models/
+dso_avatar/gfpgan/weights/
+*.pth
+*.onnx
+*.dna
+*.weights
+*.bin
+*.exe
+*.zip
+*.tar
+*.tgz
+*.gz
+*.7z
