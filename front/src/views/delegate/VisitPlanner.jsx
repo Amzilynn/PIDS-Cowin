@@ -164,7 +164,7 @@ export default function VisitPlanner() {
       if (!res.ok) throw new Error(`Optimize error: ${res.status}`);
       const data = await res.json();
       setSchedule(data);
-      setToastMessage('Tournee optimisee avec OSRM + Meteo en temps reel !');
+      setToastMessage('Tournee optimisee avec TomTom Traffic + Meteo !');
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3500);
     } catch (err) {
@@ -304,7 +304,7 @@ export default function VisitPlanner() {
             Chargement de la tournee...
           </p>
           <p className="text-[10px] font-bold text-md-on-surface-variant opacity-40">
-            Connexion OSRM + Open-Meteo
+            Connexion TomTom Traffic + Open-Meteo
           </p>
         </div>
       </div>
@@ -391,8 +391,8 @@ export default function VisitPlanner() {
                       <div className="flex items-center gap-3 text-[10px] font-bold text-md-primary bg-md-primary/5 px-3 py-2 rounded-xl">
                         <Navigation2 size={11} />
                         {v.travel_distance_km} km • {v.travel_time_min ? `${v.travel_time_min} min` : ''}
-                        {v.travel_source === 'osrm' && (
-                          <span className="text-emerald-500 font-black">(OSRM)</span>
+                        {v.travel_source === 'tomtom' && (
+                          <span className="text-emerald-500 font-black">(TomTom)</span>
                         )}
                       </div>
                     )}
@@ -426,7 +426,7 @@ export default function VisitPlanner() {
             {optimizing ? (
               <div className="flex items-center gap-4">
                 <Loader2 className="animate-spin" size={24} />
-                <span className="text-[11px] font-black uppercase tracking-[0.3em]">OSRM + Meteo...</span>
+                <span className="text-[11px] font-black uppercase tracking-[0.3em]">TomTom + Meteo...</span>
               </div>
             ) : (
               <div className="flex items-center gap-4">
@@ -535,8 +535,8 @@ export default function VisitPlanner() {
                         <Navigation2 size={9} />
                         {v.travel_distance_km} km
                         {v.travel_time_min != null && ` • ${v.travel_time_min} min`}
-                        {v.travel_source === 'osrm' && (
-                          <span className="text-emerald-500 ml-0.5">(route reelle)</span>
+                        {v.travel_source === 'tomtom' && (
+                          <span className="text-emerald-500 ml-0.5">(trafic reel)</span>
                         )}
                       </span>
                     )}
@@ -576,22 +576,7 @@ export default function VisitPlanner() {
                 {stats ? `${stats.taux_realisation}%` : `${schedule?.visits_scheduled || 0}`}
               </p>
             </div>
-            <div className="col-span-3">
-              <button
-                onClick={handleOptimize}
-                disabled={optimizing}
-                className="w-full btn-primary !h-14 uppercase !tracking-[0.4em] !text-[11px] font-black rounded-pill shadow-2xl relative overflow-hidden group"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-4">
-                  {optimizing ? (
-                    <><Loader2 size={18} className="animate-spin" /> Optimisation OSRM + Meteo...</>
-                  ) : (
-                    <>Lancer la Navigation <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" /></>
-                  )}
-                </span>
-                <div className="absolute inset-0 shimmer-anim opacity-20 pointer-events-none" />
-              </button>
-            </div>
+
           </div>
         </div>
       </div>
