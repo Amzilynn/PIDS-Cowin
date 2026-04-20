@@ -59,6 +59,7 @@ export default function LoginPage() {
   const [delegateName, setDelegateName] = useState('');
   const [delegateExpertise, setDelegateExpertise] = useState('');
   const [delegateInterests, setDelegateInterests] = useState('');
+  const [delegateSpecification, setDelegateSpecification] = useState('');
 
   const selectedRoleId = selectedRole?.id || 'delegate';
 
@@ -94,6 +95,9 @@ export default function LoginPage() {
     if (selectedRoleId === 'delegate') {
       payload.expertise = (delegateExpertise || (subRole === 'commercial' ? 'commercial' : 'medical')).trim();
       payload.interests = (delegateInterests || 'field activities').trim();
+      if (delegateSpecification.trim()) {
+        payload.specification = delegateSpecification.trim();
+      }
     }
 
     setLoading(true);
@@ -116,6 +120,7 @@ export default function LoginPage() {
       setDelegateName('');
       setDelegateExpertise('');
       setDelegateInterests('');
+      setDelegateSpecification('');
     } catch (signUpError) {
       setError(signUpError.message || 'Erreur lors de la création du compte');
     } finally {
@@ -363,6 +368,21 @@ export default function LoginPage() {
                         onChange={(e) => setDelegateInterests(e.target.value)}
                         className="w-full h-12 bg-md-surface-container-low rounded-xl border-b-2 border-md-outline px-4 pl-12 focus:border-md-primary focus:outline-none placeholder:text-md-on-surface-variant/50 text-sm font-medium transition-all"
                       />
+                    </div>
+
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-md-outline/50 group-focus-within:text-md-primary transition-colors">
+                        <Stethoscope size={16} />
+                      </div>
+                      <select
+                        value={delegateSpecification}
+                        onChange={(e) => setDelegateSpecification(e.target.value)}
+                        className="w-full h-12 bg-md-surface-container-low rounded-xl border-b-2 border-md-outline px-4 pl-12 focus:border-md-primary focus:outline-none placeholder:text-md-on-surface-variant/50 text-sm font-medium transition-all appearance-none"
+                      >
+                        <option value="" disabled>Spécialité/Spécification</option>
+                        <option value="Médical">Médical</option>
+                        <option value="Commercial">Commercial</option>
+                      </select>
                     </div>
                   </>
                 )}

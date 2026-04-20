@@ -110,3 +110,24 @@ def mark_recommendations_seen(delegate_id: int):
         "delegate_id": delegate_id,
         "last_seen": user.last_seen_recommendation_id,
     }
+
+
+@router.delete("/{delegate_id}")
+def delete_delegate(delegate_id: int):
+    db = SessionLocal()
+    delegate = db.query(Delegate).filter(Delegate.id == delegate_id).first()
+    if not delegate:
+        raise HTTPException(status_code=404, detail="Delegate not found")
+    
+    user = db.query(User).filter(User.id == delegate.user_id).first()
+    
+    # Delete recommendations linked to this delegate to avoid FK constraint errors
+    db.query(Recommendation).filter(Recommendation.delegate_id == delegate_id).delete()
+    db.commit()
+    
+    db.delete(delegate)
+    if user:
+        db.delete(user)
+        
+    db.commit()
+    return {"message": "Delegate and user deleted successfully"}

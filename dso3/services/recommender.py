@@ -10,12 +10,13 @@ def recommend_delegates(product, delegates):
     results = []
 
     for delegate in delegates:
-        delegate_text = f"{delegate.expertise} {delegate.interests}"
+        spec = delegate.specification or ""
+        delegate_text = f"{delegate.expertise} {delegate.interests} {spec}".strip()
         delegate_vec = get_embedding(delegate_text)
 
         score = cosine(product_vec, delegate_vec)
 
-        if score < 0.35:
+        if score < 0.05:
             continue
 
         results.append({

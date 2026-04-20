@@ -55,6 +55,7 @@ def register_user(body: RegisterUserRequest) -> RegisterUserResponse:
             name=unique_name,
             expertise=(body.expertise or "general").strip() or "general",
             interests=(body.interests or "general").strip() or "general",
+            specification=(body.specification or "").strip() or None,
         )
         db.add(new_delegate)
         db.commit()

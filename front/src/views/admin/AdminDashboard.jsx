@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   AreaChart, Area, PieChart, Pie, Cell, LineChart, Line, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
@@ -55,12 +55,7 @@ const annualPerformance = [
   { mois: 'Nov', medical: 4800, commercial: 6200 }, { mois: 'Déc', medical: 5200, commercial: 7000 },
 ];
 
-const delegates = [
-  { id: 1, nom: "Dr. Sarah Khalil", role: "Médical", dso: "DSO1", score: 94, eval: 24, statut: "Actif" },
-  { id: 2, nom: "Youssef Amari", role: "Commercial", dso: "DSO2", score: 88, eval: 18, statut: "Actif" },
-  { id: 3, nom: "Leila Ben Salah", role: "Médical", dso: "DSO3", score: 76, eval: 12, statut: "Formation" },
-  { id: 4, nom: "Ahmed Mansouri", role: "Commercial", dso: "DSO1", score: 91, eval: 32, statut: "Actif" },
-];
+// Les donnees des delegues seront recuperees dynamiquement
 
 const radarData = [
   { item: 'Connaissance Produit', value: 85, full: 100 },
@@ -93,6 +88,44 @@ export default function AdminDashboard() {
    const [adminError, setAdminError] = useState('');
    const [adminSuccess, setAdminSuccess] = useState('');
    const [productRecommendations, setProductRecommendations] = useState([]);
+   const [delegatesList, setDelegatesList] = useState([]);
+
+   const fetchDelegates = async () => {
+      try {
+         const res = await fetch(`${DSO3_API_URL}/delegates/`);
+         const data = await res.json();
+         setDelegatesList(data.map(d => ({
+            id: d.id,
+            nom: d.name,
+            role: d.specification || 'Médical',
+            score: Math.floor(Math.random() * 20 + 80),
+            eval: Math.floor(Math.random() * 30 + 10),
+            statut: 'Actif'
+         })));
+      } catch (e) {
+         console.error("Erreur récupération délégués", e);
+      }
+   };
+
+   useEffect(() => {
+      fetchDelegates();
+   }, []);
+
+   const deleteDelegate = async (id) => {
+      if (!window.confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
+      try {
+         const res = await fetch(`${DSO3_API_URL}/delegates/${id}`, { method: 'DELETE' });
+         if (res.ok) {
+            setDelegatesList(prev => prev.filter(d => d.id !== id));
+            setAdminSuccess('Utilisateur supprimé avec succès.');
+         } else {
+            const err = await res.json().catch(() => ({}));
+            setAdminError(err.detail || "Erreur lors de la suppression.");
+         }
+      } catch (e) {
+         setAdminError('Erreur de connexion serveur.');
+      }
+   };
 
    const handleDelegateInput = (event) => {
       const { name, value } = event.target;
@@ -124,6 +157,7 @@ export default function AdminDashboard() {
 
          setAdminSuccess('Délégué créé avec succès.');
          setDelegateForm({ name: '', expertise: '', interests: '', specification: '', user_email: '', user_password: '' });
+         fetchDelegates();
       } catch (error) {
          setAdminError(error.message || 'Erreur inconnue.');
       } finally {
@@ -389,7 +423,7 @@ export default function AdminDashboard() {
                    </tr>
                 </thead>
                 <tbody className="divide-y divide-md-outline/5">
-                   {delegates.map((d) => (
+                   {delegatesList.map((d) => (
                       <tr key={d.id} className="group hover:bg-white transition-colors">
                          <td className="px-10 py-6">
                             <div className="flex items-center gap-4">
@@ -416,7 +450,7 @@ export default function AdminDashboard() {
                                <button className="p-3 bg-sky-50 text-sky-600 rounded-2xl hover:bg-sky-500 hover:text-white transition-all shadow-sm">
                                   <Edit size={16} />
                                </button>
-                               <button className="p-3 bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-500 hover:text-white transition-all shadow-sm">
+                               <button onClick={() => deleteDelegate(d.id)} className="p-3 bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-500 hover:text-white transition-all shadow-sm">
                                   <Trash2 size={16} />
                                </button>
                             </div>
@@ -486,7 +520,7 @@ export default function AdminDashboard() {
              Leaderboard de l'Excellence <span className="p-2 bg-amber-500/10 rounded-xl text-amber-500 shadow-sm"><Award size={24} /></span>
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-             {delegates.sort((a,b) => b.score - a.score).map((d, i) => (
+             {[...delegatesList].sort((a,b) => b.score - a.score).map((d, i) => (
                 <div key={i} className="p-8 bg-md-surface-container-low rounded-[48px] flex flex-col items-center gap-6 text-center group transition-all hover:bg-white hover:shadow-2xl hover:scale-105 border border-md-outline/5">
                     <div className="relative">
                        <div className="w-24 h-24 rounded-full bg-md-primary/10 flex items-center justify-center text-md-primary font-black text-2xl border-4 border-white shadow-xl">

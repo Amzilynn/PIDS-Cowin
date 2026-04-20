@@ -36,10 +36,11 @@ class RegisterUserRequest(BaseModel):
     delegate_name: str | None = None
     expertise: str | None = None
     interests: str | None = None
+    specification: str | None = None
 
     @model_validator(mode="after")
     def validate_role_delegate_link(self) -> "RegisterUserRequest":
-        if self.role != "delegate" and any([self.delegate_name, self.expertise, self.interests]):
+        if self.role != "delegate" and any([self.delegate_name, self.expertise, self.interests, self.specification]):
             raise ValueError("delegate details are only allowed for delegate role")
         return self
 
