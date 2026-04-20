@@ -6,7 +6,8 @@ import {
   Popup,
   Polyline,
   ZoomControl,
-  Circle
+  Circle,
+  Tooltip
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -356,6 +357,9 @@ export default function VisitPlanner() {
             {/* Delegate starting position */}
             {delegateInfo && (
               <Marker position={[delegateInfo.latitude, delegateInfo.longitude]} icon={ICONS.delegate}>
+                <Tooltip direction="bottom" offset={[0, 10]} opacity={1} permanent className="bg-white/90 backdrop-blur-sm border-none shadow-sm rounded-lg px-2 py-1">
+                  <span className="font-black text-[10px] uppercase tracking-widest text-violet-600">Depart: {delegateInfo.nom}</span>
+                </Tooltip>
                 <Popup className="md-popup">
                   <div className="p-6 font-sans space-y-3 min-w-[200px]">
                     <p className="text-[10px] font-black uppercase text-violet-600 tracking-[0.2em]">Point de Depart</p>
@@ -375,6 +379,9 @@ export default function VisitPlanner() {
                 position={[v.latitude, v.longitude]}
                 icon={ICONS[v.statut] || ICONS.planifiee}
               >
+                <Tooltip direction="bottom" offset={[0, 10]} opacity={0.95} permanent className="bg-white/90 backdrop-blur-sm border-none shadow-sm rounded-lg px-2 py-1">
+                  <span className="font-black text-[10.5px] uppercase tracking-tight text-slate-700">{i + 1}. {v.medecin_nom}</span>
+                </Tooltip>
                 <Popup className="md-popup">
                   <div className="p-6 font-sans space-y-4 min-w-[220px]">
                     <div className="flex items-center justify-end">
