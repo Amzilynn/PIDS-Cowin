@@ -86,8 +86,14 @@ def _get_nearby_clients(lat: float, lng: float, radius_km: float, client_type: s
                 if "prenom" not in r:
                     r["prenom"] = ""
                     
-            m_lat = float(r["latitude"])
-            m_lng = float(r["longitude"])
+            # Add spatial jitter so dots never overlap and are physically well separated
+            random.seed(int(r.get("id", 0)) * 12345)
+            m_lat = float(r["latitude"]) + ((random.random() - 0.5) * 0.06)
+            m_lng = float(r["longitude"]) + ((random.random() - 0.5) * 0.06)
+            
+            # Save shifted coordinates so the frontend renders them spread out
+            r["latitude"] = str(m_lat)
+            r["longitude"] = str(m_lng)
             
             # Sanity check for Tunisian coords
             if not (30 < m_lat < 38 and 7 < m_lng < 12):
@@ -314,7 +320,7 @@ async def get_nearby_medecins(
     limit: int = Query(20, ge=1, le=100),
 ):
     """Return doctors within a given radius of coordinates."""
-    docs = _get_nearby_doctors(lat, lng, radius, limit)
+    docs = _get_nearby_clients(lat, lng, radius_km=radius, client_type="medecins", limit=limit)
 
     return [
         MedecinResponse(
