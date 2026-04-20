@@ -1,7 +1,7 @@
 @echo off
 setlocal
 echo ==========================================
-3: echo   MuseTalk - High Performance Launcher
+echo   MuseTalk - High Performance Launcher
 echo ==========================================
 echo.
 echo Starting MuseTalk (HD Engine)...

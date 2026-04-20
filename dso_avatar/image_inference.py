@@ -119,7 +119,7 @@ def run_image_inference(image_path, audio_path, output_path, batch_size=8, limit
         masked_lat = vae.vae.encode(t_mask).latent_dist.mode() * vae.vae.config.scaling_factor
         latents = torch.cat([masked_lat, ref_lat], dim=1)
 
-    # 3. Audio Pipeline
+    # 3. Audio Pipeline (Segmented for Unlimited Length)
     audio_data, sr = sf.read(audio_path)
     if audio_data.ndim > 1: audio_data = audio_data.mean(axis=1)
     
@@ -135,60 +135,92 @@ def run_image_inference(image_path, audio_path, output_path, batch_size=8, limit
         import resampy
         audio_data = resampy.resample(audio_data, sr, 16000).astype(np.float32)
         
-    whisper_feat = audio_processor.audio2feat(audio_data)
-    print(f"[*] Audio Features Extracted: {whisper_feat.shape} | Mean: {np.mean(whisper_feat):.4f}")
+    # SLIDING WINDOW: Process in 20s chunks to bypass Whisper's 30s "Wall"
+    print("[*] Processing long audio features...")
+    step = 20 * 16000 # 20 second blocks
+    whisper_feats = []
+    
+    for start in range(0, len(audio_data), step):
+        end = min(start + step, len(audio_data))
+        chunk = audio_data[start:end]
+        
+        # Pad to exactly 30s to keep Whisper internal shapes happy
+        pad_needed = (30 * 16000) - len(chunk)
+        if pad_needed > 0:
+            chunk = np.pad(chunk, (0, pad_needed))
+            
+        f = audio_processor.audio2feat(chunk)
+        
+        # Pull only the "real" tokens for this segment (50 tokens per second)
+        actual_len = int(((end - start) / 16000) * 50)
+        whisper_feats.append(f[:actual_len])
+        
+    whisper_feat = np.concatenate(whisper_feats, axis=0)
+    print(f"[*] Total Audio Sync Track: {whisper_feat.shape} | Mean: {np.mean(whisper_feat):.4f}")
     
     total_f = int(len(audio_data) / 16000 * 25)
     if limit: total_f = min(limit, total_f)
 
-    # 4. Main Inference
-    final_frames = []
+    # 4. Main Inference (Professional FFmpeg Pipe Mode)
     print(f"[*] Generating {total_f} frames...")
-    
-    for i in tqdm(range(0, total_f, batch_size)):
-        cur_bs = min(batch_size, total_f - i)
-        aud_chunks = []
-        for j in range(cur_bs):
-            chunk, _ = audio_processor.get_sliced_feature(whisper_feat, i + j, [2, 2], 25)
-            aud_chunks.append(chunk)
-            
-        aud_batch = torch.from_numpy(np.stack(aud_chunks)).to(device=gpu_device, dtype=torch.bfloat16)
-        aud_batch = pe(aud_batch)
-        lat_batch = latents.repeat(cur_bs, 1, 1, 1)
-
-        with torch.no_grad():
-            # Apply Blackwell stability: nan_to_num
-            pred_sample = unet.model(lat_batch, timesteps, encoder_hidden_states=aud_batch).sample
-            pred_lat = torch.nan_to_num(pred_sample, nan=0.0)
-            pred_imgs = vae.decode_latents(pred_lat)
-
-        for j in range(cur_bs):
-            raw_patch = pred_imgs[j].astype(np.uint8)
-            
-            # Create precise mouth mask (Relative to the 256x256 space)
-            h_p, w_p = raw_patch.shape[:2]
-            mask = np.zeros((h_p, w_p), dtype=np.float32)
-            # WIDER MASK: Cover more area (0.5h to 0.95h) to catch all movement
-            cv2.rectangle(mask, (int(w_p*0.1), int(h_p*0.55)), (int(w_p*0.9), int(h_p*0.95)), 1.0, -1)
-            mask = cv2.GaussianBlur(mask, (31, 31), 0) # Softer edges
-            
-            # Debug: Save the very first AI mouth patch
-            if i == 0 and j == 0:
-                cv2.imwrite("DEBUG_AI_MOUTH_CROP.png", raw_patch)
-
-            final_f = blend_face_image(img, raw_patch, [bx1, by1, bx2, by2], mask=mask)
-            final_frames.append(final_f)
-
-    # 5. Output
+    ffmpeg_exe = imageio_ffmpeg.get_ffmpeg_exe()
     tmp_vid = "temp_v.mp4"
-    h_f, w_f = final_frames[0].shape[:2]
-    vw = cv2.VideoWriter(tmp_vid, cv2.VideoWriter_fourcc(*'mp4v'), 25, (w_f, h_f))
-    for f in final_frames: vw.write(f)
-    vw.release()
+    h_f, w_f = img.shape[:2]
+    
+    # CRITICAL: Even dimensions check
+    w_f = w_f if w_f % 2 == 0 else w_f - 1
+    h_f = h_f if h_f % 2 == 0 else h_f - 1
+    img = img[:h_f, :w_f]
+    
+    # Initialize imageio writer with stable software encoding
+    import imageio
+    # libx264 is more compatible than nvenc on some Windows systems
+    writer = imageio.get_writer(tmp_vid, fps=25, codec='libx264', pixelformat='yuv420p', ffmpeg_log_level='error')
 
-    ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
-    subprocess.run([ffmpeg, '-y', '-i', tmp_vid, '-i', audio_path, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-shortest', output_path], capture_output=True)
-    if os.path.exists(tmp_vid): os.remove(tmp_vid)
+    try:
+        for i in tqdm(range(0, total_f, batch_size), desc="[*] Generating video"):
+            cur_bs = min(batch_size, total_f - i)
+            aud_chunks = []
+            for j in range(cur_bs):
+                # Using 5 frames of context (2 before, 2 after) for each frame
+                chunk, _ = audio_processor.get_sliced_feature(whisper_feat, i + j, [2, 2], 25)
+                aud_chunks.append(chunk)
+
+            aud_batch = torch.from_numpy(np.stack(aud_chunks)).to(device=gpu_device, dtype=torch.bfloat16)
+            aud_batch = pe(aud_batch)
+            lat_batch = latents.repeat(cur_bs, 1, 1, 1)
+
+            with torch.no_grad():
+                pred_sample = unet.model(lat_batch, timesteps, encoder_hidden_states=aud_batch).sample
+                pred_lat = torch.nan_to_num(pred_sample, nan=0.0)
+                pred_imgs = vae.decode_latents(pred_lat)
+
+            for j in range(cur_bs):
+                raw_patch = pred_imgs[j].astype(np.uint8)
+                h_p, w_p = raw_patch.shape[:2]
+                mask = np.zeros((h_p, w_p), dtype=np.float32)
+                cv2.rectangle(mask, (int(w_p*0.1), int(h_p*0.55)), (int(w_p*0.9), int(h_p*0.95)), 1.0, -1)
+                mask = cv2.GaussianBlur(mask, (31, 31), 0)
+
+                final_f = blend_face_image(img, raw_patch, [bx1, by1, bx2, by2], mask=mask)
+                # Write directly via imageio (handles encoding internally)
+                writer.append_data(final_f[:, :, ::-1])  # BGR to RGB
+    finally:
+        writer.close()
+
+    # 5. Final Merge (Removed -shortest to ensure full length)
+    print(f"[*] Merging Final High-Quality Result...")
+    subprocess.run([
+        ffmpeg_exe, '-y', 
+        '-i', tmp_vid, 
+        '-i', audio_path, 
+        '-c:v', 'copy', # Copy stream for zero quality loss
+        '-c:a', 'aac', 
+        output_path
+    ], capture_output=True)
+    
+    if os.path.exists(tmp_vid): 
+        os.remove(tmp_vid)
     print(f"[!] SUCCESS! Result saved to: {output_path}")
 
 if __name__ == "__main__":
