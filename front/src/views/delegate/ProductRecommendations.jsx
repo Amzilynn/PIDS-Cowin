@@ -43,7 +43,7 @@ export default function ProductRecommendations() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const res = await fetch(`${DSO3_API_URL}/delegates/${delegateId}/recommended-products/new?limit=10`);
+        const res = await fetch(`${DSO3_API_URL}/delegates/${delegateId}/recommended-products?limit=20`);
         const data = await res.json();
         if (data.items) {
           const mapped = data.items.map((item, index) => ({

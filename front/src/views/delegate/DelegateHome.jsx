@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { 
   BrainCircuit, 
   PlusSquare, 
@@ -42,6 +42,19 @@ export default function DelegateHome({ subRole = 'medical' }) {
    const newRecommendations = Array.isArray(authPayload?.new_recommendations)
       ? authPayload.new_recommendations
       : [];
+
+  useEffect(() => {
+    if (newRecommendations.length > 0) {
+      try {
+        const currentAuth = JSON.parse(localStorage.getItem('cw_auth') || '{}');
+        if (currentAuth.new_recommendations) {
+          delete currentAuth.new_recommendations;
+          currentAuth.new_recommendations_count = 0;
+          localStorage.setItem('cw_auth', JSON.stringify(currentAuth));
+        }
+      } catch (e) {}
+    }
+  }, [newRecommendations]);
 
   const navigateTo = (path) => {
     navigate(`${path}?role=delegate&sub=${subRole}`);

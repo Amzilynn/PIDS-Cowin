@@ -54,8 +54,8 @@ def get_delegates():
     return db.query(Delegate).all()
 
 
-@router.get("/{delegate_id}/recommended-products/new")
-def get_new_recommended_products(delegate_id: int, limit: int = 5):
+@router.get("/{delegate_id}/recommended-products")
+def get_recommended_products(delegate_id: int, limit: int = 20):
     db = SessionLocal()
     delegate = db.query(Delegate).filter(Delegate.id == delegate_id).first()
     user = db.query(User).filter(User.id == delegate.user_id).first() if delegate else None
@@ -65,10 +65,7 @@ def get_new_recommended_products(delegate_id: int, limit: int = 5):
     rows = (
         db.query(Recommendation, Product)
         .join(Product, Product.id == Recommendation.product_id)
-        .filter(
-            Recommendation.delegate_id == delegate_id,
-            Recommendation.id > user.last_seen_recommendation_id,
-        )
+        .filter(Recommendation.delegate_id == delegate_id)
         .order_by(Recommendation.id.desc())
         .limit(max(limit, 1))
         .all()

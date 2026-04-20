@@ -100,7 +100,9 @@ def login(body: LoginRequest) -> LoginResponse:
             .all()
         )
 
+        max_rec_id = 0
         for recommendation, product in rows:
+            max_rec_id = max(max_rec_id, recommendation.id)
             previews.append(
                 RecommendationPreview(
                     recommendation_id=recommendation.id,
@@ -109,6 +111,10 @@ def login(body: LoginRequest) -> LoginResponse:
                     score=float(recommendation.score),
                 )
             )
+
+        if max_rec_id > user.last_seen_recommendation_id:
+            user.last_seen_recommendation_id = max_rec_id
+            db.commit()
 
     return LoginResponse(
         success=True,
