@@ -123,6 +123,7 @@ def login(body: LoginRequest) -> LoginResponse:
         user_id=user.id,
         role=user.role,
         delegate_id=delegate.id if delegate is not None else None,
+        delegate_name=delegate.name if delegate is not None else None,
         new_recommendations_count=len(previews),
         new_recommendations=previews,
     )

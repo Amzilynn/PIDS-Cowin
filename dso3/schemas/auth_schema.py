@@ -25,6 +25,7 @@ class LoginResponse(BaseModel):
     user_id: int
     role: RoleType
     delegate_id: int | None = None
+    delegate_name: str | None = None
     new_recommendations_count: int = 0
     new_recommendations: list[RecommendationPreview] = []
 
