@@ -142,6 +142,17 @@
             </div>
         </div>
 
+        <div class="section" id="avatarSection">
+            <h2>VITAL AI Delegate - Digital Twin</h2>
+            <div style="display: flex; justify-content: center; background: #000; border-radius: 8px; overflow: hidden; position: relative; height: 350px;">
+                <video id="vitalAvatarVideo" style="height: 100%; border-radius: 8px;" poster="avalive.jpg"></video>
+                <div id="videoLoading" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                    <div class="voice-wave active"><span></span><span></span><span></span><span></span></div>
+                    <div style="margin-top: 10px; color: #00d9ff; font-size: 14px;">Rendering Digital Twin...</div>
+                </div>
+            </div>
+        </div>
+
         <div class="section">
             <h2>Chat</h2>
             
@@ -640,7 +651,12 @@
 
                 if (response.ok) {
                     addChatMessage('agent', data.agent_response, data.intent);
+                    
+                    // Trigger Audio Fallback + Video Polling
                     void speakText(data.agent_response);
+                    if (data.video_url) {
+                        void syncAvatarVideo(data.video_url);
+                    }
                 } else {
                     addChatMessage('agent', `Erreur: ${data.detail || 'Une erreur est survenue'}`, 'ERROR');
                 }
@@ -650,6 +666,50 @@
             }
 
             document.getElementById('chatMessage').value = '';
+        }
+
+        async function syncAvatarVideo(videoUrl) {
+            const videoEl = document.getElementById('vitalAvatarVideo');
+            const loader = document.getElementById('videoLoading');
+            
+            // Show loading state
+            loader.style.display = 'block';
+            videoEl.style.opacity = '0.3';
+            
+            // Polling interval to check if video file is ready on the server
+            const pollStart = Date.now();
+            const maxPoll = 180000; // 3 minutes
+            
+            const poll = setInterval(async () => {
+                try {
+                    // Try to fetch the video file
+                    const res = await fetch(videoUrl, { method: 'HEAD' });
+                    
+                    if (res.ok) {
+                        clearInterval(poll);
+                        loader.style.display = 'none';
+                        videoEl.style.opacity = '1';
+                        
+                        // Load and Play the video
+                        videoEl.src = videoUrl;
+                        videoEl.load();
+                        
+                        // Stop the TTS audio if it's still playing to favor the video's audio
+                        stopSpeech(); 
+                        
+                        videoEl.play().catch(e => console.error("Auto-play blocked:", e));
+                    }
+                } catch (e) {
+                    // File not ready yet
+                }
+                
+                if (Date.now() - pollStart > maxPoll) {
+                    clearInterval(poll);
+                    loader.style.display = 'none';
+                    videoEl.style.opacity = '1';
+                    console.error("Video rendering timed out.");
+                }
+            }, 3000); // Check every 3 seconds
         }
 
         function addChatMessage(type, text, intent = null) {

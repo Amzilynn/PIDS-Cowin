@@ -21,6 +21,11 @@ export default function DoctorView() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechPulse, setSpeechPulse] = useState(0);
   const [cameraActive, setCameraActive] = useState(false);
+  const [currentManifestUrl, setCurrentManifestUrl] = useState(null);
+
+  const handleVideoUrl = (url, manifest) => {
+    setCurrentManifestUrl(manifest);
+  };
 
   return (
     <div className="h-[calc(100vh-160px)] flex flex-col gap-6 animate-fade-in-up">
@@ -71,6 +76,7 @@ export default function DoctorView() {
                  type="doctor"
                  status="SCIENTIFIC DETAILING ACTIVE"
                  name="Delegate: Sarah K."
+                 manifestUrl={currentManifestUrl}
               />
               
               {/* Product Info Inset */}
@@ -132,6 +138,7 @@ export default function DoctorView() {
               persona="medical"
               onSpeakingState={setIsSpeaking}
               onVolumeSync={setSpeechPulse} 
+              onVideoResponse={handleVideoUrl}
            />
         </div>
       </div>

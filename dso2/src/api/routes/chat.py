@@ -77,6 +77,70 @@ async def start_session(body: SessionStartRequest) -> SessionStartResponse:
 # POST /chat
 # ──────────────────────────────────────────────────────────────────────
 
+from fastapi import APIRouter, HTTPException, status, BackgroundTasks
+import asyncio
+import uuid
+import os
+import sys
+
+# Safe imports — if these packages are missing the router still loads
+try:
+    import edge_tts
+    EDGE_TTS_OK = True
+except ImportError:
+    EDGE_TTS_OK = False
+    print("[WARNING] edge_tts not installed — avatar generation disabled.")
+
+try:
+    import requests as http_requests
+    REQUESTS_OK = True
+except ImportError:
+    REQUESTS_OK = False
+    print("[WARNING] requests not installed — avatar generation disabled.")
+
+
+AVATAR_SERVICE = "http://127.0.0.1:8001"
+
+
+def trigger_avatar_streaming(text: str, video_filename: str, job_id: str):
+    """
+    Background task: synthesise speech then POST to the avatar
+    streaming service so chunks are written as fast as the GPU can render.
+    """
+    if not (EDGE_TTS_OK and REQUESTS_OK):
+        print("[AVATAR] Skipping render — missing dependencies.")
+        return
+    try:
+        temp_audio = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..", "..", "..", "dso_avatar", "temp_musetalk", "data", "audio",
+            f"{job_id}_tts.wav"
+        )
+        os.makedirs(os.path.dirname(temp_audio), exist_ok=True)
+
+        # Synthesise English speech
+        async def _synth():
+            comm = edge_tts.Communicate(text, "en-US-AvaMultilingualNeural")
+            await comm.save(temp_audio)
+
+        asyncio.run(_synth())
+
+        # Send to avatar service with the pre-agreed job_id
+        with open(temp_audio, "rb") as fh:
+            http_requests.post(
+                f"{AVATAR_SERVICE}/render/stream",
+                files={"file": (f"{job_id}.wav", fh, "audio/wav")},
+                data={"filename": video_filename, "job_id": job_id},
+                timeout=10,
+            )
+
+        if os.path.exists(temp_audio):
+            os.remove(temp_audio)
+
+    except Exception as e:
+        print(f"[AVATAR ERROR] {e}")
+
+
 @router.post(
     "/chat",
     response_model=ChatResponse,
@@ -84,8 +148,8 @@ async def start_session(body: SessionStartRequest) -> SessionStartResponse:
     summary="Send a message to the delegate agent",
     tags=["Chat"],
 )
-async def chat(body: ChatRequest) -> ChatResponse:
-    """Send a user message and receive the agent's French response."""
+async def chat(body: ChatRequest, background_tasks: BackgroundTasks) -> ChatResponse:
+    """Send a user message and receive the agent's English response."""
     try:
         agent = _manager.get_agent(body.session_id)
         if agent is None:
@@ -95,17 +159,27 @@ async def chat(body: ChatRequest) -> ChatResponse:
             )
 
         response_text = agent.chat(body.message)
-        intent = agent.last_intent
+        intent        = agent.last_intent
+        session       = _manager.get_session(body.session_id)
 
-        session = _manager.get_session(body.session_id)
+        # Pre-compute job_id so we can return the manifest URL immediately,
+        # before the background task even starts.
+        job_id       = str(uuid.uuid4())
+        video_file   = f"{job_id}.mp4"
+        manifest_url = f"{AVATAR_SERVICE}/stream/{job_id}/manifest"
+        video_url    = f"/assets/videos/{video_file}"
+
+        background_tasks.add_task(trigger_avatar_streaming, response_text, video_file, job_id)
 
         return ChatResponse(
-            session_id=body.session_id,
-            persona=session["persona"],
-            user_message=body.message,
-            agent_response=response_text,
-            intent=intent,
-            timestamp=datetime.utcnow(),
+            session_id    = body.session_id,
+            persona       = session["persona"],
+            user_message  = body.message,
+            agent_response= response_text,
+            video_url     = video_url,
+            manifest_url  = manifest_url,
+            intent        = intent,
+            timestamp     = datetime.utcnow(),
         )
     except HTTPException:
         raise

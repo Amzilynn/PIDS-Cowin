@@ -54,20 +54,10 @@ def blend_face_image(background, ai_patch, face_coords, mask=None):
     ai_lab[:, :, 0] = np.clip(ai_lab[:, :, 0].astype(np.int16) + l_diff, 0, 255).astype(np.uint8)
     ai_patch = cv2.cvtColor(ai_lab, cv2.COLOR_LAB2BGR)
 
-    # Blending
-    output = background.copy()
-    if mask is None:
-        mask = np.zeros((y_e - y_s, x_e - x_s), dtype=np.float32)
-        cv2.rectangle(mask, (5, 5), (mask.shape[1]-5, mask.shape[0]-5), 1.0, -1)
-        mask = cv2.GaussianBlur(mask, (15, 15), 0)
-    
-    roi = output[y_s:y_e, x_s:x_e].astype(np.float32)
-    ai_patch = ai_patch.astype(np.float32)
-    for c in range(3):
-        roi[:, :, c] = roi[:, :, c] * (1 - mask) + ai_patch[:, :, c] * mask
-        
-    output[y_s:y_e, x_s:x_e] = roi.astype(np.uint8)
-    return output
+    # Optimized Vectorized Blending (Numpy speedup)
+    mask_3d = mask[:, :, np.newaxis]
+    background[y_s:y_e, x_s:x_e] = (target_roi.astype(np.float32) * (1 - mask_3d) + ai_patch.astype(np.float32) * mask_3d).astype(np.uint8)
+    return background
 
 def run_image_inference(image_path, audio_path, output_path, batch_size=8, limit=None):
     print(f"[*] Initializing Blackwell Image Mode for: {image_path}")

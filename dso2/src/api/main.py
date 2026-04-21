@@ -39,8 +39,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
+# ... (existing imports)
+
 # DSO2 — Chat routes
 app.include_router(chat_router)
+
+# Serve the Frontend HTML
+@app.get("/")
+async def read_index():
+    index_path = os.path.join(PROJECT_ROOT, "dso2", "frontend", "main.html")
+    return FileResponse(index_path)
+
+# Mount static files for Avatar Videos
+ASSETS_DIR = os.path.join(PROJECT_ROOT, "dso2", "frontend", "assets")
+if os.path.exists(ASSETS_DIR):
+    app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="assets")
+    print(f"[OK] Assets mounted at /assets from {ASSETS_DIR}")
+else:
+    print(f"[WARNING] Assets directory not found at {ASSETS_DIR}")
 
 # DSO4 — Visit Strategy routes
 if DSO4_AVAILABLE:

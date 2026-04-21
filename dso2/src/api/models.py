@@ -42,6 +42,8 @@ class ChatResponse(BaseModel):
     persona: str
     user_message: str
     agent_response: str
+    video_url: Optional[str] = None
+    manifest_url: Optional[str] = None
     intent: str
     timestamp: datetime
 

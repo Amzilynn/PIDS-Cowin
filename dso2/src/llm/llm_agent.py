@@ -52,24 +52,23 @@ class VitalAgent:
             timeout=120,
         )
         print(f"VitalAgent ready — session {self.session_id} | persona: {self.persona}")
-
     def detect_intent(self, user_message: str) -> str:
         """Detect conversation intent, persona-aware."""
         msg = user_message.lower().strip()
         
         # Greeting - simple short response
         greeting_kw = [
-            "bonjour", "salut", "bonsoir", "coucou", "hello",
-            "bonjour!", "salut!", "bonjour.", "salut."
+            "hello", "hi", "hey", "good morning", "good afternoon",
+            "hello!", "hi!", "bonjour", "salut"
         ]
-        if msg in greeting_kw or msg.startswith("bonjour") and len(msg) < 15:
+        if any(msg == k for k in greeting_kw) or (msg.startswith("hello") and len(msg) < 15):
             return "GREETING"
         
         # Safety checks apply to both personas
         safety_kw = [
-            "grossesse", "enceinte", "enfant", "bébé", "senior",
-            "diabét", "danger", "contre-indiq", "allergi",
-            "interaction", "risque", "innocuité", "tolérance"
+            "pregnancy", "pregnant", "child", "baby", "senior", "elderly",
+            "diabetes", "danger", "contraind", "allerg", "breastfeed",
+            "interaction", "risk", "safety", "tolerance"
         ]
         if any(k in msg for k in safety_kw):
             return "SAFETY_CHECK"
@@ -77,8 +76,8 @@ class VitalAgent:
         # Commercial persona keywords
         if getattr(self, "persona", "medical") == "commercial":
             commercial_kw = [
-                "marge", "prix", "remise", "stock", "commande",
-                "promo", "concurrent", "rotation", "livraison"
+                "margin", "price", "discount", "stock", "order",
+                "promo", "competitor", "rotation", "delivery"
             ]
             if any(k in msg for k in commercial_kw):
                 return "PRODUCT_INQUIRY"
@@ -86,22 +85,22 @@ class VitalAgent:
         # Medical persona keywords
         if getattr(self, "persona", "medical") == "medical":
             medical_kw = [
-                "mécanisme", "biodispo", "posologie", "prescription",
-                "patient", "efficac", "étude", "clinique", "symptôme"
+                "mechanism", "biodisponibility", "dosage", "prescription",
+                "patient", "efficac", "study", "clinical", "symptom"
             ]
             if any(k in msg for k in medical_kw):
                 return "SYMPTOM_INQUIRY"
         
         # Shared intents
         if any(k in msg for k in [
-            "recommand", "conseil", "proposez", "suggér",
-            "qu'est-ce que", "que pensez"
+            "recommend", "advise", "propose", "suggest",
+            "what is", "what do you think"
         ]):
             return "RECOMMENDATION"
         
         if any(k in msg for k in [
-            "non", "pas convaincu", "pas sûr", "doute",
-            "preuve", "générique", "moins cher"
+            "no", "not convinced", "not sure", "doubt",
+            "proof", "generic", "cheaper"
         ]):
             return "OBJECTION"
         
@@ -124,9 +123,9 @@ class VitalAgent:
     def _get_greeting_response(self) -> str:
         """Return a short greeting response based on persona."""
         if self.persona == "medical":
-            return "Bonjour ! Je suis le délégué médical VITAL. Comment puis-je vous aider aujourd'hui ?"
+            return "Hello! I am the VITAL medical representative. How can I assist you today?"
         else:
-            return "Bonjour ! Je suis le délégué commercial VITAL. Comment puis-je vous servir ?"
+            return "Hello! I am the VITAL commercial representative. How can I serve you?"
 
     def chat(self, user_message: str) -> str:
         """Run one user turn: RAG context injection, then French assistant reply."""
