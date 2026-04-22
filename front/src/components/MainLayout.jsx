@@ -32,7 +32,7 @@ export default function MainLayout({ role = 'delegate', subRole = 'medical' }) {
         
       </main>
 
-      <style jsx>{`
+      <style>{`
         ::-webkit-scrollbar {
           width: 6px;
         }

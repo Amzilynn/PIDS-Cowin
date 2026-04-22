@@ -65,10 +65,11 @@ class BaseAvatar:
         self.opt = opt
         self.sample_rate = 16000
         self.chunk = self.sample_rate // (opt.fps*2) # 320 samples per chunk (20ms)
-        self.sessionid = self.opt.sessionid
+        self.sessionid = getattr(self.opt, 'sessionid', '0')
 
         self.speaking = False
         self.recording = False
+        self.players = [] # Support multiple WebRTC connections
         self._record_video_pipe = None
         self._record_audio_pipe = None
         self.width = self.height = 0
@@ -121,14 +122,75 @@ class BaseAvatar:
         else:
             logger.error(f"Output transport {opt.transport} not found in map.")
 
+    def add_player(self, player):
+        if player in self.players:
+            logger.info(f"Player already registered for session {self.sessionid}. Total: {len(self.players)}")
+            return
+
+        alive_players = []
+        for existing in self.players:
+            try:
+                if getattr(existing.audio, 'readyState', None) == 'live' or getattr(existing.video, 'readyState', None) == 'live':
+                    alive_players.append(existing)
+            except Exception:
+                pass
+        self.players = alive_players
+
+        if len(self.players) >= 2:
+            old_p = self.players.pop(0)
+            logger.warning(f"Ghost Buster: Pruning oldest stale connection from session {self.sessionid}")
+            try:
+                old_p.stop()
+            except Exception:
+                pass
+
+        self.players.append(player)
+        logger.info(f"Player added to session {self.sessionid}. Total: {len(self.players)}")
+
+    def remove_player(self, player):
+        if player in self.players:
+            # Safely stop the individual player track without stopping the whole engine
+            try:
+                player.stop()
+            except:
+                pass
+            self.players.remove(player)
+            logger.info(f"Player removed from session {self.sessionid}. Remaining: {len(self.players)}")
+
+    def push_video_all(self, frame):
+        for p in self.players:
+            try:
+                p.push_video(frame)
+            except Exception:
+                pass # Prevent one slow player from crashing the engine
+
+    def push_audio_all(self, frame, eventpoint=None):
+        for p in self.players:
+            try:
+                p.push_audio(frame, eventpoint)
+            except Exception:
+                pass
+
     # 如果系统没有使用 pipeline，或者为了向后兼容原来的 ttsreal.py
     def put_msg_txt(self, msg, datainfo:dict={}):
+        # 1. Flush FIRST before any new data is generated
+        if hasattr(self, 'asr'):
+            self.asr.flush_talk()
+        
+        while not self.res_frame_queue.empty():
+            try: self.res_frame_queue.get_nowait()
+            except: break
+
+        # 2. THEN generate new data
         if hasattr(self, 'tts'):
             self.tts.put_msg_txt(msg, datainfo)
     
     def put_audio_frame(self, audio_chunk:NDArray[np.float32], datainfo:dict={}): # 16khz 20ms pcm
         if hasattr(self, 'asr'):
-            self.asr.put_audio_frame(audio_chunk, datainfo)
+            self.speaking = True # Force speaking state
+            # Force type 0 (Speech) for all TTS-generated audio
+            audio_frame = AudioFrameData(type=0, data=audio_chunk, userdata=datainfo)
+            self.asr.queue.put(audio_frame)
 
     def put_audio_file(self, filebyte, datainfo:dict={}): 
         input_stream = BytesIO(filebyte)
@@ -294,9 +356,9 @@ class BaseAvatar:
 
     # ========================== 核心渲染及 Pipeline 桥接 ==========================
     def get_avatar_length(self):
-        if hasattr(self, 'frame_list_cycle'):
+        if hasattr(self, 'frame_list_cycle') and self.frame_list_cycle:
             return len(self.frame_list_cycle)
-        return 1
+        return 0
         
     def inference(self, quit_event):
         length = self.get_avatar_length()
@@ -310,49 +372,62 @@ class BaseAvatar:
         # infernum = 0
         logger.info('start inference')
         while not quit_event.is_set():
-            starttime = time.perf_counter()
-            audiofeat_batch = []
+            # 1. Pull audio frames FIRST to maintain sync
+            audio_frames: list[AudioFrameData] = []
+            is_all_silence = True
+            
             try:
-                audiofeat_batch = self.asr.feat_queue.get(block=True, timeout=1)
+                # Pull raw audio matching the batch size (2 chunks per frame)
+                for _ in range(self.batch_size * 2):
+                    audioframe: AudioFrameData = self.asr.output_queue.get(block=True, timeout=1)
+                    if audioframe.type == 0:
+                        is_all_silence = False
+                    audio_frames.append(audioframe)
             except queue.Empty:
                 continue
-                
-            is_all_silence = True
-            audio_frames: list[AudioFrameData] = []
-            for _ in range(self.batch_size * 2):
-                audioframe:AudioFrameData = self.asr.output_queue.get()
-                if audioframe.type == 0:
-                    is_all_silence = False               
-                audio_frames.append(audioframe)
 
-             # 检测状态变化
             current_speaking = not is_all_silence
-
-            if is_all_silence: #全为静音数据，只需要取fullimg，不需要推理
+            
+            if is_all_silence:
+                # Silence Mode: Standard background loop
                 for i in range(self.batch_size):
-                    idx = mirror_index(length, index)
-                    self.res_frame_queue.put((None, audio_frames[i*2:i*2+2], idx))
-                    index = index + 1
+                    self.res_frame_queue.put((None, audio_frames[i*2:i*2+2], mirror_index(length, index)))
+                    index += 1
             else:
-                if current_speaking and not last_speaking and self.custom_index.get(1) is not None: #从静音到说话切换,并且有自定义静态视频
-                    index = 0
-                t = time.perf_counter()
-
-                pred = self.inference_batch(index, audiofeat_batch)
-
-                counttime += (time.perf_counter() - t)
-                count += self.batch_size
-                if count >= 100:
-                    logger.info(f"------actual avg infer fps:{count/counttime:.4f}")
-                    count = 0
-                    counttime = 0
-                for i, res_frame in enumerate(pred):
-                    self.res_frame_queue.put((res_frame, audio_frames[i*2:i*2+2], mirror_index(length, index)))
-                    index = index + 1
+                # Speaking Mode: AI lipsync inference
+                try:
+                    audiofeat_batch = self.asr.feat_queue.get(block=True, timeout=0.2)
+                    
+                    if current_speaking and not last_speaking:
+                        index = 0 # Reset for sync
+                        
+                    pred = self.inference_batch(index, audiofeat_batch)
+                    
+                    for i, res_frame in enumerate(pred):
+                        try:
+                            self.res_frame_queue.put((res_frame, audio_frames[i*2:i*2+2], mirror_index(length, index)), block=False)
+                        except queue.Full:
+                            # Drop oldest frame if queue full to prevent deadlock
+                            try: self.res_frame_queue.get_nowait()
+                            except: pass
+                            self.res_frame_queue.put((res_frame, audio_frames[i*2:i*2+2], mirror_index(length, index)), block=False)
+                        index += 1
+                except queue.Empty:
+                    # Fallback if features delayed
+                    for i in range(self.batch_size):
+                        try:
+                            self.res_frame_queue.put((None, audio_frames[i*2:i*2+2], mirror_index(length, index)), block=False)
+                        except queue.Full:
+                            pass
+                        index += 1
                     
             if current_speaking != last_speaking:
-                logger.info(f"inference 状态切换：{'说话' if last_speaking else '静音'} → {'说话' if current_speaking else '静音'}")
+                logger.info(f"Speaking state shift: {'Silent' if last_speaking else 'Speaking'} -> {'Speaking' if current_speaking else 'Silent'}")
                 last_speaking = current_speaking         
+            
+            # Diagnostic: Inference loop alive
+            if index % 100 == 0:
+                logger.debug(f"[DIAG] Inference Loop Active: frame_index={index}, speaking={current_speaking}")
         logger.info('baseavatar inference thread stop')
 
     def process_frames(self,quit_event):
@@ -365,81 +440,71 @@ class BaseAvatar:
             _last_silent_frame = None  # 静音帧缓存
             _last_speaking_frame = None  # 说话帧缓存
 
-        self.output.start()
+        # self.output.start() # No longer used
+        _total_frames_pushed = 0
+        _standby_frame = None
         
         while not quit_event.is_set():
             try:
                 audio_frames: list[AudioFrameData]
-                res_frame,audio_frames,idx = self.res_frame_queue.get(block=True, timeout=1)
+                # Increase timeout if speaking to wait for processed frames
+                timeout = 0.08 if self.speaking else 0.04
+                res_frame,audio_frames,idx = self.res_frame_queue.get(block=True, timeout=timeout) 
+                _last_idx = idx
             except queue.Empty:
+                # Fast-Start: If queue is empty, push a standby background frame to keep stream alive
+                if hasattr(self, 'frame_list_cycle') and self.frame_list_cycle:
+                    # Use index 0 or last known index and INCREMENT it
+                    idx = getattr(self, '_last_idx', 0)
+                    target_frame = self.frame_list_cycle[mirror_index(len(self.frame_list_cycle), idx)]
+                    self.push_video_all(target_frame)
+                    
+                    self._last_idx = (idx + 1) % len(self.frame_list_cycle)
+                    _total_frames_pushed += 1
+                    if _total_frames_pushed % 25 == 0:
+                        logger.info(f"[HEARTBEAT] Engine live (STANDBY): {_total_frames_pushed} frames [Active Links: {len(self.players)}]")
                 continue
             
-            # 检测状态变化
+            self._last_idx = idx
             current_speaking = not (audio_frames[0].type!=0 and audio_frames[1].type!=0)
             if current_speaking != _last_speaking:
-                logger.info(f"状态切换：{'说话' if _last_speaking else '静音'} → {'说话' if current_speaking else '静音'}")
+                logger.info(f"Streaming Shift: {'Idle' if _last_speaking else 'Live'} -> {'Live' if current_speaking else 'Idle'}")
                 _transition_start = time.time()
             _last_speaking = current_speaking
 
-            if audio_frames[0].type!=0 and audio_frames[1].type!=0: #全为静音数据，只需要取fullimg
+            if res_frame is None: 
+                # Background frame
                 self.speaking = False
-                audiotype = audio_frames[0].type
-                if self.custom_index.get(audiotype) is not None: #有自定义视频
-                    mirindex = mirror_index(len(self.custom_img_cycle[audiotype]),self.custom_index[audiotype])
-                    target_frame = self.custom_img_cycle[audiotype][mirindex]
-                    self.custom_index[audiotype] += 1
-                else:
-                    target_frame = self.frame_list_cycle[idx]
-                
-                if enable_transition:
-                    # 说话→静音过渡
-                    if time.time() - _transition_start < _transition_duration and _last_speaking_frame is not None:
-                        alpha = min(1.0, (time.time() - _transition_start) / _transition_duration)
-                        combine_frame = cv2.addWeighted(_last_speaking_frame, 1-alpha, target_frame, alpha, 0)
-                    else:
-                        combine_frame = target_frame
-                    # 缓存静音帧
-                    _last_silent_frame = combine_frame.copy()
-                else:
-                    combine_frame = target_frame
+                target_frame = self.frame_list_cycle[idx]
+                combine_frame = target_frame
             else:
+                # AI Lipsync frame
                 self.speaking = True
                 try:
-                    current_frame = self.paste_back_frame(res_frame,idx)
+                    combine_frame = self.paste_back_frame(res_frame,idx)
                 except Exception as e:
-                    logger.warning(f"paste_back_frame error: {e}")
-                    continue
-                if enable_transition:
-                    # 静音→说话过渡
-                    if time.time() - _transition_start < _transition_duration and _last_silent_frame is not None:
-                        alpha = min(1.0, (time.time() - _transition_start) / _transition_duration)
-                        combine_frame = cv2.addWeighted(_last_silent_frame, 1-alpha, current_frame, alpha, 0)
-                    else:
-                        combine_frame = current_frame
-                    # 缓存说话帧
-                    _last_speaking_frame = combine_frame.copy()
-                else:
-                    combine_frame = current_frame
+                    logger.warning(f"Composite fail: {e}")
+                    combine_frame = self.frame_list_cycle[idx]
 
-            cv2.putText(combine_frame, "LiveTalking", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (128,128,128), 1)
-            
-            # 使用统一输出接口推送视频帧
-            self.output.push_video_frame(combine_frame)
+            # Heartbeat Logging (every 25 frames = 1 second)
+            _total_frames_pushed += 1
+            if _total_frames_pushed % 25 == 0:
+                status = "ACTIVE" if self.speaking else "STANDBY"
+                links = len(self.players)
+                logger.info(f"[HEARTBEAT] Engine live ({status}): {_total_frames_pushed} frames [Active Links: {links}]")
+
+            # Push to ALL WebRTC relays
+            self.push_video_all(combine_frame)
             self.record_video_data(combine_frame)
 
             for audio_frame in audio_frames:
-                #frame,type,eventpoint = audio_frame
                 frame = (audio_frame.data * 32767).astype(np.int16)
-
-                # 使用统一输出接口推送音频帧
-                self.output.push_audio_frame(frame, audio_frame.userdata)
+                self.push_audio_all(frame, audio_frame.userdata)
                 self.record_audio_data(frame)
-                
-            # if self.opt.transport == 'virtualcam' and hasattr(self.output, '_cam') and self.output._cam:
-            #     self.output._cam.sleep_until_next_frame()
 
-        self.output.stop()
-        logger.info('baseavatar process_frames thread stop') 
+        # NEVER stop the engine output loop for the persistent avatar
+        # self.output.stop() 
+        logger.info('baseavatar process_frames thread finished (STANDBY continues)') 
 
     def render(self,quit_event):
         self.quit_event = quit_event
@@ -462,19 +527,21 @@ class BaseAvatar:
         while not quit_event.is_set(): 
             t_start = time.perf_counter()
             self.asr.run_step()
+            
+            # Diagnostic: Main Render loop heartbeat
+            _totalframe += self.batch_size
+            if _totalframe % 100 == 0:
+                logger.debug(f"[DIAG] Main Render Loop Active: processed_frames={_totalframe}")
 
             # Strict 25 FPS Throttle (40ms per step)
-            # Since each run_step handles batch_size * 2 (e.g. 8 chunks = 160ms)
-            step_duration = (self.batch_size * 2 * 0.02)
+            # Each step pulls exactly batch_size video frames
+            step_duration = (self.batch_size * 0.04) # 40ms per video frame
             
             elapsed = time.perf_counter() - t_start
             sleep_time = step_duration - elapsed
             
-            # Additional buffer check
-            buffer_size = self.output.get_buffer_size() if hasattr(self.output, 'get_buffer_size') else 0
-            if buffer_size >= 5:
-                sleep_time += (0.04 * (buffer_size - 5))
-                
+            # Dynamic buffer adjustment: if output queue is too full, slow down slightly
+            # if too empty, speed up (but we are already in real-time)
             if sleep_time > 0:
                 time.sleep(sleep_time)
         logger.info('baseavatar render thread stop')

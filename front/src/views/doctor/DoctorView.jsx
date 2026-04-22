@@ -21,11 +21,9 @@ export default function DoctorView() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechPulse, setSpeechPulse] = useState(0);
   const [cameraActive, setCameraActive] = useState(false);
-  const [currentManifestUrl, setCurrentManifestUrl] = useState(null);
+  const [avatarSessionId, setAvatarSessionId] = useState(null);
+  const [manifestUrl, setManifestUrl] = useState(null);
 
-  const handleVideoUrl = (url, manifest) => {
-    setCurrentManifestUrl(manifest);
-  };
 
   return (
     <div className="h-[calc(100vh-160px)] flex flex-col gap-6 animate-fade-in-up">
@@ -70,14 +68,16 @@ export default function DoctorView() {
         <div className="col-span-12 lg:col-span-8 flex flex-col gap-6">
            {/* Rep Avatar Section */}
            <div className="flex-1 min-h-0 relative">
-              <Avatar3D 
-                 isSpeaking={isSpeaking} 
-                 speechPulse={speechPulse}
-                 type="doctor"
-                 status="SCIENTIFIC DETAILING ACTIVE"
-                 name="Delegate: Sarah K."
-                 manifestUrl={currentManifestUrl}
-              />
+               <Avatar3D
+                  isSpeaking={isSpeaking}
+                  speechPulse={speechPulse}
+                  type="doctor"
+                  status="SCIENTIFIC DETAILING ACTIVE"
+                  name="Delegate: Sarah K."
+                  useWebRTC={false}
+                  manifestUrl={manifestUrl}
+                  onSessionReady={setAvatarSessionId}
+               />
               
               {/* Product Info Inset */}
               <div className="absolute top-8 left-8 p-4 bg-brand-navy/40 backdrop-blur-xl rounded-3xl border border-white/10 flex items-center gap-4 z-20">
@@ -134,11 +134,12 @@ export default function DoctorView() {
 
         {/* Right Sidebar: Chat Interaction */}
         <div className="col-span-12 lg:col-span-4 h-full min-h-0">
-           <ChatPanel 
+           <ChatPanel
               persona="medical"
               onSpeakingState={setIsSpeaking}
-              onVolumeSync={setSpeechPulse} 
-              onVideoResponse={handleVideoUrl}
+              onVolumeSync={setSpeechPulse}
+              onManifest={setManifestUrl}
+              avatarSessionId={avatarSessionId}
            />
         </div>
       </div>

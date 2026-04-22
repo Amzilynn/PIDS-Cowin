@@ -55,7 +55,7 @@ class PlayerStreamTrack(MediaStreamTrack):
         super().__init__()  # don't forget this!
         self.kind = kind
         self._player = player
-        self._queue = queue.Queue(maxsize=100)
+        self._queue = queue.Queue(maxsize=200) # Increased capacity
         self.timelist = [] #记录最近包的时间戳
         self.current_frame_count = 0
         if self.kind == 'video':
@@ -129,6 +129,8 @@ class PlayerStreamTrack(MediaStreamTrack):
         while True:
             try:
                 frame, eventpoint = self._queue.get_nowait()
+                if self.kind == 'video':
+                    frame.pict_type = 0 # Automatic/Default
                 break
             except queue.Empty:
                 await asyncio.sleep(0.005)
@@ -184,20 +186,36 @@ class HumanPlayer:
         self.__video = PlayerStreamTrack(self, kind="video")
 
         self.__container = avatar_session
-        if hasattr(self.__container, 'output'):
-            self.__container.output._player = self
+        self.__container.add_player(self)
 
     def push_video(self, frame):
         from av import VideoFrame
         new_frame = VideoFrame.from_ndarray(frame, format="bgr24")
-        self.__video._queue.put((new_frame, None))
+        try:
+            self.__video._queue.put((new_frame, None), block=False)
+        except queue.Full:
+            # Drop oldest and try again ONCE, then give up if still full
+            try:
+                self.__video._queue.get_nowait()
+                self.__video._queue.put((new_frame, None), block=False)
+            except:
+                pass 
 
     def push_audio(self, frame, eventpoint=None):
         from av import AudioFrame
-        new_frame = AudioFrame(format='s16', layout='mono', samples=frame.shape[0])
-        new_frame.planes[0].update(frame.tobytes())
+        # Convert float32 [-1, 1] to int16 [-32768, 32767]
+        audio_int16 = (frame * 32767).astype(np.int16)
+        new_frame = AudioFrame(format='s16', layout='mono', samples=audio_int16.shape[0])
+        new_frame.planes[0].update(audio_int16.tobytes())
         new_frame.sample_rate = 16000
-        self.__audio._queue.put((new_frame, eventpoint))
+        try:
+            self.__audio._queue.put((new_frame, eventpoint), block=False)
+        except queue.Full:
+            try:
+                self.__audio._queue.get_nowait()
+                self.__audio._queue.put((new_frame, eventpoint), block=False)
+            except:
+                pass
 
     def get_buffer_size(self) -> int:
         return self.__video._queue.qsize()

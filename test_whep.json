@@ -1,0 +1,5 @@
+{
+  "api": "http://127.0.0.1:1985/rtc/v1/whep/",
+  "streamurl": "webrtc://127.0.0.1/live/livestream",
+  "sdp": "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\nm=audio 9 UDP/TLS/RTP/SAVPF 111\r\nc=IN IP4 0.0.0.0\r\n"
+}

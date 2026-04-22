@@ -1,19 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Play, Square, Activity, Cpu } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Play, Square, Activity, Wifi } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const AVATAR_SERVICE = 'http://127.0.0.1:8001';
+const AVATAR_API_SERVICE = 'http://localhost:8011';
 
 export default function Avatar3D({ type = 'doctor', manifestUrl }) {
   const [avatarState, setAvatarState] = useState('standby');
-  // standby | waiting | streaming | idle
-  const [isActive, setIsActive]     = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [chunkCount, setChunkCount] = useState(0);
   const [totalFrames, setTotalFrames] = useState(0);
+  const [isMuted, setIsMuted] = useState(true);
 
-  const videoRef   = useRef(null);
-  const audioRef   = useRef(null);
-  const pollRef    = useRef(null);
+  const videoRef = useRef(null);
+  const pollRef = useRef(null);
+  const mediaSourceRef = useRef(null);
+  const sourceBufferRef = useRef(null);
+  const chunkQueueRef = useRef([]);
+  const lastManifestRef = useRef(null);
 
   const theme = {
     doctor:     { color: '#4E8C8A', light: '#0D9488', name: 'Dr. Martin (Médecin)'         },
@@ -21,316 +24,199 @@ export default function Avatar3D({ type = 'doctor', manifestUrl }) {
     delegate:   { color: '#1E3A8A', light: '#3B82F6', name: 'Sarah Khalil (Déléguée)'      },
   }[type] || { color: '#4E8C8A', light: '#0D9488', name: 'VITAL Agent' };
 
-  // ── Status label ───────────────────────────────────────────────────────
-  const statusLabel = {
-    standby:   'Neural Standby',
-    waiting:   'Generating Twin...',
-    streaming: 'En ligne',
-    idle:      'En ligne',
-  }[avatarState] ?? 'En ligne';
+  // Stable state ref for callbacks
+  const stateRef = useRef(avatarState);
+  useEffect(() => { stateRef.current = avatarState; }, [avatarState]);
 
-  // ══════════════════════════════════════════════════════════════════════
-  //  Progressive Streaming Engine
-  //  When a new manifestUrl arrives, poll the manifest until chunks appear,
-  //  then play them sequentially with seamless hand-off.
-  // ══════════════════════════════════════════════════════════════════════
-  useEffect(() => {
-    console.log('[Avatar3D] manifestUrl changed:', manifestUrl);
-    if (!manifestUrl) return;
+  const flushQueue = useCallback(() => {
+    const sb = sourceBufferRef.current;
+    const ms = mediaSourceRef.current;
+    const queue = chunkQueueRef.current;
+    const video = videoRef.current;
+    const currState = stateRef.current;
 
-    // Reset state for the new response
-    console.log('[Avatar3D] Setting state to WAITING');
-    setAvatarState('waiting');
-    setChunkCount(0);
+    if (!sb || !ms || ms.readyState !== 'open' || sb.updating || queue.length === 0) return;
+    
+    try {
+        const buf = queue.shift();
+        sb.appendBuffer(buf);
+        if (currState === 'waiting' || currState === 'standby') {
+            setAvatarState('streaming');
+            setIsActive(true);
+            if (video && video.paused) {
+                video.play().catch(() => {});
+            }
+        }
+    } catch (e) {
+        console.warn('[Avatar3D MSE] append error:', e);
+    }
+  }, []); // Truly stable
 
-    // Mutable state owned by this effect closure (avoids stale-closure issues)
-    let knownChunks  = [];
-    let chunkPlayIdx = 0;
-    let isDone       = false;
-    let isPlaying    = false;
+  const stopAvatarStream = useCallback(() => {
+    if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+    }
+    if (sourceBufferRef.current) {
+        try { sourceBufferRef.current.removeEventListener('updateend', flushQueue); } catch (e) {}
+        sourceBufferRef.current = null;
+    }
+    if (mediaSourceRef.current && mediaSourceRef.current.readyState === 'open') {
+        try { mediaSourceRef.current.endOfStream(); } catch(e) {}
+    }
+    mediaSourceRef.current = null;
+    chunkQueueRef.current = [];
+  }, [flushQueue]);
 
+  const startAvatarStream = useCallback(async (mUrl) => {
+    if (!mUrl || mUrl === lastManifestRef.current) return;
+    lastManifestRef.current = mUrl;
+    
     const video = videoRef.current;
     if (!video) return;
 
-    // Build the absolute manifest URL
-    const absManifest = manifestUrl.startsWith('http')
-      ? manifestUrl
-      : `${AVATAR_SERVICE}${manifestUrl}`;
+    console.log("[Avatar3D] Starting stream:", mUrl);
+    stopAvatarStream();
+    setAvatarState('waiting');
+    setChunkCount(0);
+    setTotalFrames(0);
 
-    // Absolute URL helper
-    const getAbs = (url) => url.startsWith('http') ? url : `${AVATAR_SERVICE}${url}`;
+    const API_BASE = 'http://localhost:8011';
+    const absManifest = mUrl.startsWith('http') ? mUrl : `${API_BASE}${mUrl}`;
+    let seenChunks = 0;
+    const pollStart = Date.now();
 
-    // ── Play the next available chunk ─────────────────────────────────
-    const playNext = () => {
-      if (chunkPlayIdx >= knownChunks.length) {
-        // Buffer underrun — wait for more chunks
-        isPlaying = false;
-        if (isDone) {
-          // All chunks played, return to standby portrait
-          video.src = '';
-          if (audioRef.current) audioRef.current.src = '';
-          setAvatarState('standby');
+    const ms = new MediaSource();
+    mediaSourceRef.current = ms;
+    video.src = URL.createObjectURL(ms);
+
+    ms.addEventListener('sourceopen', () => {
+        try {
+            if (ms.readyState !== 'open') return;
+            const sb = ms.addSourceBuffer('video/mp4; codecs="avc1.42E01E"');
+            sb.mode = 'sequence';
+            sourceBufferRef.current = sb;
+            sb.addEventListener('updateend', flushQueue);
+            console.log("[Avatar3D MSE] Ready");
+        } catch (e) {
+            console.error('[Avatar3D MSE] init failed:', e);
         }
-        return;
-      }
+    }, { once: true });
 
-      const chunk = knownChunks[chunkPlayIdx++];
-      video.src = getAbs(chunk.url);
-      video.load();
-      video.play().catch(() => {});
-      isPlaying = true;
-
-      // Start MASTER audio only on the very first chunk
-      if (chunkPlayIdx === 1 && audioRef.current && audioRef.current.src) {
-        audioRef.current.play().catch(() => {});
-      }
-    };
-
-    // ── On chunk ended → immediately play next ─────────────────────────
-    const onEnded = () => { playNext(); };
-    video.addEventListener('ended', onEnded);
-
-    // ── Manifest polling (every 2.5 s) ─────────────────────────────────
     pollRef.current = setInterval(async () => {
-      try {
-        const res      = await fetch(absManifest);
-        const manifest = await res.json();
-
-        // 1. Prepare Audio Master track
-        if (manifest.audio_url && (!audioRef.current.src || audioRef.current.src === window.location.href)) {
-           audioRef.current.src = getAbs(manifest.audio_url);
-           audioRef.current.load();
+        if (Date.now() - pollStart > 300000) { 
+            stopAvatarStream();
+            return;
         }
 
-        // 2. Detect newly published chunks
-        if (manifest.chunks && manifest.chunks.length > knownChunks.length) {
-          const added = manifest.chunks.slice(knownChunks.length);
-          knownChunks = [...knownChunks, ...added];
-          setChunkCount(knownChunks.length);
+        try {
+            const res = await fetch(`${absManifest}?t=${Date.now()}`);
+            if (!res.ok) return;
+            const manifest = await res.json();
+            
+            if (manifest.total_frames) setTotalFrames(manifest.total_frames);
+            
+            const allChunks = manifest.chunks || [];
+            const newChunks = allChunks.slice(seenChunks);
+            
+            if (newChunks.length > 0) {
+                console.log(`[Avatar3D Poll] Found ${newChunks.length} chunks`);
+                for (const chunk of newChunks) {
+                    const cUrl = chunk.url.startsWith('http') ? chunk.url : `${API_BASE}${chunk.url}`;
+                    const cRes = await fetch(cUrl);
+                    if (!cRes.ok) continue;
+                    const buf = await cRes.arrayBuffer();
+                    chunkQueueRef.current.push(buf);
+                    setChunkCount(prev => prev + 1);
+                    seenChunks++;
+                }
+            }
+            
+            if (chunkQueueRef.current.length > 0) flushQueue();
 
-          // First chunk just arrived — switch to streaming mode and play
-          if (!isPlaying && chunkPlayIdx === 0) {
-            setAvatarState('streaming');
-            setIsActive(true);
-            window.dispatchEvent(new CustomEvent('avatarStreamStart'));
-            playNext();
-          } else if (!isPlaying) {
-            // Buffer recovered after underrun
-            playNext();
-          }
-        }
+            if (manifest.done || manifest.status === 'complete') {
+                if (seenChunks >= allChunks.length && chunkQueueRef.current.length === 0) {
+                    clearInterval(pollRef.current);
+                    pollRef.current = null;
+                    setAvatarState('idle');
+                }
+            }
+        } catch (e) { console.warn('[Avatar3D Poll] error:', e.message); }
+    }, 1000);
 
-        if (manifest.total_frames) setTotalFrames(manifest.total_frames);
+  }, [stopAvatarStream, flushQueue]);
 
-        if (manifest.done) {
-          isDone = true;
-          // Failsafe: if it finishes but no chunks fired the event, fire it now to unblock chat
-          window.dispatchEvent(new CustomEvent('avatarStreamStart'));
-          clearInterval(pollRef.current);
-        }
-      } catch (_) {
-        // Service not yet ready — silently retry
-      }
-    }, 2500);
+  useEffect(() => {
+    if (manifestUrl) startAvatarStream(manifestUrl);
+    return () => stopAvatarStream();
+  }, [manifestUrl, startAvatarStream, stopAvatarStream]);
 
-    return () => {
-      clearInterval(pollRef.current);
-      video.removeEventListener('ended', onEnded);
-      video.src = '';
-    };
-  }, [manifestUrl]);
-
-  // ── Manual session controls ────────────────────────────────────────────
-  const startSession = () => {
-    setAvatarState('standby');
-    setIsActive(true);
-  };
-  const endSession = () => {
-    setAvatarState('standby');
-    setIsActive(false);
-    if (videoRef.current) videoRef.current.src = '';
-  };
-
-  // ── Progress percentage ────────────────────────────────────────────────
-  const framesPerChunk = 25;
-  const progressPct = totalFrames > 0
-    ? Math.min(Math.round((chunkCount * framesPerChunk / totalFrames) * 100), 99)
-    : 0;
+  const progressPct = totalFrames > 0 ? Math.min(Math.round((chunkCount * 4 / totalFrames) * 100), 99) : 0;
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-between relative overflow-hidden p-6 bg-brand-navy/50 rounded-4xl border border-white/10 shadow-2xl backdrop-blur-3xl transition-all group">
-
-      {/* Background Glows */}
-      <div className="absolute -top-24 -right-24 w-80 h-80 opacity-20 rounded-full blur-[100px] animate-pulse-slow"
-           style={{ backgroundColor: theme.color }} />
-      <div className="absolute -bottom-24 -left-24 w-80 h-80 opacity-10 rounded-full blur-[100px] animate-pulse-slow delay-1000"
-           style={{ backgroundColor: theme.light }} />
-
-      {/* Status Bar */}
+      <div className="absolute -top-24 -right-24 w-80 h-80 opacity-20 rounded-full blur-[100px]" style={{ backgroundColor: theme.color }} />
       <div className="w-full flex items-center justify-between relative z-10">
-        <div className="flex items-center gap-3 bg-white/5 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/10 shadow-lg">
-          <div
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${isActive ? 'animate-pulse' : ''}`}
-            style={{
-              backgroundColor: avatarState === 'streaming'
-                ? theme.color
-                : avatarState === 'waiting'
-                ? '#3B82F6'
-                : 'rgba(255,255,255,0.2)',
-              boxShadow: isActive ? `0 0 10px ${theme.color}` : 'none',
-            }}
-          />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80">
-            {statusLabel}
+        <div className="flex items-center gap-3 bg-white/5 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/10">
+          <div className={`w-2.5 h-2.5 rounded-full ${isActive ? 'animate-pulse' : ''}`}
+               style={{ backgroundColor: avatarState === 'streaming' ? theme.color : '#3B82F6' }} />
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+            {avatarState === 'waiting' ? 'Generating...' : 'Neural Link Active'}
           </span>
         </div>
-
-        {/* Neural Link indicator */}
-        <div className={`flex items-center gap-2 text-white/40 transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
-          <Activity size={14} className="animate-pulse" style={{ color: theme.color }} />
-          <span className="text-[9px] font-black uppercase tracking-widest leading-none">Neural Link Active</span>
-        </div>
+        {avatarState === 'waiting' && (
+           <div className="flex items-center gap-2 text-white/40">
+              <Activity size={14} className="animate-pulse" style={{ color: theme.color }} />
+              <span className="text-[9px] font-black uppercase tracking-widest">Rendering {progressPct}%</span>
+           </div>
+        )}
       </div>
 
-      {/* ── Main Avatar Area ───────────────────────────────────────────── */}
       <div className="relative w-full flex-1 flex flex-col items-center justify-center min-h-[350px] mt-4 mb-4">
         <AnimatePresence mode="wait">
-
-          {/* Waiting — Avatar Thinking State */}
-          {avatarState === 'waiting' && (
-            <motion.div
-              key="waiting"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="relative group/avatar w-full h-full flex items-center justify-center z-20"
-            >
-              <div className="w-64 h-64 rounded-full border-2 border-brand-teal flex items-center justify-center bg-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_0_50px_rgba(20,184,166,0.15)] relative">
-                
-                {/* Active "Thinking" Breathing Animation Layer */}
-                <motion.div 
-                  className="absolute inset-0 z-0 opacity-40 bg-brand-teal"
-                  animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                />
-
-                <img
-                  src="/avalive.jpg"
-                  alt="Sarah Khalil Processing"
-                  className="w-full h-full object-cover transform scale-110 relative z-10"
-                />
+          {avatarState !== 'streaming' && chunkCount === 0 && (
+            <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative w-full h-full flex items-center justify-center">
+              <div className="w-64 h-64 rounded-full border-2 border-white/10 overflow-hidden relative">
+                <img src="/avalive.jpg" alt="Avatar" className="w-full h-full object-cover transform scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 to-transparent" />
               </div>
-
-              {/* Minimal Thinking Badge */}
-              <div className="absolute -bottom-4 bg-brand-navy border border-brand-teal/30 px-6 py-2.5 rounded-full shadow-2xl flex items-center gap-3">
-                <div className="flex gap-1">
-                   <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                   <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                   <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              {avatarState === 'waiting' && (
+                <div className="absolute -bottom-4 bg-brand-navy border border-brand-teal/30 px-6 py-2.5 rounded-full flex items-center gap-3">
+                   <div className="flex gap-1">
+                      <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce" />
+                      <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce delay-100" />
+                      <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce delay-200" />
+                   </div>
+                   <span className="text-[10px] font-black tracking-widest text-brand-teal uppercase">Neural Link Syncing...</span>
                 </div>
-                <span className="text-[10px] font-black tracking-widest text-brand-teal uppercase">Thinking...</span>
-              </div>
+              )}
             </motion.div>
           )}
-
-          {/* Streaming — hidden video element, shown via CSS */}
-          {/* NOTE: the <video> element is ALWAYS mounted (below) so we never
-              lose the event listener. We just toggle visibility here. */}
-
-          {/* Standby — portrait with idle animations */}
-          {(avatarState === 'standby' || avatarState === 'idle') && (
-            <motion.div
-              key="standby"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="relative group/avatar w-full h-full flex items-center justify-center"
-            >
-              <div className="w-64 h-64 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_0_50px_rgba(255,255,255,0.05)] relative">
-                
-                {/* Breathing Animation Layer */}
-                <motion.div 
-                  className="absolute inset-0 z-0 opacity-20"
-                  animate={{ scale: [1, 1.05, 1], opacity: [0.1, 0.3, 0.1] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ backgroundColor: theme.color }}
-                />
-
-                <motion.img
-                  src="/avalive.jpg"
-                  alt="Sarah Khalil"
-                  className="w-full h-full object-cover transform scale-110"
-                  animate={{ scale: [1.1, 1.12, 1.1] }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                />
-
-                {/* Subtle Blink Overlay */}
-                <motion.div 
-                  className="absolute inset-0 bg-brand-navy opacity-0 pointer-events-none"
-                  animate={{ opacity: [0, 0, 0.8, 0, 0] }}
-                  transition={{ 
-                    duration: 0.15, 
-                    repeat: Infinity, 
-                    repeatDelay: 5,
-                    times: [0, 0.4, 0.5, 0.6, 1] 
-                  }}
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent opacity-60" />
-              </div>
-
-              {/* Glowing Pulse Ring */}
-              <motion.div 
-                className="absolute w-72 h-72 rounded-full border border-white/5" 
-                animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.5, 0.1] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-
-              <div className="absolute inset-0 flex items-end justify-center pb-12 opacity-0 group-hover/avatar:opacity-100 transition-all duration-700">
-                <div className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20">
-                  <span className="text-[9px] font-black text-white uppercase tracking-[0.3em]">Neural Standby</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
         </AnimatePresence>
 
-        {/* ── Always-mounted video element ──────────────────────────────
-            Visibility is controlled via CSS so the event listener persists.
-        ─────────────────────────────────────────────────────────────── */}
-        <motion.video
+        <video
           ref={videoRef}
+          autoPlay
           playsInline
-          muted={true}
-          className="absolute inset-0 h-full w-full object-contain rounded-3xl shadow-2xl border border-white/10"
-          style={{
-            // Show ONLY when actively streaming; otherwise transparent/hidden
-            opacity:   avatarState === 'streaming' ? 1 : 0,
-            pointerEvents: avatarState === 'streaming' ? 'auto' : 'none',
-            transition: 'opacity 0.4s ease',
-          }}
-          animate={{ opacity: avatarState === 'streaming' ? 1 : 0 }}
-          transition={{ duration: 0.4 }}
+          muted={isMuted}
+          className="absolute inset-0 h-full w-full object-cover transform scale-110 rounded-full shadow-2xl border border-white/10"
+          style={{ opacity: (avatarState === 'streaming' || chunkCount > 0) ? 1 : 0, zIndex: 30, pointerEvents: 'none' }}
         />
 
-        {/* Hidden Master Audio Sync Track */}
-        <audio ref={audioRef} className="hidden" />
+        {avatarState === 'streaming' && isMuted && (
+          <button onClick={() => setIsMuted(false)} className="absolute z-50 bg-white/10 backdrop-blur-3xl border border-white/20 p-6 rounded-full">
+            <Wifi size={32} className="text-white animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Unmute</span>
+          </button>
+        )}
       </div>
 
-      {/* ── Footer: Name + Connect Button ─────────────────────────────────── */}
       <div className="w-full space-y-6 relative z-10 px-4">
         <div className="flex flex-col items-center gap-2">
-          <h3 className="text-xl font-black text-white tracking-tighter leading-none italic uppercase">
-            {theme.name}
-          </h3>
+          <h3 className="text-xl font-black text-white tracking-tighter italic uppercase">{theme.name}</h3>
           <div className="h-1 w-10 rounded-full opacity-40" style={{ backgroundColor: theme.color }} />
         </div>
-
-        <button
-          onClick={isActive ? endSession : startSession}
-          className={`w-full h-14 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] transition-all shadow-2xl flex items-center justify-center gap-4 transform active:scale-[0.98] border ${
-            isActive
-              ? 'bg-rose-500/10 text-rose-500 border-rose-500/20 hover:bg-rose-500/20'
-              : 'bg-white text-brand-navy border-white hover:scale-[1.02]'
-          }`}
-        >
+        <button onClick={() => setIsActive(!isActive)} className="w-full h-14 rounded-2xl bg-white text-brand-navy text-[11px] font-black uppercase tracking-[0.25em] flex items-center justify-center gap-4 border border-white">
           {isActive ? <Square size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
           {isActive ? 'Disconnect' : 'Establish Link'}
         </button>

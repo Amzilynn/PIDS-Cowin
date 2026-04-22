@@ -46,7 +46,7 @@ class SessionManager:
     async def create_session(self, params: dict, sessionid: str = None) -> str:
         """
         在异步环境中创建一个新会话
-        如果 sessionid 为 None，则自动生成。
+        如果 sessionid 已存在，则直接返回。
         """
         if self.build_session_fn is None:
             raise Exception("SessionManager builder not initialized")
@@ -54,6 +54,11 @@ class SessionManager:
         if sessionid is None:
             sessionid = _rand_session_id()
             
+        # Reuse existing session if available (Important for Fast-Start)
+        if sessionid in self.sessions and self.sessions[sessionid] is not None:
+            logger.info('Reusing existing sessionid=%s', sessionid)
+            return sessionid
+
         logger.info('Creating sessionid=%s, current session num=%d', sessionid, len(self.sessions))
         # 预先占位防止重复
         self.sessions[sessionid] = None

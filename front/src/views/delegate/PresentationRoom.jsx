@@ -28,6 +28,7 @@ export default function PresentationRoom() {
   
   const [sessionTime, setSessionTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [manifestUrl, setManifestUrl] = useState(null);
 
   useEffect(() => {
     let interval;
@@ -91,12 +92,15 @@ export default function PresentationRoom() {
         {/* COL 1 : Avatar du Praticien (40%) */}
         <div className="flex-[0.4] p-8 relative flex flex-col">
            <div className="absolute inset-0 bg-indigo-500/[0.03] -z-10" />
-           <Avatar3D type={isMedical ? 'doctor' : 'pharmacist'} />
+           <Avatar3D 
+              type={isMedical ? 'doctor' : 'pharmacist'} 
+              manifestUrl={manifestUrl}
+            />
            
            {/* Feedback temps réel */}
            <div className="mt-8 grid grid-cols-3 gap-4">
               {[
-                { label: 'Empathie', icon: HeartPulse, color: 'text-rose-500', val: 88 },
+                { label: 'Empathie', icon: Activity, color: 'text-rose-500', val: 88 },
                 { label: 'Posture', icon: Activity, color: 'text-md-primary', val: 92 },
                 { label: 'Confiance', icon: Star, color: 'text-amber-500', val: 76 },
               ].map((m, i) => (
@@ -157,7 +161,7 @@ export default function PresentationRoom() {
 
            {/* Chat Panel - Prend le reste de la hauteur */}
            <div className="flex-1 min-h-0">
-              <ChatPanel />
+              <ChatPanel onManifest={setManifestUrl} />
            </div>
         </div>
 

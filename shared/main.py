@@ -20,9 +20,9 @@ def start_avatar_engine():
     # Pass the current environment variables so the virtual environment works natively
     env = os.environ.copy()
     
-    # Launch LiveTalking with MuseTalk model
+    # Launch LiveTalking with Wav2Lip model for real-time lip sync
     process = subprocess.Popen(
-        [sys.executable, "app.py", "--transport", "webrtc", "--model", "musetalk", "--avatar_id", "musetalk_avatar"],
+        [sys.executable, "app.py", "--transport", "webrtc", "--model", "wav2lip", "--avatar_id", "wav2lip256_avatar1"],
         cwd=avatar_dir,
         env=env
     )

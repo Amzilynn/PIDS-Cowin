@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 
 @register("streamout", "webrtc")
+@register("streamout", "rtcpush")
 class WebRTCOutput(BaseOutput):
     """WebRTC 输出模式 — 通过 aiortc 推送音视频"""
 

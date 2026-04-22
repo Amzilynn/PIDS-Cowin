@@ -22,46 +22,103 @@
 import time
 import torch
 import numpy as np
-
 import queue
 from queue import Queue
 
 from avatars.audio_features.base_asr import BaseASR
 from avatars.wav2lip import audio
+from utils.logger import logger
 
 class MelASR(BaseASR):
+    def __init__(self, opt, parent):
+        super().__init__(opt, parent)
+        # Force low-latency mode: No stride/look-ahead delay
+        self.stride_left_size = 10
+        self.stride_right_size = 0
+        self.frames = []
+        while not self.queue.empty():
+            try: self.queue.get_nowait()
+            except: break
+        while not self.output_queue.empty():
+            try: self.output_queue.get_nowait()
+            except: break
+        while not self.feat_queue.empty():
+            try: self.feat_queue.get_nowait()
+            except: break
+        logger.info(f"ASR Flush: Queues cleared for session {getattr(self.opt, 'sessionid', '0')}")
 
     def run_step(self):
         ############################################## extract audio feature ##############################################
         # get a frame of audio
-        for _ in range(self.batch_size*2):
+        # stride_left + batch_size*2 + stride_right
+        needed_frames = self.batch_size * 2
+        collected_frames = []
+        has_speech = False
+        for _ in range(needed_frames):
             audioframe = self.get_audio_frame()
             self.frames.append(audioframe.data)
-            # put to output
+            collected_frames.append(audioframe)
+            # put to output queue for the process_frames thread
             self.output_queue.put(audioframe)
+            if audioframe.type == 0:  # type 0 = real speech
+                has_speech = True
+
         # context not enough, do not run network.
-        if len(self.frames) <= self.stride_left_size + self.stride_right_size:
+        if len(self.frames) < needed_frames:
             return
-        
-        inputs = np.concatenate(self.frames) # [N * chunk]
+
+        # ── KEY FIX: Only extract mel features when real speech is present ──
+        # If all frames are silence, flush stale feat_queue entries and skip.
+        if not has_speech:
+            # Drain stale silence features so speech features can slot in immediately
+            while not self.feat_queue.empty():
+                try:
+                    self.feat_queue.get_nowait()
+                except Exception:
+                    break
+            # discard old frames
+            expected_len = self.stride_left_size + self.stride_right_size + needed_frames
+            if len(self.frames) > expected_len:
+                self.frames = self.frames[-expected_len:]
+            return
+
+        inputs = np.concatenate(self.frames)  # [N * chunk]
         mel = audio.melspectrogram(inputs)
-        #print(mel.shape[0],mel.shape,len(mel[0]),len(self.frames))
         # cut off stride
-        left = max(0, self.stride_left_size*80/50)
-        right = min(len(mel[0]), len(mel[0]) - self.stride_right_size*80/50)
-        mel_idx_multiplier = 80./self.fps # 80 is the hop length of mel spectrogram, so that each 40ms corresponds to 3.2 mel frames. (80/25=3.2)
+        left = max(0, self.stride_left_size * 80 / 50)
+        right = min(len(mel[0]), len(mel[0]) - self.stride_right_size * 80 / 50)
+        mel_idx_multiplier = 80. / self.fps
         mel_step_size = 16
         i = 0
         mel_chunks = []
-        while i < (len(self.frames)-self.stride_left_size-self.stride_right_size)/2:
+        while i < (len(self.frames) - self.stride_left_size - self.stride_right_size) / 2:
             start_idx = int(left + i * mel_idx_multiplier)
-            #print(start_idx)
             if start_idx + mel_step_size > len(mel[0]):
                 mel_chunks.append(mel[:, len(mel[0]) - mel_step_size:])
             else:
-                mel_chunks.append(mel[:, start_idx : start_idx + mel_step_size])
+                mel_chunks.append(mel[:, start_idx: start_idx + mel_step_size])
             i += 1
-        self.feat_queue.put(mel_chunks)
-        
+
+        if mel_chunks:
+            try:
+                self.feat_queue.put_nowait(mel_chunks)
+            except Exception:
+                # Queue full — discard oldest stale entry then retry
+                try:
+                    self.feat_queue.get_nowait()
+                except Exception:
+                    pass
+                try:
+                    self.feat_queue.put_nowait(mel_chunks)
+                except Exception:
+                    pass
+
         # discard the old part to save memory
-        self.frames = self.frames[-(self.stride_left_size + self.stride_right_size):]
+        expected_len = self.stride_left_size + self.stride_right_size + needed_frames
+        if len(self.frames) > expected_len:
+            self.frames = self.frames[-expected_len:]
+
+        # Optional: Emergency purge if the input queue is getting dangerously long
+        if self.queue.qsize() > 50:
+            logger.warning(f"[DEBUG] Emergency audio purge: {self.queue.qsize()} frames in queue")
+            self.get_audio_frame()

@@ -1,5 +1,3 @@
-"""Chat router — all /session/* and /chat endpoints."""
-
 from __future__ import annotations
 
 import os
@@ -77,68 +75,52 @@ async def start_session(body: SessionStartRequest) -> SessionStartResponse:
 # POST /chat
 # ──────────────────────────────────────────────────────────────────────
 
-from fastapi import APIRouter, HTTPException, status, BackgroundTasks
+import requests as http_requests
 import asyncio
+import tempfile
+import io
 import uuid
-import os
-import sys
 
-# Safe imports — if these packages are missing the router still loads
-try:
-    import edge_tts
-    EDGE_TTS_OK = True
-except ImportError:
-    EDGE_TTS_OK = False
-    print("[WARNING] edge_tts not installed — avatar generation disabled.")
-
-try:
-    import requests as http_requests
-    REQUESTS_OK = True
-except ImportError:
-    REQUESTS_OK = False
-    print("[WARNING] requests not installed — avatar generation disabled.")
+# Avatar rendering service (wav2lip offline render, port 8011)
+AVATAR_SERVICE = "http://127.0.0.1:8011"
+# Edge TTS server (local, port 5500)
+EDGE_TTS_URL   = "http://127.0.0.1:5500/tts"
+# Voice to use (French female)
+TTS_VOICE      = "fr-FR-DeniseNeural"
 
 
-AVATAR_SERVICE = "http://127.0.0.1:8001"
-
-
-def trigger_avatar_streaming(text: str, video_filename: str, job_id: str):
-    """
-    Background task: synthesise speech then POST to the avatar
-    streaming service so chunks are written as fast as the GPU can render.
-    """
-    if not (EDGE_TTS_OK and REQUESTS_OK):
-        print("[AVATAR] Skipping render — missing dependencies.")
-        return
+def generate_tts_wav(text: str) -> bytes | None:
+    """Call the local Edge TTS server and return raw MP3/WAV bytes."""
     try:
-        temp_audio = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            "..", "..", "..", "dso_avatar", "temp_musetalk", "data", "audio",
-            f"{job_id}_tts.wav"
+        resp = http_requests.get(
+            EDGE_TTS_URL,
+            params={"text": text, "voice": TTS_VOICE},
+            timeout=30,
         )
-        os.makedirs(os.path.dirname(temp_audio), exist_ok=True)
-
-        # Synthesise English speech
-        async def _synth():
-            comm = edge_tts.Communicate(text, "en-US-AvaMultilingualNeural")
-            await comm.save(temp_audio)
-
-        asyncio.run(_synth())
-
-        # Send to avatar service with the pre-agreed job_id
-        with open(temp_audio, "rb") as fh:
-            http_requests.post(
-                f"{AVATAR_SERVICE}/render/stream",
-                files={"file": (f"{job_id}.wav", fh, "audio/wav")},
-                data={"filename": video_filename, "job_id": job_id},
-                timeout=10,
-            )
-
-        if os.path.exists(temp_audio):
-            os.remove(temp_audio)
-
+        resp.raise_for_status()
+        return resp.content  # MP3 bytes
     except Exception as e:
-        print(f"[AVATAR ERROR] {e}")
+        print(f"[WARNING] Edge TTS call failed: {e}")
+        return None
+
+
+def submit_avatar_render(audio_bytes: bytes, job_id: str) -> dict | None:
+    """
+    Send MP3 audio bytes to avatar_service /render/stream.
+    Returns the manifest info dict or None on failure.
+    """
+    try:
+        resp = http_requests.post(
+            f"{AVATAR_SERVICE}/render/stream",
+            files={"file": (f"{job_id}.mp3", io.BytesIO(audio_bytes), "audio/mpeg")},
+            data={"job_id": job_id},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        return resp.json()  # {job_id, manifest_url, video_url}
+    except Exception as e:
+        print(f"[WARNING] Avatar render submit failed: {e}")
+        return None
 
 
 @router.post(
@@ -148,7 +130,7 @@ def trigger_avatar_streaming(text: str, video_filename: str, job_id: str):
     summary="Send a message to the delegate agent",
     tags=["Chat"],
 )
-async def chat(body: ChatRequest, background_tasks: BackgroundTasks) -> ChatResponse:
+async def chat(body: ChatRequest) -> ChatResponse:
     """Send a user message and receive the agent's English response."""
     try:
         agent = _manager.get_agent(body.session_id)
@@ -158,32 +140,54 @@ async def chat(body: ChatRequest, background_tasks: BackgroundTasks) -> ChatResp
                 detail="Session not found. Call /session/start first.",
             )
 
-        response_text = agent.chat(body.message)
-        intent        = agent.last_intent
-        session       = _manager.get_session(body.session_id)
+        try:
+            response_text = agent.chat(body.message)
+        except Exception as chat_err:
+            print(f"[WARNING] LLM Generation failed: {chat_err}. Using fallback.")
+            response_text = "Je m'excuse, j'ai une petite perturbation de connexion. Pouvez-vous répéter ?"
+            
+        intent = agent.last_intent
+        session = _manager.get_session(body.session_id)
 
-        # Pre-compute job_id so we can return the manifest URL immediately,
-        # before the background task even starts.
-        job_id       = str(uuid.uuid4())
-        video_file   = f"{job_id}.mp4"
-        manifest_url = f"{AVATAR_SERVICE}/stream/{job_id}/manifest"
-        video_url    = f"/assets/videos/{video_file}"
+        # ── Avatar Rendering Pipeline ───────────────────────────────────
+        avatar_job_id    = str(uuid.uuid4())
+        manifest_url     = None
+        video_url        = None
+        avatar_status    = None
 
-        background_tasks.add_task(trigger_avatar_streaming, response_text, video_file, job_id)
+        # 1. Generate TTS audio from the agent response
+        audio_bytes = generate_tts_wav(response_text)
+        if audio_bytes:
+            # 2. Submit to avatar_service for Wav2Lip rendering
+            render_info = submit_avatar_render(audio_bytes, avatar_job_id)
+            if render_info:
+                manifest_url  = render_info.get("manifest_url")
+                video_url     = render_info.get("video_url")
+                avatar_status = "rendering"
+                print(f"[INFO] Avatar render job submitted: {avatar_job_id[:8]}")
+            else:
+                avatar_status = "avatar_error"
+        else:
+            avatar_status = "tts_error"
 
         return ChatResponse(
-            session_id    = body.session_id,
-            persona       = session["persona"],
-            user_message  = body.message,
-            agent_response= response_text,
-            video_url     = video_url,
-            manifest_url  = manifest_url,
-            intent        = intent,
-            timestamp     = datetime.utcnow(),
+            session_id=body.session_id,
+            persona=session["persona"],
+            user_message=body.message,
+            agent_response=response_text,
+            avatar_session_id=avatar_job_id,
+            avatar_status=avatar_status,
+            manifest_url=manifest_url,
+            video_url=video_url,
+            intent=intent,
+            timestamp=datetime.utcnow(),
         )
     except HTTPException:
         raise
     except Exception as exc:
+        import traceback
+        error_detail = traceback.format_exc()
+        print(f"[ERROR] Chat Route Failure:\n{error_detail}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Chat error: {exc}",

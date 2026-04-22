@@ -26,7 +26,7 @@ from server.session_manager import session_manager
 class RTCManager:
     """
     WebRTC 连接管理器。
-    
+
     管理 PeerConnection 生命周期、音视频轨道收发、DataChannel。
     """
 
@@ -50,35 +50,30 @@ class RTCManager:
                 text=json.dumps({"code": -1, "msg": "reach max session"}),
             )
 
-        #sessionid = _rand_session_id()
-
-        # 通过 SessionManager 构建
-        sessionid = await session_manager.create_session(params)
+        sessionid = params.get('sessionid', '0')
+        sessionid = await session_manager.create_session(params, sessionid=sessionid)
         logger.info('offer sessionid=%s', sessionid)
         avatar_session = session_manager.get_session(sessionid)
 
-        # 创建 PeerConnection
-        ice_server = RTCIceServer(urls='stun:stun.freeswitch.org:3478')
-        pc = RTCPeerConnection(
-            configuration=RTCConfiguration(iceServers=[ice_server])
-        )
+        pc = RTCPeerConnection()
         self.pcs.add(pc)
+
+        from server.webrtc import HumanPlayer
+        player = HumanPlayer(avatar_session)
 
         @pc.on("connectionstatechange")
         async def on_connectionstatechange():
             logger.info("Connection state is %s", pc.connectionState)
             if pc.connectionState in ("failed", "closed"):
+                avatar_session.remove_player(player)
                 await pc.close()
                 self.pcs.discard(pc)
-                session_manager.remove_session(sessionid)
+                if sessionid != '0':
+                    session_manager.remove_session(sessionid)
 
-        # 添加发送轨道
-        from server.webrtc import HumanPlayer
-        player = HumanPlayer(avatar_session)
         pc.addTrack(player.audio)
         pc.addTrack(player.video)
 
-        # 设置编解码器偏好
         capabilities = RTCRtpSender.getCapabilities("video")
         preferences = list(filter(lambda x: x.name == "H264", capabilities.codecs))
         preferences += list(filter(lambda x: x.name == "VP8", capabilities.codecs))
@@ -90,6 +85,11 @@ class RTCManager:
 
         answer = await pc.createAnswer()
         await pc.setLocalDescription(answer)
+
+        gathering_timer = 0
+        while pc.iceGatheringState != 'complete' and gathering_timer < 30:
+            await asyncio.sleep(0.1)
+            gathering_timer += 1
 
         return web.Response(
             content_type="application/json",
@@ -136,3 +136,6 @@ class RTCManager:
         coros = [pc.close() for pc in self.pcs]
         await asyncio.gather(*coros)
         self.pcs.clear()
+
+# Singleton for easy import
+rtc_manager = RTCManager(None)

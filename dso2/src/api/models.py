@@ -29,6 +29,10 @@ class ChatRequest(BaseModel):
         ...,
         description="Session ID returned from /session/start"
     )
+    avatar_session_id: Optional[str] = Field(
+        None,
+        description="Live avatar session ID returned from the avatar WebRTC /offer endpoint"
+    )
     message: str = Field(
         ...,
         description="User message in French",
@@ -42,8 +46,10 @@ class ChatResponse(BaseModel):
     persona: str
     user_message: str
     agent_response: str
-    video_url: Optional[str] = None
+    avatar_session_id: Optional[str] = None
+    avatar_status: Optional[str] = None
     manifest_url: Optional[str] = None
+    video_url: Optional[str] = None
     intent: str
     timestamp: datetime
 

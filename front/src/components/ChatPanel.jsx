@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { Send, Mic, MicOff, Bot, FileText, Copy, Download, X, Volume2, VolumeX, MessageSquare, ArrowRight, PlusCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolumeSync, onVideoResponse }) {
+export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolumeSync, onManifest, avatarSessionId = null }) {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isRecording, setIsRecording] = useState(false);
@@ -20,26 +20,12 @@ export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolu
   const scrollRef = useRef(null);
   const timerRef = useRef(null);
   const recognitionRef = useRef(null);
-  const pendingBotMessageRef = useRef(null);
   
   // Audio state refs for Lip-Sync
   const audioRef = useRef(null);
   const audioCtxRef = useRef(null);
   const analyserRef = useRef(null);
   const sourceRef = useRef(null);
-
-  // Sync avatar stream start with text reveal
-  useEffect(() => {
-    const handleAvatarStart = () => {
-      if (pendingBotMessageRef.current) {
-        setMessages(prev => [...prev, pendingBotMessageRef.current]);
-        setIsTyping(false);
-        pendingBotMessageRef.current = null;
-      }
-    };
-    window.addEventListener('avatarStreamStart', handleAvatarStart);
-    return () => window.removeEventListener('avatarStreamStart', handleAvatarStart);
-  }, []);
 
   // Initialize Audio element on mount
   useEffect(() => {
@@ -224,30 +210,29 @@ export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolu
       const res = await fetch('http://127.0.0.1:8000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: sessionId, message: textToSend })
+        body: JSON.stringify({
+          session_id: sessionId,
+          avatar_session_id: avatarSessionId,
+          message: textToSend
+        })
       });
       const data = await res.json();
-      
+
       const botMessage = {
         id: Date.now() + 1,
         text: data.agent_response,
         sender: 'bot',
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
       };
-      
-      if (data.manifest_url) {
-        // Avatar is rendering -> Stay in 'typing' state and defer text display
-        pendingBotMessageRef.current = botMessage;
-      } else {
-        // No avatar -> Display instantly and play TTS
-        setMessages(prev => [...prev, botMessage]);
-        setIsTyping(false);
-        playTTS(data.agent_response);
+
+      setMessages(prev => [...prev, botMessage]);
+      setIsTyping(false);
+
+      // Trigger avatar animation and audio
+      if (data.manifest_url && onManifest) {
+        onManifest(data.manifest_url);
       }
-      
-      if (onVideoResponse) {
-        onVideoResponse(data.video_url, data.manifest_url);
-      }
+      playTTS(data.agent_response);
     } catch (err) {
       console.error(err);
       setIsTyping(false);

@@ -72,11 +72,18 @@ def load_model(path):
     return model.eval()
 
 def load_avatar(avatar_id):
-    avatar_path = f"./data/avatars/{avatar_id}"
-    full_imgs_path = f"{avatar_path}/full_imgs" 
-    face_imgs_path = f"{avatar_path}/face_imgs" 
-    coords_path = f"{avatar_path}/coords.pkl"
+    avatar_path = os.path.join(os.getcwd(), "data", "avatars", avatar_id)
+    full_imgs_path = os.path.join(avatar_path, "full_imgs")
+    face_imgs_path = os.path.join(avatar_path, "face_imgs")
+    coords_path = os.path.join(avatar_path, "coords.pkl")
     
+    if not os.path.exists(avatar_path):
+        # Fallback to relative path if absolute fails
+        avatar_path = f"./data/avatars/{avatar_id}"
+        full_imgs_path = f"{avatar_path}/full_imgs" 
+        face_imgs_path = f"{avatar_path}/face_imgs" 
+        coords_path = f"{avatar_path}/coords.pkl"
+
     with open(coords_path, 'rb') as f:
         coord_list_cycle = pickle.load(f)
     frame_list_cycle = None
@@ -153,29 +160,24 @@ class LipReal(BaseAvatar):
             pred = self.model(audiofeat_batch, img_batch)
         pred = pred.cpu().numpy().transpose(0, 2, 3, 1) * 255.
         
-        # Enhance each face in the batch with optimizations
+        # Enhance each face in the batch safely
         enhanced_pred = []
         for i in range(len(pred)):
             self.frame_count += 1
+            img = pred[i].astype(np.uint8)
             
-            # Optimization B: Skip enhancement every other frame to save 50% compute
+            # Skip enhancement every other frame to maintain 25FPS
             if self.frame_count % 2 == 0:
-                img = pred[i].astype(np.uint8)
-                h, w = img.shape[:2]
-                
-                # Optimization A: ROI - Enhance only the mouth area (bottom 50% of the face box)
-                # This reduces the pixels processed by another ~50%
-                roi_y1 = int(h * 0.5)
-                roi_img = img[roi_y1:h, 0:w]
-                
-                _, _, restored_roi = self.enhancer.enhance(roi_img, has_aligned=False, only_center_face=False, paste_back=True)
-                
-                # Paste back the enhanced mouth region into the original face box
-                img[roi_y1:h, 0:w] = restored_roi
-                enhanced_pred.append(img)
-            else:
-                # Use raw Wav2Lip output for odd frames to maintain 25FPS
-                enhanced_pred.append(pred[i])
+                try:
+                    # Pass the FULL image to GFPGAN so it can find the face
+                    _, _, restored_img = self.enhancer.enhance(img, has_aligned=False, only_center_face=False, paste_back=True)
+                    if restored_img is not None:
+                        img = restored_img
+                except Exception as e:
+                    logger.warning(f"GFPGAN failed: {e}")
+            
+            enhanced_pred.append(img)
+            
         pred = np.array(enhanced_pred)
         
         return pred

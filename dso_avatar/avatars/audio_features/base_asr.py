@@ -56,13 +56,9 @@ class BaseASR:
     #return frame:audio pcm; type: 0-normal speak, 1-silence; eventpoint:custom event sync with audio
     def get_audio_frame(self)->AudioFrameData:        
         try:
-            if self.parent and self.parent.custom_audiotype>1: #播放自定义音频,优先播放完自定义动作,可以通过interrupt打断动作播放
-                frame = self.parent.get_custom_audio_stream(self.parent.custom_audiotype)
-                type = self.parent.custom_audiotype
-                return AudioFrameData(data=frame, type=type, userdata={})
-            else:
-                frame = self.queue.get(block=True,timeout=0.01)
-                return frame
+            # Fast-Start: Simplified retrieval to prevent pipeline stalls
+            frame = self.queue.get(block=True,timeout=0.01)
+            return frame
             #print(f'[INFO] get frame {frame.shape}')
         except queue.Empty:
             frame = np.zeros(self.chunk, dtype=np.float32)
@@ -84,8 +80,8 @@ class BaseASR:
     def run_step(self):
         pass
 
-    def get_next_feat(self,block,timeout):        
-        return self.feat_queue.get(block,timeout)
+    def get_next_feat(self, block=True, timeout=None):        
+        return self.feat_queue.get(block, timeout)
 
     #分割音频特征，子类调用
     def _get_sliced_feature(self, feature_array, 

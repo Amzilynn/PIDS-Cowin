@@ -23,14 +23,9 @@ export default function TrainingRoom() {
   
   const [sessionTime, setSessionTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
-  const [currentManifestUrl, setCurrentManifestUrl] = useState(null);
+  const [avatarSessionId, setAvatarSessionId] = useState(null);
+  const [manifestUrl, setManifestUrl] = useState(null);
 
-  const handleVideoUrl = (url, manifest) => {
-    console.log("[Simulation] Digital Twin signal received:", url, manifest);
-    setCurrentVideoUrl(url);
-    setCurrentManifestUrl(manifest);
-  };
 
   useEffect(() => {
     let interval;
@@ -94,10 +89,12 @@ export default function TrainingRoom() {
         
         {/* COL 1 : Avatar de Formation */}
         <div className="md-card !p-0 overflow-hidden relative flex flex-col bg-md-surface-container border-none shadow-2xl">
-           <Avatar3D 
-             type={isMedical ? 'doctor' : 'pharmacist'} 
-             manifestUrl={currentManifestUrl}
-           />
+           <Avatar3D
+              type={isMedical ? 'doctor' : 'pharmacist'}
+              useWebRTC={false}
+              manifestUrl={manifestUrl}
+              onSessionReady={setAvatarSessionId}
+            />
         </div>
 
         {/* COL 2 : Caméra du Délégué */}
@@ -109,7 +106,10 @@ export default function TrainingRoom() {
 
         {/* COL 3 : Panneau de Chat Interactif */}
         <div className="md-card !p-0 overflow-hidden bg-md-surface-container/50 relative flex flex-col shadow-xl border-none w-full h-full">
-           <ChatPanel onVideoResponse={handleVideoUrl} />
+           <ChatPanel 
+              avatarSessionId={avatarSessionId} 
+              onManifest={setManifestUrl}
+            />
         </div>
 
       </div>

@@ -31,12 +31,9 @@ export default function PractitionerView() {
   const delegateName = isDoctor ? 'Sarah Khalil (Médical)' : 'Youssef Amari (Commercial)';
   const productTitle = isDoctor ? 'Cardio-Zolpin v4.2' : 'Gamme Hiver Promo 2026';
 
-  const [currentManifestUrl, setCurrentManifestUrl] = useState(null);
+  const [avatarSessionId, setAvatarSessionId] = useState(null);
+  const [manifestUrl, setManifestUrl] = useState(null);
 
-  const handleVideoUrl = (videoUrl, manifestUrl) => {
-    console.log("[PractitionerView] Video Signal received:", manifestUrl);
-    setCurrentManifestUrl(manifestUrl);
-  };
 
   return (
     <div className="relative h-screen overflow-hidden bg-md-surface flex flex-col font-sans">
@@ -77,27 +74,29 @@ export default function PractitionerView() {
         
         {/* COL 1 : Card Unifiée (Avatar + Caméra côte à côte) */}
         <div className="md-card !p-0 overflow-hidden bg-md-surface-container border-none shadow-2xl flex flex-row divide-x divide-md-outline/5">
-           {/* Section Avatar */}
-           <div className="flex-1 min-h-0 flex flex-col relative">
-              <Avatar3D 
-                 type="delegate" 
-                 manifestUrl={currentManifestUrl}
-              />
-           </div>
+            <div className="flex-1 min-h-0 flex flex-col relative">
+               <Avatar3D
+                  type="delegate"
+                  useWebRTC={false}
+                  manifestUrl={manifestUrl}
+                  onSessionReady={setAvatarSessionId}
+               />
+            </div>
 
-           {/* Section Caméra */}
-           <div className="flex-1 min-h-0 p-6 flex flex-col relative">
-              <CameraPanel label="Flux Praticien" />
-           </div>
-        </div>
+            {/* Section Caméra */}
+            <div className="flex-1 min-h-0 p-6 flex flex-col relative">
+               <CameraPanel label="Flux Praticien" />
+            </div>
+         </div>
 
-        {/* COL 2 : Chat Panel (Slightly expanded) - Custom Container to prevent modal scaling */}
-        <div className="bg-md-surface-container/60 rounded-[32px] overflow-hidden relative flex flex-col shadow-2xl border border-md-outline/5">
-           <ChatPanel 
-             persona={isDoctor ? 'medical' : 'commercial'} 
-             onVideoResponse={handleVideoUrl}
-           />
-        </div>
+         {/* COL 2 : Chat Panel (Slightly expanded) - Custom Container to prevent modal scaling */}
+         <div className="bg-md-surface-container/60 rounded-[32px] overflow-hidden relative flex flex-col shadow-2xl border border-md-outline/5">
+            <ChatPanel
+              persona={isDoctor ? 'medical' : 'commercial'}
+              avatarSessionId={avatarSessionId}
+              onManifest={setManifestUrl}
+            />
+         </div>
       </div>
 
       {/* Signature Background Layer */}

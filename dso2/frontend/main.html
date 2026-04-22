@@ -651,11 +651,14 @@
 
                 if (response.ok) {
                     addChatMessage('agent', data.agent_response, data.intent);
-                    
-                    // Trigger Audio Fallback + Video Polling
+
+                    // Play TTS audio in sync while avatar video renders
                     void speakText(data.agent_response);
-                    if (data.video_url) {
-                        void syncAvatarVideo(data.video_url);
+
+                    // Start avatar chunk streaming if manifest available
+                    if (data.manifest_url) {
+                        stopSpeech(); // avatar video will carry audio
+                        void startAvatarStream(data.manifest_url);
                     }
                 } else {
                     addChatMessage('agent', `Erreur: ${data.detail || 'Une erreur est survenue'}`, 'ERROR');
@@ -668,49 +671,170 @@
             document.getElementById('chatMessage').value = '';
         }
 
-        async function syncAvatarVideo(videoUrl) {
+        // ─────────────────────────────────────────────────────────────
+        // AVATAR CHUNK STREAM PLAYER
+        // Polls the manifest from avatar_service and plays chunks as
+        // they arrive using MSE (MediaSource Extensions).
+        // ─────────────────────────────────────────────────────────────
+        let _avatarPollTimer = null;
+
+        function stopAvatarStream() {
+            if (_avatarPollTimer) {
+                clearInterval(_avatarPollTimer);
+                _avatarPollTimer = null;
+            }
+        }
+
+        async function startAvatarStream(manifestUrl) {
             const videoEl = document.getElementById('vitalAvatarVideo');
-            const loader = document.getElementById('videoLoading');
-            
-            // Show loading state
+            const loader  = document.getElementById('videoLoading');
+            stopAvatarStream();
+
+            // Show loading spinner
             loader.style.display = 'block';
-            videoEl.style.opacity = '0.3';
-            
-            // Polling interval to check if video file is ready on the server
-            const pollStart = Date.now();
-            const maxPoll = 180000; // 3 minutes
-            
-            const poll = setInterval(async () => {
+            videoEl.style.opacity = '0.35';
+
+            const AVATAR_BASE = 'http://127.0.0.1:8011';  // avatar_service
+            const DSO2_BASE   = 'http://localhost:8000';   // dso2 api (for assets)
+            const fullManifestUrl = AVATAR_BASE + manifestUrl;
+
+            let seenChunks   = 0;
+            let mediaSource  = null;
+            let sourceBuffer = null;
+            let chunkQueue   = [];   // URLs to fetch
+            let fetching     = false;
+            let firstChunkPlayed = false;
+            const pollStart  = Date.now();
+            const MAX_WAIT   = 300_000; // 5 min max
+
+            // ── setup MSE player ───────────────────────────────────────
+            function initMSE() {
+                if (!window.MediaSource || !MediaSource.isTypeSupported('video/mp4; codecs="avc1.42E01E"')) {
+                    // MSE not supported — fallback to direct src swap on final URL
+                    return;
+                }
+                mediaSource = new MediaSource();
+                videoEl.src = URL.createObjectURL(mediaSource);
+
+                mediaSource.addEventListener('sourceopen', () => {
+                    try {
+                        sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E"');
+                        sourceBuffer.mode = 'sequence'; // gapless append
+                        sourceBuffer.addEventListener('updateend', flushQueue);
+                    } catch (e) {
+                        console.error('[Avatar MSE] addSourceBuffer failed:', e);
+                        mediaSource = null;
+                        sourceBuffer = null;
+                    }
+                }, { once: true });
+            }
+
+            async function fetchAndEnqueue(chunkUrl) {
+                if (fetching) return;
+                fetching = true;
                 try {
-                    // Try to fetch the video file
-                    const res = await fetch(videoUrl, { method: 'HEAD' });
-                    
-                    if (res.ok) {
-                        clearInterval(poll);
+                    const absUrl = chunkUrl.startsWith('http') ? chunkUrl : AVATAR_BASE + chunkUrl;
+                    const res  = await fetch(absUrl);
+                    if (!res.ok) return;
+                    const data = await res.arrayBuffer();
+                    chunkQueue.push(data);
+                    flushQueue();
+                } catch (e) {
+                    console.warn('[Avatar] chunk fetch error:', e);
+                } finally {
+                    fetching = false;
+                }
+            }
+
+            function flushQueue() {
+                if (!sourceBuffer || sourceBuffer.updating || chunkQueue.length === 0) return;
+                const buf = chunkQueue.shift();
+                try {
+                    sourceBuffer.appendBuffer(buf);
+                    if (!firstChunkPlayed) {
+                        firstChunkPlayed = true;
                         loader.style.display = 'none';
                         videoEl.style.opacity = '1';
-                        
-                        // Load and Play the video
-                        videoEl.src = videoUrl;
-                        videoEl.load();
-                        
-                        // Stop the TTS audio if it's still playing to favor the video's audio
-                        stopSpeech(); 
-                        
-                        videoEl.play().catch(e => console.error("Auto-play blocked:", e));
+                        videoEl.muted = false;
+                        videoEl.play().catch(() => {});
                     }
                 } catch (e) {
-                    // File not ready yet
+                    console.warn('[Avatar MSE] appendBuffer error:', e);
                 }
-                
-                if (Date.now() - pollStart > maxPoll) {
-                    clearInterval(poll);
+            }
+
+            initMSE();
+
+            // ── manifest polling loop ──────────────────────────────────
+            _avatarPollTimer = setInterval(async () => {
+                if (Date.now() - pollStart > MAX_WAIT) {
+                    stopAvatarStream();
                     loader.style.display = 'none';
                     videoEl.style.opacity = '1';
-                    console.error("Video rendering timed out.");
+                    return;
                 }
-            }, 3000); // Check every 3 seconds
+
+                let manifest;
+                try {
+                    const r = await fetch(fullManifestUrl);
+                    if (!r.ok) return;
+                    manifest = await r.json();
+                } catch { return; }
+
+                // Enqueue any new chunks we haven't seen yet
+                const newChunks = (manifest.chunks || []).slice(seenChunks);
+                for (const chunk of newChunks) {
+                    seenChunks++;
+                    if (mediaSource && sourceBuffer) {
+                        await fetchAndEnqueue(chunk.url);
+                    }
+                }
+
+                if (manifest.done || manifest.status === 'complete') {
+                    stopAvatarStream();
+
+                    // Once all MSE chunks are drained, switch to the final merged MP4
+                    // (which has audio baked in)
+                    const finalUrl = manifest.final_url
+                        ? DSO2_BASE + manifest.final_url
+                        : null;
+
+                    if (finalUrl) {
+                        // Wait for current buffer to drain then swap to final mp4
+                        const doSwap = () => {
+                            if (mediaSource && mediaSource.readyState === 'open') {
+                                try { mediaSource.endOfStream(); } catch(_) {}
+                            }
+                            setTimeout(() => {
+                                videoEl.src = finalUrl;
+                                videoEl.load();
+                                videoEl.play().catch(() => {});
+                                loader.style.display = 'none';
+                                videoEl.style.opacity = '1';
+                            }, 300);
+                        };
+
+                        if (sourceBuffer && sourceBuffer.updating) {
+                            sourceBuffer.addEventListener('updateend', doSwap, { once: true });
+                        } else {
+                            doSwap();
+                        }
+                    } else {
+                        loader.style.display = 'none';
+                        videoEl.style.opacity = '1';
+                    }
+                }
+
+                if (manifest.status === 'error') {
+                    stopAvatarStream();
+                    loader.style.display = 'none';
+                    videoEl.style.opacity = '1';
+                    console.error('[Avatar] Render error:', manifest.error);
+                }
+
+            }, 500); // poll every 500 ms
         }
+
 
         function addChatMessage(type, text, intent = null) {
             const history = document.getElementById('chatHistory');
