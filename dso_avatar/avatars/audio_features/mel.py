@@ -32,9 +32,9 @@ from utils.logger import logger
 class MelASR(BaseASR):
     def __init__(self, opt, parent):
         super().__init__(opt, parent)
-        # Force low-latency mode: No stride/look-ahead delay
+        # Restore look-ahead delay to fix random lip flapping (Wav2Lip needs context)
         self.stride_left_size = 10
-        self.stride_right_size = 0
+        self.stride_right_size = 10
         self.frames = []
         while not self.queue.empty():
             try: self.queue.get_nowait()

@@ -110,6 +110,10 @@ def audio_to_mel_chunks(audio_path: str):
     if sr != 16000: audio_data = resampy.resample(audio_data, sr, 16000)
     
     audio_data = audio_data.astype(np.float32)
+    # Peak normalization for consistent mouth movement
+    if np.max(np.abs(audio_data)) > 0:
+        audio_data = audio_data / np.max(np.abs(audio_data))
+        
     mel = wav2lip_audio.melspectrogram(audio_data)
     
     mel_idx_multiplier = 80.0 / FPS
@@ -219,15 +223,18 @@ def render_worker_streaming(audio_path: str, output_filename: str, job_id: str):
                 
                 pred_face = cv2.resize(pred_np[j].astype(np.float32), (w, h))
                 
-                # Precision Elliptical Mask for the mouth area
-                # Mouth is typically centered horizontally and in the lower 60-80% of the face box
+                # Subtle sharpening to counter upscaling blur
+                kernel = np.array([[0, -0.2, 0], [-0.2, 1.8, -0.2], [0, -0.2, 0]])
+                pred_face = cv2.filter2D(pred_face, -1, kernel)
+                
+                # Expanded Elliptical Mask for better movement range
                 mask = np.zeros((h, w), dtype=np.float32)
-                center = (w // 2, int(h * 0.75))
-                axes = (int(w * 0.38), int(h * 0.22))
+                center = (w // 2, int(h * 0.72)) # Slightly higher center
+                axes = (int(w * 0.45), int(h * 0.28)) # Wider and taller
                 cv2.ellipse(mask, center, axes, 0, 0, 360, 1.0, -1)
                 
                 # Smooth feathering
-                blur_size = max(5, int(w * 0.15))
+                blur_size = max(7, int(w * 0.2))
                 if blur_size % 2 == 0: blur_size += 1
                 mask = cv2.GaussianBlur(mask, (blur_size, blur_size), 0)[:,:,np.newaxis]
                 

@@ -23,6 +23,10 @@ echo [1/4] Starting Wav2Lip Avatar Engine...
 start "WAV2LIP-ENGINE" /D "%CD%\dso_avatar" powershell -NoExit -Command "venv\Scripts\python.exe app.py --transport webrtc --model wav2lip --avatar_id sarah_static --listenport 8010 --batch_size 4 --modelres 256 -l 10 -r 3"
 start "AVATAR-SERVICE" /D "%CD%\dso_avatar" powershell -NoExit -Command "venv\Scripts\python.exe avatar_service.py"
 
+REM 2.5 Start TTS Server
+echo [3/5] Starting TTS Server...
+start "TTS-SERVER" /D "%CD%\dso2\frontend" powershell -NoExit -Command "python tts_server.py"
+
 timeout /t 5 /nobreak >nul
 
 REM 3. Start DSO2 API

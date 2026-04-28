@@ -127,10 +127,7 @@ class LipReal(BaseAvatar):
             channel_multiplier=2,
             device=device
         )
-        try:
-            self.enhancer.gfpgan.half() # Optimization C: FP16
-        except:
-            pass
+
 
         self.frame_count = 0 # Optimization B: For Skip-Frame
         self.asr = MelASR(opt,self)
@@ -163,18 +160,14 @@ class LipReal(BaseAvatar):
         # Enhance each face in the batch safely
         enhanced_pred = []
         for i in range(len(pred)):
-            self.frame_count += 1
             img = pred[i].astype(np.uint8)
-            
-            # Skip enhancement every other frame to maintain 25FPS
-            if self.frame_count % 2 == 0:
-                try:
-                    # Pass the FULL image to GFPGAN so it can find the face
-                    _, _, restored_img = self.enhancer.enhance(img, has_aligned=False, only_center_face=False, paste_back=True)
-                    if restored_img is not None:
-                        img = restored_img
-                except Exception as e:
-                    logger.warning(f"GFPGAN failed: {e}")
+            try:
+                # Pass the FULL image to GFPGAN so it can find the face
+                _, _, restored_img = self.enhancer.enhance(img, has_aligned=False, only_center_face=False, paste_back=True)
+                if restored_img is not None:
+                    img = restored_img
+            except Exception as e:
+                logger.warning(f"GFPGAN failed: {e}")
             
             enhanced_pred.append(img)
             
