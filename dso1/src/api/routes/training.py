@@ -7,7 +7,9 @@ import json
 import asyncio
 
 from session_manager import manager
-from session import load_delegues, load_products
+from session import load_delegues, load_products, load_gammes
+from shared.database import SessionLocal
+from shared.models import Simulation
 
 router = APIRouter()
 
@@ -15,8 +17,9 @@ class StartRequest(BaseModel):
     delegue_id: int
     product_id: int = None  # Make it optional for backwards compatibility during testing
 
-class SpeechControlRequest(BaseModel):
-    action: str  # "start" or "stop"
+class SpeechTextRequest(BaseModel):
+    text: str
+    lang: str = "fr"
 
 @router.get("/delegues")
 def get_delegues():
@@ -28,39 +31,34 @@ def get_products():
     products = load_products()
     return products
 
+@router.get("/gammes")
+def get_gammes():
+    gammes = load_gammes()
+    return gammes
+
 @router.post("/start")
 def start_training(req: StartRequest):
     try:
-        res = manager.start_session(req.delegue_id)
+        res = manager.start_session(req.delegue_id, req.product_id)
         return res
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/speech_control")
-def speech_control(req: SpeechControlRequest):
-    from avatar.stt import recording_start_event, recording_stop_event
-    if req.action == "start":
-        recording_stop_event.clear()
-        recording_start_event.set()
-        return {"status": "recording started"}
-    elif req.action == "stop":
-        recording_stop_event.set()
-        return {"status": "recording stopped"}
-    else:
-        raise HTTPException(status_code=400, detail="Action invalide")
+@router.post("/speech_text")
+def speech_text(req: SpeechTextRequest):
+    from avatar.stt import set_user_text
+    set_user_text(req.text, req.lang)
+    return {"status": "text received"}
 
 @router.post("/stop")
 def stop_training():
-    res = manager.stop_session()
+    res = manager.stop_session(discard=False)
     # On attend un peu que le JSON du report soit prêt si le thread se ferme doucement
-    # Mais stop_session ne bloque pas s'il délègue l'arrêt.
-    # Pour faire simple on retourne manager.last_results s'ils ont été calculés, sinon le front devra interroger
-    # Dans notre cas, manager._run_conversation va set last_results.
     import time
-    for _ in range(10):  # Attente max 5 secondes
-        if not manager.is_active:
+    for _ in range(200):  # Attente max 100s
+        if not manager.is_active and manager.last_results is not None and manager.last_report is not None:
             break
         time.sleep(0.5)
 
@@ -70,17 +68,19 @@ def stop_training():
         "report_pdf": manager.last_report
     }
 
+@router.post("/cancel")
+def cancel_training():
+    res = manager.stop_session(discard=True)
+    return {"status": res}
+
 def frame_generator():
     """Generator function that yields JPEG frames from the evaluation thread."""
     import time
-    while True:
-        if not manager.is_active:
-            time.sleep(0.1)
-            continue
-            
+    # On reste dans la boucle seulement tant que la session est active
+    while manager.is_active:
         frame = manager.get_current_frame()
         if frame is None:
-            time.sleep(0.05)
+            time.sleep(0.015)
             continue
 
         ret, buffer = cv2.imencode('.jpg', frame)
@@ -92,7 +92,7 @@ def frame_generator():
                b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
         
         # Limit framerate for the stream to avoid network congestion
-        time.sleep(0.05)
+        time.sleep(0.015)
 
 @router.get("/video_feed")
 def video_feed():
@@ -110,3 +110,29 @@ async def chat_feed():
                 await asyncio.sleep(0.2)
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+@router.get("/history/{delegue_id}")
+def get_training_history(delegue_id: int):
+    db = SessionLocal()
+    from shared.models import Evaluation
+    try:
+        results = db.query(Simulation).filter(
+            Simulation.delegate_id == delegue_id
+        ).order_by(Simulation.start_time.asc()).all()
+        
+        history = []
+        for r in results:
+            eval_data = db.query(Evaluation).filter(Evaluation.simulation_id == r.id).first()
+            history.append({
+                "id": r.id,
+                "date": r.start_time.strftime("%d/%m"),
+                "full_date": r.start_time.strftime("%Y-%m-%d"),
+                "score": float(r.final_score) if r.final_score else 0.0,
+                # Détails si dispos
+                "confidence": float(eval_data.confidence_score) * 100 if eval_data and eval_data.confidence_score else 0.0,
+                "stress": float(eval_data.stress_score) * 100 if eval_data and eval_data.stress_score else 0.0,
+                "engagement": float(eval_data.engagement_score) * 100 if eval_data and eval_data.engagement_score else 0.0,
+                "product_knowledge": float(eval_data.product_knowledge_score) * 100 if eval_data and eval_data.product_knowledge_score else 0.0,
+            })
+        return history
+    finally:
+        db.close()

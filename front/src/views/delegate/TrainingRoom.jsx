@@ -23,6 +23,7 @@ export default function TrainingRoom() {
   const [sessionTime, setSessionTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEvaluating, setIsEvaluating] = useState(false);
   
   // Extraire les ID depuis the routing state
   const delegueId = location.state?.delegueId;
@@ -51,14 +52,18 @@ export default function TrainingRoom() {
         if (response.ok) setIsActive(true);
         else console.error("Failed to start session", await response.text());
       } else {
+        setIsActive(false);
+        setIsLoading(false);
+        setIsEvaluating(true); // Afficher l'overlay pendant l'évaluation IA
         const response = await fetch("http://localhost:8001/api/training/stop", {
           method: "POST"
         });
+        setIsEvaluating(false);
         if (response.ok) {
           sessionResult = await response.json();
-          setIsActive(false);
+        } else {
+          console.error("Failed to stop session", await response.text());
         }
-        else console.error("Failed to stop session", await response.text());
       }
     } catch (error) {
       console.error("API error", error);
@@ -83,6 +88,28 @@ export default function TrainingRoom() {
 
   return (
     <div className="relative h-screen bg-md-surface flex flex-col font-sans overflow-hidden">
+
+      {/* Overlay Évaluation IA en cours */}
+      {isEvaluating && (
+        <div className="fixed inset-0 z-[999] bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8">
+          <div className="flex flex-col items-center gap-6 text-center">
+            <div className="relative w-24 h-24">
+              <div className="absolute inset-0 rounded-full border-4 border-white/10"/>
+              <div className="absolute inset-0 rounded-full border-4 border-t-indigo-400 animate-spin"/>
+              <div className="absolute inset-0 flex items-center justify-center text-3xl">🧠</div>
+            </div>
+            <h2 className="text-2xl font-black text-white tracking-tight">Analyse IA en cours...</h2>
+            <p className="text-white/60 text-sm font-medium max-w-sm">
+              Le moteur de fact-checking analyse vos allégations produit. Cette opération peut prendre <strong className="text-white">20 à 40 secondes</strong>.
+            </p>
+            <div className="flex gap-1.5 mt-2">
+              {[0,1,2,3,4].map(i => (
+                <div key={i} className="w-2 h-2 rounded-full bg-indigo-400 animate-bounce" style={{animationDelay: `${i*0.1}s`}}/>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Barre d'Outils Supérieure Contextuelle */}
       <div className="h-20 border-b border-md-outline/10 bg-white/40 backdrop-blur-3xl flex items-center justify-between px-8 relative z-50">
@@ -115,25 +142,44 @@ export default function TrainingRoom() {
               </div>
            </div>
 
-           {!isActive ? (
-             <button 
-               disabled={isLoading}
-               onClick={toggleSession}
-               className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20 bg-green-600 hover:bg-green-700 disabled:opacity-50"
-             >
-                {isLoading ? "Démarrage..." : "Démarrer la Session IA"}
-             </button>
-           ) : (
-             <button 
-               onClick={async () => {
-                  const data = await toggleSession();
-                  navigate('/delegate/results', { state: { resultData: data } });
-               }}
-               className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20 bg-red-600 hover:bg-red-700 flex items-center gap-2"
-             >
-                {isLoading ? "Patientez..." : "Arrêter et Évaluer"}
-             </button>
-           )}
+            {!isActive ? (
+              <button 
+                disabled={isLoading}
+                onClick={toggleSession}
+                className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20 bg-green-600 hover:bg-green-700 disabled:opacity-50"
+              >
+                 {isLoading ? "Démarrage..." : "Démarrer la Session IA"}
+              </button>
+            ) : (
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={async () => {
+                     setIsLoading(true);
+                     try {
+                        await fetch("http://localhost:8001/api/training/cancel", { method: "POST" });
+                        setIsActive(false);
+                        navigate('/delegate/training');
+                     } catch (err) {
+                        console.error(err);
+                     }
+                     setIsLoading(false);
+                  }}
+                  className="!h-12 !px-6 !rounded-pill uppercase text-[10px] font-black tracking-widest text-md-outline bg-white border border-md-outline/20 hover:bg-slate-50 transition-all"
+                >
+                  Annuler
+                </button>
+                <button 
+                  onClick={async () => {
+                     const data = await toggleSession();
+                     navigate('/delegate/results', { state: { resultData: data } });
+                  }}
+                  disabled={isLoading || isEvaluating}
+                  className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20 bg-red-600 hover:bg-red-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                   Arrêter et Évaluer
+                </button>
+              </div>
+            )}
         </div>
       </div>
 

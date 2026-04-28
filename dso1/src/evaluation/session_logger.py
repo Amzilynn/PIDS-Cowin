@@ -53,38 +53,23 @@ class SessionLogger:
 
     def __init__(self, output_dir: str = "sessions"):
         self._dir      = Path(output_dir)
-        self._dir.mkdir(parents=True, exist_ok=True)
-
-        session_id    = time.strftime("%Y%m%d_%H%M%S")
-        self._csv_path  = self._dir / f"session_{session_id}.csv"
-        self._json_path = self._dir / f"session_{session_id}_summary.json"
-
-        self._file   = self._csv_path.open("w", newline="", encoding="utf-8")
-        self._writer = csv.DictWriter(self._file, fieldnames=self.CSV_FIELDS)
-        self._writer.writeheader()
-
+        # (Directory and file creation removed)
+        self._csv_path  = None
+        self._json_path = None
         self._rows: list[dict] = []
 
     # ── Public API ────────────────────────────────────────────────────────
 
     def log(self, snap: SessionSnapshot) -> None:
-        """Write a single snapshot row to the CSV."""
+        """Store a single snapshot in memory."""
         row = self._flatten(snap)
-        self._writer.writerow(row)
         self._rows.append(row)
 
     def close(self) -> dict:
         """
-        Flush CSV, generate JSON summary, and return summary dict.
+        Return the summary dict without writing files.
         """
-        self._file.close()
-
         summary = self._build_summary()
-        with self._json_path.open("w", encoding="utf-8") as f:
-            json.dump(summary, f, indent=2)
-
-        print(f"[SessionLogger] CSV  → {self._csv_path}")
-        print(f"[SessionLogger] JSON → {self._json_path}")
         return summary
 
     @property

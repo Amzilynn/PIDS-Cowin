@@ -75,9 +75,10 @@ export default function CameraPanel({ label = "Délégué", isActive, onToggle, 
              >
                 {/* Flux vidéo du backend DSO1 (MJPEG Feed) */}
                 <img 
-                   src={isActive ? "http://localhost:8001/api/training/video_feed" : ""} 
+                   key={isActive ? "active-feed" : "inactive-feed"}
+                   src={isActive ? `http://localhost:8001/api/training/video_feed?t=${Date.now()}` : ""} 
                    alt="Flux DSO1"
-                   className="absolute inset-0 w-full h-full object-cover rounded-xl scale-x-[-1] transition-opacity duration-700 bg-black shadow-inner" 
+                   className="absolute inset-0 w-full h-full object-contain rounded-xl scale-x-[-1] transition-opacity duration-700 bg-black shadow-inner" 
                 />
                 
                 <div className="absolute bottom-6 left-6 flex items-center gap-2">

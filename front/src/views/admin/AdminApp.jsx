@@ -12,6 +12,8 @@ import { TrainingView } from '../pages/TrainingView';
 import { MedicalAIView } from '../pages/MedicalAIView';
 import { AnalyticsView } from '../pages/AnalyticsView';
 
+import AdminDashboard from './AdminDashboard';
+
 export default function AdminApp() {
   const { user, logout } = useAuth();
   const { state, actions } = useAvalifeController();
@@ -38,7 +40,7 @@ export default function AdminApp() {
             transition={springTransition}
           >
             {activeTab === 'Dashboard' && (
-              <DashboardView stats={stats} streamLogs={streamLogs} visits={visits} kpis={kpis} roleType={roleType} />
+              <AdminDashboard />
             )}
             {activeTab === 'Territory' && (
               <TerritoryView selectedRegion={selectedRegion} regionsData={regionsData} onRegionSelect={actions.handleRegionSelect} />

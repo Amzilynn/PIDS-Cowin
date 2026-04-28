@@ -40,10 +40,10 @@ sys.path.insert(0, PROJECT_ROOT)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from shared.database import SessionLocal
-from shared.models import Delegate, Product
+from shared.models import Delegate, Product, Gamme
 
 from avatar.prompts import SYSTEM_PROMPT
-from avatar.stt     import record_audio, model as whisper_model
+from avatar.stt     import get_user_text
 from avatar.voice   import speak_text
 
 from nlp.rag.rag_build  import load_or_build_rag
@@ -121,12 +121,27 @@ def load_products() -> list[dict]:
             {
                 "id":   p.id,
                 "name": p.name,
+                "gamme_id": p.gamme_id,
+                "gamme_name": p.gamme.name if p.gamme else "Sans Gamme"
             }
             for p in products
         ]
     finally:
         db.close()
 
+def load_gammes() -> list[dict]:
+    db = SessionLocal()
+    try:
+        gammes = db.query(Gamme).all()
+        return [
+            {
+                "id": g.id,
+                "name": g.name
+            }
+            for g in gammes
+        ]
+    finally:
+        db.close()
 
 def load_single_product(product_id: int) -> dict | None:
     if not product_id: return None
@@ -458,13 +473,12 @@ def conversation_loop(
     
     # ── INJECTION DB PRODUIT ──
     if product:
-        system_prompt += f"\n\nYOU MUST BASE YOUR ROLEPLAY AND OBJECTIONS ON THE FOLLOWING PRODUCT:\n"
+        system_prompt += f"\n\nYOU MUST BASE YOUR ROLEPLAY AND OBJECTIONS ON THE FOLLOWING PRODUCT DATA SHEET:\n"
         system_prompt += f"- Name: {product.get('name', 'Unknown')}\n"
-        system_prompt += f"- Description: {product.get('description') or 'Not specified'}\n"
-        system_prompt += f"- Indications: {product.get('indications') or 'Not specified'}\n"
-        system_prompt += f"- Active Ingredients / Compositions: {product.get('compositions') or 'Not specified'}\n"
-        system_prompt += f"- Usage Advice / Posology: {product.get('usage_advice') or 'Not specified'}\n"
-        system_prompt += "Formulate your questions and objections specifically based on this official product data sheet.\n"
+        system_prompt += f"- Indications: {product.get('indications') or 'Not provided'}\n"
+        system_prompt += f"- Active Ingredients / Composition: {product.get('compositions') or 'Not provided'}\n"
+        system_prompt += f"- Usage Advice / Posology: {product.get('usage_advice') or 'Not provided'}\n"
+        system_prompt += "Ensure your roleplay is strictly consistent with the medical indications and composition provided above.\n"
     
     messages = [
         {"role": "system", "content": system_prompt}
@@ -489,10 +503,10 @@ def conversation_loop(
 
         # ── PHASE 1 : Délégué parle → évaluation active ──────────────────────
         eval_thread.set_avatar_speaking(False)   # ← logging actif
-        print("\n🎤 En écoute...")
+        print("\n🎤 En attente de votre message (Web Speech API)...")
 
         try:
-            audio, _fs = record_audio()
+            user_input, lang = get_user_text()
         except KeyboardInterrupt:
             print("\n[Conv] Interruption clavier.")
             break
@@ -500,27 +514,20 @@ def conversation_loop(
             print(f"[STT Error] {e}")
             continue
 
-        # ── Transcription Whisper ────────────────────────────────────────────
-        try:
-            result     = whisper_model.transcribe(audio, fp16=False, language="fr")
-            user_input = result.get("text", "").strip()
-            lang       = result.get("language", "fr")
-        except Exception as e:
-            print(f"[Whisper Error] {e}")
+        if not user_input:
+            print("[Conv] Aucun texte détecté, réessayez.")
             continue
 
-        if not user_input:
-            print("[Conv] Aucun audio détecté, réessayez.")
-            continue
+        # Si le message est un signal d'arrêt ou d'annulation (envoyé par l'API stop/cancel)
+        if user_input.lower() in ["stop", "annuler"]:
+            print(f"[Conv] Signal d'arrêt reçu ({user_input}). Sortie de boucle.")
+            break
 
         print(f"🗣️  Délégué : {user_input}")
         if on_message_callback:
             on_message_callback("user", user_input)
 
-        # ── Mot-clé de fin ───────────────────────────────────────────────────
-        if any(kw in user_input.lower() for kw in STOP_KEYWORDS):
-            print("[Conv] Mot-clé de fin détecté.")
-            break
+        # On n'arrête plus par mots-clés, le frontend gère la fin via l'API.
 
         turn += 1
         eval_thread.set_conv_turn(turn)
@@ -571,27 +578,7 @@ def conversation_loop(
     return messages
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# SAUVEGARDE SESSION JSON
-# ═══════════════════════════════════════════════════════════════════════════════
-
-def save_conversation(delegue: dict, messages: list, cv_summary: dict | None) -> Path:
-    SESSIONS_DIR.mkdir(exist_ok=True)
-    nom  = delegue["nom"].replace(" ", "_")
-    date = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    path = SESSIONS_DIR / f"{nom}_{date}.json"
-
-    session = {
-        "delegue":       delegue,
-        "date":          datetime.now().isoformat(),
-        "conversation":  messages,
-        "cv_evaluation": cv_summary,
-    }
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(session, f, ensure_ascii=False, indent=2)
-
-    print(f"[Session] Conversation → {path}")
-    return path
+# (save_conversation removed - everything now goes to SQL)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -653,8 +640,7 @@ def main():
 
     cv_summary = eval_thread.get_summary()
 
-    # ── 6. Sauvegarde ─────────────────────────────────────────────────────────
-    session_path = save_conversation(delegue, messages, cv_summary)
+    # (Local JSON saving skipped)
 
     # ── 7. Mise à jour score délégué ──────────────────────────────────────────
     if cv_summary:
@@ -668,8 +654,7 @@ def main():
         report_path = generate_report(
             delegue      = delegue,
             messages     = messages,
-            cv_summary   = cv_summary,
-            session_path = session_path,
+            cv_summary   = cv_summary
         )
         print(f"\n[Rapport] PDF → {report_path}")
     except ImportError:

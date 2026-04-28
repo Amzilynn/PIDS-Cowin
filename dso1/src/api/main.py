@@ -10,6 +10,8 @@ SRC_DIR = os.path.join(BASE_DIR, "..")
 sys.path.insert(0, SRC_DIR)
 
 from api.routes.training import router as training_router
+from api.routes.auth import router as auth_router
+from api.routes.admin import router as admin_router
 
 app = FastAPI(
     title="VITAL AI - DSO1 Training API",
@@ -26,6 +28,15 @@ app.add_middleware(
 )
 
 app.include_router(training_router, prefix="/api/training", tags=["Training"])
+app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(admin_router, prefix="/api/admin", tags=["Admin"])
+
+# Montage des dossiers statiques
+# On s'assure que le chemin est absolu vers dso1/reports
+reports_dir = os.path.abspath(os.path.join(SRC_DIR, "..", "reports"))
+os.makedirs(reports_dir, exist_ok=True)
+print(f"[Main] Serving reports from: {reports_dir}")
+app.mount("/reports", StaticFiles(directory=reports_dir), name="reports")
 
 @app.get("/health")
 def health_check():

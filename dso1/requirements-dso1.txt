@@ -2,6 +2,11 @@
 requests
 python-dotenv
 openai
+
+# ── Auth (JWT + Hachage mot de passe) ────────────────────────
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
 # groq
 
 # ── Agent Voice & Audio (TTS / STT) ──────────────────────────
@@ -60,9 +65,10 @@ soxr==0.3.7
 six==1.16.0
 setuptools==69.5.1
 
-# ── Dashboard ────────────────────────────────────────────────
+# ── Dashboard & Reporting ────────────────────────────────────
 streamlit==1.33.0
 plotly==5.22.0
+fpdf2==2.8.2
 
 # ── TF / Keras Compatibility ─────────────────────────────────
 # mediapipe 0.10.9 forces protobuf<4, so we cannot use TF 2.21+ (which requires protobuf>=6).
