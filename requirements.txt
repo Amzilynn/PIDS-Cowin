@@ -1,0 +1,87 @@
+# ==========================================
+# 🚀 CORE & SYSTEM
+# ==========================================
+python-dotenv>=1.0.0
+requests>=2.27.1
+
+# ==========================================
+# 🗄️ DATABASE & ORM
+# ==========================================
+SQLAlchemy>=2.0.0
+# Add your DB driver if needed (e.g., pymysql, psycopg2)
+# pymysql>=1.1.0
+
+# ==========================================
+# 🌐 APIs & BACKEND (DSO2 & DSO3)
+# ==========================================
+Flask>=3.0.0
+flask-cors>=4.0.0
+
+# ==========================================
+# 🔒 AUTHENTICATION
+# ==========================================
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+
+# ==========================================
+# 🤖 AI MODELS & RAG (DSO1 & DSO2)
+# ==========================================
+openai>=1.0
+sentence-transformers>=2.2
+chromadb>=0.4
+
+# ==========================================
+# 🎙️ AUDIO, TTS, STT (DSO1)
+# ==========================================
+edge-tts>=6.1
+pygame
+openai-whisper
+sounddevice
+PyAudio==0.2.14
+librosa==0.10.1
+speechbrain==1.0.2
+soundfile==0.12.1
+soxr==0.3.7
+
+# ==========================================
+# 👁️ COMPUTER VISION & EMOTION (DSO1)
+# ==========================================
+opencv-python==4.9.0.80
+mediapipe==0.10.9
+deepface==0.0.93
+fer==22.5.1
+mtcnn>=0.1.0
+retina-face>=0.0.1
+
+# ==========================================
+# 🧠 DEEP LEARNING (DSO1)
+# ==========================================
+torch==2.6.0
+torchvision==0.21.0
+torchaudio==2.6.0
+timm==0.9.16
+hsemotion==0.3.0
+huggingface-hub>=0.21.0
+transformers==4.39.3
+onnxruntime==1.17.3
+tensorflow==2.15.1
+
+# ==========================================
+# 📊 DATA & UTILS
+# ==========================================
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.13.1
+chardet>=5.0
+cffi==1.17.1
+protobuf==3.20.3
+six==1.16.0
+setuptools==69.5.1
+
+# ==========================================
+# 📈 DASHBOARD & REPORTING (DSO1)
+# ==========================================
+streamlit==1.33.0
+plotly==5.22.0
+fpdf2==2.8.2
