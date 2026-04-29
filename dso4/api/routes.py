@@ -3,16 +3,19 @@ DSO4 API Routes — Visit Strategy Optimizer endpoints.
 
 All routes are prefixed with /api/tournee by the router.
 Mounted into the shared DSO2 FastAPI app.
+
+Data source: MySQL (avalive_dso4) via SQLAlchemy ORM.
 """
 
 from __future__ import annotations
 
 import os
-import csv
 import random
 from datetime import datetime, timedelta
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Query, Depends, status
+from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 # Import DSO4 models
 import sys
@@ -28,171 +31,157 @@ from dso4.api.schemas import (
     OptimizeRequest, WeatherResponse,
 )
 
+# ─── Database ─────────────────────────────────────────────────────
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, PROJECT_ROOT)
+
+from shared.database import get_db
+from shared.modelsDSO4 import DelegueDSO4, MedecinDSO4, PharmacienDSO4, VisiteDSO4
+
 router = APIRouter(prefix="/api/tournee", tags=["DSO4 - Visit Strategy"])
 
-# ─── Data paths ──────────────────────────────────────────────────
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DSO4_DATA = os.path.join(PROJECT_ROOT, "dso4", "data")
-DSO2_DATA = os.path.join(PROJECT_ROOT, "dso2", "data", "raw")
 
-DELEGUES_PATH = os.path.join(DSO4_DATA, "delegues.csv")
-VISITES_PATH = os.path.join(DSO4_DATA, "visites.csv")
-MEDECINS_PATH = os.path.join(DSO2_DATA, "medecins.csv")
-PHARMACIES_PATH = os.path.join(DSO2_DATA, "pharmacies.csv")
+# ─── DB Helper Functions ──────────────────────────────────────────
+
+def _get_delegate(delegue_id: int, db: Session):
+    """Find a delegate by ID from MySQL."""
+    return db.query(DelegueDSO4).filter(DelegueDSO4.id == delegue_id).first()
 
 
-# ─── CSV Helpers ─────────────────────────────────────────────────
-
-def _load_csv(path: str):
-    """Load CSV with BOM handling."""
-    try:
-        with open(path, "r", encoding="utf-8-sig") as f:
-            return list(csv.DictReader(f))
-    except UnicodeDecodeError:
-        with open(path, "r", encoding="latin-1") as f:
-            return list(csv.DictReader(f))
-    except FileNotFoundError:
-        return []
-
-
-def _get_delegate(delegue_id: int):
-    """Find a delegate by ID."""
-    rows = _load_csv(DELEGUES_PATH)
-    for r in rows:
-        if int(r["id"]) == delegue_id:
-            return r
-    return None
-
-
-def _get_nearby_clients(lat: float, lng: float, radius_km: float, client_type: str = "medecins", limit: int = 20):
-    """Get doctors or pharmacies within radius of a point."""
-    path = PHARMACIES_PATH if client_type == "pharmacies" else MEDECINS_PATH
-    rows = _load_csv(path)
+def _get_nearby_clients(lat: float, lng: float, radius_km: float, db: Session, client_type: str = "medecins", limit: int = 20):
+    """Get doctors or pharmacies within radius of a point, from MySQL."""
     nearby = []
-    
-    # Random displacement generator for synthetic coordinates (pharmacies lack lat/lng)
-    def random_offset():
-        return (random.random() - 0.5) * 0.1  # Approx +/- 5km
-        
-    for r in rows:
-        try:
-            if client_type == "pharmacies":
-                if "latitude" not in r or not r["latitude"]:
-                    # Seed random to ensure consistency per pharmacy ID
-                    random.seed(int(r.get("id", 0))) 
-                    r["latitude"] = str(lat + random_offset())
-                    r["longitude"] = str(lng + random_offset())
-                r["specialite"] = "Pharmacie"
-                if "prenom" not in r:
-                    r["prenom"] = ""
-                    
-            # Add spatial jitter so dots never overlap and are physically well separated
-            random.seed(int(r.get("id", 0)) * 12345)
-            m_lat = float(r["latitude"]) + ((random.random() - 0.5) * 0.06)
-            m_lng = float(r["longitude"]) + ((random.random() - 0.5) * 0.06)
-            
-            # Save shifted coordinates so the frontend renders them spread out
-            r["latitude"] = str(m_lat)
-            r["longitude"] = str(m_lng)
-            
-            # Sanity check for Tunisian coords
-            if not (30 < m_lat < 38 and 7 < m_lng < 12):
+
+    if client_type == "pharmacies":
+        rows = db.query(PharmacienDSO4).all()
+        for r in rows:
+            try:
+                # Pharmacies have no GPS coords — generate deterministic synthetic ones
+                random.seed(r.id * 12345)
+                p_lat = lat + (random.random() - 0.5) * 0.06
+                p_lng = lng + (random.random() - 0.5) * 0.06
+
+                if not (30 < p_lat < 38 and 7 < p_lng < 12):
+                    continue
+
+                dist = haversine(lat, lng, p_lat, p_lng)
+                if dist <= radius_km:
+                    nearby.append({
+                        "id": r.id,
+                        "nom": r.nom,
+                        "prenom": "",
+                        "specialite": "Pharmacie",
+                        "adresse": r.adresse or "",
+                        "latitude": str(p_lat),
+                        "longitude": str(p_lng),
+                        "distance_km": round(dist, 2),
+                    })
+            except Exception:
                 continue
-                
-            dist = haversine(lat, lng, m_lat, m_lng)
-            if dist <= radius_km:
-                r["distance_km"] = round(dist, 2)
-                nearby.append(r)
-        except (ValueError, KeyError):
-            continue
-            
+    else:
+        rows = db.query(MedecinDSO4).filter(
+            MedecinDSO4.latitude.isnot(None),
+            MedecinDSO4.longitude.isnot(None),
+        ).all()
+
+        for r in rows:
+            try:
+                # Add spatial jitter so dots never overlap on the map
+                random.seed(r.id * 12345)
+                m_lat = float(r.latitude) + ((random.random() - 0.5) * 0.06)
+                m_lng = float(r.longitude) + ((random.random() - 0.5) * 0.06)
+
+                if not (30 < m_lat < 38 and 7 < m_lng < 12):
+                    continue
+
+                dist = haversine(lat, lng, m_lat, m_lng)
+                if dist <= radius_km:
+                    nearby.append({
+                        "id": r.id,
+                        "nom": r.nom,
+                        "prenom": r.prenom or "",
+                        "specialite": r.specialite or "",
+                        "adresse": r.adresse or "",
+                        "latitude": str(m_lat),
+                        "longitude": str(m_lng),
+                        "distance_km": round(dist, 2),
+                    })
+            except Exception:
+                continue
+
     nearby.sort(key=lambda x: x["distance_km"])
     return nearby[:limit]
 
 
-def _get_delegate_visits(delegue_id: int):
-    """Get all visits for a delegate from visites.csv."""
-    rows = _load_csv(VISITES_PATH)
-    return [r for r in rows if int(r.get("delegue_id", 0)) == delegue_id]
+def _get_delegate_visits(delegue_id: int, db: Session):
+    """Get all visits for a delegate from MySQL."""
+    return db.query(VisiteDSO4).filter(VisiteDSO4.delegue_id == delegue_id).all()
 
 
-def _filter_recent_visits(doctors, delegue_id: int, days: int = 14):
-    """Filter out doctors that were visited recently."""
-    visits = _get_delegate_visits(delegue_id)
-    cutoff = datetime.now() - timedelta(days=days)
-    
-    # IDs visited recently
-    recent_ids = set()
-    for v in visits:
-        try:
-            visit_date = datetime.strptime(v["date"], "%Y-%m-%d")
-            # Usually we check if it's effectuee, but let's just stick to the basic check
-            if visit_date >= cutoff and v.get("statut") in ("effectuee", "effectuée"):
-                recent_ids.add(int(v["medecin_id"]))
-        except (ValueError, KeyError):
-            continue
-    
-    # Return only doctors not visited recently
+def _filter_recent_visits(doctors, delegue_id: int, db: Session, days: int = 14):
+    """Filter out doctors visited recently (within N days)."""
+    cutoff = (datetime.now() - timedelta(days=days)).date()
+
+    recent_ids = set(
+        v.medecin_id
+        for v in db.query(VisiteDSO4).filter(
+            VisiteDSO4.delegue_id == delegue_id,
+            VisiteDSO4.date >= cutoff,
+            VisiteDSO4.statut == "effectuée",
+        ).all()
+    )
+
     filtered = [d for d in doctors if int(d.get("id")) not in recent_ids]
-    
-    # Safety: if filter removes everything, return original list
     return filtered if len(filtered) >= 8 else doctors
 
 
-
-
-
-# ─── Endpoints ───────────────────────────────────────────────────
-
+# ─── Endpoints ────────────────────────────────────────────────────
 
 @router.get(
     "/{delegue_id}/today",
     response_model=TourneeResponse,
-    summary="Get today's optimized schedule (real-time OSRM + weather)",
+    summary="Get today's optimized schedule (real-time TomTom + weather)",
 )
 async def get_today_schedule(
-    delegue_id: int, 
+    delegue_id: int,
     max_visits: int = Query(8, ge=1, le=20),
-    target: str = Query("medecins")
+    target: str = Query("medecins"),
+    db: Session = Depends(get_db),
 ):
     """Return today's optimized visit schedule using real road data and live weather."""
-    delegate = _get_delegate(delegue_id)
+    delegate = _get_delegate(delegue_id, db)
     if not delegate:
         raise HTTPException(status_code=404, detail=f"Delegue {delegue_id} not found")
 
-    d_lat = float(delegate["latitude"])
-    d_lng = float(delegate["longitude"])
-    d_name = f"{delegate['prenom']} {delegate['nom']}"
+    d_lat = float(delegate.latitude)
+    d_lng = float(delegate.longitude)
+    d_name = f"{delegate.prenom} {delegate.nom}"
 
-    # Find nearby clients to visit
-    nearby_docs = _get_nearby_clients(d_lat, d_lng, radius_km=20, client_type=target, limit=max_visits * 2)
+    # Find nearby clients
+    nearby_docs = _get_nearby_clients(d_lat, d_lng, radius_km=20, db=db, client_type=target, limit=max_visits * 2)
 
     if not nearby_docs:
         raise HTTPException(status_code=404, detail="No clients found near delegate zone")
 
-    # Pick a subset for today's visits
-    selected = nearby_docs[:max_visits*3]
-    selected = _filter_recent_visits(selected, delegue_id, days=14)
+    # Pick a subset and filter recently visited
+    selected = nearby_docs[:max_visits * 3]
+    selected = _filter_recent_visits(selected, delegue_id, db=db, days=14)
     selected = selected[:max_visits]
 
-    # Add visit info
     for doc in selected:
         doc["type_visite"] = "physique"
         doc["duree_min"] = 8
 
-    # ── Real-time optimization (OSRM + weather) ──
+    # Real-time optimization (TomTom + weather)
     optimized, weather_info = await optimize_route_realtime(d_lat, d_lng, selected)
 
-    # Build schedule from optimized route
     schedule = build_schedule(
         optimized_visits=optimized,
         delegate_name=d_name,
     )
 
-    # Calculate total distance
     total_dist = calculate_total_distance(optimized)
 
-    # Convert blocks to ScheduleBlock models
     blocks = []
     for b in schedule["blocks"]:
         blocks.append(ScheduleBlock(
@@ -217,7 +206,6 @@ async def get_today_schedule(
             statut="planifiee",
         ))
 
-    # Build weather response
     weather_resp = WeatherResponse(
         rain_mm=weather_info.get("rain_mm", 0),
         wind_kmh=weather_info.get("wind_kmh", 0),
@@ -254,9 +242,10 @@ async def optimize_schedule(
     max_visits: int = Query(8, ge=1, le=20),
     radius_km: float = Query(20.0, ge=1.0, le=100.0),
     target: str = Query("medecins"),
+    db: Session = Depends(get_db),
 ):
-    """Re-run the route optimizer with live OSRM + weather data."""
-    return await get_today_schedule(delegue_id, max_visits, target)
+    """Re-run the route optimizer with live TomTom + weather data."""
+    return await get_today_schedule(delegue_id, max_visits, target, db)
 
 
 @router.get(
@@ -268,7 +257,7 @@ async def get_live_weather(
     lat: float = Query(..., description="Latitude"),
     lng: float = Query(..., description="Longitude"),
 ):
-    """Return current weather conditions from Open-Meteo (free, no key)."""
+    """Return current weather conditions from Open-Meteo."""
     weather = await get_weather(lat, lng)
     return WeatherResponse(
         rain_mm=weather.get("rain_mm", 0),
@@ -284,26 +273,18 @@ async def get_live_weather(
     "/visite/{visite_id}/statut",
     summary="Update visit status",
 )
-async def update_visit_status(visite_id: int, body: VisiteStatusUpdate):
-    """Mark a visit as effectuee, annulee, or reportee."""
-    rows = _load_csv(VISITES_PATH)
-    found = False
-    for r in rows:
-        if int(r.get("id", 0)) == visite_id:
-            r["statut"] = body.statut
-            found = True
-            break
-
-    if not found:
+async def update_visit_status(
+    visite_id: int,
+    body: VisiteStatusUpdate,
+    db: Session = Depends(get_db),
+):
+    """Mark a visit as effectuée, annulée, or reportée in MySQL."""
+    visite = db.query(VisiteDSO4).filter(VisiteDSO4.id == visite_id).first()
+    if not visite:
         raise HTTPException(status_code=404, detail=f"Visit {visite_id} not found")
 
-    # Write back
-    if rows:
-        fieldnames = list(rows[0].keys())
-        with open(VISITES_PATH, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(rows)
+    visite.statut = body.statut
+    db.commit()
 
     return {"message": f"Visit {visite_id} updated to {body.statut}", "visite_id": visite_id}
 
@@ -318,9 +299,10 @@ async def get_nearby_medecins(
     lng: float = Query(...),
     radius: float = Query(10.0, ge=0.5, le=50.0),
     limit: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
 ):
     """Return doctors within a given radius of coordinates."""
-    docs = _get_nearby_clients(lat, lng, radius_km=radius, client_type="medecins", limit=limit)
+    docs = _get_nearby_clients(lat, lng, radius_km=radius, db=db, client_type="medecins", limit=limit)
 
     return [
         MedecinResponse(
@@ -342,20 +324,20 @@ async def get_nearby_medecins(
     response_model=list[DelegueResponse],
     summary="List all delegates",
 )
-async def list_delegues():
-    """Return all delegates."""
-    rows = _load_csv(DELEGUES_PATH)
+async def list_delegues(db: Session = Depends(get_db)):
+    """Return all delegates from MySQL."""
+    rows = db.query(DelegueDSO4).all()
     return [
         DelegueResponse(
-            id=int(r["id"]),
-            nom=r["nom"],
-            prenom=r["prenom"],
-            email=r["email"],
-            zone=r["zone"],
-            ville=r["ville"],
-            latitude=float(r["latitude"]),
-            longitude=float(r["longitude"]),
-            disponibilite=r["disponibilite"],
+            id=r.id,
+            nom=r.nom,
+            prenom=r.prenom,
+            email=r.email,
+            zone=r.zone,
+            ville=r.ville,
+            latitude=float(r.latitude),
+            longitude=float(r.longitude),
+            disponibilite=r.disponibilite,
         )
         for r in rows
     ]
@@ -366,31 +348,34 @@ async def list_delegues():
     response_model=StatsResponse,
     summary="Get delegate performance stats",
 )
-async def get_delegate_stats(delegue_id: int):
-    """Return performance statistics for a delegate."""
-    delegate = _get_delegate(delegue_id)
+async def get_delegate_stats(
+    delegue_id: int,
+    db: Session = Depends(get_db),
+):
+    """Return performance statistics for a delegate from MySQL."""
+    delegate = _get_delegate(delegue_id, db)
     if not delegate:
         raise HTTPException(status_code=404, detail=f"Delegue {delegue_id} not found")
 
-    visits = _get_delegate_visits(delegue_id)
+    visits = _get_delegate_visits(delegue_id, db)
 
-    effectuees = [v for v in visits if v.get("statut") == "effectuee" or v.get("statut") == "effectuée"]
-    annulees = [v for v in visits if v.get("statut") == "annulee" or v.get("statut") == "annulée"]
-    physiques = [v for v in effectuees if v.get("type_visite") == "physique"]
-    en_ligne = [v for v in effectuees if v.get("type_visite") == "en_ligne"]
+    effectuees = [v for v in visits if v.statut == "effectuée"]
+    annulees   = [v for v in visits if v.statut == "annulée"]
+    physiques  = [v for v in effectuees if v.type_visite == "physique"]
+    en_ligne   = [v for v in effectuees if v.type_visite == "en_ligne"]
 
     total = len(visits)
     taux = round((len(effectuees) / total * 100), 1) if total > 0 else 0.0
 
-    scores = [float(v.get("score_visite", 0)) for v in effectuees if float(v.get("score_visite", 0)) > 0]
+    scores = [float(v.score_visite) for v in effectuees if v.score_visite and float(v.score_visite) > 0]
     score_moyen = round(sum(scores) / len(scores), 1) if scores else 0.0
 
-    distances = [float(v.get("distance_km", 0)) for v in visits]
+    distances = [float(v.distance_km) for v in visits if v.distance_km]
     dist_total = round(sum(distances), 1)
 
     return StatsResponse(
         delegue_id=delegue_id,
-        delegue_nom=f"{delegate['prenom']} {delegate['nom']}",
+        delegue_nom=f"{delegate.prenom} {delegate.nom}",
         total_visites=total,
         visites_effectuees=len(effectuees),
         visites_annulees=len(annulees),
@@ -399,28 +384,33 @@ async def get_delegate_stats(delegue_id: int):
         score_moyen=score_moyen,
         visites_physiques=len(physiques),
         visites_en_ligne=len(en_ligne),
-        zones_couvertes=[delegate.get("zone", "")],
+        zones_couvertes=[delegate.zone or ""],
     )
 
 
 @router.get("/health", summary="DSO4 health check")
-async def dso4_health():
-    """Check DSO4 module health."""
-    has_delegues = os.path.exists(DELEGUES_PATH)
-    has_visites = os.path.exists(VISITES_PATH)
-    has_medecins = os.path.exists(MEDECINS_PATH)
+async def dso4_health(db: Session = Depends(get_db)):
+    """Check DSO4 module health including DB connectivity."""
+    try:
+        delegue_count = db.query(func.count(DelegueDSO4.id)).scalar()
+        medecin_count = db.query(func.count(MedecinDSO4.id)).scalar()
+        db_status = "connected"
+    except Exception as e:
+        delegue_count = 0
+        medecin_count = 0
+        db_status = f"error: {e}"
 
     return {
         "module": "dso4",
-        "status": "ok" if (has_delegues and has_medecins) else "degraded",
+        "status": "ok" if db_status == "connected" else "degraded",
+        "database": db_status,
         "realtime_services": {
-            "osrm": "router.project-osrm.org (free, no key)",
+            "routing": "TomTom Routing API (live traffic)",
             "weather": "api.open-meteo.com (free, no key)",
         },
         "datasets": {
-            "delegues": has_delegues,
-            "visites": has_visites,
-            "medecins": has_medecins,
+            "delegues": delegue_count,
+            "medecins": medecin_count,
         },
         "timestamp": datetime.utcnow().isoformat(),
     }
