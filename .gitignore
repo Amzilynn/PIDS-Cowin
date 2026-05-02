@@ -48,7 +48,6 @@ Thumbs.db
 # --- Project-Specific: DO NOT PUSH ---
 dso2/data/vectorstore/
 dso_avatar/temp_chunks/
-faster_live_avatar/
 front/server/models/
 front/src/models/
 shared/face.dna
