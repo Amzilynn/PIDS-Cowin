@@ -232,7 +232,7 @@ export default function ChatPanel({ persona = 'medical', onSpeakingState, onVolu
       if (data.manifest_url && onManifest) {
         onManifest(data.manifest_url);
       }
-      playTTS(data.agent_response);
+      // playTTS(data.agent_response); // Silenced: Handled by real-time Sarah Avatar socket
     } catch (err) {
       console.error(err);
       setIsTyping(false);

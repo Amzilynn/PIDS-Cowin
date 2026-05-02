@@ -149,26 +149,21 @@ async def chat(body: ChatRequest) -> ChatResponse:
         intent = agent.last_intent
         session = _manager.get_session(body.session_id)
 
-        # ── Avatar Rendering Pipeline ───────────────────────────────────
-        avatar_job_id    = str(uuid.uuid4())
-        manifest_url     = None
-        video_url        = None
-        avatar_status    = None
-
-        # 1. Generate TTS audio from the agent response
-        audio_bytes = generate_tts_wav(response_text)
-        if audio_bytes:
-            # 2. Submit to avatar_service for Wav2Lip rendering
-            render_info = submit_avatar_render(audio_bytes, avatar_job_id)
-            if render_info:
-                manifest_url  = render_info.get("manifest_url")
-                video_url     = render_info.get("video_url")
-                avatar_status = "rendering"
-                print(f"[INFO] Avatar render job submitted: {avatar_job_id[:8]}")
-            else:
-                avatar_status = "avatar_error"
-        else:
-            avatar_status = "tts_error"
+        # ── Faster Live Avatar Trigger (Real-Time) ──────────────────────
+        avatar_job_id = str(uuid.uuid4())
+        avatar_status = "streaming"
+        
+        try:
+            # Tell the avatar server to start speaking immediately
+            http_requests.post(
+                "http://127.0.0.1:8027/chat",
+                json={"text": response_text, "voice": "en-US-AvaNeural"},
+                timeout=5
+            )
+            print(f"[INFO] Avatar streaming triggered: {avatar_job_id[:8]}")
+        except Exception as e:
+            print(f"[WARNING] Could not trigger Avatar server: {e}")
+            avatar_status = "offline"
 
         return ChatResponse(
             session_id=body.session_id,
@@ -177,8 +172,8 @@ async def chat(body: ChatRequest) -> ChatResponse:
             agent_response=response_text,
             avatar_session_id=avatar_job_id,
             avatar_status=avatar_status,
-            manifest_url=manifest_url,
-            video_url=video_url,
+            manifest_url=None, # No longer needed for streaming
+            video_url=None,    # No longer needed for streaming
             intent=intent,
             timestamp=datetime.utcnow(),
         )
