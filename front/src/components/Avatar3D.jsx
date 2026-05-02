@@ -79,12 +79,10 @@ export default function Avatar3D({ type = 'delegate' }) {
         </AnimatePresence>
 
         {liveFrame && (
-          <motion.img
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          <img
             src={liveFrame}
             alt="Live Avatar"
-            className="w-full h-full object-cover z-10"
+            className="absolute inset-0 w-full h-full object-cover z-10"
             style={{ objectPosition: 'center top' }}
           />
         )}
