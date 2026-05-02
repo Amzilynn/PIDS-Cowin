@@ -21,7 +21,6 @@ from audio_bridge import AudioLipSync, IdleAnimator
 SOURCE_IMAGE = os.path.join(os.path.dirname(__file__), "ava.jpg")
 DASHBOARD_FILE = os.path.join(os.path.dirname(__file__), "avatar_demo.html")
 FPS = 6 # Hardware-locked floor for perfect timing
-AUDIO_SYNC_OFFSET = 0.60 # Final tuned delay for 6 FPS
 PORT = 8027
 
 # =========================================================================
@@ -38,6 +37,7 @@ idle_anim = IdleAnimator(fps=FPS)
 is_speaking = False
 speech_timeline = []
 speech_start_time = 0
+audio_ready = False  # True once browser confirms audio playback started
 
 # =========================================================================
 # CORE AVATAR LOOP
@@ -45,7 +45,7 @@ speech_start_time = 0
 current_loop_task = None
 
 async def idle_loop(sid):
-    global is_speaking, current_loop_task
+    global is_speaking, current_loop_task, audio_ready
     print(f"[SYSTEM] Master Turbo Loop started for {sid}")
     frame_count = 0
     last_log_time = time.time()
@@ -66,9 +66,9 @@ async def idle_loop(sid):
             lip_spread = 0.0
             lip_pucker = 0.0
             
-            if is_speaking and speech_timeline:
-                # Apply AUDIO_SYNC_OFFSET to wait for browser audio to start
-                elapsed_speech = time.time() - speech_start_time - AUDIO_SYNC_OFFSET
+            if is_speaking and audio_ready and speech_timeline:
+                # Sync lips to ACTUAL audio playback start time confirmed by browser
+                elapsed_speech = time.time() - speech_start_time
                 
                 if elapsed_speech >= 0:
                     frame_idx = int(elapsed_speech * FPS)
@@ -79,11 +79,12 @@ async def idle_loop(sid):
                         lip_pucker = sync_data["pucker"]
                     else:
                         is_speaking = False
-                else:
-                    # Still in the offset buffer, keep mouth closed
-                    lip_open = 0.0
-                    lip_spread = 0.0
-                    lip_pucker = 0.0
+                        audio_ready = False
+            elif is_speaking and not audio_ready:
+                # Waiting for browser to confirm audio started — keep mouth closed
+                lip_open = 0.0
+                lip_spread = 0.0
+                lip_pucker = 0.0
             
             idle = idle_anim.get_idle_state()
             
@@ -122,7 +123,7 @@ async def idle_loop(sid):
 # SPEECH PIPELINE
 # =========================================================================
 async def speak_pipeline(sid, text, voice):
-    global is_speaking, speech_timeline, speech_start_time
+    global is_speaking, speech_timeline, speech_start_time, audio_ready
     
     tmp_mp3 = os.path.join(tempfile.gettempdir(), "sarah_speech.mp3")
     tmp_wav = os.path.join(tempfile.gettempdir(), "sarah_speech.wav")
@@ -165,9 +166,11 @@ async def speak_pipeline(sid, text, voice):
             print("[ERROR] ❌ TTS File is empty or missing.")
             return
         
-        # 5. Start Sync Clock
-        speech_start_time = time.time()
+        # 5. Flag as speaking but DO NOT start clock yet.
+        # The clock starts when the browser fires 'audio_started'.
         is_speaking = True
+        audio_ready = False
+        speech_start_time = 0
         
     except Exception as e:
         print(f"[ERROR] ❌ Speech Pipeline Failed: {e}")
@@ -201,6 +204,15 @@ async def connect(sid, environ):
     global current_loop_task
     print(f"[WS] Client {sid} connected.")
     current_loop_task = asyncio.create_task(idle_loop(sid))
+
+@sio.on("audio_started")
+async def on_audio_started(sid, data):
+    """Browser fires this the instant HTMLAudioElement begins playing.
+    We use this as the ground-truth T=0 for lip-sync."""
+    global speech_start_time, audio_ready
+    speech_start_time = time.time()
+    audio_ready = True
+    print(f"[SYNC] ✅ Browser audio confirmed playing. Lip-sync clock started.")
 
 @app.on_event("startup")
 async def startup_event():

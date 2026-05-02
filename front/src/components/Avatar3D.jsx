@@ -39,6 +39,13 @@ export default function Avatar3D({ type = 'delegate' }) {
       socket.on('avatar_audio', (data) => {
         console.log("[Avatar3D] Audio received");
         const audio = new Audio(`data:audio/mpeg;base64,${data.audio}`);
+        
+        // Ground-truth sync: Tell the server the EXACT moment audio starts
+        audio.onplaying = () => {
+          socket.emit('audio_started', {});
+          console.log("[Avatar3D] Sync signal sent: audio_started");
+        };
+
         audio.play().catch(e => console.error("Audio play failed:", e));
       });
 
