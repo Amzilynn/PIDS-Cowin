@@ -11,35 +11,28 @@ export default function ChatPanel({ isActive = false }) {
   const transcriptRef = useRef('');
   const interimRef = useRef('');
 
-  // ── Correcteur STT : corrige les erreurs fréquentes de reconnaissance vocale ──
   const correctSTT = (text) => {
     const corrections = [
-      // Nom du laboratoire
       [/\bvitelle\b/gi, 'Vital'],
       [/\bvitale\b/gi, 'Vital'],
       [/\bveetale\b/gi, 'Vital'],
       [/\bvital(e)?\b/gi, 'Vital'],
       [/\blaboratoire vital\b/gi, 'Laboratoire Vital'],
-      // Produits Bactol
       [/\bbactole\b/gi, 'Bactol'],
       [/\bbectol\b/gi, 'Bactol'],
       [/\bbacktol\b/gi, 'Bactol'],
       [/\bbac(k)?dole\b/gi, 'Bactol'],
       [/\bpactole\b/gi, 'Bactol'],
-      // Produits Calmoss
       [/\bcalmos\b/gi, 'Calmoss'],
       [/\bcalmoss gorge kids\b/gi, 'Calmoss Gorge Kids'],
       [/\bcalmoss gorge\b/gi, 'Calmoss Gorge'],
-      // Chlorure de benzalkonium
       [/\bbenzalkon[iy]um\b/gi, 'benzalkonium'],
       [/\bchlor[uy]re\b/gi, 'chlorure'],
-      // Termes médicaux courants
       [/\bdés?infectant\b/gi, 'désinfectant'],
       [/\bindica?tion\b/gi, 'indication'],
       [/\bposolog[íi]e\b/gi, 'posologie'],
       [/\bcomposit?ion\b/gi, 'composition'],
     ];
-
     let corrected = text;
     corrections.forEach(([pattern, replacement]) => {
       corrected = corrected.replace(pattern, replacement);
@@ -48,60 +41,7 @@ export default function ChatPanel({ isActive = false }) {
   };
 
   useEffect(() => {
-    // Configuration Web Speech API Native
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'fr-FR';
-
-      recognition.onresult = (event) => {
-        let finalTrans = '';
-        let interimTrans = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            finalTrans += event.results[i][0].transcript + ' ';
-          } else {
-            interimTrans += event.results[i][0].transcript;
-          }
-        }
-        if (finalTrans) {
-          transcriptRef.current += correctSTT(finalTrans);
-        }
-        interimRef.current = interimTrans;
-        setInterimText(transcriptRef.current + correctSTT(interimTrans));
-      };
-
-      recognition.onend = async () => {
-        // Correction STT appliquée avant envoi au backend
-        const rawText = transcriptRef.current.trim() || interimRef.current.trim() || ' ';
-        const finalText = correctSTT(rawText);
-        try {
-          await fetch('http://localhost:8001/api/training/speech_text', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: finalText, lang: 'fr' })
-          });
-        } catch (err) {
-          console.error("Backend /speech_text API non joignable.", err);
-        }
-        setIsRecording(false);
-      };
-
-      recognition.onerror = (e) => {
-        console.error("Erreur Speech Recognition:", e);
-        setIsRecording(false);
-      };
-
-      recognitionRef.current = recognition;
-    }
-  }, []);
-
-  useEffect(() => {
-    // Connexion SSE au backend DSO1
     const eventSource = new EventSource("http://localhost:8001/api/training/chat_feed");
-
     eventSource.onmessage = (event) => {
       if (event.data) {
         try {
@@ -117,14 +57,8 @@ export default function ChatPanel({ isActive = false }) {
         }
       }
     };
-
-    eventSource.onerror = (e) => {
-      console.log("SSE Connection Error or Closed");
-    };
-
-    return () => {
-      eventSource.close();
-    };
+    eventSource.onerror = () => console.log("SSE Connection Error or Closed");
+    return () => eventSource.close();
   }, []);
 
   useEffect(() => {
@@ -139,9 +73,70 @@ export default function ChatPanel({ isActive = false }) {
       interimRef.current = '';
       setInterimText('');
       setIsRecording(true);
-      if (recognitionRef.current) {
-        try { recognitionRef.current.start(); } catch (e) { console.error(e) }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Votre navigateur ne supporte pas la reconnaissance vocale.");
+        setIsRecording(false);
+        return;
       }
+
+      if (recognitionRef.current) {
+        const old = recognitionRef.current;
+        old.onend = null;
+        old.onerror = null;
+        old.onresult = null;
+        recognitionRef.current = null;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'fr-FR';
+
+      recognition.onresult = (event) => {
+        let finalTrans = '';
+        let interimTrans = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) finalTrans += event.results[i][0].transcript + ' ';
+          else interimTrans += event.results[i][0].transcript;
+        }
+        if (finalTrans) transcriptRef.current += correctSTT(finalTrans);
+        interimRef.current = interimTrans;
+        setInterimText(transcriptRef.current + correctSTT(interimTrans));
+      };
+
+      recognition.onend = async () => {
+        const rawText = transcriptRef.current.trim() || interimRef.current.trim() || ' ';
+        const finalText = correctSTT(rawText);
+        try {
+          await fetch('http://localhost:8001/api/training/speech_text', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: finalText, lang: 'fr' })
+          });
+        } catch (err) {
+          console.error("Backend API non joignable.", err);
+        }
+        setIsRecording(false);
+      };
+
+      recognition.onerror = (e) => {
+        console.error("Erreur STT:", e);
+      };
+
+      recognitionRef.current = recognition;
+      
+      setTimeout(() => {
+        if (recognitionRef.current !== recognition) return;
+        try {
+          recognition.start();
+        } catch (e) {
+          console.error(e);
+          setIsRecording(false);
+        }
+      }, 200);
+
     } else {
       if (recognitionRef.current) {
         try { recognitionRef.current.stop(); } catch (e) { console.error(e) }
@@ -153,8 +148,6 @@ export default function ChatPanel({ isActive = false }) {
 
   return (
     <div className="flex flex-col h-full bg-white rounded-[32px] border border-md-outline/10 overflow-hidden shadow-[0_8px_32px_-4px_rgba(0,0,0,0.05)] relative font-sans">
-
-      {/* Header */}
       <div className="px-8 py-5 border-b border-md-outline/5 bg-white/80 backdrop-blur-xl flex items-center justify-between sticky top-0 z-20">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-md-primary/10 flex items-center justify-center text-md-primary">
@@ -164,11 +157,7 @@ export default function ChatPanel({ isActive = false }) {
         </div>
       </div>
 
-      {/* Messages */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto p-8 flex flex-col gap-8 scroll-smooth"
-      >
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 flex flex-col gap-8 scroll-smooth">
         <AnimatePresence initial={false}>
           {messages.map((msg) => {
             const isUser = msg.sender === 'user';
@@ -195,16 +184,13 @@ export default function ChatPanel({ isActive = false }) {
                     </div>
                   )}
                 </div>
-
-                <div
-                  className={`
-                    relative px-6 py-4 text-[13px] leading-relaxed font-medium shadow-sm max-w-full break-words
-                    ${isUser
-                      ? 'bg-md-primary text-white rounded-[24px] rounded-tr-sm shadow-md-primary/20'
-                      : 'bg-md-surface-container text-md-on-surface rounded-[24px] rounded-tl-sm border border-md-outline/5'
-                    }
-                  `}
-                >
+                <div className={`
+                  relative px-6 py-4 text-[13px] leading-relaxed font-medium shadow-sm max-w-full break-words
+                  ${isUser
+                    ? 'bg-md-primary text-white rounded-[24px] rounded-tr-sm shadow-md-primary/20'
+                    : 'bg-md-surface-container text-md-on-surface rounded-[24px] rounded-tl-sm border border-md-outline/5'
+                  }
+                `}>
                   {msg.text}
                 </div>
               </motion.div>
@@ -212,7 +198,6 @@ export default function ChatPanel({ isActive = false }) {
           })}
         </AnimatePresence>
 
-        {/* Feedback visuel de l'API SpeechRecognition */}
         {isRecording && interimText && (
           <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.98 }}
@@ -242,7 +227,6 @@ export default function ChatPanel({ isActive = false }) {
         )}
       </div>
 
-      {/* Push to Talk Controls */}
       {isActive && (
         <div className="p-6 border-t border-md-outline/10 bg-white shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center gap-3">
           <button
@@ -254,7 +238,6 @@ export default function ChatPanel({ isActive = false }) {
           </button>
         </div>
       )}
-
     </div>
   );
 }

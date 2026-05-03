@@ -42,6 +42,9 @@ export default function AdminApp() {
             {activeTab === 'Dashboard' && (
               <AdminDashboard />
             )}
+            {activeTab === 'produits' && (
+              <AdminDashboard initialTab="produits" />
+            )}
             {activeTab === 'Territory' && (
               <TerritoryView selectedRegion={selectedRegion} regionsData={regionsData} onRegionSelect={actions.handleRegionSelect} />
             )}

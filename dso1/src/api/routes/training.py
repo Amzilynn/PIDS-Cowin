@@ -49,6 +49,13 @@ def start_training(req: StartRequest):
 @router.post("/speech_text")
 def speech_text(req: SpeechTextRequest):
     from avatar.stt import set_user_text
+
+    # Ignorer le texte pendant que l'avatar parle
+    if manager.eval_thread and manager.eval_thread._avatar_speaking.is_set():
+        print(f"[STT] Ignored (avatar speaking): {req.text[:40]}")
+        return {"status": "ignored - avatar speaking"}
+
+    print(f"[STT] Accepted: '{req.text[:60]}'")
     set_user_text(req.text, req.lang)
     return {"status": "text received"}
 
@@ -61,6 +68,18 @@ def stop_training():
         if not manager.is_active and manager.last_results is not None and manager.last_report is not None:
             break
         time.sleep(0.5)
+
+    # Mise à jour de l'expertise DSO3 après la simulation
+    try:
+        if manager.last_results:
+            from dso3.services.recommender import update_delegate_expertise
+            db = SessionLocal()
+            try:
+                update_delegate_expertise(db, manager.current_delegue_id)
+            finally:
+                db.close()
+    except Exception as e:
+        print(f"[Training API] Expertise update error: {e}")
 
     return {
         "status": res,

@@ -16,37 +16,56 @@ import {
   Clock,
   Filter,
   CheckCircle2,
-  ExternalLink,
-  ArrowLeft
+  ArrowLeft,
+  PackageCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
-export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('delegues'); // 'delegues', 'medecins', 'pharmacies'
+export default function AdminDashboard({ initialTab = 'delegues' }) {
+  const [activeTab, setActiveTab] = useState(initialTab); // 'delegues', 'medecins', 'pharmacies', 'produits'
   const [delegues, setDelegues] = useState([]);
   const [medecins, setMedecins] = useState([]);
   const [pharmacies, setPharmacies] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [gammes, setGammes] = useState([]);
+  
   const [selectedDelegue, setSelectedDelegue] = useState(null);
   const [simulations, setSimulations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // DSO3 States
+  const [isAddingProduct, setIsAddingProduct] = useState(false);
+  const [showRecs, setShowRecs] = useState(false);
+  const [newProduct, setNewProduct] = useState({ name: '', gamme_id: '', description: '', category: '' });
+  const [currentRecs, setCurrentRecs] = useState([]);
+  const [selectedRecs, setSelectedRecs] = useState([]);
+  const [createdProductId, setCreatedProductId] = useState(null);
+
   // 1. Fetch initial data
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const [delRes, medRes, pharRes] = await Promise.all([
+        const [delRes, medRes, pharRes, prodRes, gammeRes] = await Promise.all([
           fetch(`${API_BASE}/api/admin/delegues_summary`),
           fetch(`${API_BASE}/api/admin/medecins`),
-          fetch(`${API_BASE}/api/admin/pharmaciens`)
+          fetch(`${API_BASE}/api/admin/pharmaciens`),
+          fetch(`${API_BASE}/api/admin/training/products`),
+          fetch(`${API_BASE}/api/admin/training/gammes`)
         ]);
 
         if (delRes.ok) setDelegues(await delRes.json());
         if (medRes.ok) setMedecins(await medRes.json());
         if (pharRes.ok) setPharmacies(await pharRes.json());
+        if (prodRes.ok) setProducts(await prodRes.json());
+        if (gammeRes.ok) setGammes(await gammeRes.json());
       } catch (e) {
         console.error("Erreur chargement admin:", e);
       } finally {
@@ -73,6 +92,51 @@ export default function AdminDashboard() {
   const filteredDelegues = delegues.filter(d => d.nom.toLowerCase().includes(searchQuery.toLowerCase()));
   const filteredMedecins = medecins.filter(m => m.nom.toLowerCase().includes(searchQuery.toLowerCase()) || m.specialite.toLowerCase().includes(searchQuery.toLowerCase()));
   const filteredPharmacies = pharmacies.filter(p => p.nom.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  // ── Handlers DSO3 ──────────────────────────────────────────────────────────
+  const handleAddProduct = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/products/product`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProduct)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCreatedProductId(data.product_id);
+        setCurrentRecs(data.recommendations);
+        setShowRecs(true);
+        setIsAddingProduct(false);
+        // Refresh products list
+        const pRes = await fetch(`${API_BASE}/api/admin/training/products`);
+        if (pRes.ok) setProducts(await pRes.json());
+      }
+    } catch (err) {
+      console.error("Erreur ajout produit:", err);
+    }
+  };
+
+  const handleConfirmRecs = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/products/confirm-recommendations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: createdProductId,
+          delegate_ids: selectedRecs
+        })
+      });
+      if (res.ok) {
+        setShowRecs(false);
+        setSelectedRecs([]);
+        alert("Affectations enregistrées avec succès !");
+      }
+    } catch (err) {
+      console.error("Erreur confirmation recs:", err);
+    }
+  };
 
   // ── Rendu de l'historique d'un délégué ──────────────────────────────────────
   if (selectedDelegue) {
@@ -199,6 +263,12 @@ export default function AdminDashboard() {
               >
                 Pharmacies
               </button>
+              <button 
+                onClick={() => setActiveTab('produits')}
+                className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'produits' ? 'bg-md-primary text-white shadow-lg' : 'text-md-outline hover:bg-slate-50'}`}
+              >
+                Produits
+              </button>
            </div>
            <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-md-outline/40" size={16} />
@@ -249,6 +319,21 @@ export default function AdminDashboard() {
                         <th className="px-10 py-6">Type</th>
                         <th className="px-10 py-6">Localisation</th>
                         <th className="px-10 py-6">Contact</th>
+                     </tr>
+                   )}
+                   {activeTab === 'produits' && (
+                     <tr>
+                        <th className="px-10 py-6">Produit</th>
+                        <th className="px-10 py-6">Gamme</th>
+                        <th className="px-10 py-6">Catégorie</th>
+                        <th className="px-10 py-6 text-right">
+                           <button 
+                             onClick={() => setIsAddingProduct(true)}
+                             className="px-6 py-2 bg-md-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest"
+                           >
+                             + Nouveau Produit
+                           </button>
+                        </th>
                      </tr>
                    )}
                 </thead>
@@ -303,11 +388,140 @@ export default function AdminDashboard() {
                         <td className="px-10 py-6 font-bold text-sm tracking-tighter">{p.telephone}</td>
                      </tr>
                    ))}
+
+                   {activeTab === 'produits' && filteredProducts.map(p => (
+                     <tr key={p.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-10 py-6 flex items-center gap-4">
+                           <div className="w-10 h-10 rounded-xl bg-md-primary/5 text-md-primary flex items-center justify-center"><PackageCheck size={18} /></div>
+                           <span className="font-bold text-md-on-background">{p.name}</span>
+                        </td>
+                        <td className="px-10 py-6 text-xs font-bold uppercase tracking-widest opacity-60">Gamme #{p.gamme_id}</td>
+                        <td className="px-10 py-6 font-black text-xs uppercase tracking-widest text-md-primary">{p.category || "N/A"}</td>
+                        <td className="px-10 py-6 text-right opacity-40 italic text-[10px]">ID: {p.id}</td>
+                     </tr>
+                   ))}
                 </tbody>
              </table>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Modal Ajout Produit - Version Ultra-Sécurisée */}
+      {isAddingProduct && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-[32px] p-10 w-full max-w-xl shadow-2xl relative" style={{ color: '#000' }}>
+            <h2 className="text-2xl font-bold mb-6 text-slate-900">Nouveau Produit</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-bold uppercase opacity-50 mb-1">Nom du produit</label>
+                <input 
+                  type="text" 
+                  value={newProduct.name} 
+                  onChange={e => setNewProduct({...newProduct, name: e.target.value})}
+                  className="w-full p-4 bg-slate-100 rounded-xl border-none outline-none focus:ring-2 ring-md-primary"
+                  placeholder="Ex: CardioPlus"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-[10px] font-bold uppercase opacity-50 mb-1">Gamme</label>
+                <select 
+                  value={newProduct.gamme_id} 
+                  onChange={e => setNewProduct({...newProduct, gamme_id: e.target.value})}
+                  className="w-full p-4 bg-slate-100 rounded-xl border-none outline-none"
+                >
+                  <option value="">Choisir une gamme...</option>
+                  {gammes && gammes.map(g => (
+                    <option key={g.id} value={g.id}>{g.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase opacity-50 mb-1">Catégorie</label>
+                <input 
+                  type="text" 
+                  value={newProduct.category} 
+                  onChange={e => setNewProduct({...newProduct, category: e.target.value})}
+                  className="w-full p-4 bg-slate-100 rounded-xl border-none outline-none"
+                />
+              </div>
+
+              <div className="flex gap-3 mt-8">
+                <button 
+                  onClick={() => setIsAddingProduct(false)}
+                  className="flex-1 p-4 rounded-xl font-bold bg-slate-100 text-slate-600"
+                >
+                  Annuler
+                </button>
+                <button 
+                  onClick={handleAddProduct}
+                  className="flex-[2] p-4 rounded-xl font-bold bg-md-primary text-white shadow-lg"
+                >
+                  Ajouter et Recommander
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Recommandations IA */}
+      {showRecs && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 md:p-6" style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)' }}>
+          <div className="bg-white rounded-[40px] p-8 md:p-12 w-full max-w-4xl shadow-2xl space-y-10 relative z-[1100] max-h-[90vh] overflow-y-auto">
+            <div className="space-y-2">
+              <span className="text-[10px] font-black text-md-primary uppercase tracking-[0.4em]">Analyse IA DSO3</span>
+              <h2 className="text-4xl font-black uppercase tracking-tighter">Délégués Recommandés</h2>
+              <p className="text-md-on-surface-variant font-bold opacity-60">Voici les profils les plus adaptés pour le produit <span className="text-md-primary uppercase">{newProduct.name}</span> selon leur expertise et leurs scores.</p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
+              {!currentRecs || currentRecs.length === 0 ? (
+                <div className="p-10 text-center border-2 border-dashed rounded-3xl opacity-40 font-bold uppercase tracking-widest">Aucun délégué expert trouvé pour cette gamme</div>
+              ) : currentRecs.map(rec => (
+                <div 
+                  key={rec.delegate_id} 
+                  onClick={() => {
+                    if (selectedRecs.includes(rec.delegate_id)) {
+                      setSelectedRecs(selectedRecs.filter(id => id !== rec.delegate_id));
+                    } else {
+                      setSelectedRecs([...selectedRecs, rec.delegate_id]);
+                    }
+                  }}
+                  className={`p-6 rounded-3xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedRecs.includes(rec.delegate_id) ? 'border-md-primary bg-md-primary/5 shadow-md' : 'border-md-outline/10 hover:border-md-primary/30'}`}
+                >
+                  <div className="flex items-center gap-6">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-white ${selectedRecs.includes(rec.delegate_id) ? 'bg-md-primary' : 'bg-slate-300'}`}>
+                      {rec.delegate_name ? rec.delegate_name[0] : '?'}
+                    </div>
+                    <div>
+                      <p className="font-black text-lg uppercase tracking-tight">{rec.delegate_name}</p>
+                      <p className="text-[10px] font-bold text-md-primary uppercase tracking-widest">Expertise: {rec.expertise}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] font-black uppercase opacity-40">Score Moyen</p>
+                    <p className="text-2xl font-black text-emerald-500">{rec.score}%</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-4 pt-6">
+              <button onClick={() => setShowRecs(false)} className="flex-1 h-16 rounded-3xl font-black uppercase tracking-widest text-[11px] bg-slate-100 hover:bg-slate-200 transition-colors">Plus tard</button>
+              <button 
+                onClick={handleConfirmRecs}
+                disabled={!selectedRecs || selectedRecs.length === 0}
+                className="flex-[2] h-16 rounded-3xl font-black uppercase tracking-widest text-[11px] bg-md-primary text-white shadow-xl shadow-md-primary/25 disabled:opacity-50 disabled:grayscale hover:opacity-90 transition-all"
+              >
+                Affecter {selectedRecs?.length || 0} Délégué(s)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

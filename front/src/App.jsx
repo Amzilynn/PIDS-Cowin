@@ -74,6 +74,7 @@ export default function App() {
       >
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="produits"  element={<AdminDashboard initialTab="produits" />} />
         <Route path="stats"     element={<AdminDashboard />} />
         <Route path="delegues"  element={<AdminDashboard />} />
       </Route>

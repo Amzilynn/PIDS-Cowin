@@ -19,6 +19,7 @@ class User(Base):
     type = Column(Enum("delegue", "medecin", "pharmacien", "admin"), nullable=False)
     is_active = Column(Boolean, default=True)
     last_login = Column(TIMESTAMP, nullable=True)
+    last_seen_recommendation_id = Column(Integer, nullable=False, default=0)
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     # Discriminator pour SQLAlchemy — indique quelle classe utiliser
@@ -46,8 +47,12 @@ class Delegate(User):
     current_level = Column(Enum("Débutant", "Junior", "Confirmé", "Expert"), default="Débutant")
     global_score = Column(Numeric(5, 2), default=0.00)
     total_simulations_completed = Column(Integer, default=0)
+    
+    # Champs DSO3
+    expertise = Column(Text, nullable=True)
 
     simulations = relationship("Simulation", back_populates="delegate")
+    recommendations = relationship("Recommendation", back_populates="delegate")
 
     __mapper_args__ = {
         "polymorphic_identity": "delegue",
@@ -141,6 +146,7 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     gamme_id = Column(Integer, ForeignKey("gammes.id"), nullable=False, index=True)
     name = Column(String(150), nullable=False)
+    category = Column(String(150), nullable=True)  # Ajouté par DSO3
     description = Column(Text)
     indications = Column(Text)
     compositions = Column(Text)
@@ -150,6 +156,19 @@ class Product(Base):
 
     gamme = relationship("Gamme", back_populates="products")
     simulations = relationship("Simulation", back_populates="product")
+    recommendations = relationship("Recommendation", back_populates="product")
+
+class Recommendation(Base):
+    __tablename__ = "recommendations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False, index=True)
+    delegate_id = Column(Integer, ForeignKey("delegates.id"), nullable=False, index=True)
+    score = Column(Float, nullable=False)
+    created_at = Column(TIMESTAMP, server_default=func.now())
+
+    delegate = relationship("Delegate", back_populates="recommendations")
+    product = relationship("Product", back_populates="recommendations")
 
 
 class Simulation(Base):

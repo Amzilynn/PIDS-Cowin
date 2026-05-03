@@ -36,6 +36,7 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
   const menuItems = {
     admin: [
       { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Vue Générale' },
+      { to: '/admin/produits', icon: PackageCheck, label: 'Gestion Produits' },
       { to: '/admin/stats', icon: BarChart3, label: 'Statistiques' },
       { to: '/admin/delegues', icon: User, label: 'Délégués' },
     ],

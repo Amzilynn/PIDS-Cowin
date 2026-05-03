@@ -195,10 +195,12 @@ class TrainingSessionManager:
         self.is_active = False 
 
     def stop_session(self, discard=False):
-        if not self.is_active or not self.eval_thread:
+        if not self.eval_thread:
+            self.is_active = False
             return {"status": "no_active_session"}
         
         self.should_discard = discard
+        self.is_active = False
 
         # Debloquer le nouvel STT textuel pour permettre à la boucle de conversation de se terminer
         try:
