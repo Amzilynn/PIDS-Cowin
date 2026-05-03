@@ -163,6 +163,8 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
                 "recommendation_id": rec.id,
                 "product_id": prod.id,
                 "product_name": prod.name,
+                "category": prod.category,
+                "gamme_name": prod.gamme.name if prod.gamme else None,
                 "score": float(rec.score)
             })
         

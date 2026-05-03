@@ -55,6 +55,8 @@ export function AuthProvider({ children }) {
         sub_role: data.sub_role,
         display_name: data.display_name,
         redirect_to: data.redirect_to,
+        new_recommendations_count: data.new_recommendations_count || 0,
+        new_recommendations: data.new_recommendations || [],
       };
 
       setToken(data.access_token);

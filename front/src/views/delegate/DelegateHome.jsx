@@ -46,6 +46,7 @@ export default function DelegateHome({ subRole = 'medical' }) {
   const [historyData, setHistoryData] = useState([]);
   const [selectedMetric, setSelectedMetric] = useState('score');
   const [isLoading, setIsLoading] = useState(true);
+  const [showRecNotice, setShowRecNotice] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,8 +82,24 @@ export default function DelegateHome({ subRole = 'medical' }) {
     fetchData();
   }, [user]);
 
+  useEffect(() => {
+    if (!user?.user_id) return;
+    const count = Number(user?.new_recommendations_count || 0);
+    const seenKey = `avalive_recs_seen_${user.user_id}`;
+    const alreadySeen = localStorage.getItem(seenKey) === '1';
+    if (count > 0 && !alreadySeen) {
+      setShowRecNotice(true);
+    }
+  }, [user]);
+
   const navigateTo = (path) => {
     navigate(`${path}?role=delegate&sub=${subRole}`);
+  };
+
+  const dismissRecNotice = () => {
+    if (!user?.user_id) return;
+    localStorage.setItem(`avalive_recs_seen_${user.user_id}`, '1');
+    setShowRecNotice(false);
   };
 
   const displayName = user?.display_name || 'Délégué';
@@ -175,6 +192,29 @@ export default function DelegateHome({ subRole = 'medical' }) {
            </p>
         </div>
       </div>
+
+      {showRecNotice && (
+        <div className="md-card p-6 bg-emerald-50 border border-emerald-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-700">NOUVELLE RECOMMANDATION</p>
+            <p className="text-sm font-bold text-emerald-800">Une ou plusieurs recommandations produits sont disponibles pour vous.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => { dismissRecNotice(); navigateTo('/delegate/produits'); }}
+              className="px-6 h-11 rounded-2xl bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest"
+            >
+              Voir produits
+            </button>
+            <button
+              onClick={dismissRecNotice}
+              className="px-6 h-11 rounded-2xl bg-white border border-emerald-200 text-emerald-700 font-black uppercase text-[10px] tracking-widest"
+            >
+              Plus tard
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
          {[

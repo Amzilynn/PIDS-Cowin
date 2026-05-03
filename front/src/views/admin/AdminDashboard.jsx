@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Users, 
   TrendingUp, 
@@ -39,7 +40,7 @@ export default function AdminDashboard({ initialTab = 'delegues' }) {
   // DSO3 States
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [showRecs, setShowRecs] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: '', gamme_id: '', description: '', category: '' });
+    const [newProduct, setNewProduct] = useState({ name: '', gamme_id: '', description: '', category: '', indications: '', compositions: '', usage_advice: '' });
   const [currentRecs, setCurrentRecs] = useState([]);
   const [selectedRecs, setSelectedRecs] = useState([]);
   const [createdProductId, setCreatedProductId] = useState(null);
@@ -406,13 +407,13 @@ export default function AdminDashboard({ initialTab = 'delegues' }) {
         )}
       </AnimatePresence>
 
-      {/* Modal Ajout Produit - Version Ultra-Sécurisée */}
-      {isAddingProduct && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-[32px] p-10 w-full max-w-xl shadow-2xl relative" style={{ color: '#000' }}>
+      {/* Modal Ajout Produit - Version Fixée */}
+      {isAddingProduct && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto" style={{ pointerEvents: 'auto' }}>
+          <div className="bg-white rounded-[32px] p-10 w-full max-w-xl shadow-2xl relative my-auto" style={{ color: '#000' }}>
             <h2 className="text-2xl font-bold mb-6 text-slate-900">Nouveau Produit</h2>
             
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
               <div>
                 <label className="block text-[10px] font-bold uppercase opacity-50 mb-1">Nom du produit</label>
                 <input 
@@ -448,27 +449,57 @@ export default function AdminDashboard({ initialTab = 'delegues' }) {
                 />
               </div>
 
-              <div className="flex gap-3 mt-8">
-                <button 
-                  onClick={() => setIsAddingProduct(false)}
-                  className="flex-1 p-4 rounded-xl font-bold bg-slate-100 text-slate-600"
-                >
-                  Annuler
-                </button>
-                <button 
-                  onClick={handleAddProduct}
-                  className="flex-[2] p-4 rounded-xl font-bold bg-md-primary text-white shadow-lg"
-                >
-                  Ajouter et Recommander
-                </button>
+              <div>
+                <label className="block text-[10px] font-bold uppercase opacity-50 mb-1">Indications</label>
+                <textarea 
+                  value={newProduct.indications} 
+                  onChange={e => setNewProduct({...newProduct, indications: e.target.value})}
+                  className="w-full p-4 bg-slate-100 rounded-xl border-none outline-none focus:ring-2 ring-md-primary"
+                  placeholder="Ex: Douleurs modérées..."
+                />
               </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase opacity-50 mb-1">Composition</label>
+                <textarea 
+                  value={newProduct.compositions} 
+                  onChange={e => setNewProduct({...newProduct, compositions: e.target.value})}
+                  className="w-full p-4 bg-slate-100 rounded-xl border-none outline-none focus:ring-2 ring-md-primary"
+                  placeholder="Ex: Paracétamol 500mg..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase opacity-50 mb-1">Conseils d'utilisation</label>
+                <textarea 
+                  value={newProduct.usage_advice} 
+                  onChange={e => setNewProduct({...newProduct, usage_advice: e.target.value})}
+                  className="w-full p-4 bg-slate-100 rounded-xl border-none outline-none focus:ring-2 ring-md-primary"
+                  placeholder="Ex: 1 comprimé toutes les 6 heures..."
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-8">
+              <button 
+                onClick={() => setIsAddingProduct(false)}
+                className="flex-1 p-4 rounded-xl font-bold bg-slate-100 text-slate-600"
+              >
+                Annuler
+              </button>
+              <button 
+                onClick={handleAddProduct}
+                className="flex-[2] p-4 rounded-xl font-bold bg-md-primary text-white shadow-lg"
+              >
+                Ajouter et Recommander
+              </button>
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* Modal Recommandations IA */}
-      {showRecs && (
+      {showRecs && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 md:p-6" style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)' }}>
           <div className="bg-white rounded-[40px] p-8 md:p-12 w-full max-w-4xl shadow-2xl space-y-10 relative z-[1100] max-h-[90vh] overflow-y-auto">
             <div className="space-y-2">
@@ -521,7 +552,7 @@ export default function AdminDashboard({ initialTab = 'delegues' }) {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 }

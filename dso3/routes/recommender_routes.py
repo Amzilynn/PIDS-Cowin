@@ -41,6 +41,8 @@ def get_delegate_recommendations(delegate_id: int):
                 "product_name": prod.name,
                 "score": float(rec.score),
                 "gamme_id": prod.gamme_id,
+                "gamme_name": prod.gamme.name if prod.gamme else "Sans Gamme",
+                "category": prod.category,
                 "description": prod.description
             }
             for rec, prod in results

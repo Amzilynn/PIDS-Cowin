@@ -7,7 +7,7 @@ import json
 import asyncio
 
 from session_manager import manager
-from session import load_delegues, load_products, load_gammes
+from session import load_delegues, load_products, load_gammes, load_single_product
 from shared.database import SessionLocal
 from shared.models import Simulation
 
@@ -30,6 +30,13 @@ def get_delegues():
 def get_products():
     products = load_products()
     return products
+
+@router.get("/products/{product_id}")
+def get_product_details(product_id: int):
+    product = load_single_product(product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
 
 @router.get("/gammes")
 def get_gammes():

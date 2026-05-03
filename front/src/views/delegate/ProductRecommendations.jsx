@@ -15,6 +15,10 @@ export default function ProductRecommendations() {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [detailsError, setDetailsError] = useState(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   useEffect(() => {
     if (!user?.user_id) return;
@@ -38,6 +42,23 @@ export default function ProductRecommendations() {
 
     fetchRecommendations();
   }, [user]);
+
+  const openProductDetails = async (productId) => {
+    setIsDetailsOpen(true);
+    setDetailsLoading(true);
+    setDetailsError(null);
+    try {
+      const response = await fetch(`${API_BASE}/api/training/products/${productId}`);
+      if (!response.ok) throw new Error('Erreur lors du chargement du produit');
+      const data = await response.json();
+      setSelectedProduct(data);
+    } catch (err) {
+      setDetailsError(err.message);
+      setSelectedProduct(null);
+    } finally {
+      setDetailsLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -111,13 +132,17 @@ export default function ProductRecommendations() {
                   
                   <div className="flex-1 space-y-3 relative z-10">
                      <h4 className="text-2xl font-black text-md-on-background tracking-tighter leading-none uppercase">{p.product_name}</h4>
-                     <p className="text-[11px] font-black text-md-primary uppercase tracking-[0.3em] underline underline-offset-4 decoration-md-primary/20">Gamme ID: {p.gamme_id}</p>
+                     <p className="text-[11px] font-black text-md-primary uppercase tracking-[0.3em] underline underline-offset-4 decoration-md-primary/20">Gamme: {p.gamme_name || 'Sans Gamme'}</p>
+                     <p className="text-[10px] font-black text-md-on-surface-variant uppercase tracking-[0.3em] opacity-60">Catégorie: {p.category || 'N/A'}</p>
                      <p className="text-xs font-bold text-md-on-surface-variant opacity-60 leading-relaxed italic mt-6 border-l-4 border-md-primary/20 pl-4">
                        {p.description || "Aucune description disponible."}
                      </p>
                   </div>
 
-                  <button className="relative z-10 w-full btn-tonal !h-14 !rounded-2xl group flex items-center justify-between px-8 font-black uppercase text-[11px] tracking-widest">
+                  <button
+                    onClick={() => openProductDetails(p.product_id)}
+                    className="relative z-10 w-full btn-tonal !h-14 !rounded-2xl group flex items-center justify-between px-8 font-black uppercase text-[11px] tracking-widest"
+                  >
                      <span>Fiche Produit</span>
                      <ChevronRight size={18} className="group-hover:translate-x-2 transition-transform" />
                   </button>
@@ -125,6 +150,61 @@ export default function ProductRecommendations() {
             ))}
          </AnimatePresence>
       </div>
+
+      {isDetailsOpen && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 p-6">
+          <div className="bg-white rounded-[32px] p-8 w-full max-w-2xl shadow-2xl max-h-[85vh] overflow-y-auto">
+            {detailsLoading && (
+              <div className="h-40 flex items-center justify-center">
+                <Loader2 className="w-10 h-10 text-md-primary animate-spin" />
+              </div>
+            )}
+            {detailsError && (
+              <div className="bg-rose-50 border border-rose-200 p-4 rounded-2xl text-rose-600 font-bold">
+                {detailsError}
+              </div>
+            )}
+            {!detailsLoading && !detailsError && selectedProduct && (
+              <div className="space-y-6">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-md-primary">Fiche Produit</p>
+                  <h3 className="text-3xl font-black text-md-on-background uppercase tracking-tighter">{selectedProduct.name}</h3>
+                  <p className="text-xs font-bold text-md-on-surface-variant uppercase tracking-widest opacity-60">Gamme: {selectedProduct.gamme_name || 'Sans Gamme'}</p>
+                  <p className="text-xs font-bold text-md-on-surface-variant uppercase tracking-widest opacity-60">Catégorie: {selectedProduct.category || 'N/A'}</p>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Description</p>
+                    <p className="text-sm font-bold text-md-on-surface-variant">{selectedProduct.description || 'Aucune description disponible.'}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Indications</p>
+                    <p className="text-sm font-bold text-md-on-surface-variant">{selectedProduct.indications || 'Non renseigné.'}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Composition</p>
+                    <p className="text-sm font-bold text-md-on-surface-variant">{selectedProduct.compositions || 'Non renseigné.'}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Conseils d'utilisation</p>
+                    <p className="text-sm font-bold text-md-on-surface-variant">{selectedProduct.usage_advice || 'Non renseigné.'}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end mt-8">
+              <button
+                onClick={() => { setIsDetailsOpen(false); setSelectedProduct(null); }}
+                className="px-6 h-11 rounded-2xl bg-slate-100 text-slate-600 font-black uppercase text-[10px] tracking-widest"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

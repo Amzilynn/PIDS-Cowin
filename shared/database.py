@@ -11,7 +11,7 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     # Valeur par défaut si .env est manquant ou vide
-    DATABASE_URL = "mysql+pymysql://root@localhost:3307/avalive"
+    DATABASE_URL = "mysql+pymysql://root@localhost:3306/avalive"
 
 engine = create_engine(
     DATABASE_URL,
