@@ -102,3 +102,4 @@ config.ini
 # =========================
 evaluation/report/*.html
 evaluation/report/*.csv
+node_modules/
