@@ -8,8 +8,12 @@ from fastapi.staticfiles import StaticFiles
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DSO1_SRC = os.path.join(BASE_DIR, "dso1", "src")
 DSO1_API = os.path.join(DSO1_SRC, "api")
-sys.path.insert(0, DSO1_SRC)
-sys.path.insert(0, DSO1_API)
+
+# Ajout au path de manière absolue et prioritaire
+if DSO1_SRC not in sys.path:
+    sys.path.insert(0, DSO1_SRC)
+if DSO1_API not in sys.path:
+    sys.path.insert(0, DSO1_API)
 
 # 2. Imports des routeurs DSO1
 from api.routes.training import router as training_router

@@ -122,8 +122,7 @@ def load_products() -> list[dict]:
                 "id":   p.id,
                 "name": p.name,
                 "gamme_id": p.gamme_id,
-                "gamme_name": p.gamme.name if p.gamme else "Sans Gamme",
-                "category": p.category
+                "gamme_name": p.gamme.name if p.gamme else "Sans Gamme"
             }
             for p in products
         ]
@@ -153,8 +152,6 @@ def load_single_product(product_id: int) -> dict | None:
             return {
                 "id": p.id,
                 "name": p.name,
-                "category": p.category,
-                "gamme_name": p.gamme.name if p.gamme else "Sans Gamme",
                 "description": p.description,
                 "indications": p.indications,
                 "compositions": p.compositions,

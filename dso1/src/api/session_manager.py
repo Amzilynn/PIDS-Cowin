@@ -5,8 +5,10 @@ import sys
 import queue
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SRC_DIR = os.path.join(BASE_DIR, "..")
-sys.path.insert(0, SRC_DIR)
+# On remonte d'un cran pour atteindre 'src'
+SRC_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
 
 from session import EvaluationThread, load_delegues, load_single_product, update_delegue_score, _score_to_level, conversation_loop, TOKEN_FACTORY_URL
 from openai import OpenAI

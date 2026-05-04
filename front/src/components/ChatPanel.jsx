@@ -122,11 +122,12 @@ export default function ChatPanel({ isActive = false }) {
       };
 
       recognition.onerror = (e) => {
-        console.error("Erreur STT:", e);
+        console.error("Erreur STT:", e.error);
+        alert("Erreur micro : " + e.error);
       };
 
       recognitionRef.current = recognition;
-      
+
       setTimeout(() => {
         if (recognitionRef.current !== recognition) return;
         try {
