@@ -4,16 +4,20 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-# 1. Configuration des chemins pour trouver DSO1 et DSO3
+# 1. Configuration des chemins — ordre CRITIQUE pour éviter les conflits
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DSO1_SRC = os.path.join(BASE_DIR, "dso1", "src")
 DSO1_API = os.path.join(DSO1_SRC, "api")
 
-# Ajout au path de manière absolue et prioritaire
+# a) Racine du projet en premier (pour dso3.*, dso4.*, shared.*)
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+# b) DSO1/src en second (pour les imports relatifs DSO1)
 if DSO1_SRC not in sys.path:
-    sys.path.insert(0, DSO1_SRC)
+    sys.path.insert(1, DSO1_SRC)
+# c) DSO1/src/api en troisième (pour api.routes.*)
 if DSO1_API not in sys.path:
-    sys.path.insert(0, DSO1_API)
+    sys.path.insert(2, DSO1_API)
 
 # 2. Imports des routeurs DSO1
 from api.routes.training import router as training_router
@@ -22,6 +26,9 @@ from api.routes.admin import router as dso1_admin_router
 
 # 3. Imports des routeurs DSO3
 from dso3.routes import auth_routes, delegate_routes, product_routes, recommender_routes
+
+# 3b. Import du routeur DSO4
+from dso4.api.routes import router as dso4_router
 
 # 4. Création de l'application unifiée
 app = FastAPI(
@@ -49,6 +56,9 @@ app.include_router(auth_routes.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(delegate_routes.router, prefix="/api")
 app.include_router(product_routes.router, prefix="/api")
 app.include_router(recommender_routes.router, prefix="/api")
+
+# 7b. Inclusion des routes DSO4 (Optimisation Tournées)
+app.include_router(dso4_router)
 
 # 8. Inclusion des routes DSO1 (Training et Admin)
 app.include_router(training_router, prefix="/api/training", tags=["DSO1-Training"])

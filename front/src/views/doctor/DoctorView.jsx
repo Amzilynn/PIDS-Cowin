@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AvatarPlaceholder from '../../components/AvatarPlaceholder';
+import Avatar3D from '../../components/Avatar3D';
 import CameraPanel from '../../components/CameraPanel';
 import ChatPanel from '../../components/ChatPanel';
 import { 
@@ -19,34 +19,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function DoctorView() {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechPulse, setSpeechPulse] = useState(0);
   const [cameraActive, setCameraActive] = useState(false);
-  const [messages, setMessages] = useState([
-    { role: 'ai', text: "Hello Dr. Khalil. I'm Sarah, your Medical Representative. Today I'd like to present Cardia-Max Pro focusing on the latest kidney protection outcomes.", timestamp: '09:00' }
-  ]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [presentationStep, setPresentationStep] = useState('active');
-
-  const handleSendMessage = (text) => {
-    // Add doctor (user) message
-    const newMsg = { role: 'user', text, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-    setMessages(prev => [...prev, newMsg]);
-    
-    // Simulate Delegate thinking and response
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      setIsSpeaking(true);
-      const aiReply = { 
-        role: 'ai', 
-        text: "That clinical concern about GFR stability is valid. In our recent EMPA-REG follow-up, Cardia-Max showed 35% better protection in stage 3 patients. Would you like to see the dosing guidelines for that population?",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setMessages(prev => [...prev, aiReply]);
-      
-      // Stop speaking animation after 5 seconds
-      setTimeout(() => setIsSpeaking(false), 5000);
-    }, 1500);
-  };
 
   return (
     <div className="h-[calc(100vh-160px)] flex flex-col gap-6 animate-fade-in-up">
@@ -91,9 +65,10 @@ export default function DoctorView() {
         <div className="col-span-12 lg:col-span-8 flex flex-col gap-6">
            {/* Rep Avatar Section */}
            <div className="flex-1 min-h-0 relative">
-              <AvatarPlaceholder 
+              <Avatar3D 
                  isSpeaking={isSpeaking} 
-                 isLoading={false} 
+                 speechPulse={speechPulse}
+                 type="doctor"
                  status="SCIENTIFIC DETAILING ACTIVE"
                  name="Delegate: Sarah K."
               />
@@ -154,10 +129,9 @@ export default function DoctorView() {
         {/* Right Sidebar: Chat Interaction */}
         <div className="col-span-12 lg:col-span-4 h-full min-h-0">
            <ChatPanel 
-              messages={messages} 
-              onSend={handleSendMessage} 
-              isTyping={isTyping} 
-              title="Interaction Log"
+              persona="medical"
+              onSpeakingState={setIsSpeaking}
+              onVolumeSync={setSpeechPulse} 
            />
         </div>
       </div>

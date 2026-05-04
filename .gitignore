@@ -104,3 +104,7 @@ evaluation/report/*.html
 evaluation/report/*.csv
 
 node_modules/
+
+*.csv
+
+dso2/.venv

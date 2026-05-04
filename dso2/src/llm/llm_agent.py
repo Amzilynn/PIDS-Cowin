@@ -1,4 +1,4 @@
-"""Vital medical delegate agent (Ollama Mistral + tool calling)."""
+"""Vital medical delegate agent (Token Factory Llama-3.1-70B-Instruct + tool calling)."""
 
 from __future__ import annotations
 
@@ -47,8 +47,8 @@ class VitalAgent:
         self._system_prompt = self.prompt_builder.build_system_prompt(persona=self.persona)
         
         self._client = OpenAI(
-            base_url="http://localhost:11434/v1",
-            api_key="ollama",
+            base_url="https://tokenfactory.esprit.tn/api",
+            api_key="sk-0531e00792114f2dbaafdd44aa5fe439",
             timeout=120,
         )
         print(f"VitalAgent ready — session {self.session_id} | persona: {self.persona}")
@@ -129,7 +129,7 @@ class VitalAgent:
             return "Bonjour ! Je suis le délégué commercial VITAL. Comment puis-je vous servir ?"
 
     def chat(self, user_message: str) -> str:
-        """Run one user turn: optional tool calls, then French assistant reply."""
+        """Run one user turn: RAG context injection, then French assistant reply."""
         try:
             self.last_intent = self.detect_intent(user_message)
             
@@ -140,9 +140,9 @@ class VitalAgent:
                 self.conversation_history.append({"role": "assistant", "content": greeting})
                 return greeting
             
-            # --- AUTO RETRIEVAL (RAG) FOR SMALL/LOCAL MODELS ---
-            # Instead of relying strictly on LLM tool syntax generation (which 8B models fail at),
-            # we proactively fetch context based on the user's intent.
+            # --- AUTO RETRIEVAL (RAG) ---
+            # Proactively fetch product context and inject it into the system prompt.
+            # This avoids tool_choice="auto" which is NOT supported by Token Factory vLLM.
             pre_context = None
             if self.last_intent in ("SYMPTOM_INQUIRY", "RECOMMENDATION", "PRODUCT_INQUIRY", "SAFETY_CHECK"):
                 from llm.tools import recommend_products_for_condition
@@ -161,87 +161,16 @@ class VitalAgent:
                 {"role": "system", "content": current_system_prompt},
                 *self.conversation_history,
             ]
+            # Single API call — no tools, no tool_choice (unsupported by Token Factory vLLM)
             response = self._client.chat.completions.create(
-                model="llama3.1",
+                model="hosted_vllm/Llama-3.1-70B-Instruct",
                 messages=messages,
-                tools=TOOLS_SCHEMA,
-                tool_choice="auto",
+                temperature=0.7,
+                max_tokens=512,
+                top_p=0.9,
             )
-            msg = response.choices[0].message
-            response_text = (msg.content or "").strip()
-            if msg.tool_calls:
-                assistant_entry: dict[str, Any] = {
-                    "role": "assistant",
-                    "content": msg.content or "",
-                    "tool_calls": [
-                        {
-                            "id": tc.id,
-                            "type": "function",
-                            "function": {
-                                "name": tc.function.name,
-                                "arguments": tc.function.arguments or "{}",
-                            },
-                        }
-                        for tc in msg.tool_calls
-                    ],
-                }
-                messages.append(assistant_entry)
-                for tc in msg.tool_calls:
-                    try:
-                        args = json.loads(tc.function.arguments or "{}")
-                    except json.JSONDecodeError:
-                        args = {}
-                    out = self._call_tool(tc.function.name, args)
-                    messages.append(
-                        {
-                            "role": "tool",
-                            "tool_call_id": tc.id,
-                            "content": out,
-                        }
-                    )
-                response2 = self._client.chat.completions.create(
-                    model="llama3.1",
-                    messages=messages,
-                )
-                response_text = (response2.choices[0].message.content or "").strip()
-            
-            # FALLBACK for Text-Leaked Tool Calls (very common on Llama 3 via compat API)
-            elif '{"name"' in response_text and '"parameters"' in response_text:
-                import re
-                import uuid
-                # Fix syntax error where it ends with }) instead of }
-                fixed_text = response_text.replace("})", "}")
-                match = re.search(r'(\{[\s\S]*"name"[\s\S]*"parameters"[\s\S]*?\})', fixed_text)
-                if match:
-                    try:
-                        parsed = json.loads(match.group(1))
-                        name = parsed.get("name")
-                        args = parsed.get("parameters", {})
-                        if name:
-                            out = self._call_tool(name, args)
-                            fake_id = "call_" + str(uuid.uuid4())[:8]
-                            assistant_entry = {
-                                "role": "assistant",
-                                "content": "",
-                                "tool_calls": [{
-                                    "id": fake_id,
-                                    "type": "function",
-                                    "function": {"name": name, "arguments": json.dumps(args)}
-                                }]
-                            }
-                            messages.append(assistant_entry)
-                            messages.append({
-                                "role": "tool",
-                                "tool_call_id": fake_id,
-                                "content": out
-                            })
-                            response2 = self._client.chat.completions.create(
-                                model="llama3.1",
-                                messages=messages,
-                            )
-                            response_text = (response2.choices[0].message.content or "").strip()
-                    except json.JSONDecodeError:
-                        pass
+            response_text = (response.choices[0].message.content or "").strip()
+
             self.conversation_history.append(
                 {"role": "assistant", "content": response_text}
             )
@@ -255,8 +184,8 @@ class VitalAgent:
         except Exception as exc:
             error_msg = str(exc).lower()
             if "connection" in error_msg or "connect" in error_msg:
-                print(f"Ollama connection error: {exc}")
-                return "Le serveur IA n'est pas accessible. Vérifiez qu'Ollama est en cours d'exécution."
+                print(f"Token Factory connection error: {exc}")
+                return "Le serveur IA Token Factory n'est pas accessible. Vérifiez votre connexion internet."
             elif "timeout" in error_msg:
                 print(f"Timeout in session {self.session_id}: {exc}")
                 return "La réponse prend trop de temps. Le modèle est peut-être surchargé. Réessayez."
@@ -287,14 +216,16 @@ class VitalAgent:
 if __name__ == "__main__":
     import sys
 
-    print("Checking Ollama connection...")
+    print("Checking Token Factory connection...")
     try:
         from openai import OpenAI as _OAI
-        _OAI(base_url="http://localhost:11434/v1",
-             api_key="ollama").models.list()
-        print("Ollama connection: OK\n")
+        _OAI(
+            base_url="https://tokenfactory.esprit.tn/api",
+            api_key="sk-0531e00792114f2dbaafdd44aa5fe439"
+        ).models.list()
+        print("Token Factory connection: OK\n")
     except Exception as e:
-        print(f"ERROR: Ollama not running. Run 'ollama serve'")
+        print(f"ERROR: Could not connect to Token Factory — {e}")
         sys.exit(1)
 
     # --- TEST MEDICAL PERSONA ---

@@ -48,11 +48,18 @@ class Delegate(User):
     global_score = Column(Numeric(5, 2), default=0.00)
     total_simulations_completed = Column(Integer, default=0)
     
+    # DSO4 Fields
+    address = Column(String(500), nullable=True)
+    phone = Column(String(30), nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    
     # Champs DSO3
     expertise = Column(Text, nullable=True)
 
     simulations = relationship("Simulation", back_populates="delegate")
     recommendations = relationship("Recommendation", back_populates="delegate")
+    visites = relationship("Visit", back_populates="delegate")
 
     __mapper_args__ = {
         "polymorphic_identity": "delegue",
@@ -78,6 +85,8 @@ class Medecin(User):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
 
+    visites = relationship("Visit", back_populates="medecin")
+
     __mapper_args__ = {
         "polymorphic_identity": "medecin",
     }
@@ -102,6 +111,10 @@ class Pharmacien(User):
     adresse = Column(String(300), nullable=True)
     gouvernorat = Column(String(100), nullable=True)
     url = Column(String(512), nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+
+    visites = relationship("Visit", back_populates="pharmacien")
 
     __mapper_args__ = {
         "polymorphic_identity": "pharmacien",
@@ -129,6 +142,33 @@ class Admin(User):
 # =============================================================================
 # TABLES MÉTIER (inchangées)
 # =============================================================================
+
+from sqlalchemy import Date, Time
+
+class Visit(Base):
+    __tablename__ = "visits"
+
+    id = Column(Integer, primary_key=True, index=True)
+    delegate_id = Column(Integer, ForeignKey("delegates.id"), nullable=False, index=True)
+    medecin_id = Column(Integer, ForeignKey("medecins.id"), nullable=True, index=True)
+    pharmacien_id = Column(Integer, ForeignKey("pharmaciens.id"), nullable=True, index=True)
+    
+    date = Column(Date, nullable=False)
+    scheduled_time = Column(String(10), nullable=True)  # Format HH:MM
+    duration_min = Column(Integer, nullable=True)
+    status = Column(Enum("Prévue", "Effectuée", "Annulée", "Reportée", name="visit_status_enum"), default="Prévue")
+    visit_type = Column(Enum("Physique", "En ligne", name="visit_type_enum"), default="Physique")
+    
+    distance_km = Column(Float, nullable=True)
+    travel_time_min = Column(Float, nullable=True)
+    score = Column(Numeric(4, 2), nullable=True)
+    
+    created_at = Column(TIMESTAMP, server_default=func.now())
+
+    delegate = relationship("Delegate", back_populates="visites")
+    medecin = relationship("Medecin", back_populates="visites")
+    pharmacien = relationship("Pharmacien", back_populates="visites")
+
 
 class Gamme(Base):
     __tablename__ = "gammes"
