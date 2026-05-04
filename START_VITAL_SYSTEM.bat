@@ -8,8 +8,9 @@ echo ======================================================
 echo.
 
 :: 1. Start Faster Live Avatar Engine (Port 8027)
+:: We use the new run.py entry point for organized architecture
 echo [1/3] Starting Faster Live Avatar Engine...
-start "AVATAR ENGINE" cmd /k "cd faster_live_avatar && ..\dso_avatar\venv\Scripts\python.exe main.py"
+start "AVATAR ENGINE" cmd /k "cd faster_live_avatar && ..\dso_avatar\venv\Scripts\python.exe run.py"
 timeout /t 5
 
 :: 2. Start DSO2 Backend (Port 8000)
@@ -24,8 +25,10 @@ start "FRONTEND" cmd /k "cd front && npm run dev"
 echo.
 echo ======================================================
 echo   SYSTEM READY! 
-echo   - Backend: http://localhost:8000
+echo   - Backend:  http://localhost:8000
 echo   - Frontend: http://localhost:5173
-echo   - Avatar: http://localhost:8027 (Socket.io)
+echo   - Avatar:   http://localhost:8027 (Socket.io)
 echo ======================================================
+echo.
+echo Close these windows to stop the servers.
 pause
