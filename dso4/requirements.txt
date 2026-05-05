@@ -1,0 +1,18 @@
+# ── Database ──────────────────────────────────────────────────────
+pymysql==1.1.2
+sqlalchemy==2.0.49
+greenlet==3.5.0
+
+# ── API Framework ─────────────────────────────────────────────────
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.0.0
+
+# ── HTTP Clients (TomTom + Open-Meteo) ───────────────────────────
+httpx>=0.27.0
+
+# ── Route Optimization (OR-Tools TSP solver) ─────────────────────
+ortools>=9.7.2996
+
+# ── Data Processing ───────────────────────────────────────────────
+pandas>=2.0.0
