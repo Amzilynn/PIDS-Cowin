@@ -13,7 +13,7 @@ class LivePortraitEngine:
     def __init__(self, source_image_path: str):
         print(f"[Engine] SPEED-STREAM: Initializing with {source_image_path}")
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        print(f"[Engine] DEVICE: Using {self.device.upper()} mode.")
+        print(f"[Engine] DEVICE: Using {self.device.upper()} mode (Compatibility Patch).")
         
         cfg = InferenceConfig()
         cfg.checkpoint_F = os.path.join(ROOT_DIR, "base_repo/pretrained_weights/liveportrait/base_models/appearance_feature_extractor.pth")
@@ -21,10 +21,13 @@ class LivePortraitEngine:
         cfg.checkpoint_W = os.path.join(ROOT_DIR, "base_repo/pretrained_weights/liveportrait/base_models/warping_module.pth")
         cfg.checkpoint_G = os.path.join(ROOT_DIR, "base_repo/pretrained_weights/liveportrait/base_models/spade_generator.pth")
         cfg.checkpoint_S = os.path.join(ROOT_DIR, "base_repo/pretrained_weights/liveportrait/retargeting_models/stitching_retargeting_module.pth")
-        cfg.flag_use_half_precision = True
+        cfg.flag_use_half_precision = False # Set to False for older GPU compatibility
         cfg.flag_stitching = True
         cfg.flag_pasteback = True
         cfg.flag_do_crop = True
+        cfg.flag_lip_zero = True # Prevents lip jitters when silent
+        cfg.flag_eye_retargeting = True 
+        
         self.cfg = cfg
         
         self.wrapper = LivePortraitWrapper(cfg)

@@ -18,6 +18,7 @@ def get_user_text():
 
 def set_user_text(text, lang="fr"):
     global received_text, received_lang
+    print(f"\n[DEBUG] 📡 VOICE RECEIVED: '{text}' (lang: {lang})")
     received_text = text
     received_lang = lang
     text_received_event.set()

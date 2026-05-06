@@ -16,8 +16,8 @@ from nlp.rag.retriever import Retriever
 from nlp.rag.rag_build import load_or_build_rag
 from dotenv import load_dotenv
 
-env_path = os.path.join(SRC_DIR, "..", ".env")
-load_dotenv(dotenv_path=env_path)
+env_path = os.path.abspath(os.path.join(SRC_DIR, "..", ".env"))
+load_dotenv(dotenv_path=env_path, override=True)
 
 class TrainingSessionManager:
     def __init__(self):
@@ -42,7 +42,10 @@ class TrainingSessionManager:
 
     def start_session(self, delegue_id: int, product_id: int = None):
         if self.is_active:
-            raise ValueError("Une session est déjà en cours.")
+            print("[SessionManager] Session déjà active, arrêt automatique pour redémarrage...")
+            self.stop_session(discard=True)
+            # Petit délai pour laisser les threads se fermer proprement
+            time.sleep(0.5)
 
         delegues = load_delegues()
         self.delegue = next((d for d in delegues if d["id"] == delegue_id), None)
@@ -50,6 +53,7 @@ class TrainingSessionManager:
             raise ValueError(f"Délégué {delegue_id} introuvable.")
             
         self.product = load_single_product(product_id) if product_id else None
+        print(f"[DEBUG] Session Init: User={self.delegue['nom']}, Product={'None' if not self.product else self.product['name']}")
 
         self.initialize_models()
 
@@ -77,7 +81,10 @@ class TrainingSessionManager:
         )
         self.conv_thread.start()
         self.is_active = True
-        return {"status": "started", "delegue": self.delegue["nom"]}
+        self.current_delegue_id = delegue_id
+        sess_id = f"sess_{int(time.time())}"
+        print(f"[DEBUG] Session STARTED successfully. ID: {sess_id}")
+        return {"status": "started", "delegue": self.delegue["nom"], "session_id": sess_id}
 
     def _run_conversation(self, delegue, eval_thread, client, retriever, product):
         def _on_msg(role, content):
@@ -103,25 +110,26 @@ class TrainingSessionManager:
                 self.is_active = False
             return
 
-        # On marque la session comme inactive pour les flux temps réel
+        # On marque la session comme inactive pour les flux temps réel uniquement à la fin
+        # pour éviter que /status ne renvoie "idle" prématurément.
         
-        # On marque la session comme inactive pour les flux temps réel
-        if self.eval_thread == eval_thread:
-            self.is_active = False 
-            
-        # Attendre la fin du thread CV (timeout genereux pour Windows)
-        eval_thread.join(timeout=60)
+        # Attendre la fin du thread CV (timeout réduit pour Windows)
+        print("[Api Main] Attente du thread CV...")
+        eval_thread.join(timeout=5.0)
 
-        # Si le thread est encore vivant apres 60s, on l'attend encore un peu
-        import time as _time
-        for _ in range(20):  # Max 10s supplementaires
-            cv_summary = eval_thread.get_summary()
-            if cv_summary is not None:
-                break
-            _time.sleep(0.5)
+        # Si le thread est encore vivant, on récupère quand même le résumé partiel
+        cv_summary = eval_thread.get_summary()
+        if cv_summary is None:
+            # On tente une dernière fois
+            import time as _time
+            for _ in range(10): 
+                cv_summary = eval_thread.get_summary()
+                if cv_summary is not None:
+                    break
+                _time.sleep(0.2)
 
         if cv_summary is None:
-            print("[Api Main] WARN: cv_summary toujours None apres 70s, on continue sans.")
+            print("[Api Main] WARN: cv_summary indisponible, utilisation d'un résumé vide.")
             cv_summary = {}
 
         # ── NLP Fact-Checking Evaluation ──
@@ -137,13 +145,14 @@ class TrainingSessionManager:
                 ]
 
                 if filtered_messages:
+                    print(f"[DEBUG] NLP Evaluation starting for {len(filtered_messages)} messages.")
                     from evaluation.nlp_evaluator import NLPEvaluator
                     evaluator = NLPEvaluator(client)
                     nlp_report = evaluator.evaluate_session(filtered_messages, product)
                     cv_summary["nlp"] = nlp_report
-                    print(f"[Api Main] NLP OK — score produit: {nlp_report.get('product_knowledge_score')}")
+                    print(f"[DEBUG] NLP Evaluation SUCCESS. Product Score: {nlp_report.get('product_knowledge_score')}")
                 else:
-                    print("[Api Main] Aucun message substantiel a evaluer.")
+                    print("[DEBUG] NLP Evaluation SKIPPED: No substantial messages found.")
             except Exception as e:
                 import traceback
                 print(f"[Api Main] Erreur NLP Evaluator: {e}")
@@ -218,6 +227,12 @@ class TrainingSessionManager:
     def get_current_frame(self):
         if self.eval_thread and self.eval_thread.is_alive() and self.eval_thread.current_frame is not None:
             return self.eval_thread.current_frame
+        return None
+
+    def get_live_metrics(self):
+        """Extracts the latest performance scores from the live evaluation thread."""
+        if self.eval_thread and self.eval_thread.is_alive() and self.eval_thread.current_snap:
+            return self.eval_thread.current_snap
         return None
 
 manager = TrainingSessionManager()

@@ -49,3 +49,42 @@ def get_delegate_recommendations(delegate_id: int):
         ]
     finally:
         db.close()
+@router.get("/notifications/{user_id}")
+def get_notifications(user_id: int):
+    db = SessionLocal()
+    from shared.models import Notification
+    try:
+        notifications = (
+            db.query(Notification)
+            .filter(Notification.user_id == user_id)
+            .order_by(Notification.created_at.desc())
+            .limit(20)
+            .all()
+        )
+        return [
+            {
+                "id": n.id,
+                "title": n.title,
+                "message": n.message,
+                "type": n.type,
+                "is_read": n.is_read,
+                "date": n.created_at.strftime("%Y-%m-%d %H:%M")
+            }
+            for n in notifications
+        ]
+    finally:
+        db.close()
+
+@router.post("/notifications/{notification_id}/read")
+def mark_notification_as_read(notification_id: int):
+    db = SessionLocal()
+    from shared.models import Notification
+    try:
+        n = db.query(Notification).get(notification_id)
+        if n:
+            n.is_read = True
+            db.commit()
+            return {"status": "success"}
+        return {"status": "not found"}
+    finally:
+        db.close()

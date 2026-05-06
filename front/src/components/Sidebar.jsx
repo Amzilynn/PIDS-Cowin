@@ -17,9 +17,11 @@ import {
   Store
 } from 'lucide-react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
 
 export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(true);
@@ -36,6 +38,7 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
   const menuItems = {
     admin: [
       { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Vue Générale' },
+      { to: '/admin/produits', icon: PackageCheck, label: 'Gestion Produits' },
       { to: '/admin/stats', icon: BarChart3, label: 'Statistiques' },
       { to: '/admin/delegues', icon: User, label: 'Délégués' },
     ],
@@ -115,7 +118,9 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
            {isOpen && (
              <div className="p-5 bg-md-secondary-container/30 rounded-[28px] border border-md-secondary-container/50 flex flex-col gap-1 shadow-inner group overflow-hidden relative">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-md-primary/5 rounded-full blur-xl -translate-y-1/2 translate-x-1/2" />
-                <p className="text-[10px] font-black text-md-on-surface-variant uppercase tracking-widest opacity-60 relative z-10">Rôle Actif</p>
+                <p className="text-[10px] font-black text-md-on-surface-variant uppercase tracking-widest opacity-60 relative z-10">
+                   {user?.display_name || 'Rôle Actif'}
+                </p>
                 <div className="flex items-center gap-2 relative z-10">
                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                    <p className="text-sm font-black text-md-primary truncate uppercase tracking-tighter">
@@ -127,7 +132,7 @@ export default function Sidebar({ role = 'delegate', subRole = 'medical' }) {
 
            <div className={`flex items-center gap-3 ${!isOpen && 'lg:flex-col lg:items-center'}`}>
               <button 
-                onClick={() => navigate('/')}
+                onClick={logout}
                 className={`flex-1 btn-pill bg-white/50 border border-md-outline/10 text-rose-500 hover:bg-rose-50 hover:border-rose-200 shadow-sm ${!isOpen && 'lg:w-12 lg:h-12 !p-0 !rounded-2xl'}`}
               >
                  <LogOut size={20} className="transition-transform group-hover:rotate-12" /> 

@@ -321,6 +321,7 @@ class EvaluationThread(threading.Thread):
         self.use_api        = False
         self.api_mode_hud_off = False
         self.current_frame  = None
+        self.current_snap   = None
 
     # ── API publique ─────────────────────────────────────────────────────────
 
@@ -407,6 +408,12 @@ class EvaluationThread(threading.Thread):
                     )
                 
                 self.current_frame = frame.copy()
+                self.current_snap = {
+                    "performance_score": snap.performance_score,
+                    "confidence_score": snap.confidence_score,
+                    "stress_score": snap.stress_score,
+                    "engagement_score": snap.engagement_score
+                }
 
                 if not self.use_api:
                     cv2.imshow("Co-Win | Évaluation délégué", frame)

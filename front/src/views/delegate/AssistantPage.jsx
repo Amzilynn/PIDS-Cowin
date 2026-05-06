@@ -35,8 +35,9 @@ function getAvaResponse(msg, context) {
 
 export default function AssistantPage() {
   const { user } = useAuth();
+  const userName = user?.display_name?.split(' ')[0] || "there";
   const [messages, setMessages] = useState([
-    { role: 'assistant', text: "Hello! I am Ava, your personal Medical Intelligence Assistant. How can I help you today with your territory or clinical data?" }
+    { role: 'assistant', text: `Hello ${userName}! I am Ava, your personal Medical Intelligence Assistant. How can I help you today with your territory or clinical data?` }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -157,7 +158,7 @@ export default function AssistantPage() {
                 </div>
                 {msg.role === 'user' && (
                   <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center font-black text-xs text-indigo-600 flex-shrink-0">
-                    {user?.name?.[0]}
+                    {user?.display_name?.[0] || 'U'}
                   </div>
                 )}
               </motion.div>

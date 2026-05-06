@@ -44,7 +44,7 @@
 .idea/
 .DS_Store
 Thumbs.db
-
+__pycache__/
 # --- Project-Specific: DO NOT PUSH ---
 dso2/data/vectorstore/
 dso_avatar/temp_chunks/
@@ -53,3 +53,8 @@ front/src/models/
 shared/face.dna
 debug_bbox_*.png
 *.csv
+
+
+dso1/chroma_db/
+dso1/reports/
+scratch/

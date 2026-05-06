@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { 
   BrainCircuit, 
   PlusSquare, 
@@ -26,6 +27,7 @@ const performanceData = [
 ];
 
 export default function DelegateHome({ subRole = 'medical' }) {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isMedical = subRole === 'medical';
@@ -45,7 +47,7 @@ export default function DelegateHome({ subRole = 'medical' }) {
             <div className="space-y-6">
                 <div>
                    <label className="block text-[11px] font-black uppercase tracking-[0.2em] opacity-60 mb-3">Nom Complet</label>
-                   <input type="text" className="w-full bg-md-surface-container border border-md-outline/10 p-4 rounded-2xl font-bold" defaultValue={isMedical ? 'Sarah Khalil' : 'Marc Dupont'} />
+                   <input type="text" className="w-full bg-md-surface-container border border-md-outline/10 p-4 rounded-2xl font-bold" defaultValue={user?.display_name || (isMedical ? 'Sarah Khalil' : 'Marc Dupont')} />
                 </div>
                 <div>
                    <label className="block text-[11px] font-black uppercase tracking-[0.2em] opacity-60 mb-3">Rôle</label>
@@ -53,7 +55,7 @@ export default function DelegateHome({ subRole = 'medical' }) {
                 </div>
                 <div>
                    <label className="block text-[11px] font-black uppercase tracking-[0.2em] opacity-60 mb-3">Email</label>
-                   <input type="email" className="w-full bg-md-surface-container border border-md-outline/10 p-4 rounded-2xl font-bold" defaultValue={`${isMedical ? 'sarah' : 'marc'}@meddelegate.pro`} />
+                   <input type="email" className="w-full bg-md-surface-container border border-md-outline/10 p-4 rounded-2xl font-bold" defaultValue={user?.email || `${isMedical ? 'sarah' : 'marc'}@meddelegate.pro`} />
                 </div>
                 <button className="btn-primary !h-14 uppercase tracking-[0.2em] text-[11px] font-black mt-8 w-full md:w-auto px-8 !rounded-xl shadow-xl">Enregistrer les modifications</button>
             </div>
@@ -76,7 +78,7 @@ export default function DelegateHome({ subRole = 'medical' }) {
                </div>
                <span className="text-[11px] font-black text-md-primary uppercase tracking-[0.5em] leading-none">Unité de Performance Active</span>
            </div>
-           <h1 className="text-6xl font-black text-md-on-background tracking-tighter leading-[0.9] uppercase">Bonjour, <br/><span className={`${isMedical ? 'text-md-primary' : 'text-emerald-500'} italic lowercase`}>{isMedical ? 'Sarah' : 'Marc'}.</span></h1>
+           <h1 className="text-6xl font-black text-md-on-background tracking-tighter leading-[0.9] uppercase">Bonjour, <br/><span className={`${isMedical ? 'text-md-primary' : 'text-emerald-500'} italic lowercase`}>{user?.display_name?.split(' ')[0] || (isMedical ? 'Sarah' : 'Marc')}.</span></h1>
            <p className="text-md-on-surface-variant font-bold text-xl leading-relaxed max-w-lg mt-4 opacity-70 italic tracking-tight">
              Prêts pour votre session d'excellence aujourd'hui en tant que <span className={`font-black not-italic ${isMedical ? 'text-md-on-background' : 'text-emerald-600'}`}>{roleTitle}</span> ?
            </p>

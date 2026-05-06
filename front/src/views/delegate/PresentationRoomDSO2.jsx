@@ -2,35 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  PlusSquare, 
   ChevronLeft, 
+  PlusSquare, 
   Package, 
-  Stethoscope,
-  Activity,
-  CheckCircle2,
-  HelpCircle,
-  Award,
+  CheckCircle2, 
+  Clock, 
   ArrowRight,
-  Info,
   ShieldCheck,
-  User,
-  Zap
+  Star,
+  Activity
 } from 'lucide-react';
 import Avatar3DDSO2 from '../../components/Avatar3DDSO2';
 import CameraPanelDSO2 from '../../components/CameraPanelDSO2';
 import ChatPanelDSO2 from '../../components/ChatPanelDSO2';
 import { useAuth } from '../../context/AuthContext';
 
-export default function PractitionerView() {
+export default function PresentationRoomDSO2() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const sub = query.get('sub') || user?.sub_role || 'doctor';
+  const subRole = query.get('sub') || 'medical';
+  const isMedical = subRole === 'medical' || subRole === 'doctor';
   
-  const isDoctor = sub === 'doctor' || sub === 'medical';
-  const establishmentName = isDoctor ? 'CENTRE HOSPITALIER UNIVERSITAIRE' : 'PHARMACIE VALÉRIE BERNARD';
-
+  const establishmentName = isMedical ? 'CENTRE HOSPITALIER UNIVERSITAIRE' : 'PHARMACIE VALÉRIE BERNARD';
+  
   const [isActive, setIsActive] = useState(false);
 
   const handleConnect = () => setIsActive(true);
@@ -41,7 +37,7 @@ export default function PractitionerView() {
   return (
     <div className="relative h-screen bg-[#f8fafb] flex flex-col font-sans overflow-hidden">
       
-      {/* ── Top Bar DSO2 Style ── */}
+      {/* ── Top Bar (Minimalist as per Image) ── */}
       <div className="h-16 border-b border-slate-100 bg-white flex items-center justify-between px-8 relative z-50">
         <div className="flex items-center gap-6">
            <button 
@@ -52,8 +48,8 @@ export default function PractitionerView() {
            </button>
            
            <div className="flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-lg ${isDoctor ? 'bg-sky-50 text-sky-600' : 'bg-emerald-50 text-emerald-600'} flex items-center justify-center`}>
-                 {isDoctor ? <Stethoscope size={16} /> : <Activity size={16} />}
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                 <Activity size={16} />
               </div>
               <h1 className="text-[12px] font-black text-slate-800 uppercase tracking-widest">{establishmentName}</h1>
            </div>
@@ -65,7 +61,7 @@ export default function PractitionerView() {
         </div>
       </div>
 
-      {/* ── Main Layout DSO2 (3 Balanced Panels) ── */}
+      {/* ── Main Layout (3 Balanced Panels) ── */}
       <div className="flex-1 flex overflow-hidden p-6 gap-6">
         
         {/* PANEL 1 : Avatar (Left) */}
@@ -84,12 +80,12 @@ export default function PractitionerView() {
 
         {/* PANEL 3 : Chat Panel (Right) */}
         <div className="flex-1 h-full relative rounded-[32px] overflow-hidden bg-white shadow-sm border border-slate-50">
-           <ChatPanelDSO2 isActive={true} />
+           <ChatPanelDSO2 isActive={isActive} />
         </div>
 
       </div>
 
-      {/* Signature Background Layer */}
+      {/* Decorative Signature Glows */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 blur-[120px] rounded-full -z-10 pointer-events-none" />
     </div>
   );

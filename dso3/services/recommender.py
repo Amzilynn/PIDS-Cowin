@@ -1,4 +1,4 @@
-from shared.models import Simulation, Delegate, Product, Gamme
+from shared.models import Simulation, Delegate, Product, Gamme, Notification
 from sqlalchemy import case, func, desc
 
 def recommend_delegates(db, product, limit=10):
@@ -77,5 +77,16 @@ def update_delegate_expertise(db, delegate_id: int):
     if best_gamme:
         delegate = db.query(Delegate).filter(Delegate.id == delegate_id).first()
         if delegate:
+            old_expertise = delegate.expertise
             delegate.expertise = best_gamme.name
+            
+            # Notification si l'expertise change
+            if old_expertise != best_gamme.name:
+                db.add(Notification(
+                    user_id=delegate_id,
+                    title="Expertise Mise à Jour",
+                    message=f"Félicitations ! Suite à vos excellentes performances, votre expertise a été mise à jour en : {best_gamme.name}.",
+                    type="system"
+                ))
+            
             db.commit()

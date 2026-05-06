@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from shared.database import SessionLocal
-from shared.models import Medecin, Pharmacien, Delegate, Simulation, User, Product, Recommendation, Gamme
+from shared.models import Medecin, Pharmacien, Delegate, Simulation, User, Product, Recommendation, Gamme, Notification
 from sqlalchemy import func, desc, and_
+
 from pydantic import BaseModel
 from typing import List, Optional
 import os
@@ -126,6 +127,19 @@ def confirm_recommendations(body: ConfirmRecommendationsRequest):
         for d_id in body.delegate_ids:
             score = recs_map.get(d_id, 0.0)
             db.add(Recommendation(product_id=product.id, delegate_id=d_id, score=score))
+            
+            # --- NOTIFICATION IN-APP ---
+            notif = Notification(
+                user_id=d_id,
+                title="Nouveau produit assigné",
+                message=f"Vous avez été sélectionné comme expert pour le produit : {product.name}. Votre score de recommandation est de {round(score, 2)}%.",
+                type="recommendation"
+            )
+            db.add(notif)
+
+            # Notification email désactivée
+
+
         db.commit()
         return {"message": f"{len(body.delegate_ids)} recommendations saved."}
     finally:

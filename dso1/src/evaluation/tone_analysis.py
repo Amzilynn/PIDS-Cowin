@@ -157,85 +157,88 @@ class ToneAnalyzer:
                 time.sleep(0.1)
 
     def _analyze(self, audio: np.ndarray) -> ToneResult:
-        sr = self.SAMPLE_RATE
+        try:
+            sr = self.SAMPLE_RATE
 
-        # ── Pitch (F0) & Jitter ──────────────────────────────
-        # Using yin instead of pyin for a massive ~15x speedup
-        f0 = librosa.yin(
-            audio,
-            fmin=65,
-            fmax=2093,
-            sr=sr,
-        )
-        f0_valid = f0[f0 > 0] if f0 is not None else np.array([])
-        pitch_mean     = float(np.mean(f0_valid))     if len(f0_valid) > 0 else 0.0
-        pitch_variance = float(np.var(f0_valid))      if len(f0_valid) > 0 else 0.0
+            # ── Pitch (F0) & Jitter ──────────────────────────────
+            # Using yin instead of pyin for a massive ~15x speedup
+            f0 = librosa.yin(
+                audio,
+                fmin=65,
+                fmax=2093,
+                sr=sr,
+            )
+            f0_valid = f0[f0 > 0] if f0 is not None else np.array([])
+            pitch_mean     = float(np.mean(f0_valid))     if len(f0_valid) > 0 else 0.0
+            pitch_variance = float(np.var(f0_valid))      if len(f0_valid) > 0 else 0.0
 
-        if len(f0_valid) > 1:
-            jitter = float(np.mean(np.abs(np.diff(f0_valid))) / (pitch_mean + 1e-6))
-        else:
-            jitter = 0.0
+            if len(f0_valid) > 1:
+                jitter = float(np.mean(np.abs(np.diff(f0_valid))) / (pitch_mean + 1e-6))
+            else:
+                jitter = 0.0
 
-        # ── Energy (RMS) & Shimmer ───────────────────────────
-        rms    = librosa.feature.rms(y=audio)[0]
-        energy = float(np.mean(rms))
+            # ── Energy (RMS) & Shimmer ───────────────────────────
+            rms    = librosa.feature.rms(y=audio)[0]
+            energy = float(np.mean(rms))
 
-        rms_valid = rms[rms > 0.01]
-        if len(rms_valid) > 1:
-            shimmer = float(np.mean(np.abs(np.diff(rms_valid))) / (np.mean(rms_valid) + 1e-6))
-        else:
-            shimmer = 0.0
+            rms_valid = rms[rms > 0.01]
+            if len(rms_valid) > 1:
+                shimmer = float(np.mean(np.abs(np.diff(rms_valid))) / (np.mean(rms_valid) + 1e-6))
+            else:
+                shimmer = 0.0
 
-        # ── Speaking rate proxy (ZCR) ─────────────────────────
-        zcr          = librosa.feature.zero_crossing_rate(audio)[0]
-        speaking_rate = float(np.mean(zcr))
+            # ── Speaking rate proxy (ZCR) ─────────────────────────
+            zcr          = librosa.feature.zero_crossing_rate(audio)[0]
+            speaking_rate = float(np.mean(zcr))
 
-        # ── Pause detection (silence ratio) ─────────────────
-        silence_mask = rms < 0.01           # frames below threshold = silence
-        pause_ratio  = float(np.mean(silence_mask))
+            # ── Pause detection (silence ratio) ─────────────────
+            silence_mask = rms < 0.01           # frames below threshold = silence
+            pause_ratio  = float(np.mean(silence_mask))
 
-        # ── Speech Emotion (distilHuBERT) ────────────────────
-        speech_emotion_label = "neutral"
-        speech_emotion_conf = 0.0
+            # ── Speech Emotion (distilHuBERT) ────────────────────
+            speech_emotion_label = "neutral"
+            speech_emotion_conf = 0.0
 
-        if self._model and getattr(self, "_torch", None):
-            try:
-                inputs = self._feature_extractor(audio, sampling_rate=16000, return_tensors="pt", padding=True)
-                inputs = {k: v.to(self._device) for k, v in inputs.items()}
-                with self._torch.no_grad():
-                    logits = self._model(**inputs).logits
-                probs = self._torch.nn.functional.softmax(logits, dim=-1)
-                pred_idx = self._torch.argmax(probs, dim=-1).item()
-                speech_emotion_conf = probs[0][pred_idx].item()
-                speech_emotion_label = self._model.config.id2label[pred_idx]
-            except Exception as e:
-                pass
+            if self._model and getattr(self, "_torch", None):
+                try:
+                    inputs = self._feature_extractor(audio, sampling_rate=16000, return_tensors="pt", padding=True)
+                    inputs = {k: v.to(self._device) for k, v in inputs.items()}
+                    with self._torch.no_grad():
+                        logits = self._model(**inputs).logits
+                    probs = self._torch.nn.functional.softmax(logits, dim=-1)
+                    pred_idx = self._torch.argmax(probs, dim=-1).item()
+                    speech_emotion_conf = probs[0][pred_idx].item()
+                    speech_emotion_label = self._model.config.id2label[pred_idx]
+                except Exception:
+                    pass
 
+            # ── Tone classification ──────────────────────────────
+            tone_label = self._classify_tone(
+                pitch_mean, pitch_variance, energy, speaking_rate, pause_ratio,
+                jitter, shimmer, speech_emotion_label
+            )
 
-        # ── Tone classification ──────────────────────────────
-        tone_label = self._classify_tone(
-            pitch_mean, pitch_variance, energy, speaking_rate, pause_ratio,
-            jitter, shimmer, speech_emotion_label
-        )
+            # ── Composite score ──────────────────────────────────
+            overall = self._compute_score(
+                pitch_variance, energy, speaking_rate, pause_ratio, jitter, shimmer
+            )
 
-        # ── Composite score ──────────────────────────────────
-        overall = self._compute_score(
-            pitch_variance, energy, speaking_rate, pause_ratio, jitter, shimmer
-        )
-
-        return ToneResult(
-            pitch_mean=round(pitch_mean, 2),
-            pitch_variance=round(pitch_variance, 2),
-            energy=round(energy, 4),
-            speaking_rate=round(speaking_rate, 4),
-            pause_ratio=round(pause_ratio, 3),
-            jitter=round(jitter, 4),
-            shimmer=round(shimmer, 4),
-            speech_emotion_label=speech_emotion_label,
-            speech_emotion_conf=round(speech_emotion_conf, 3),
-            tone_label=tone_label,
-            overall_score=round(overall, 3),
-        )
+            return ToneResult(
+                pitch_mean=round(pitch_mean, 2),
+                pitch_variance=round(pitch_variance, 2),
+                energy=round(energy, 4),
+                speaking_rate=round(speaking_rate, 4),
+                pause_ratio=round(pause_ratio, 3),
+                jitter=round(jitter, 4),
+                shimmer=round(shimmer, 4),
+                speech_emotion_label=speech_emotion_label,
+                speech_emotion_conf=round(speech_emotion_conf, 3),
+                tone_label=tone_label,
+                overall_score=round(overall, 3),
+            )
+        except Exception as e:
+            print(f"[ToneAnalyzer] Analysis error: {e}")
+            return self._default_result()
 
     def _classify_tone(
         self,

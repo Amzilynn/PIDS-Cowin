@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAvalifeController } from '../../controllers/useAvalifeController';
-import { Sidebar } from '../components/Sidebar';
+import Sidebar from '../components/Sidebar';
 import { Header } from '../components/Header';
 import { pageVariants, springTransition } from '../components/Card';
 import { useAuth } from '../../context/AuthContext';
 
-import { DashboardView } from '../pages/DashboardView';
+import AdminDashboard from './AdminDashboard';
 import { TerritoryView } from '../pages/TerritoryView';
 import { TrainingView } from '../pages/TrainingView';
 import { MedicalAIView } from '../pages/MedicalAIView';
@@ -17,7 +17,7 @@ export default function AdminApp() {
   const { state, actions } = useAvalifeController();
   const {
     activeTab, selectedRegion, simData,
-    stats, regionsData, streamLogs, visits, kpis, products,
+    regionsData, products,
     chatMessages, chatInput, chatLoading, roleType
   } = state;
 
@@ -37,20 +37,30 @@ export default function AdminApp() {
             exit="exit"
             transition={springTransition}
           >
+            {/* Unified Dashboard Tab */}
             {activeTab === 'Dashboard' && (
-              <DashboardView stats={stats} streamLogs={streamLogs} visits={visits} kpis={kpis} roleType={roleType} />
+              <AdminDashboard initialTab="synthèse" />
             )}
+
+            {/* Direct access to specific management tabs if needed via sidebar mapping */}
+            {activeTab === 'produits' && (
+              <AdminDashboard initialTab="produits" />
+            )}
+
             {activeTab === 'Territory' && (
               <TerritoryView selectedRegion={selectedRegion} regionsData={regionsData} onRegionSelect={actions.handleRegionSelect} />
             )}
+
             {activeTab === 'Training' && (
               <TrainingView simData={simData} chatMessages={chatMessages} chatInput={chatInput} chatLoading={chatLoading} onSendChat={actions.handleSendChat} setChatInput={actions.setChatInput} />
             )}
+
             {activeTab === 'Medical AI' && (
               <MedicalAIView products={products} onQueryChange={actions.handleMedQueryChange} />
             )}
+
             {activeTab === 'Analytics' && (
-              <AnalyticsView kpis={kpis} visits={visits} products={products} roleType={roleType} />
+              <AdminDashboard initialTab="stats" />
             )}
           </motion.div>
         </AnimatePresence>

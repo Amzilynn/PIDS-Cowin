@@ -37,6 +37,9 @@ class VitalAgent:
                 f"got '{persona}'"
             )
         
+        from dotenv import load_dotenv
+        load_dotenv()
+        
         self.session_id = session_id or str(uuid.uuid4())
         self.persona = persona
         self.prompt_builder = VitalPromptBuilder()
@@ -46,9 +49,12 @@ class VitalAgent:
         
         self._system_prompt = self.prompt_builder.build_system_prompt(persona=self.persona)
         
+        base_url = os.getenv("TOKENFACTORY_URL", "https://tokenfactory.esprit.tn/api")
+        api_key = os.getenv("TOKENFACTORY_API_KEY")
+        
         self._client = OpenAI(
-            base_url="https://tokenfactory.esprit.tn/api",
-            api_key="sk-0531e00792114f2dbaafdd44aa5fe439",
+            base_url=base_url,
+            api_key=api_key,
             timeout=120,
         )
         print(f"VitalAgent ready — session {self.session_id} | persona: {self.persona}")
@@ -218,9 +224,11 @@ if __name__ == "__main__":
     print("Checking Token Factory connection...")
     try:
         from openai import OpenAI as _OAI
+        from dotenv import load_dotenv
+        load_dotenv()
         _OAI(
-            base_url="https://tokenfactory.esprit.tn/api",
-            api_key="sk-0531e00792114f2dbaafdd44aa5fe439"
+            base_url=os.getenv("TOKENFACTORY_URL", "https://tokenfactory.esprit.tn/api"),
+            api_key=os.getenv("TOKENFACTORY_API_KEY")
         ).models.list()
         print("Token Factory connection: OK\n")
     except Exception as e:

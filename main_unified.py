@@ -1,5 +1,8 @@
 import os
 import sys
+
+# 🛡️ PROTOBUF SHIELD: Force pure-python implementation to bypass 'MessageFactory' attribute errors
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles

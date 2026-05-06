@@ -1,63 +1,145 @@
 import React from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 import MainLayout from './components/MainLayout';
+
+// Pages Auth
 import LoginPage from './views/auth/LoginPage';
+
+// Pages Admin
 import AdminDashboard from './views/admin/AdminDashboard';
+
+// Pages Délégué
 import DelegateHome from './views/delegate/DelegateHome';
 import TrainingRoom from './views/delegate/TrainingRoom';
-import PresentationRoom from './views/delegate/PresentationRoom';
+import ProductSelection from './views/delegate/ProductSelection';
+import PresentationRoomDSO2 from './views/delegate/PresentationRoomDSO2';
 import VisitPlanner from './views/delegate/VisitPlanner';
 import EvaluationResults from './views/delegate/EvaluationResults';
 import ProductRecommendations from './views/delegate/ProductRecommendations';
+
+// Pages Praticien (médecin / pharmacien)
 import PractitionerView from './views/practitioner/PractitionerView';
 
-// Utilitaire pour extraire les paramètres de rôle de l'URL
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
+// ─────────────────────────────────────────────────────────────────────────────
+// Route protégée : redirige vers / si pas connecté
+// ─────────────────────────────────────────────────────────────────────────────
+function ProtectedRoute({ children, allowedTypes }) {
+  const { isAuthenticated, user, loading } = useAuth();
+
+  if (loading) {
+    // Pendant la vérification du localStorage, on n'affiche rien
+    return (
+      <div className="h-screen flex items-center justify-center bg-md-surface">
+        <div className="animate-spin w-8 h-8 border-4 border-md-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Si des types sont spécifiés, vérifier que l'utilisateur a le bon type
+  if (allowedTypes && !allowedTypes.includes(user?.type)) {
+    // Redirige vers la page adéquate selon son vrai rôle
+    return <Navigate to={user?.redirect_to || '/'} replace />;
+  }
+
+  return children;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// App principale
+// ─────────────────────────────────────────────────────────────────────────────
 export default function App() {
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  const roleParam = query.get('role') || 'delegate';
-  const subRoleParam = query.get('sub') || 'medical';
-  const searchStr = location.search;
+  const { user } = useAuth();
+
+  // Le sub_role vient maintenant du JWT stocké en contexte
+  const subRole = user?.sub_role || 'medical';
 
   return (
     <Routes>
-      {/* Page de Connexion sans Sidebar */}
+      {/* ── Page de Connexion (publique) ────────────────────── */}
       <Route path="/" element={<LoginPage />} />
 
-      {/* Routes Administrateur */}
-      <Route path="/admin" element={<MainLayout role="admin" />}>
-        <Route index element={<Navigate to={`dashboard${searchStr}`} replace />} />
+      {/* ── Routes Administrateur ───────────────────────────── */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedTypes={['admin']}>
+            <MainLayout role="admin" />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="stats" element={<AdminDashboard />} />
-        <Route path="delegues" element={<AdminDashboard />} />
+        <Route path="produits"  element={<AdminDashboard initialTab="produits" />} />
+        <Route path="stats"     element={<AdminDashboard />} />
+        <Route path="delegues"  element={<AdminDashboard />} />
       </Route>
 
-      {/* Routes Délégué (Médical ou Commercial) */}
-      <Route path="/delegate" element={<MainLayout role="delegate" subRole={subRoleParam} />}>
-        <Route index element={<Navigate to={`home${searchStr}`} replace />} />
-        <Route path="home" element={<DelegateHome subRole={subRoleParam} />} />
-        <Route path="training" element={<TrainingRoom type={subRoleParam} />} />
-        <Route path="presentation" element={<PresentationRoom subRole={subRoleParam} />} />
-        <Route path="produits" element={<ProductRecommendations subRole={subRoleParam} />} />
-        <Route path="planner" element={<VisitPlanner />} />
-        <Route path="results" element={<EvaluationResults />} />
-        <Route path="profil" element={<DelegateHome subRole={subRoleParam} />} />
+      {/* ── Routes Délégué (Medical / Commercial) ───────────── */}
+      <Route
+        path="/delegate"
+        element={
+          <ProtectedRoute allowedTypes={['delegue']}>
+            <MainLayout role="delegate" subRole={subRole} />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="home" replace />} />
+        <Route path="home"             element={<DelegateHome subRole={subRole} />} />
+        <Route path="training"         element={<ProductSelection />} />
+        <Route path="training/session" element={<TrainingRoom type={subRole} />} />
+        <Route path="presentation"     element={<PresentationRoomDSO2 />} />
+        <Route path="produits"         element={<ProductRecommendations subRole={subRole} />} />
+        <Route path="planner"          element={<VisitPlanner />} />
+        <Route path="results"          element={<EvaluationResults />} />
+        <Route path="profil"           element={<DelegateHome subRole={subRole} />} />
       </Route>
 
-      {/* Routes Praticien (Médecin ou Pharmacien) */}
-      <Route path="/practitioner" element={<MainLayout role="practitioner" subRole={subRoleParam} />}>
-        <Route index element={<Navigate to={`presentations${searchStr}`} replace />} />
-        <Route path="home" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
-        <Route path="presentations" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
-        <Route path="agenda" element={<VisitPlanner />} /> {/* Réutilisation du Planner compatible */}
-        <Route path="profil" element={<PractitionerView roleType={subRoleParam === 'doctor' ? 'doctor' : 'pharmacist'} />} />
+      {/* ── Routes Praticien (Médecin / Pharmacien) ─────────── */}
+      <Route
+        path="/practitioner"
+        element={
+          <ProtectedRoute allowedTypes={['medecin', 'pharmacien']}>
+            <MainLayout
+              role="practitioner"
+              subRole={subRole}
+            />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="presentations" replace />} />
+        <Route
+          path="home"
+          element={
+            <PractitionerView
+              roleType={subRole === 'doctor' ? 'doctor' : 'pharmacist'}
+            />
+          }
+        />
+        <Route
+          path="presentations"
+          element={
+            <PractitionerView
+              roleType={subRole === 'doctor' ? 'doctor' : 'pharmacist'}
+            />
+          }
+        />
+        <Route path="agenda" element={<VisitPlanner />} />
+        <Route
+          path="profil"
+          element={
+            <PractitionerView
+              roleType={subRole === 'doctor' ? 'doctor' : 'pharmacist'}
+            />
+          }
+        />
       </Route>
 
-      {/* Redirection par défaut */}
+      {/* ── Fallback ─────────────────────────────────────────── */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

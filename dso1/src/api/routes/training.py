@@ -1,5 +1,5 @@
 import cv2
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Generator
@@ -69,10 +69,10 @@ def speech_text(req: SpeechTextRequest):
 @router.post("/stop")
 def stop_training():
     res = manager.stop_session(discard=False)
-    # On attend un peu que le JSON du report soit prêt si le thread se ferme doucement
+    # On attend brièvement que le thread finisse (le frontend polle /status de toute façon)
     import time
-    for _ in range(200):  # Attente max 100s
-        if not manager.is_active and manager.last_results is not None and manager.last_report is not None:
+    for _ in range(10):  # Attente max 5s
+        if not manager.is_active and manager.last_results is not None:
             break
         time.sleep(0.5)
 
@@ -99,9 +99,29 @@ def cancel_training():
     res = manager.stop_session(discard=True)
     return {"status": res}
 
+@router.get("/status")
+def get_session_status():
+    """Returns the current state of the session or the results of the last one."""
+    if not manager.is_active and manager.last_results is not None:
+        return {
+            "status": "stopped",
+            "results": manager.last_results,
+            "report_pdf": manager.last_report
+        }
+    return {
+        "status": "running" if manager.is_active else "idle"
+    }
+
 def frame_generator():
     """Generator function that yields JPEG frames from the evaluation thread."""
     import time
+    
+    # Wait up to 10 seconds for the session to become active
+    wait_time = 0
+    while not manager.is_active and wait_time < 10.0:
+        time.sleep(0.1)
+        wait_time += 0.1
+        
     # On reste dans la boucle seulement tant que la session est active
     while manager.is_active:
         frame = manager.get_current_frame()
@@ -125,17 +145,23 @@ def video_feed():
     return StreamingResponse(frame_generator(), media_type="multipart/x-mixed-replace; boundary=frame")
 
 @router.get("/chat_feed")
-async def chat_feed():
+async def chat_feed(request: Request):
     async def event_generator():
         while True:
-            # Polling la queue
+            if await request.is_disconnected():
+                break
             try:
                 msg = manager.message_queue.get_nowait()
                 yield f"data: {json.dumps(msg)}\n\n"
             except Exception:
+                yield ": ping\n\n"
                 await asyncio.sleep(0.2)
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no", "Connection": "keep-alive"}
+    )
 @router.get("/history/{delegue_id}")
 def get_training_history(delegue_id: int):
     db = SessionLocal()
@@ -162,3 +188,31 @@ def get_training_history(delegue_id: int):
         return history
     finally:
         db.close()
+
+@router.get("/live_metrics")
+async def live_metrics(request: Request):
+    """Real-time SSE stream of performance scores."""
+    async def event_generator():
+        while True:
+            # Exit cleanly only when the browser tab closes
+            if await request.is_disconnected():
+                break
+            if manager.is_active:
+                metrics = manager.get_live_metrics()
+                if metrics:
+                    yield f"data: {json.dumps(metrics)}\n\n"
+                else:
+                    yield ": keep-alive\n\n"
+            else:
+                yield ": ping\n\n"
+            await asyncio.sleep(0.5)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+            "Connection": "keep-alive",
+        }
+    )

@@ -1,47 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Camera, CameraOff, Video, Mic, Shield } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Camera, CameraOff, Mic, Shield, Video } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function CameraPanel({ label = "Délégué" }) {
+export default function CameraPanel({ label = "Délégué", autoStart = false }) {
   const [isActive, setIsActive] = useState(false);
-  const videoRef = useRef(null);
-  const streamRef = useRef(null);
   const [micLevel, setMicLevel] = useState([0, 0, 0, 0, 0, 0]);
 
-  // Gestion du flux Caméra Réel
+  // Auto-start camera when prop changes to true
   useEffect(() => {
-    async function startCamera() {
-      if (isActive) {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { width: 1280, height: 720, facingMode: 'user' },
-            audio: false 
-          });
-          streamRef.current = stream;
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        } catch (err) {
-          console.error("Erreur caméra:", err);
-          setIsActive(false);
-          alert("Impossible d'accéder à la caméra. Vérifiez les permissions.");
-        }
-      } else {
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach(track => track.stop());
-          streamRef.current = null;
-        }
-      }
+    if (autoStart) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
     }
-    startCamera();
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
-      }
-    };
-  }, [isActive]);
+  }, [autoStart]);
 
-  // Simulation de l'animation du micro quand actif
+  // Mic animation when active
   useEffect(() => {
     let interval;
     if (isActive) {
@@ -57,102 +31,70 @@ export default function CameraPanel({ label = "Délégué" }) {
   return (
     <div className="h-full flex flex-col relative overflow-hidden">
       
-      {/* Background patterns */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--color-md-primary) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
-      
-      {/* Header Statut */}
-      <div className="flex items-center justify-between mb-6 relative z-10 px-2">
-         <div className="flex items-center gap-3">
-            <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse shadow-[0_0_12px_#10b981]' : 'bg-md-outline/40'}`} />
-            <span className="text-[11px] font-black uppercase tracking-widest text-md-on-background">{label}</span>
-         </div>
-         {isActive && (
-            <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-pill">
-               <Shield size={12} className="text-emerald-500" />
-               <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-tighter">Sécurisé</span>
-            </div>
-         )}
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4 relative z-10 px-1">
+        <div className="flex items-center gap-3">
+          <div className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${isActive ? 'bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]' : 'bg-slate-300'}`} />
+          <span className="text-[11px] font-black uppercase tracking-widest text-md-on-background">{label}</span>
+        </div>
+        {isActive && (
+          <div className="flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded-full">
+            <Shield size={10} className="text-emerald-500" />
+            <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-tighter">Live</span>
+          </div>
+        )}
       </div>
 
-      {/* Zone Caméra Principal */}
-      <div className="flex-1 flex flex-col items-center justify-center relative rounded-[20px] overflow-hidden bg-transparent">
-         <AnimatePresence mode="wait">
-           {!isActive ? (
-             <motion.div 
-               key="inactive"
-               initial={{ opacity: 0, scale: 0.9 }}
-               animate={{ opacity: 1, scale: 1 }}
-               exit={{ opacity: 0, scale: 1.1 }}
-               className="flex flex-col items-center gap-6 text-md-outline/40"
-             >
-                <div className="w-24 h-24 rounded-full bg-white/50 border border-dashed border-md-outline/20 flex items-center justify-center shadow-sm">
-                   <CameraOff size={40} />
+      {/* Camera View */}
+      <div className="flex-1 flex flex-col items-center justify-center relative rounded-[20px] overflow-hidden bg-slate-950/5">
+        <AnimatePresence mode="wait">
+          {!isActive ? (
+            <motion.div 
+              key="inactive"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.05 }}
+              className="flex flex-col items-center gap-4 text-md-outline/40"
+            >
+              <div className="w-20 h-20 rounded-full bg-white/60 border border-dashed border-md-outline/20 flex items-center justify-center">
+                <Video size={32} className="opacity-40" />
+              </div>
+              <p className="text-[11px] font-black uppercase tracking-widest opacity-40">En attente...</p>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="active"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="w-full h-full relative"
+            >
+              {/* IMPORTANT: Use the backend's video feed to prevent locking the Windows hardware camera! */}
+              <img 
+                src={`http://127.0.0.1:8001/api/training/video_feed?t=${Date.now()}`} 
+                alt="Flux OpenCV"
+                className="w-full h-full object-cover" 
+                onError={(e) => { console.error('Erreur de chargement du flux vidéo OpenCV'); }}
+              />
+              
+              {/* Mic indicator overlay */}
+              <div className="absolute bottom-4 left-4 flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                <Mic size={12} className="text-emerald-400" />
+                <div className="flex items-end gap-0.5 h-3">
+                  {micLevel.map((level, i) => (
+                    <motion.div 
+                      key={i}
+                      animate={{ height: `${Math.max(level * 0.12, 2)}px` }}
+                      className="w-0.5 bg-emerald-400 rounded-full"
+                      style={{ minHeight: '2px', maxHeight: '12px' }}
+                    />
+                  ))}
                 </div>
-                <div className="text-center">
-                   <p className="text-sm font-black uppercase tracking-widest text-md-on-background opacity-40">Caméra désactivée</p>
-                   <p className="text-[10px] font-bold mt-1 max-w-[200px] leading-relaxed italic">Autorisez l'accès pour commencer la simulation</p>
-                </div>
-             </motion.div>
-           ) : (
-             <motion.div 
-                key="active"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="w-full h-full relative"
-             >
-                {/* Flux vidéo réel */}
-                <video 
-                   ref={videoRef}
-                   autoPlay 
-                   playsInline 
-                   muted 
-                   className="w-full h-full object-cover scale-x-[-1] transition-opacity duration-700" 
-                />
-                
-                <div className="absolute bottom-6 left-6 flex items-center gap-2">
-                   <div className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-emerald-500">
-                      <Mic size={14} />
-                   </div>
-                   <div className="flex items-end gap-1 h-4">
-                      {micLevel.map((level, i) => (
-                        <motion.div 
-                          key={i}
-                          animate={{ height: `${level}%` }}
-                          className="w-1 bg-emerald-500 rounded-full transition-all duration-150"
-                          style={{ minHeight: '2px' }}
-                        />
-                      ))}
-                   </div>
-                </div>
-             </motion.div>
-           )}
-         </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      {/* Contrôles Inférieurs */}
-      <div className="mt-8 flex justify-center relative z-10">
-         <button 
-           onClick={() => setIsActive(!isActive)}
-           className={`btn-pill px-10 transition-all ${
-             isActive 
-               ? 'bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100' 
-               : 'btn-primary'
-           }`}
-         >
-            {isActive ? (
-               <>
-                  <CameraOff size={18} /> Désactiver
-               </>
-            ) : (
-               <>
-                  <Camera size={18} /> Activer la caméra
-               </>
-            )}
-         </button>
-      </div>
-
-      {/* Decorative corners */}
-      {/* Removing decorative corners */}
     </div>
   );
 }

@@ -9,7 +9,13 @@ CHROMA_DB_PATH = DSO1_ROOT / "chroma_db"
 
 class ChromaStore:
     def __init__(self, collection_name="vital_products"):
-        self.client = chromadb.PersistentClient(path=str(CHROMA_DB_PATH))
+        self.client = chromadb.PersistentClient(
+            path=str(CHROMA_DB_PATH),
+            settings=Settings(
+                anonymized_telemetry=False,
+                is_persistent=True
+            )
+        )
 
         self.collection = self.client.get_or_create_collection(
             name=collection_name

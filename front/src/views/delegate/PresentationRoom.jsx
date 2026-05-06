@@ -45,7 +45,7 @@ export default function PresentationRoom() {
   };
 
   return (
-    <div className="relative min-h-full bg-md-surface flex flex-col font-sans">
+    <div className="relative h-screen bg-md-surface flex flex-col font-sans overflow-hidden">
       
       {/* Barre d'Outils Supérieure Contextuelle */}
       <div className="h-20 border-b border-md-outline/10 bg-white/40 backdrop-blur-3xl flex items-center justify-between px-8 relative z-50">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PackageSearch, ArrowRight, Activity, Pill, Dna, Hexagon, Component, ChevronLeft, ChevronRight } from 'lucide-react';
+import { PackageSearch, ArrowRight, Activity, Pill, Dna, Hexagon, Component, ChevronLeft, ChevronRight, BrainCircuit, ShieldCheck } from 'lucide-react';
 
 export default function ProductSelection() {
   const navigate = useNavigate();
@@ -49,191 +49,202 @@ export default function ProductSelection() {
   const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleStart = () => {
-    if (selectedProductId && user?.user_id) {
-      navigate('/delegate/training/session', { 
-        state: { 
-          productId: selectedProductId, 
-          delegueId: user.user_id 
-        } 
-      });
+    if (selectedProductId) {
+      navigate(`/delegate/training/session?sub=${user?.sub_role}&productId=${selectedProductId}`);
     }
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-100px)] p-8 animate-fade-in flex flex-col font-sans">
+    <div className="relative min-h-screen p-8 animate-fade-in flex flex-col font-sans overflow-y-auto">
       
       {/* Decors de fond */}
       <div className="fixed top-20 right-0 w-[500px] h-[500px] bg-md-primary/5 blur-[100px] rounded-full pointer-events-none -z-10" />
       <div className="fixed bottom-0 left-10 w-[600px] h-[600px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-      {/* Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-12">
+      {/* Header with Step Indicator */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-12">
         <div className="space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-md-primary/10 text-md-primary flex items-center justify-center shadow-lg shadow-md-primary/5">
-            <PackageSearch size={28} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-md-on-background tracking-tighter uppercase leading-none">
-              Choix du <span className="text-md-primary italic lowercase">produit.</span>
-            </h1>
-            <p className="text-sm font-bold text-md-on-surface-variant opacity-60 uppercase tracking-widest mt-2 ml-1">
-              Configuration de la simulation IA
-            </p>
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-md-primary/10 text-md-primary flex items-center justify-center shadow-lg shadow-md-primary/5">
+              <PackageSearch size={28} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="px-2 py-0.5 rounded-full bg-md-primary text-white text-[9px] font-black uppercase tracking-widest">Étape 01</span>
+                <span className="text-[10px] font-black text-md-outline uppercase tracking-widest opacity-40">Configuration</span>
+              </div>
+              <h1 className="text-4xl font-black text-md-on-background tracking-tighter uppercase leading-none">
+                Cible de <span className="text-md-primary italic lowercase">formation.</span>
+              </h1>
+            </div>
           </div>
         </div>
         
-        {/* Profil connecté affiché discrètement */}
-        <div className="flex items-center gap-3 bg-white p-3 px-5 rounded-2xl shadow-sm border border-md-outline/5 relative overflow-hidden">
-          <div className="w-8 h-8 rounded-xl bg-md-primary/10 flex items-center justify-center text-md-primary font-black text-xs">
-            {user?.display_name?.[0] || 'D'}
-          </div>
-          <div className="flex flex-col">
-             <span className="text-[9px] font-black uppercase tracking-widest text-md-primary opacity-60">Connecté en tant que</span>
-             <span className="text-xs font-bold text-md-on-background">{user?.display_name}</span>
-          </div>
+        {/* Connection Status */}
+        <div className="flex items-center gap-4 bg-white/50 backdrop-blur-md p-2 pl-4 pr-2 rounded-2xl border border-md-outline/5">
+           <div className="flex flex-col items-end">
+              <span className="text-[9px] font-black uppercase tracking-widest text-md-primary opacity-60">Délégué {user?.sub_role}</span>
+              <span className="text-xs font-bold text-md-on-background">{user?.display_name}</span>
+           </div>
+           <div className="w-10 h-10 rounded-xl bg-md-primary text-white flex items-center justify-center font-black text-sm shadow-lg shadow-md-primary/20">
+             {user?.display_name?.[0] || 'D'}
+           </div>
         </div>
       </div>
 
-      {/* Barre de Recherche et Filtre par Gamme */}
-      <div className="mb-10 flex flex-col gap-6">
-        <div className="max-w-xl relative">
-           <input 
-             type="text" 
-             placeholder="Rechercher un produit Vital..."
-             value={searchQuery}
-             onChange={(e) => setSearchQuery(e.target.value)}
-             className="w-full h-14 pl-6 pr-12 rounded-full border border-md-outline/20 bg-white/50 backdrop-blur-md shadow-inner focus:outline-none focus:ring-2 focus:ring-md-primary/50 focus:border-md-primary text-sm font-bold text-md-on-background placeholder:font-medium placeholder:uppercase placeholder:tracking-widest placeholder:text-[11px]"
-           />
+      {/* Main Selection Area */}
+      <div className="bg-white/40 backdrop-blur-3xl rounded-[40px] border border-white/20 p-8 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+          <BrainCircuit size={200} />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-md-outline/60 mr-2">Filtrer par Gamme :</span>
-           <button 
-             onClick={() => setSelectedGammeId("all")}
-             className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${selectedGammeId === "all" ? 'bg-md-primary text-white shadow-lg shadow-md-primary/20' : 'bg-white border border-md-outline/10 text-md-on-background hover:bg-slate-50'}`}
-           >
-             Toutes
-           </button>
-           {gammes.map(g => (
-             <button 
-               key={g.id}
-               onClick={() => setSelectedGammeId(g.id.toString())}
-               className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${selectedGammeId === g.id.toString() ? 'bg-md-primary text-white shadow-lg shadow-md-primary/20' : 'bg-white border border-md-outline/10 text-md-on-background hover:bg-slate-50'}`}
-             >
-               {g.name}
-             </button>
-           ))}
-        </div>
-      </div>
-
-      {/* Grille des Produits */}
-      {isLoading ? (
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-12 h-12 rounded-full border-4 border-md-primary border-t-transparent animate-spin" />
-        </div>
-      ) : (
-        <div className="flex flex-col flex-1 pb-32">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6 content-start flex-1">
-            <AnimatePresence mode="popLayout">
-              {paginatedProducts.map((p, i) => {
-                const isSelected = selectedProductId === p.id;
-                const Icon = productIcons[p.id % productIcons.length];
-                
-                return (
-                  <motion.div
-                    key={p.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ delay: i * 0.05 }}
-                    onClick={() => setSelectedProductId(p.id)}
-                    className={`
-                      cursor-pointer rounded-[24px] p-6 flex flex-col gap-4 relative overflow-hidden transition-all duration-300
-                      ${isSelected 
-                        ? 'bg-md-primary text-white shadow-2xl shadow-md-primary/30 scale-105 border-none z-10' 
-                        : 'bg-white text-md-on-background hover:bg-white/80 hover:shadow-xl border border-md-outline/10 shadow-sm hover:-translate-y-1'
-                      }
-                    `}
-                  >
-                    {isSelected && (
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2" />
-                    )}
-                    
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center relative z-10 transition-colors ${isSelected ? 'bg-white/20' : 'bg-md-surface-container-high'}`}>
-                       <Icon size={22} className={isSelected ? 'text-white' : 'text-md-primary'} />
-                    </div>
-                    
-                    <div className="relative z-10 mt-2">
-                      <h3 className="text-base font-black uppercase tracking-tight leading-none mb-2">{p.name}</h3>
-                      <p className={`text-[10px] font-bold uppercase tracking-widest ${isSelected ? 'text-white/70' : 'text-md-outline/60'}`}>
-                        Gamme: {p.gamme_name}
-                      </p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-            
-            {filteredProducts.length === 0 && (
-              <div className="col-span-full py-20 text-center opacity-50">
-                <p className="text-sm font-black uppercase tracking-widest mb-2">Aucun produit trouvé</p>
-                <p className="text-xs font-medium">Vérifiez l'orthographe de votre recherche.</p>
-              </div>
-            )}
-          </div>
-
-          {/* Contrôles de pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-6 mt-12 bg-white/50 backdrop-blur-md self-center p-2 rounded-full border border-md-outline/10 shadow-lg">
-              <button 
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="w-12 h-12 rounded-full flex items-center justify-center bg-white border border-md-outline/10 text-md-on-background shadow-sm hover:bg-md-primary/10 hover:text-md-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              
-              <div className="flex items-center gap-2 px-4">
-                <span className="text-xs font-black uppercase tracking-widest text-md-on-background">Page <span className="text-md-primary">{currentPage}</span> / {totalPages}</span>
-              </div>
-
-              <button 
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="w-12 h-12 rounded-full flex items-center justify-center bg-white border border-md-outline/10 text-md-on-background shadow-sm hover:bg-md-primary/10 hover:text-md-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-              >
-                <ChevronRight size={20} />
-              </button>
+        {/* Search & Categories */}
+        <div className="flex flex-col lg:flex-row gap-8 mb-12 relative z-10">
+          <div className="flex-1 space-y-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-md-primary ml-1">Recherche</span>
+            <div className="relative group">
+               <input 
+                 type="text" 
+                 placeholder="Quel produit souhaitez-vous présenter ?"
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="w-full h-16 pl-8 pr-12 rounded-3xl border border-md-outline/10 bg-white/80 shadow-sm transition-all focus:ring-4 focus:ring-md-primary/10 focus:border-md-primary text-lg font-bold"
+               />
+               <div className="absolute right-6 top-1/2 -translate-y-1/2 text-md-outline/30 group-focus-within:text-md-primary transition-colors">
+                 <PackageSearch size={24} />
+               </div>
             </div>
-          )}
-        </div>
-      )}
+          </div>
 
-      {/* Floating Action Bar */}
-      <AnimatePresence>
-        {selectedProductId && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
-          >
-             <div className="pointer-events-auto bg-md-on-background p-3 pl-8 rounded-full shadow-2xl shadow-black/30 flex items-center gap-8 border border-white/10 backdrop-blur-3xl">
-                <div className="flex flex-col">
-                   <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest leading-none mb-1">Cible Sélectionnée</span>
-                   <span className="text-sm font-black text-white uppercase tracking-wider">{products.find(p => p.id === selectedProductId)?.name}</span>
+          <div className="space-y-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-md-primary ml-1">Spécialité / Gamme</span>
+            <div className="flex flex-wrap gap-2">
+               <button 
+                 onClick={() => setSelectedGammeId("all")}
+                 className={`px-6 h-16 rounded-3xl text-[11px] font-black uppercase tracking-widest transition-all ${selectedGammeId === "all" ? 'bg-md-on-background text-white shadow-xl' : 'bg-white border border-md-outline/10 text-md-on-background hover:bg-slate-50'}`}
+               >
+                 Toutes les gammes
+               </button>
+               {gammes.map(g => (
+                 <button 
+                   key={g.id}
+                   onClick={() => setSelectedGammeId(g.id.toString())}
+                   className={`px-6 h-16 rounded-3xl text-[11px] font-black uppercase tracking-widest transition-all ${selectedGammeId === g.id.toString() ? 'bg-md-on-background text-white shadow-xl' : 'bg-white border border-md-outline/10 text-md-on-background hover:bg-slate-50'}`}
+                 >
+                   {g.name}
+                 </button>
+               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Product Grid */}
+        {isLoading ? (
+          <div className="py-40 flex flex-col items-center justify-center gap-4">
+            <div className="w-16 h-16 rounded-full border-4 border-md-primary border-t-transparent animate-spin" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-md-primary animate-pulse">Synchronisation Catalogue...</span>
+          </div>
+        ) : (
+          <div className="space-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 content-start min-h-[400px]">
+              <AnimatePresence mode="popLayout">
+                {paginatedProducts.map((p, i) => {
+                  const isSelected = selectedProductId === p.id;
+                  const Icon = productIcons[p.id % productIcons.length];
+                  
+                  return (
+                    <motion.div
+                      key={p.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ delay: i * 0.03 }}
+                      onClick={() => setSelectedProductId(p.id)}
+                      className={`
+                        cursor-pointer rounded-[32px] p-8 flex flex-col gap-6 relative overflow-hidden transition-all duration-500
+                        ${isSelected 
+                          ? 'bg-md-primary text-white shadow-2xl shadow-md-primary/40 scale-105 border-none z-10' 
+                          : 'bg-white/50 text-md-on-background hover:bg-white hover:shadow-xl border border-md-outline/10'
+                        }
+                      `}
+                    >
+                      <div className={`w-14 h-14 rounded-[20px] flex items-center justify-center relative z-10 transition-colors ${isSelected ? 'bg-white/20' : 'bg-md-primary/5 text-md-primary'}`}>
+                         <Icon size={24} />
+                      </div>
+                      
+                      <div className="relative z-10">
+                        <h3 className="text-xl font-black uppercase tracking-tight leading-tight mb-2">{p.name}</h3>
+                        <div className="flex items-center gap-2">
+                           <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white/40' : 'bg-md-primary/20'}`} />
+                           <p className={`text-[10px] font-bold uppercase tracking-widest ${isSelected ? 'text-white/60' : 'text-md-outline/60'}`}>
+                             {p.gamme_name}
+                           </p>
+                        </div>
+                      </div>
+
+                      {isSelected && (
+                        <motion.div 
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          className="absolute bottom-6 right-6"
+                        >
+                          <ShieldCheck size={24} className="text-white/30" />
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+
+            {/* Bottom Controls */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8 pt-8 border-t border-md-outline/5">
+              {totalPages > 1 ? (
+                <div className="flex items-center gap-3">
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white border border-md-outline/10 hover:bg-md-primary hover:text-white disabled:opacity-20 transition-all"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <span className="text-xs font-black uppercase tracking-[0.2em] px-4">
+                    {currentPage} <span className="opacity-30">/</span> {totalPages}
+                  </span>
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white border border-md-outline/10 hover:bg-md-primary hover:text-white disabled:opacity-20 transition-all"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
                 </div>
-                <button 
-                  onClick={handleStart}
-                  className="h-12 px-8 bg-md-primary rounded-full text-white font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:bg-md-primary/90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-md-primary/40"
-                >
-                   Continuer <ArrowRight size={16} />
-                </button>
-             </div>
-          </motion.div>
+              ) : <div />}
+
+              <AnimatePresence>
+                {selectedProductId && (
+                  <motion.button 
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    onClick={handleStart}
+                    className="h-20 px-12 bg-md-on-background text-white rounded-[24px] flex items-center gap-6 group hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-black/20"
+                  >
+                    <div className="flex flex-col items-start">
+                      <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest leading-none mb-1">Prêt pour la simulation</span>
+                      <span className="text-xl font-black uppercase tracking-tight">Démarrer la session</span>
+                    </div>
+                    <div className="w-12 h-12 rounded-xl bg-md-primary flex items-center justify-center group-hover:translate-x-2 transition-transform">
+                      <ArrowRight size={24} />
+                    </div>
+                  </motion.button>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
+  </div>
   );
 }

@@ -63,9 +63,9 @@ torchaudio==2.6.0
 timm==0.9.16
 hsemotion==0.3.0
 huggingface-hub>=0.21.0
-transformers==4.39.3
+transformers>=4.39.3
 onnxruntime==1.17.3
-tensorflow==2.15.1
+tensorflow>=2.16.1
 
 # ==========================================
 # DATA & UTILS
@@ -75,7 +75,7 @@ pandas==2.2.3
 scipy==1.13.1
 chardet>=5.0
 cffi==1.17.1
-protobuf==3.20.3
+protobuf>=4.25.8
 six==1.16.0
 setuptools==69.5.1
 

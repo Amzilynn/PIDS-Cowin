@@ -1,26 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Play, Square, Activity, Wifi } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Play, Square, Activity, Star, HeartPulse, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 
-const AVATAR_SOCKET_URL = 'http://localhost:8027';
+const AVATAR_SOCKET_URL = 'http://127.0.0.1:8027';
 
-export default function Avatar3D({ type = 'delegate' }) {
+export default function Avatar3D({ type = 'delegate', isActive = false }) {
   const [avatarState, setAvatarState] = useState('standby');
-  const [isActive, setIsActive] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
   const [liveFrame, setLiveFrame] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
 
   const socketRef = useRef(null);
-  const audioContextRef = useRef(null);
 
-  const theme = {
+  const theme = useMemo(() => ({
     doctor:     { color: '#4E8C8A', light: '#0D9488', name: 'Dr. Martin (Médecin)'         },
     pharmacist: { color: '#10B981', light: '#059669', name: 'Mme Berthier (Pharmacienne)'  },
     delegate:   { color: '#1E3A8A', light: '#3B82F6', name: 'Sarah Khalil (Déléguée)'      },
-  }[type] || { color: '#4E8C8A', light: '#0D9488', name: 'VITAL Agent' };
+  }[type] || { color: '#4E8C8A', light: '#0D9488', name: 'VITAL Assistant' }), [type]);
 
-  // 1. WebSocket Initialization
+  // 1. WebSocket Initialization (Kept from Sync-Version)
   useEffect(() => {
     if (isActive) {
       console.log("[Avatar3D] Establishing Neural Link...");
@@ -37,7 +36,6 @@ export default function Avatar3D({ type = 'delegate' }) {
       });
 
       socket.on('avatar_audio', (data) => {
-        console.log("[Avatar3D] Audio received");
         const audio = new Audio(`data:audio/mpeg;base64,${data.audio}`);
         
         // Ground-truth sync: Tell the server the EXACT moment audio starts
@@ -61,13 +59,17 @@ export default function Avatar3D({ type = 'delegate' }) {
     }
   }, [isActive]);
 
-  const toggleLink = () => {
-    setIsActive(!isActive);
-  };
+
 
   return (
-    <div className="h-full w-full relative overflow-hidden bg-brand-navy rounded-[40px] border border-white/10 shadow-[0_8px_64px_-12px_rgba(0,0,0,0.6)] group">
+    <div className="h-full w-full relative overflow-hidden bg-brand-navy rounded-[40px] border border-white/10 shadow-2xl backdrop-blur-3xl group">
       
+      {/* Cinematic Background Glows (From Intelligence Branch) */}
+      <div className="absolute -top-24 -right-24 w-80 h-80 opacity-20 rounded-full blur-[100px] animate-pulse-slow" 
+           style={{ backgroundColor: theme.color }} />
+      <div className="absolute -bottom-24 -left-24 w-80 h-80 opacity-10 rounded-full blur-[100px] animate-pulse-slow delay-1000" 
+           style={{ backgroundColor: theme.light }} />
+
       {/* 1. THE FULL-SCREEN AVATAR BASE */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
@@ -95,52 +97,67 @@ export default function Avatar3D({ type = 'delegate' }) {
         )}
       </div>
 
-      {/* 2. TOP OVERLAY: Neural Status */}
+      {/* 2. TOP OVERLAY: Neural Status (Hybrid Version) */}
       <div className="absolute top-8 left-8 right-8 z-20 flex justify-between items-start pointer-events-none">
-        <div className="flex items-center gap-3 bg-brand-navy/40 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 pointer-events-auto">
-          <div className={`w-2 h-2 rounded-full ${isActive ? 'animate-pulse' : ''}`}
-               style={{ backgroundColor: avatarState === 'streaming' ? theme.color : '#3B82F6' }} />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
-            {isActive ? (avatarState === 'streaming' ? 'Live Connection' : 'Syncing...') : 'Offline'}
-          </span>
+        <div className="flex items-center gap-3 bg-white/5 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/10 shadow-lg pointer-events-auto">
+            <div className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${isActive ? 'shadow-[0_0_10px]' : ''}`} 
+                 style={{ backgroundColor: isActive ? theme.color : 'rgba(255,255,255,0.2)', boxShadow: isActive ? `0 0 10px ${theme.color}` : 'none' }} />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80">
+                {isActive ? (avatarState === 'streaming' ? 'Neural Link Active' : 'Initialisation...') : 'Standby'}
+            </span>
         </div>
         
-        {isActive && avatarState === 'idle' && (
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-brand-teal/20 backdrop-blur-md border border-brand-teal/40 px-5 py-2.5 rounded-full flex items-center gap-3"
-          >
-             <div className="flex gap-1">
-                <div className="w-1 h-1 bg-brand-teal rounded-full animate-bounce [animation-delay:-0.3s]" />
-                <div className="w-1 h-1 bg-brand-teal rounded-full animate-bounce [animation-delay:-0.15s]" />
-                <div className="w-1 h-1 bg-brand-teal rounded-full animate-bounce" />
-             </div>
-             <span className="text-[9px] font-black tracking-widest text-brand-teal uppercase">Listening</span>
-          </motion.div>
+        {isActive && (
+          <div className="flex items-center gap-2 text-white/40 animate-pulse">
+            <Activity size={14} style={{ color: theme.color }} />
+            <span className="text-[9px] font-black uppercase tracking-widest leading-none">Biolink Active</span>
+          </div>
         )}
       </div>
 
-      {/* 3. BOTTOM OVERLAY: Identity & Controls */}
+      {/* 3. BOTTOM OVERLAY: Identity & Rating System */}
       <div className="absolute bottom-0 left-0 right-0 z-30 p-8 pt-20 bg-gradient-to-t from-brand-navy via-brand-navy/60 to-transparent">
-        <div className="flex flex-col gap-6">
-          <div className="space-y-1">
-            <h3 className="text-3xl font-black text-white tracking-tighter italic uppercase leading-none">
-              {theme.name}
-            </h3>
-            <div className="h-1 w-16 rounded-full" style={{ backgroundColor: theme.color }} />
+        <div className="flex flex-col items-center gap-6">
+          
+          <div className="flex flex-col items-center gap-2">
+             <h3 className="text-2xl font-black text-white tracking-tighter italic uppercase leading-none">
+                {theme.name}
+             </h3>
+             <div className="h-1 w-12 rounded-full opacity-40" style={{ backgroundColor: theme.color }} />
           </div>
 
-          <button 
-            onClick={toggleLink} 
-            className="w-full h-16 rounded-3xl bg-white text-brand-navy text-[12px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4 border-2 border-white hover:bg-transparent hover:text-white transition-all duration-500 group/btn overflow-hidden relative shadow-2xl"
-          >
-            <div className="absolute inset-0 bg-brand-navy translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500" />
-            <div className="relative z-10 flex items-center gap-3">
-              {isActive ? <Square size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
-              {isActive ? 'Disconnect Session' : 'Establish Link'}
-            </div>
-          </button>
+          {/* Rating System (From Intelligence Branch) */}
+          <AnimatePresence>
+            {!isActive && rating > 0 && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex flex-col items-center gap-2 mb-2 p-3 bg-white/5 rounded-2xl border border-white/10"
+              >
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star 
+                      key={star}
+                      size={14} 
+                      fill={rating >= star ? '#F59E0B' : 'transparent'} 
+                      className={rating >= star ? 'text-amber-500' : 'text-white/10'}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Connection status label (read-only — controlled by TrainingRoom) */}
+          <div className={`w-full h-10 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 border ${
+              isActive
+                ? 'bg-white/5 text-white/60 border-white/10'
+                : 'bg-white/5 text-white/30 border-white/5'
+          }`}>
+            {isActive
+              ? <><Activity size={12} className="animate-pulse" style={{ color: theme.color }} /> Neural Link Active</>
+              : <><Play size={12} className="opacity-40" /> En attente de session</>}
+          </div>
         </div>
       </div>
 
@@ -151,3 +168,4 @@ export default function Avatar3D({ type = 'delegate' }) {
     </div>
   );
 }
+

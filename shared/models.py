@@ -22,6 +22,8 @@ class User(Base):
     last_seen_recommendation_id = Column(Integer, nullable=False, default=0)
     created_at = Column(TIMESTAMP, server_default=func.now())
 
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
+
     # Discriminator pour SQLAlchemy — indique quelle classe utiliser
     __mapper_args__ = {
         "polymorphic_on": type,
@@ -279,3 +281,17 @@ class Evaluation(Base):
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     simulation = relationship("Simulation", back_populates="evaluation")
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    title = Column(String(255), nullable=False)
+    message = Column(Text, nullable=False)
+    type = Column(String(50), default="info")  # recommendation, system, etc.
+    is_read = Column(Boolean, default=False)
+    created_at = Column(TIMESTAMP, server_default=func.now())
+
+    user = relationship("User", back_populates="notifications")

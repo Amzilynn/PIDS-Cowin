@@ -6,7 +6,7 @@ import { ShieldCheck, Globe, Activity } from 'lucide-react';
 
 export default function MainLayout({ role = 'delegate', subRole = 'medical' }) {
   const location = useLocation();
-  const isTheaterView = location.pathname.includes('/training') || location.pathname.includes('/presentation');
+  const isTheaterView = location.pathname.endsWith('/session') || location.pathname.includes('/presentation');
 
   return (
     <div className="flex bg-md3-surface min-h-screen font-sans overflow-hidden">
@@ -19,7 +19,7 @@ export default function MainLayout({ role = 'delegate', subRole = 'medical' }) {
 
       <Sidebar role={role} subRole={subRole} />
       
-      <main className={`flex-1 lg:ml-80 h-screen overflow-y-auto relative flex flex-col ${isTheaterView ? '!p-0 !gap-0' : 'p-8 gap-10'}`}>
+      <main className={`flex-1 lg:ml-80 h-screen relative flex flex-col ${isTheaterView ? '!p-0 !gap-0 overflow-y-hidden' : 'p-8 gap-10 overflow-y-auto'}`}>
         {/* Page Content with Transition */}
         <motion.div 
            initial={{ opacity: 0, x: 20 }}
@@ -32,7 +32,7 @@ export default function MainLayout({ role = 'delegate', subRole = 'medical' }) {
         
       </main>
 
-      <style>{`
+      <style jsx>{`
         ::-webkit-scrollbar {
           width: 6px;
         }

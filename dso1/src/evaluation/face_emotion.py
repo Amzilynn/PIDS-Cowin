@@ -14,11 +14,14 @@ import numpy as np
 import mediapipe as mp
 from dataclasses import dataclass, field
 
-try:
-    from deepface import DeepFace
-    _DEEPFACE_AVAILABLE = True
-except ImportError:
-    _DEEPFACE_AVAILABLE = False
+# DEEPFACE DISABLED: Bypassing TensorFlow to avoid Windows 'Application Control' policy blocks.
+# We utilize the superior EfficientNet (PyTorch) backend instead.
+_DEEPFACE_AVAILABLE = False
+# try:
+#     from deepface import DeepFace
+#     _DEEPFACE_AVAILABLE = True
+# except ImportError:
+#     _DEEPFACE_AVAILABLE = False
 
 try:
     from fer import FER

@@ -1,5 +1,11 @@
 import os
 import sys
+
+# 🛡️ SECURITY SHIELD: Force Transformers to ignore TensorFlow to bypass Windows Policy blocks.
+os.environ["TRANSFORMERS_NO_TF"] = "1"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3" # Silence TF warnings
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
+
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(BASE_DIR, "..")
 sys.path.insert(0, SRC_DIR)
+sys.path.insert(0, BASE_DIR) # Allow importing modules like session_manager directly
 
 from api.routes.training import router as training_router
 from api.routes.auth import router as auth_router

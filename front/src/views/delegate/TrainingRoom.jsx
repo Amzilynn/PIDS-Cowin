@@ -4,11 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronLeft, 
   BrainCircuit, 
-  Clock, 
-  ShieldCheck, 
-  Award,
-  Activity,
-  Zap
+  Clock
 } from 'lucide-react';
 import Avatar3D from '../../components/Avatar3D';
 import CameraPanel from '../../components/CameraPanel';
@@ -26,7 +22,6 @@ export default function TrainingRoom() {
   const [avatarSessionId, setAvatarSessionId] = useState(null);
   const [manifestUrl, setManifestUrl] = useState(null);
 
-
   useEffect(() => {
     let interval;
     if (isActive) {
@@ -42,7 +37,7 @@ export default function TrainingRoom() {
   };
 
   return (
-    <div className="relative min-h-full bg-md-surface flex flex-col font-sans">
+    <div className="relative h-screen bg-md-surface flex flex-col font-sans overflow-hidden">
       
       {/* Barre d'Outils Supérieure Contextuelle */}
       <div className="h-20 border-b border-md-outline/10 bg-white/40 backdrop-blur-3xl flex items-center justify-between px-8 relative z-50">
@@ -75,32 +70,50 @@ export default function TrainingRoom() {
               </div>
            </div>
            
-           <button 
-             onClick={() => navigate('/delegate/results')}
-             className="btn-primary !h-12 !px-8 !rounded-pill uppercase text-[11px] font-black tracking-widest shadow-xl shadow-md-primary/20"
-           >
-              Évaluer la Session
-           </button>
+           {!isActive ? (
+             <button 
+               onClick={() => setIsActive(true)}
+               className="h-12 px-8 rounded-full uppercase text-[11px] font-black tracking-widest shadow-xl bg-green-600 text-white hover:bg-green-500 transition-colors"
+             >
+                Démarrer la session IA
+             </button>
+           ) : (
+             <div className="flex items-center gap-3">
+               <button 
+                 onClick={() => navigate(-1)}
+                 className="h-12 px-8 rounded-full uppercase text-[11px] font-black tracking-widest shadow-sm bg-md-surface-container-highest text-md-on-surface hover:bg-black/10 transition-colors"
+               >
+                  Annuler
+               </button>
+               <button 
+                 onClick={() => { setIsActive(false); setSessionTime(0); navigate('/delegate/results'); }}
+                 className="h-12 px-8 rounded-full uppercase text-[11px] font-black tracking-widest shadow-xl bg-red-600 text-white hover:bg-red-500 transition-colors"
+               >
+                  Arrêter et évaluer
+               </button>
+             </div>
+           )}
         </div>
       </div>
 
       {/* Théâtre de Simulation Principal (3 Colonnes Alignées) */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 overflow-hidden h-[calc(100vh-80px)]">
         
         {/* COL 1 : Avatar de Formation */}
-        <div className="md-card !p-0 overflow-hidden relative flex flex-col bg-md-surface-container border-none shadow-2xl">
+        <div className="md-card !p-0 overflow-hidden relative flex flex-col bg-md-surface-container border-none shadow-2xl h-full">
            <Avatar3D
               type={isMedical ? 'doctor' : 'pharmacist'}
+              isActive={isActive}
               useWebRTC={false}
               manifestUrl={manifestUrl}
               onSessionReady={setAvatarSessionId}
             />
         </div>
 
-        {/* COL 2 : Caméra du Délégué */}
-        <div className="md-card !p-0 overflow-hidden bg-md-surface-container-low/30 relative flex flex-col shadow-xl border-none">
-           <div className="flex-1 flex flex-col p-4 w-full h-full">
-              <CameraPanel label="Flux Délégué" />
+        {/* COL 2 : Caméra du Délégué + Live Metrics HUD */}
+        <div className="md-card !p-0 overflow-hidden bg-md-surface-container-low/30 relative flex flex-col shadow-xl border-none h-full">
+           <div className="flex-1 flex flex-col p-4 w-full h-full overflow-hidden">
+              <CameraPanel label="Flux Délégué" autoStart={isActive} useBackend={true} />
            </div>
         </div>
 
@@ -109,6 +122,7 @@ export default function TrainingRoom() {
            <ChatPanel 
               avatarSessionId={avatarSessionId} 
               onManifest={setManifestUrl}
+              isActive={isActive}
             />
         </div>
 
